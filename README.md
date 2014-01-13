@@ -10,7 +10,6 @@ Daily Graphics
 * [What's in here?](#whats-in-here)
 * [Bootstrap the project](#bootstrap-the-project)
 * [Hide project secrets](#hide-project-secrets)
-* [Save media assets](#save-media-assets)
 * [Add a page to the site](#add-a-page-to-the-site)
 * [Run the project](#run-the-project)
 * [COPY editing](#copy-editing)
@@ -93,6 +92,19 @@ This will create the folder ```www/graphics/NAME_OF_GRAPHIC```. Within that fold
 
 Create the graphic in that file, and add any of the CSS/JS that you need within that folder.
 
+**Note**: `NAME_OF_GRAPHIC` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
+
+Here are some examples:
+
+* Good: my-project-name
+* Bad: My-Project-NAME
+
+* Good: my-project-name
+* Bad: my project name
+
+* Good: my-wonderful-project
+* Bad: my wonderful project!
+
 Run the project
 ---------------
 
@@ -137,4 +149,4 @@ fab staging master deploy
 Embedding on NPR
 ----------------
 
-Deploy the project to production. Visit ```apps.npr.org/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Use the embed code in Seamus to make the graphic work on an NPR story page.
+Deploy the project to production. Visit ```http://apps.npr.org/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Use the embed code in Seamus to make the graphic work on an NPR story page.
