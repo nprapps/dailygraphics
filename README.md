@@ -10,18 +10,12 @@ Daily Graphics
 * [What's in here?](#whats-in-here)
 * [Bootstrap the project](#bootstrap-the-project)
 * [Hide project secrets](#hide-project-secrets)
-* [Add a page to the site](#add-a-page-to-the-site)
+* [Adding a new graphic to the project](#adding-a-new-graphic-to-the-project)
 * [Run the project](#run-the-project)
-* [COPY editing](#copy-editing)
 * [Run Python tests](#run-python-tests)
 * [Run Javascript tests](#run-javascript-tests)
-* [Compile static assets](#compile-static-assets)
-* [Test the rendered app](#test-the-rendered-app)
 * [Deploy to S3](#deploy-to-s3)
-* [Deploy to EC2](#deploy-to-ec2)
-* [Install cron jobs](#install-cron-jobs)
-* [Install web services](#install-web-services)
-* [Run a remote fab command](#run-a-remote-fab-command)
+* [Embedding on NPR](#embedding-on-npr)
 
 What is this?
 -------------
@@ -72,17 +66,6 @@ Hide project secrets
 
 Project secrets should **never** be stored in ``app_config.py`` or anywhere else in the repository. They will be leaked to the client if you do. Instead, always store passwords, keys, etc. in environment variables and document that they are needed here in the README.
 
-Save media assets
------------------
-
-Large media assets (images, videos, audio) are synced with an Amazon S3 bucket called ```assets.apps.npr.org``` in a folder with the name of the project. This allows everyone who works on the project to access these assets without storing them in the repo, giving us faster clone times and the ability to open source our work.
-
-Syncing these assets requires running a few different commands at the right times:
-
-* When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets_up```. **NOTE**: The newest push will *always* overwrite the current copy on the server.
-* When you need new assets or newly changed assets in your local environment that are on the server already, run ```fab assets_down``` (this will happen in ```fab bootstrap``` automatically).
-* When you want to remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets_rm:"file_name_here.jpg"```
-
 Adding a new graphic to the project
 -------------------------
 
@@ -127,17 +110,6 @@ Run Javascript tests
 --------------------
 
 With the project running, visit [localhost:8000/test/SpecRunner.html](http://localhost:8000/test/SpecRunner.html).
-
-
-Test the rendered app
----------------------
-
-If you want to test the app once you've rendered it out, just use the Python webserver:
-
-```
-cd www
-python -m SimpleHTTPServer
-```
 
 Deploy to S3
 ------------
