@@ -2,10 +2,22 @@
 <html>
 <head>
     <title></title>
+    <style>
+        textarea {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <iframe src="child.html"></iframe>
-    <textarea readonly="readonly" rows="4"><script src="{{domain}}/js/lib/parent.js" type="text/javascript"></script><iframe src="{{ domain }}/graphics/{{ slug }}/child.html"></iframe></textarea>
+    <textarea readonly="readonly" rows="10" cols="50"><div id="responsive-embed"><iframe src="{{ domain }}/graphics/{{ slug }}/child.html"></iframe></div>
+    <script src="{{domain}}/js/lib/parent.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('#responsive-embed-test iframe').responsiveIframe();
+        //$('iframe').responsiveIframe({ xdomain: '*\.npr\.org' });
+    });
+    </script></textarea>
     <script src="../../js/lib/jquery.js" type="text/javascript"></script>
     <script src="../../js/lib/parent.js" type="text/javascript"></script>
     <script type="text/javascript">
