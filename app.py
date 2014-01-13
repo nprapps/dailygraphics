@@ -20,6 +20,7 @@ def render_parent(slug):
     """
 
     context = {'slug': slug}
+    context['domain'] = app_config.S3_BASE_URL
 
     return render_template('parent.html', **context)
 

@@ -107,9 +107,6 @@ def render():
     """
     from flask import g
 
-    sync_assets()
-    update_data()
-
     app_config_js()
 
     compiled_includes = []
