@@ -105,46 +105,33 @@ def render():
     """
     Render HTML templates and compile assets.
     """
-    from flask import g
+    _render_iterable(glob('www/graphics/*'))
 
-    app_config_js()
 
-    compiled_includes = []
+def _render_iterable(iterable):
+    """
+    View should be named _model_detail().
+    Path should be model-lookup.html.
+    Template is handled from the view.
+    """
 
-    for rule in app.app.url_map.iter_rules():
-        rule_string = rule.rule
-        name = rule.endpoint
+    # Fake out deployment target
+    app_config.configure_targets(env.get('settings', None))
 
-        if name == 'static' or name.startswith('_'):
-            print 'Skipping %s' % name
-            continue
+    for instance in iterable:
+        keyword = instance.split('www/graphics/')[1].split('/')[0]
+        path = 'www/graphics/%s/index.html' % keyword
 
-        if rule_string.endswith('/'):
-            filename = 'www' + rule_string + 'index.html'
-        elif rule_string.endswith('.html'):
-            filename = 'www' + rule_string
-        else:
-            print 'Skipping %s' % name
-            continue
+        with app.app.test_request_context(path='graphics/%s/' % keyword):
 
-        dirname = os.path.dirname(filename)
+            view = app.__dict__['_render_parent']
+            content = view(keyword)
 
-        if not (os.path.exists(dirname)):
-            os.makedirs(dirname)
+        with open(path, 'w') as writefile:
+            writefile.write(content.encode('utf-8'))
 
-        print 'Rendering %s' % (filename)
-
-        with app.app.test_request_context(path=rule_string):
-            g.compile_includes = True
-            g.compiled_includes = compiled_includes
-
-            view = app.__dict__[name]
-            content = view()
-
-            compiled_includes = g.compiled_includes
-
-        with open(filename, 'w') as f:
-            f.write(content.encode('utf-8'))
+    # Un-fake-out deployment target
+    app_config.configure_targets(app_config.DEPLOYMENT_TARGET)
 
 def tests():
     """
@@ -289,46 +276,6 @@ def _deploy_to_s3(path='.gzip'):
         local(sync_gzip % (path, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
         local(sync_assets % ('www/assets/', 's3://%s/%s/assets/' % (bucket, app_config.PROJECT_SLUG)))
 
-def assets_down(path='www/assets'):
-    """
-    Download assets folder from s3 to www/assets
-    """
-    local('aws s3 sync s3://%s/%s/ %s/ --acl "public-read" --cache-control "max-age=5" --region "us-east-1"' % (app_config.ASSETS_S3_BUCKET, app_config.PROJECT_SLUG, path))
-
-def assets_up(path='www/assets'):
-    """
-    Upload www/assets folder to s3
-    """
-    _confirm("You are about to replace the copy of the folder on the server with your own copy. Are you sure?")
-
-    local('aws s3 sync %s/ s3://%s/%s/ --acl "public-read" --cache-control "max-age=5" --region "us-east-1" --delete' % (
-            path,
-            app_config.ASSETS_S3_BUCKET,
-            app_config.PROJECT_SLUG
-        ))
-
-def assets_rm(path):
-    """
-    remove an asset from s3 and locally
-    """
-    file_list = glob(path)
-
-    if len(file_list) > 0:
-
-        _confirm("You are about to destroy %s files. Are you sure?" % len(file_list))
-
-        with settings(warn_only=True):
-
-            for file_path in file_list:
-
-                local('aws s3 rm s3://%s/%s/%s --region "us-east-1"' % (
-                    app_config.ASSETS_S3_BUCKET,
-                    app_config.PROJECT_SLUG,
-                    file_path.replace('www/assets/', '')
-                ))
-
-                local('rm -rf %s' % path)
-
 def _gzip(in_path='www', out_path='.gzip'):
     """
     Gzips everything in www and puts it all in gzip
@@ -456,8 +403,8 @@ App-specific commands
 
 def add_graphic(slug):
     with settings(warn_only=True):
-        local('mkdir www/%s' % slug)
-        local('cp templates/child.html www/%s/child.html' % slug)
+        local('mkdir www/graphics/%s' % slug)
+        local('cp templates/child.html www/graphics/%s/child.html' % slug)
 
 """
 Destruction
