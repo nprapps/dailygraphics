@@ -19,7 +19,7 @@ def render_parent(slug):
     Renders a parent.html index with child.html embedded as iframe.
     """
 
-    context = {}
+    context = {'slug': slug}
 
     return render_template('parent.html', **context)
 
