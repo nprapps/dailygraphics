@@ -10,7 +10,6 @@ from flask import Markup, g, render_template, request
 from slimit import minify
 
 import app_config
-import copytext
 
 CSS_HEADER = '''
 /*
@@ -64,7 +63,7 @@ class Includer(object):
 
             # Delete old rendered versions, just to be tidy
             old_versions = glob.glob('%s.*.%s' % (front, back))
-            
+
             for f in old_versions:
                 os.remove(f)
 
@@ -176,7 +175,6 @@ def make_context():
     """
     context = flatten_app_config()
 
-    context['COPY'] = copytext.Copy()
     context['JS'] = JavascriptIncluder()
     context['CSS'] = CSSIncluder()
 

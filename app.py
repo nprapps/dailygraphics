@@ -20,24 +20,6 @@ def index():
     """
     return render_template('index.html', **make_context())
 
-@app.route('/widget.html')
-def widget():
-    """
-    Embeddable widget example page.
-    """
-    return render_template('widget.html', **make_context())
-
-@app.route('/test_widget.html')
-def test_widget():
-    """
-    Example page displaying widget at different embed sizes.
-    """
-    return render_template('test_widget.html', **make_context())
-
-@app.route('/test/test.html')
-def test_dir():
-    return render_template('index.html', **make_context())
-
 # Boilerplate
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

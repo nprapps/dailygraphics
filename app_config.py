@@ -76,11 +76,6 @@ SERVER_BASE_URL = ''
 DEBUG = True
 
 """
-COPY EDITING
-"""
-COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHZuX1UycXplRlBfLVB0UVNldHJYZmc'
-
-"""
 SHARING
 """
 PROJECT_DESCRIPTION = 'An opinionated project template for (mostly) server-less apps.'

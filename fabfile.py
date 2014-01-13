@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import copy
 from glob import glob
 import os
 
@@ -9,7 +8,6 @@ from jinja2 import Template
 
 import app
 import app_config
-from etc import github
 
 """
 Base configuration
@@ -90,42 +88,6 @@ Changing the template functions should produce output
 with fab render without any exceptions. Any file used
 by the site templates should be rendered by fab render.
 """
-def less():
-    """
-    Render LESS files to CSS.
-    """
-    for path in glob('less/*.less'):
-        filename = os.path.split(path)[-1]
-        name = os.path.splitext(filename)[0]
-        out_path = 'www/css/%s.less.css' % name
-
-        local('node_modules/bin/lessc %s %s' % (path, out_path))
-
-def jst():
-    """
-    Render Underscore templates to a JST package.
-    """
-    local('node_modules/bin/jst --template underscore jst www/js/templates.js')
-
-def download_copy():
-    """
-    Downloads a Google Doc as an .xls file.
-    """
-    base_url = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls'
-    doc_url = base_url % app_config.COPY_GOOGLE_DOC_KEY
-    local('curl -o data/copy.xls "%s"' % doc_url)
-
-def update_copy():
-    """
-    Fetches the latest Google Doc and updates local JSON.
-    """
-    download_copy()
-
-def update_data():
-    """
-    Stub function for updating app-specific data.
-    """
-    pass
 
 def app_config_js():
     """
@@ -139,32 +101,16 @@ def app_config_js():
     with open('www/js/app_config.js', 'w') as f:
         f.write(js)
 
-def copy_js():
-    """
-    Render copy.js to file.
-    """
-    from static import _copy_js
-
-    response = _copy_js()
-    js = response[0]
-
-    with open('www/js/copy.js', 'w') as f:
-        f.write(js)
-
 def render():
     """
     Render HTML templates and compile assets.
     """
     from flask import g
 
-    update_copy()
     sync_assets()
     update_data()
-    less()
-    jst()
 
     app_config_js()
-    copy_js()
 
     compiled_includes = []
 
@@ -298,24 +244,6 @@ def uninstall_crontab():
     require('settings', provided_by=[production, staging])
 
     sudo('rm /etc/cron.d/%(PROJECT_FILENAME)s' % app_config.__dict__)
-
-def import_issues(path):
-    """
-    Import a list of a issues from any CSV formatted like default_tickets.csv.
-    """
-    auth = github.get_auth()
-    github.create_tickets(auth, path)
-
-def bootstrap_issues():
-    """
-    Bootstraps Github issues with default configuration.
-    """
-    auth = github.get_auth()
-    github.delete_existing_labels(auth)
-    github.create_labels(auth)
-    github.create_tickets(auth)
-    github.create_milestones(auth)
-    github.create_hipchat_hook(auth)
 
 def bootstrap():
     """
@@ -526,16 +454,13 @@ def deploy(remote='origin'):
     _deploy_to_s3()
 
 """
-Cron jobs
+App-specific commands
 """
-def cron_test():
-    """
-    Example cron task. Note we use "local" instead of "run"
-    because this will run on the server.
-    """
-    require('settings', provided_by=[production, staging])
 
-    local('echo $DEPLOYMENT_TARGET > /tmp/cron_test.txt')
+def add_graphic(slug):
+    with settings(warn_only=True):
+        local('mkdir www/%s' % slug)
+        local('cp templates/child.html www/%s/child.html' % slug)
 
 """
 Destruction
