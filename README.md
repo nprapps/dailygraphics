@@ -1,24 +1,33 @@
-nprviz's Project Template
-=========================
+Copyright 2013 NPR.  All rights reserved.  No part of these materials may be reproduced, modified, stored in a retrieval system, or retransmitted, in any form or by any means, electronic, mechanical or otherwise, without prior written permission from NPR.
 
-* [About this template](#about-this-template)
+(Want to use this code? Send an email to nprapps@npr.org!)
+
+Daily Graphics
+========================
+
+* [What is this?](#what-is-this)
 * [Assumptions](#assumptions)
-* [Copy the template](#copy-the-template)
-* [Configure the project](#configure-the-project)
-* [Bootstrap issues](#bootstrap-issues)
-* [Develop with the template](#develop-with-the-template)
-* [Merging init branches](#merging-init-branches)
+* [What's in here?](#whats-in-here)
+* [Bootstrap the project](#bootstrap-the-project)
+* [Hide project secrets](#hide-project-secrets)
+* [Save media assets](#save-media-assets)
+* [Add a page to the site](#add-a-page-to-the-site)
+* [Run the project](#run-the-project)
+* [COPY editing](#copy-editing)
+* [Run Python tests](#run-python-tests)
+* [Run Javascript tests](#run-javascript-tests)
+* [Compile static assets](#compile-static-assets)
+* [Test the rendered app](#test-the-rendered-app)
+* [Deploy to S3](#deploy-to-s3)
+* [Deploy to EC2](#deploy-to-ec2)
+* [Install cron jobs](#install-cron-jobs)
+* [Install web services](#install-web-services)
+* [Run a remote fab command](#run-a-remote-fab-command)
 
-About this template
--------------------
+What is this?
+-------------
 
-This template provides a a project skeleton suitable for NPR projects that are designed to be served as flat files. Facilities are provided for rendering html from data, compiling LESS into CSS, deploying to S3, installing cron jobs on servers, copy-editing via Google Spreadsheets and a whole bunch of other stuff.
-
-This codebase is licensed under the [MIT open source license](http://opensource.org/licenses/MIT). See the ``LICENSE`` file for the complete license.
-
-Please note: logos, fonts and other media referenced via url from this template are **not** covered by this license. Do not republish NPR media assets without written permission. Open source libraries in this repository are redistributed for convenience and are each governed by their own license.
-
-Also note: Though open source, This project is not intended to be a generic solution. We strongly encourage those who love the app-template to use it as a basis for their own project template. We have no plans to remove NPR-specific code from this project.
+Daily Graphics is a rig for creating simple Daily Graphics for publishing on NPR.org with responsive iframe embeds.
 
 Assumptions
 -----------
@@ -32,46 +41,95 @@ The following things are assumed to be true in this documentation.
 
 For more details on the technology stack used with the app-template, see our [development environment blog post](http://blog.apps.npr.org/2013/06/06/how-to-setup-a-developers-environment.html).
 
-Copy the template
------------------
+What's in here?
+---------------
 
-Create a new repository on Github. Everywhere you see ``$NEW_PROJECT_NAME`` in the following script, replace it with the name of the repository you just created.
+The project contains the following folders and important files:
 
-```
-git clone git@github.com:nprapps/app-template.git $NEW_PROJECT_NAME
-cd $NEW_PROJECT_NAME
+* ``templates`` -- HTML ([Jinja2](http://jinja.pocoo.org/docs/)) templates, to be compiled locally.
+* ``tests`` -- Python unit tests.
+* ``www`` -- Static and compiled assets to be deployed. (a.k.a. "the output")
+* ``www/assets`` -- A symlink to an S3 bucket containing binary assets (images, audio).
+* ``www/live-data`` -- "Live" data deployed to S3 via cron jobs or other mechanisms. (Not deployed with the rest of the project.)
+* ``www/test`` -- Javascript tests and supporting files.
+* ``app.py`` -- A [Flask](http://flask.pocoo.org/) app for rendering the project locally.
+* ``app_config.py`` -- Global project configuration for scripts, deployment, etc.
+* ``fabfile.py`` -- [Fabric](http://docs.fabfile.org/en/latest/) commands automating setup and deployment.
+* ``render_utils.py`` -- Code supporting template rendering.
+* ``requirements.txt`` -- Python requirements.
+* ``static.py`` -- Static Flask views used in both ``app.py`` and ``public_app.py``.
 
-# Optional: checkout an initial project branch
-# git checkout [init-map|init-table|init-chat|init-tumblr]
-
-mkvirtualenv --no-site-packages $NEW_PROJECT_NAME
-pip install -r requirements.txt
-
-fab app_template_bootstrap
-```
-
-This will setup the new repo and will replace `README.md` (this file) with `PROJECT_README.md`. See that file for usage documentation.
-
-Bootstrap issues
-----------------
-
-The app-template can automatically setup your Github repo with our default labels and tickets by running ``fab bootstrap_issues``. You will be prompted for your Github username and password.
-
-Merging init branches
+Bootstrap the project
 ---------------------
 
-Several branches are provided for common tasks. To merge changes on ``master`` into each of the ``init-`` branches, use the following process:
-
 ```
-git fetch
-git checkout master
-
-# For each branch
-git checkout init-foo
-git merge origin/init-foo --no-edit
-git merge master --no-edit
-
-git checkout master
-git push --all
+cd dailygraphics
+mkvirtualenv --no-site-packages dailygraphics
+pip install -r requirements.txt
 ```
 
+Hide project secrets
+--------------------
+
+Project secrets should **never** be stored in ``app_config.py`` or anywhere else in the repository. They will be leaked to the client if you do. Instead, always store passwords, keys, etc. in environment variables and document that they are needed here in the README.
+
+Save media assets
+-----------------
+
+Large media assets (images, videos, audio) are synced with an Amazon S3 bucket called ```assets.apps.npr.org``` in a folder with the name of the project. This allows everyone who works on the project to access these assets without storing them in the repo, giving us faster clone times and the ability to open source our work.
+
+Syncing these assets requires running a few different commands at the right times:
+
+* When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets_up```. **NOTE**: The newest push will *always* overwrite the current copy on the server.
+* When you need new assets or newly changed assets in your local environment that are on the server already, run ```fab assets_down``` (this will happen in ```fab bootstrap``` automatically).
+* When you want to remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets_rm:"file_name_here.jpg"```
+
+Adding a new graphic to the project
+-------------------------
+
+All of the daily graphics to be put on NPR.org will live in this repo. To add a new graphic, run ```fab add_graphic:NAME_OF_GRAPHIC```.
+
+This will create the folder ```www/graphics/NAME_OF_GRAPHIC```. Within that folder will be a ```child.html``` file.
+
+Create the graphic in that file, and add any of the CSS/JS that you need within that folder.
+
+Run the project
+---------------
+
+A flask app is used to run the project locally. It will automatically recompile templates and assets on demand.
+
+```
+workon dailygraphics
+python app.py
+```
+
+Visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser.
+
+
+Run Python tests
+----------------
+
+Python unit tests are stored in the ``tests`` directory. Run them with ``fab tests``.
+
+Run Javascript tests
+--------------------
+
+With the project running, visit [localhost:8000/test/SpecRunner.html](http://localhost:8000/test/SpecRunner.html).
+
+
+Test the rendered app
+---------------------
+
+If you want to test the app once you've rendered it out, just use the Python webserver:
+
+```
+cd www
+python -m SimpleHTTPServer
+```
+
+Deploy to S3
+------------
+
+```
+fab staging master deploy
+```
