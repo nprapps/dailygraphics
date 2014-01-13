@@ -31,12 +31,12 @@
          });
     </script>
 
-    {# Twitter #}
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@nprapps">
     <meta name="twitter:image" content="" />
 
-    {# Facebook #}
+    <!-- Facebook -->
     <meta property="og:title" content="" />
     <meta property="og:url" content="" />
     <meta property="og:type" content="article" />
@@ -45,12 +45,16 @@
     <meta property="og:site_name" content="NPR.org" />
     <meta property="fb:app_id" content="" />
 
-    {# Google News #}
+    <!-- Google News -->
     <meta name="thumbnail" content="" />
 
 </head>
 <body>
     <script src="../js/lib/jquery.js" type="text/javascript"></script>
+    <script src="../js/lib/child.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        setupResponsiveChild();
+    </script>
     <!-- GOOGLE ANALYTICS -->
     <script type="text/javascript">
         var _gaq = _gaq || [];

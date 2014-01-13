@@ -13,12 +13,15 @@ app.register_blueprint(static.static)
 app.jinja_env.filters['urlencode'] = urlencode_filter
 
 # Example application views
-@app.route('/')
-def index():
+@app.route('/<string:slug>/')
+def render_parent(slug):
     """
-    Example view demonstrating rendering a simple HTML page.
+    Renders a parent.html index with child.html embedded as iframe.
     """
-    return render_template('index.html', **make_context())
+
+    context = {}
+
+    return render_template('parent.html', **context)
 
 # Boilerplate
 if __name__ == '__main__':
