@@ -133,3 +133,8 @@ Deploy to S3
 ```
 fab staging master deploy
 ```
+
+Embedding on NPR
+----------------
+
+Deploy the project to production. Visit ```apps.npr.org/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Use the embed code in Seamus to make the graphic work on an NPR story page.
