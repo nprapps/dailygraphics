@@ -7,7 +7,6 @@ $(document).ready(function() {
         d3.csv(graphic_data_url, function(error, data) {
             graphic_data = data;
             drawGraphic();
-            setupResponsiveChild();
             $(window).on('resize', onResize);
         });
     }
@@ -95,6 +94,8 @@ $(document).ready(function() {
                 .attr('text-anchor', 'end')
                 .attr('class', function(d) { return 'age-' + d.age_group.replace(/\s+/g, '-').toLowerCase() })
                 .text(function(d) { return d.age_group });
+
+        sendHeightToParent();
     }
     
     function onResize() {
@@ -102,6 +103,8 @@ $(document).ready(function() {
     }
     
     function setup() {
+        setupResponsiveChild();
+
         if (Modernizr.svg) {
             loadData();
         }
