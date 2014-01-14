@@ -103,8 +103,10 @@ $(document).ready(function() {
     }
     
     function setup() {
-        load_data();
-        $(window).on('resize', on_resize);
+        if (Modernizr.svg) {
+            load_data();
+            $(window).on('resize', on_resize);
+        }
     }
     
     setup();
