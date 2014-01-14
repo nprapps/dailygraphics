@@ -104,7 +104,7 @@ $(document).ready(function() {
     }
     
     function setup() {
-        setupResponsiveChild(500);
+        setupResponsiveChild();
 
         if (Modernizr.svg) {
             load_data();
