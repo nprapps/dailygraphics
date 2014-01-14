@@ -7,6 +7,7 @@ $(document).ready(function() {
         d3.csv(graphic_data_url, function(error, data) {
             graphic_data = data;
             draw_graphic();
+            sendHeightToParent();
         });
     }
     
@@ -103,6 +104,8 @@ $(document).ready(function() {
     }
     
     function setup() {
+        setupResponsiveChild(500);
+
         if (Modernizr.svg) {
             load_data();
             $(window).on('resize', on_resize);
