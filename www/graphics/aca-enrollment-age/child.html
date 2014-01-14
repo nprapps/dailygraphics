@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="http://media.npr.org/favicon.ico" />
+    
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #graphic svg {
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 1em;
+        }
+        #graphic .axis {
+            font-size: 12px;
+            color: #666;
+        }
+        #graphic .axis path,
+        #graphic .axis line {
+            fill: none;
+            stroke: #666;
+            shape-rendering: crispEdges;
+        }
+        #graphic .axis.y path { display: none; }
+        #graphic .axis.y .tick line { display: none; }
+        #graphic .grid path { display: none; }
+        #graphic .grid .tick {
+            stroke: #ccc;
+            stroke-dasharray: 1px 3px;
+            stroke-width: 1px;
+            shape-rendering: crispEdges;
+        }
+        #graphic .line {
+            fill: none;
+            stroke: #333;
+            stroke-width: 3px;
+        }
+        #graphic .bars rect { fill: #8BC0BF; }
+        #graphic .label text,
+        #graphic .value text {
+            font-weight: normal;
+            font-size: 12px;
+            fill: #333;
+        }
+        
+        .footer p {
+            margin: 2px 0 0 0;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #808080;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="graphic"></div>
+    <div class="footer">
+        <p>Source: U.S. Department of Health and Human Services</p>
+        <p>Credit: Alyson Hurt/NPR</p>
+    </div>
+
+    <script src="../../js/lib/jquery.js" type="text/javascript"></script>
+    <script src="../../js/lib/d3.v3.min.js" type="text/javascript"></script>
+    <script src="../../js/lib/child.js" type="text/javascript"></script>
+    <script src="graphic.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        setupResponsiveChild();
+    </script>
+</body>
+</html>
