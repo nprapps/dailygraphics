@@ -3,15 +3,16 @@ $(document).ready(function() {
     var graphic_data_url = 'enrollment.csv';
     var graphic_data;
     
-    function load_data() {
+    function loadData() {
         d3.csv(graphic_data_url, function(error, data) {
             graphic_data = data;
-            draw_graphic();
-            sendHeightToParent();
+            drawGraphic();
+            setupResponsiveChild();
+            $(window).on('resize', onResize);
         });
     }
     
-    function draw_graphic() {
+    function drawGraphic() {
         var bar_height = 25;
         var bar_gap = 10;
         var num_bars = graphic_data.length;
@@ -22,9 +23,6 @@ $(document).ready(function() {
         // clear out existing graphics
         $graphic.empty();
 
-        // remove placeholder table if it exists
-        $graphic.find('table').remove();
-        
         var x = d3.scale.linear()
 //            .domain([0, d3.max(graphic_data, function(d) { return parseInt(d.pct_enrolled); })])
             .domain([0, d3.max(graphic_data, function(d) { 
@@ -99,16 +97,13 @@ $(document).ready(function() {
                 .text(function(d) { return d.age_group });
     }
     
-    function on_resize() {
-        draw_graphic();
+    function onResize() {
+        drawGraphic();
     }
     
     function setup() {
-        setupResponsiveChild();
-
         if (Modernizr.svg) {
-            load_data();
-            $(window).on('resize', on_resize);
+            loadData();
         }
     }
     
