@@ -6,7 +6,6 @@ $(document).ready(function() {
     function load_data() {
         d3.csv(graphic_data_url, function(error, data) {
             graphic_data = data;
-            console.log(graphic_data);
             draw_graphic();
         });
     }
