@@ -98,18 +98,9 @@ workon dailygraphics
 python app.py
 ```
 
-Visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser.
+Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo. Click on the graphic you are working on to view it.
 
-
-Run Python tests
-----------------
-
-Python unit tests are stored in the ``tests`` directory. Run them with ``fab tests``.
-
-Run Javascript tests
---------------------
-
-With the project running, visit [localhost:8000/test/SpecRunner.html](http://localhost:8000/test/SpecRunner.html).
+Alternatively, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
 
 Deploy to S3
 ------------
