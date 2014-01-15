@@ -133,12 +133,6 @@ def _render_iterable(iterable):
     # Un-fake-out deployment target
     app_config.configure_targets(app_config.DEPLOYMENT_TARGET)
 
-def tests():
-    """
-    Run Python unit tests.
-    """
-    local('nosetests')
-
 """
 Setup
 
