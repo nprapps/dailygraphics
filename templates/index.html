@@ -1,0 +1,6 @@
+<!-- index -->
+<h1>There are {{ graphics_count }} graphics:</h1>
+
+<ol>{% for graphic in graphics %}
+    <li><a href="/graphics/{{ graphic }}/">{{ graphic }}</a></li>
+{% endfor %}</ol>
