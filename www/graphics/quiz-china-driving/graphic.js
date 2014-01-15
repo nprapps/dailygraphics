@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var $quiz = $('#healthinsuranceQuiz');
+    var $quiz = $('#quiz');
 
     $quiz.find('li strong').click(function(){
         var $q = $(this).parents('.question');
