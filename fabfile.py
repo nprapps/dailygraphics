@@ -403,6 +403,7 @@ def add_graphic(slug):
     with settings(warn_only=True):
         local('mkdir www/graphics/%s' % slug)
         local('cp templates/child.html www/graphics/%s/child.html' % slug)
+        local('cp www/js/graphic.js www/graphics/%s/graphic.js' % slug)
 
 """
 Destruction
