@@ -124,7 +124,7 @@ def _render_iterable(iterable):
 
         with app.app.test_request_context(path='graphics/%s/' % keyword):
 
-            view = app.__dict__['_render_parent']
+            view = app.__dict__['_graphics_detail']
             content = view(keyword)
 
         with open(path, 'w') as writefile:
