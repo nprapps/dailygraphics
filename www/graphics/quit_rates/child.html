@@ -17,39 +17,55 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-    path { 
-        stroke: #grey;
-        stroke-width: 2;
-        fill: none;
-    }
+        #graphic { width: 100%; }
 
-    #graphic .axis.y path { display: none; }
-    #graphic .axis.y .tick line { display: none; }
-    #graphic .grid path { display: none; }
-    #graphic .grid .tick {
-        stroke: #grey;
-        stroke-dasharray: 1px 3px;
-        stroke-width: 1px;
-        shape-rendering: crispEdges;
-    }
+        #graphic svg {
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 1em;
+        }
 
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: grey;
-        stroke-width: 1;
-        shape-rendering: crispEdges;
-    }
+        #graphic path { 
+            stroke: #666;
+            stroke-width: 2;
+            fill: none;
+        }
 
-            .footer p {
+        #graphic .axis {
+            font-size: 12px;
+            color: #666;
+        }
+        #graphic .axis path,
+        #graphic .axis line {
+            fill: none;
+            stroke: #666;
+            stroke-width: 1;
+            shape-rendering: crispEdges;
+        }
+
+        #graphic .axis.y path { display: none; }
+        #graphic .axis.y .tick line { display: none; }
+        #graphic .grid path { display: none; }
+        #graphic .grid .tick {
+            stroke: #ccc;
+            stroke-dasharray: 1px 3px;
+            stroke-width: 1px;
+            shape-rendering: crispEdges;
+        }
+
+        /*
+        #graphic .line {
+            fill: none;
+            stroke: #333;
+            stroke-width: 3px;
+        }
+        */
+
+        .footer p {
             margin: 2px 0 0 0;
             font-size: 11px;
             line-height: 1.3;
             color: #808080;
         }
-
-
-
     </style>
 
     <!-- Fonts -->

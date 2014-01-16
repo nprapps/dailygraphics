@@ -2,16 +2,21 @@ $(document).ready(function() {
 	var $graphic = $('#graphic');
 	
     function loadData() {
-            drawGraphic();
-            $(window).on('resize', onResize);
+        drawGraphic();
+        $(window).on('resize', onResize);
     }
 
 function drawGraphic() {
     console.log('drawGraphic');
 
-	var margin = {top: 50, right: 50, bottom: 50, left: 100};
+	var margin = {top: 0, right: 10, bottom: 20, left: 20};
     var width = $graphic.width() - margin.left - margin.right;
     var height = 350 - margin.top - margin.bottom;
+    
+    var num_x_ticks = 20;
+    if (width <= 480) {
+        num_x_ticks = 8;
+    }
 
     // clear out existing graphics
 	$graphic.empty();
@@ -34,13 +39,16 @@ function drawGraphic() {
 	var xAxis = d3.svg.axis().scale(x)
 	    .orient("bottom")
 	    .tickSize(6)
-	    .ticks(20);
+	    .ticks(num_x_ticks);
+
+    var x_axis_grid = function() { return xAxis; }
 
 	var yAxis = d3.svg.axis()
 	    .orient("left")
 	    .scale(y)
 	    .ticks(7);
 
+    var y_axis_grid = function() { return yAxis; }
 
 	// var line = d3.svg.line()
 	//     .interpolate("basis")
@@ -51,9 +59,6 @@ function drawGraphic() {
 	    .interpolate("basis")
 	    .x(function(d) { return x(d.date); })
 	    .y(function(d) { return y(d.income); });
-
-
-    var y_axis_grid = function() { return yAxis; }
 
 	// Get the data
 	    d3.csv("quits2.csv", function(error, data) {
@@ -103,6 +108,14 @@ function drawGraphic() {
 	        .attr("transform", "translate(0," + height + ")")
 	        .call(xAxis);
 		
+        svg.append('g')
+            .attr('class', 'x grid')
+            .attr('transform', 'translate(0,' + height + ')')
+            .call(x_axis_grid()
+                .tickSize(-height, 0, 0)
+                .tickFormat('')
+            );
+
 	    svg.append("g")         // Add the Y Axis
 	        .attr("class", "y axis")
 	        .call(yAxis);
