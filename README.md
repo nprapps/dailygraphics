@@ -10,8 +10,8 @@ Daily Graphics
 * [What's in here?](#whats-in-here)
 * [Bootstrap the project](#bootstrap-the-project)
 * [Hide project secrets](#hide-project-secrets)
-* [Adding a new graphic to the project](#adding-a-new-graphic-to-the-project)
 * [Run the project](#run-the-project)
+* [Adding a new graphic to the project](#adding-a-new-graphic-to-the-project)
 * [Run Python tests](#run-python-tests)
 * [Run Javascript tests](#run-javascript-tests)
 * [Deploy to S3](#deploy-to-s3)
@@ -20,7 +20,7 @@ Daily Graphics
 What is this?
 -------------
 
-Daily Graphics is a rig for creating simple Daily Graphics for publishing on NPR.org with responsive iframe embeds.
+Daily Graphics is a rig for creating simple Daily Graphics for publishing on NPR.org with [responsive iframe embeds](https://github.com/nprapps/responsiveiframe).
 
 Assumptions
 -----------
@@ -66,6 +66,20 @@ Hide project secrets
 
 Project secrets should **never** be stored in ``app_config.py`` or anywhere else in the repository. They will be leaked to the client if you do. Instead, always store passwords, keys, etc. in environment variables and document that they are needed here in the README.
 
+Run the project
+---------------
+
+A flask app is used to run the project locally. It will automatically recompile templates and assets on demand.
+
+```
+workon dailygraphics
+python app.py
+```
+
+Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo. Click on the graphic you are working on to view it.
+
+Alternatively, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
+
 Adding a new graphic to the project
 -------------------------
 
@@ -88,33 +102,27 @@ Here are some examples:
 * Good: my-wonderful-project
 * Bad: my wonderful project!
 
-Run the project
----------------
-
-A flask app is used to run the project locally. It will automatically recompile templates and assets on demand.
-
-```
-workon dailygraphics
-python app.py
-```
-
-Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo. Click on the graphic you are working on to view it.
-
-Alternatively, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
-
 Deploy to S3
 ------------
+
+When it's time to publish your graphic, it's better to deploy a single graphic rather than the entire repo, to minimize the risk of publishing edits that aren't yet ready to go live.
+
+To deploy a specific graphic:
+
+```
+fab staging master deploy:slug=NAME_OF_GRAPHIC
+```
+```
+fab production master deploy:slug=NAME_OF_GRAPHIC
+```
 
 To deploy all graphics:
 
 ```
 fab staging master deploy
 ```
-
-To deploy a specific graphic:
-
 ```
-fab staging master deploy:slug=NAME_OF_GRAPHIC
+fab production master deploy
 ```
 
 Embedding on NPR
