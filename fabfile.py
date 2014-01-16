@@ -264,9 +264,24 @@ def _deploy_to_s3(path='.gzip'):
     sync = 'aws s3 sync %s/ %s --acl "public-read" ' + exclude_flags + ' --cache-control "max-age=5" --region "us-east-1"'
     sync_gzip = 'aws s3 sync %s/ %s --acl "public-read" --content-encoding "gzip" --exclude "*" ' + include_flags + ' --cache-control "max-age=5" --region "us-east-1"'
 
-    for bucket in app_config.S3_BUCKETS:
-        local(sync % (path, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
-        local(sync_gzip % (path, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
+    if path == '.gzip/graphics/':
+        for bucket in app_config.S3_BUCKETS:
+            local(sync % (path, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
+            local(sync_gzip % (path, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
+    else:
+        for bucket in app_config.S3_BUCKETS:
+            local(sync % (path, 's3://%s/%s/%s/%s/' % (
+                bucket,
+                app_config.PROJECT_SLUG,
+                path.split('.gzip/')[1].split('/')[0],
+                path.split('.gzip/')[1].split('/')[1]
+            )))
+            local(sync_gzip % (path, 's3://%s/%s/%s/%s/' % (
+                bucket,
+                app_config.PROJECT_SLUG,
+                path.split('.gzip/')[1].split('/')[0],
+                path.split('.gzip/')[1].split('/')[1]
+            )))
 
 def _gzip(in_path='www', out_path='.gzip'):
     """
@@ -364,7 +379,7 @@ def deploy_confs():
             else:
                 print '%s has not changed' % rendered_path
 
-def deploy(remote='origin'):
+def deploy(remote='origin', slug=''):
     """
     Deploy the latest app to S3 and, if configured, to our servers.
     """
@@ -387,7 +402,7 @@ def deploy(remote='origin'):
 
     render()
     _gzip('www', '.gzip')
-    _deploy_to_s3()
+    _deploy_to_s3('.gzip/graphics/%s' % slug)
 
 """
 App-specific commands
