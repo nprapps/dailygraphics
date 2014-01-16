@@ -9,10 +9,10 @@ $(document).ready(function() {
 function drawGraphic() {
     console.log('drawGraphic');
 
-	var margin = {top: 50, right: 50, bottom: 50, left: 100},
-	    width = 794 - margin.left - margin.right,
-	    height = 350 - margin.top - margin.bottom;
-    
+	var margin = {top: 50, right: 50, bottom: 50, left: 100};
+    var width = $graphic.width() - margin.left - margin.right;
+    var height = 350 - margin.top - margin.bottom;
+
     // clear out existing graphics
 	$graphic.empty();
 
