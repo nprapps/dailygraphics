@@ -105,8 +105,16 @@ Alternatively, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in you
 Deploy to S3
 ------------
 
+To deploy all graphics:
+
 ```
 fab staging master deploy
+```
+
+To deploy a specific graphic:
+
+```
+fab staging master deploy:slug=NAME_OF_GRAPHIC
 ```
 
 Embedding on NPR
