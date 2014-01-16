@@ -3,7 +3,7 @@ $(document).ready(function() {
 	
     function loadData() {
             drawGraphic();
-            // $(window).on('resize', onResize);
+            $(window).on('resize', onResize);
     }
 
 function drawGraphic() {
@@ -24,7 +24,7 @@ function drawGraphic() {
 
 	var color = d3.scale.category10();
 	    
-	var svg = d3.select("body")
+	var svg = d3.select("#graphic")
 	    .append("svg")
 	        .attr("width", width + margin.left + margin.right)
 	        .attr("height", height + margin.top + margin.bottom)
@@ -138,10 +138,10 @@ function drawGraphic() {
 	    
 	function setup() {
 	    setupResponsiveChild();
-// 
-	 	// if (Modernizr.svg) {
+
+	 	if (Modernizr.svg) {
 	        loadData();
-	    // }
+	    }
 	}
 
     setup();
