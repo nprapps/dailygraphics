@@ -21,10 +21,10 @@ $(document).ready(function() {
                     $results.html('You answered <strong>' + num_correct + '</strong> question correctly &mdash; not good enough to drive in China.');
                     break;
                 case 9:
-                    $results.html('You answered <strong>' + num_correct + '</strong> questions correctly. Congratulations! You\'ve passed the test!');
+                    $results.html('You answered <strong>' + num_correct + '</strong> questions correctly. Congratulations! You passed the test!');
                     break;
                 case 10:
-                    $results.html('You answered <strong>' + num_correct + '</strong> questions correctly. Amazing! You\'ve aced the test!');
+                    $results.html('You answered <strong>' + num_correct + '</strong> questions correctly. Amazing! You aced the test!');
                     break;
                 default:
                     $results.html('You answered <strong>' + num_correct + '</strong> questions correctly &mdash; not good enough to drive in China.');
