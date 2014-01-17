@@ -16,7 +16,8 @@ $(document).ready(function() {
         var bar_gap = 10;
         var num_bars = graphic_data.length;
         var margin = {top: 0, right: 50, bottom: 25, left: 85};
-        var width = $graphic.width() - margin.left - margin.right;
+//        var width = $graphic.width() - margin.left - margin.right;
+        var width = $(top).width() - margin.left - margin.right;
         var height = ((bar_height + bar_gap) * num_bars);
         
         // clear out existing graphics
@@ -96,6 +97,10 @@ $(document).ready(function() {
                 .text(function(d) { return d.age_group });
 
         sendHeightToParent();
+        
+        console.log($graphic.width());
+        console.log($(window).width());
+        console.log($(top).width());
     }
     
     function onResize() {
