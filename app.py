@@ -10,7 +10,6 @@ from render_utils import make_context, urlencode_filter
 import static
 
 app = Flask(app_config.PROJECT_NAME)
-app.register_blueprint(static.static)
 
 app.jinja_env.filters['urlencode'] = urlencode_filter
 
@@ -38,6 +37,8 @@ def _graphics_detail(slug):
     context['domain'] = app_config.S3_BASE_URL
 
     return render_template('parent.html', **context)
+
+app.register_blueprint(static.static)
 
 # Boilerplate
 if __name__ == '__main__':
