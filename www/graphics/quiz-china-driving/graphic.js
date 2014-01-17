@@ -2,6 +2,7 @@ $(document).ready(function() {
     var $quiz = $('#quiz');
     var $results = $('#results');
     var num_correct = 0;
+    var num_taken = 0;
 
     $quiz.find('li strong').click(function(){
         var $q = $(this).parents('.question');
@@ -11,11 +12,20 @@ $(document).ready(function() {
         var right_answer = $q.find('.correct');
 
         $q.addClass('answered');
+        num_taken++
 
         if (got_it_right) {
             $(this).prepend('<b>RIGHT!</b> ');
             num_correct++;
-            console.log(num_correct);
+        } else {
+            $(this).prepend('<b>WRONG!</b> ');
+        }
+ 
+        $b.each(function(v,k) {
+            $(this).unbind('click');
+        });
+ 
+        if (num_taken == 10) {
             switch(num_correct) {
                 case 1:
                     $results.html('You answered <strong>' + num_correct + '</strong> question correctly &mdash; not good enough to drive in China.');
@@ -30,15 +40,7 @@ $(document).ready(function() {
                     $results.html('You answered <strong>' + num_correct + '</strong> questions correctly &mdash; not good enough to drive in China.');
                     break;
             }
-        } else {
-            $(this).prepend('<b>WRONG!</b> ');
-        }
- 
-        console.log($results.text());
-
-        $b.each(function(v,k) {
-            $(this).unbind('click');
-        });
+        }
 
         sendHeightToParent();
     });
