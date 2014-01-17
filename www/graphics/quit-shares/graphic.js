@@ -5,7 +5,7 @@ $(document).ready(function() {
     var formatTime = d3.time.format("%B %Y"); // display date format 
 	
     function loadData() {
-        d3.csv("quits.csv", function(error, data) {
+        d3.csv("quits_share.csv", function(error, data) {
             graphic_data = data;
 
             graphic_data.forEach(function(d) {
@@ -21,7 +21,7 @@ $(document).ready(function() {
         console.log('drawGraphic');
 
         var margin = {top: 0, right: 10, bottom: 20, left: 20};
-        var width = $graphic.width() - margin.left - margin.right;
+        var width = $(top).width() - margin.left - margin.right;
         var height = 350 - margin.top - margin.bottom;
     
         var num_x_ticks = 20;
@@ -35,11 +35,15 @@ $(document).ready(function() {
         var x = d3.time.scale().range([0, width]);
         var y = d3.scale.linear().range([height, 0]);
 
-        var color = d3.scale.category10();
+        // var color = d3.scale.category10();
+        var color = d3.scale.ordinal()
+			.range(["#D8472B", "#17807E", "#51AADE", "#EFC637", "#E38D2C", "#E27560", "#981E24"]); // colors
+
+
         
         var svg = d3.select("#graphic")
             .append("svg")
-                .attr("width", width + margin.left + margin.right)
+                .attr("width", width*(8/8) + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
             .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -100,6 +104,7 @@ $(document).ready(function() {
             .attr("class", "line")
             .style("opacity", .7)
             .attr("d", function(d) { return line(d.values); })
+            .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); });
             // .on("mouseover", mouseover)
             // .on("mouseout", mouseout);
@@ -127,6 +132,20 @@ $(document).ready(function() {
                 .tickSize(-width, 0, 0)
                 .tickFormat("")
             );
+
+		  quint.append("text")
+		      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+		      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.income) + ")"; })
+		      .attr("x", 3)
+		      .attr("dy", ".35em")
+		      .text(function(d) { return d.name; });
+
+		  legend = svg.append("g")
+		    .attr("class","legend")
+		    .attr("transform","translate(50,30)")
+		    .style("font-size","12px")
+		    .call(d3.legend)    
+
 
         sendHeightToParent();
 
