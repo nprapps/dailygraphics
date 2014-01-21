@@ -86,14 +86,6 @@ $(document).ready(function() {
             };
         });
 
-        var data2 = color.domain().map(function(name) {
-            return {
-                name: name,
-                All: graphic_data.map(function(d) {
-                    return {date: d.date, income: d.All};
-                })
-            };
-        });
 
         // Scale the range of the data
         x.domain(d3.extent(graphic_data, function(d) { return d.date; }));
@@ -108,27 +100,18 @@ $(document).ready(function() {
             .attr("class", "quint");
 
         quint.append("path")
-            .attr("class", "line")
+            .attr('class', function(d) { 
+                return 'line quint-' + d.name.replace(/\s+/g, '-').toLowerCase()
+            })
             .style("opacity", .7)
             .attr("d", function(d) { return line(d.values); })
-            .style("stroke", function(d) { return color(d.name); });
-            // .on("mouseover", mouseover)
-            // .on("mouseout", mouseout);
-
-        
-        var data2 = svg.selectAll(".data2")
-            .data(data2)
-            .enter().append("g")
-            .attr("class", "data2");
-
-        data2.append("path")
-            .attr("class", "line")
-            .style("opacity", 1)
-            .attr("d", function(d) { return line(d.All); });
-            // .style("stroke", function(d) { return color(d.name); });
-            // .on("mouseover", mouseover)
-            // .on("mouseout", mouseout);
-
+            .style("stroke", function(d) { 
+                            if (d.name.toLowerCase() == 'all industries') {
+                                return '#333';
+                            } else {
+                                return color(d.name);
+                            }
+                        });
         svg.append("g") // Add the X Axis
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
@@ -153,14 +136,16 @@ $(document).ready(function() {
                 .tickFormat("")
             );
 
-          quint.append("text")
-              .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-              .attr("class", "text")
-              .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.income) + ")"; })
-              .attr("x", 3)
-              .attr("dy", ".15em")
-              .text(function(d) { return d.name; })
-              .style("opacity", .7);
+        quint.append("text")
+            .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+            .attr('class', function(d) { 
+                return 'text quint-' + d.name.replace(/\s+/g, '-').toLowerCase()
+            })
+            .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.income) + ")"; })
+            .attr("x", 3)
+            .attr("dy", ".15em")
+            .text(function(d) { return d.name; })
+            .style("opacity", .7);
 
             svg.append("text")
                     .attr("class", "y label")
