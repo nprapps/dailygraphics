@@ -113,13 +113,22 @@ $(document).ready(function() {
             .attr("class", "quint");
 
         quint.append("path")
-            .attr("class", "line")
+            .attr('class', function(d) { 
+                return 'line quint-' + d.name.replace(/\s+/g, '-').toLowerCase()
+            })
             .style("opacity", .7)
             .attr("d", function(d) { return line(d.values); })
-            .style("stroke", function(d) { return color(d.name); });
+            .style("stroke", function(d) { 
+                if (d.name.toLowerCase() == 'total') {
+                    return '#333';
+                } else {
+                    return color(d.name);
+                }
+            });
             // .on("mouseover", mouseover)
             // .on("mouseout", mouseout);
         
+        /*
         var data2 = svg.selectAll(".data2")
             .data(data2)
             .enter().append("g")
@@ -132,7 +141,7 @@ $(document).ready(function() {
             // .style("stroke", function(d) { return color(d.name); });
             // .on("mouseover", mouseover)
             // .on("mouseout", mouseout);
-
+        */
 
         svg.append("g") // Add the X Axis
             .attr("class", "x axis")
@@ -168,14 +177,16 @@ $(document).ready(function() {
                 .tickFormat("")
             );
 
-		  quint.append("text")
-		      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-              .attr("class", "text")
-              .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.income) + ")"; })
-		      .attr("x", 3)
-		      .attr("dy", ".15em")
-		      .text(function(d) { return d.name; })
-              .style("opacity", .7);
+        quint.append("text")
+            .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+            .attr('class', function(d) { 
+                return 'text quint-' + d.name.replace(/\s+/g, '-').toLowerCase()
+            })
+            .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.income) + ")"; })
+            .attr("x", 3)
+            .attr("dy", ".15em")
+            .text(function(d) { return d.name; })
+            .style("opacity", .7);
 
    
         sendHeightToParent();
