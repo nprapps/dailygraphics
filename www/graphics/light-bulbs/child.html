@@ -52,6 +52,22 @@
             width: 25%;
             vertical-align: top;
             padding: 11px;
+            border-right: 2px solid #fff;
+        }
+        
+        .bulb.standard { background-color: #e0e0e0; }
+        .bulb.halogen { background-color: #ebebeb; }
+        .bulb.cfl { background-color: #f1f1f1; }
+        .bulb.led { background-color: #f7f7f7; }
+        
+        @media screen and (max-width: 480px) {
+            .bulbs { display: block; }
+            .bulb { 
+                display: block; 
+                width: auto;
+                border-right: none;
+                border-bottom: 2px solid #fff;
+            }
         }
     </style>
 
@@ -65,22 +81,30 @@
             <div class="bulbs">
                 <div class="bulb standard">
                     <h3>Standard Incandescent Bulb</h3>
+                    <p>[Product photo]
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>[Lighting Facts graphic?]
                 </div>
 
                 <div class="bulb halogen">
                     <h3>Halogen Incandescent Bulb</h3>
+                    <p>[Product photo]
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>[Lighting Facts graphic?]
                 </div>
 
                 <div class="bulb cfl">
                     <h3>Compact Flourescent (CFL)</h3>
+                    <p>[Product photo]
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>[Lighting Facts graphic?]
                 </div>
 
                 <div class="bulb led">
                     <h3>LED</h3>
+                    <p>[Product photo]
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>[Lighting Facts graphic?]
                 </div>
             </div>
 
@@ -137,16 +161,85 @@
         <section class="brightness">
             <h2>Brightness</h2>
             <p>Explanation of what this means. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+
+            <div class="bulbs">
+                <div class="bulb standard">
+                    <h4>Standard Incandescent Bulb</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+
+                <div class="bulb halogen">
+                    <h4>Halogen Incandescent Bulb</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+
+                <div class="bulb cfl">
+                    <h4>Compact Flourescent (CFL)</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+
+                <div class="bulb led">
+                    <h4>LED</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+            </div>
+
         </section>
     
         <section class="appearance">
             <h2>Light Appearance</h2>
             <p>Explanation of what this means. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+
+            <div class="bulbs">
+                <div class="bulb standard">
+                    <h4>Standard Incandescent Bulb</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+
+                <div class="bulb halogen">
+                    <h4>Halogen Incandescent Bulb</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+
+                <div class="bulb cfl">
+                    <h4>Compact Flourescent (CFL)</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+
+                <div class="bulb led">
+                    <h4>LED</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+            </div>
+
         </section>
     
         <section class="usage">
             <h2>Energy Used</h2>
             <p>Explanation of what this means. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+
+            <div class="bulbs">
+                <div class="bulb standard">
+                    <h4>Standard Incandescent Bulb</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+
+                <div class="bulb halogen">
+                    <h4>Halogen Incandescent Bulb</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+
+                <div class="bulb cfl">
+                    <h4>Compact Flourescent (CFL)</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+
+                <div class="bulb led">
+                    <h4>LED</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+            </div>
+
         </section>
     
         <section class="Other">
@@ -155,23 +248,23 @@
 
             <div class="bulbs">
                 <div class="bulb standard">
-                    <h3>Standard Incandescent Bulb</h3>
+                    <h4>Standard Incandescent Bulb</h4>
                     <p>Info about phasing out? Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
 
                 <div class="bulb halogen">
-                    <h3>Halogen Incandescent Bulb</h3>
+                    <h4>Halogen Incandescent Bulb</h4>
                     <p>Risks / concerns? Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
 
                 <div class="bulb cfl">
-                    <h3>Compact Flourescent (CFL)</h3>
+                    <h4>Compact Flourescent (CFL)</h4>
                     <p>Yay, mercury. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
 
                 <div class="bulb led">
-                    <h3>LED</h3>
-                    <p>Risks / concerns? Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <h4>LED</h4>
+                    <p>Risks / concerns? They do cost more. Evolving technology. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
             </div>
 
