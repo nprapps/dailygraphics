@@ -5,11 +5,12 @@
         onWidthChanged: null
     };
 
+    var parentWidth = null;
+
     /*
-     * Process a new message from parent frame.
+     * Verify that the message came from a trustworthy domain.
      */
-    processMessage = function(e) {
-        console.log('child got: ' + e.data);
+    function isSafeMessage(e) {
         if (settings.xdomain !== '*') {
             var regex = new RegExp(settings.xdomain + '$');
           
@@ -19,6 +20,19 @@
             }
         }
 
+        return true;
+    }
+
+    /*
+     * Process a new message from parent frame.
+     */
+    processMessage = function(e) {
+        console.log('child got: ' + e.data);
+
+        if (!isSafeMessage(e)) {
+            return;
+        }
+
         var match = e.data.match(/^(\d+)$/);
 
         if (!match || match.length !== 2) {
@@ -26,11 +40,14 @@
             return;
         }
 
-        var width = parseInt(match[1]);
-        console.log(width);
+        width = parseInt(match[1]);
 
-        if (settings.onWidthChanged) {
-            settings.onWidthChanged(width);
+        if (width != parentWidth) {
+            parentWidth = width;
+
+            if (settings.onWidthChanged) {
+                settings.onWidthChanged(parentWidth);
+            }
         }
     }
 
@@ -43,15 +60,12 @@
         window.top.postMessage(height, '*');
     }
 
-
     /*
-     * Setup thisdocument as a responsive iframe child.
+     * Setup this document as a responsive iframe child.
      */
     window.setupResponsiveChild = function(config) {
         $.extend(settings, config);
 
-        window.addEventListener('load', sendHeightToParent);
-        window.addEventListener('resize', sendHeightToParent);
         window.addEventListener('message', processMessage, false);
 
         if (settings.polling) {

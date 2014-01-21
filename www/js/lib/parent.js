@@ -1,14 +1,13 @@
 (function($) {
     var settings = {
+        src: null,
         xdomain: '*'
     };
 
-    /*
-     * Process a new message from a child iframe.
+    /* 
+     * Verify that the message came from a trustworthy domain.
      */
-    function processMessage($elem, e) {
-        console.log('parent got: ' + e.data);
-
+    function isSafeMessage(e) {
         if (settings.xdomain !== '*') {
             var regex = new RegExp(settings.xdomain + '$');
           
@@ -18,46 +17,63 @@
             }
         }
 
+        return true;
+    }
+
+    /*
+     * Process a new message from a child iframe.
+     */
+    function processMessage($elem, e) {
+        console.log('parent got: ' + e.data);
+
+        if (!isSafeMessage(e)) {
+            return;
+        }
+
+        // Child sent height
         var match = e.data.match(/^(\d+)$/);
 
         if (!match || match.length !== 2) {
-            // Not the message we're listening for
-            return;
+            return false;
         }
 
         var height = parseInt(match[1]);
 
-        $elem.css('height', height + 'px');
+        $elem.find('iframe').css('height', height + 'px');
+
+        sendWidthToChild($elem);
     }
 
     /*
      * Transmit the current iframe width to the child.
      */
-    function sendWidthToChild($elem, e) {
+    function sendWidthToChild($elem) {
         var width = $elem.width().toString();
 
-        $elem[0].contentWindow.postMessage(width, '*');
+        $elem.find('iframe')[0].contentWindow.postMessage(width, '*');
     }
 
     /*
      * Initialize one or many child iframes.
      */
-    $.fn.responsiveIframe = function( config ) {
+    $.fn.responsiveIframe = function(config) {
         $.extend(settings, config);
 
         return this.each(function() {
             var $this = $(this);
+
+            $this.append('<iframe src="' + settings.src + '" style="width: 100%;" scrolling="no" marginheight="0" marginwidth="0" frameborder="0"></iframe>')
 
             window.addEventListener('message', function(e) {
                 processMessage($this, e);
             } , false);
 
             window.addEventListener('load', function(e) {
-                sendWidthToChild($this, e);
+                sendWidthToChild($this);
             });
 
             window.addEventListener('resize', function(e) {
-                sendWidthToChild($this, e);
+                sendWidthToChild($this);
             });
         });
     };
