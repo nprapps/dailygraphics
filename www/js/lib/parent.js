@@ -7,6 +7,8 @@
      * Process a new message from a child iframe.
      */
     function processMessage($elem, e) {
+        console.log('parent got: ' + e.data);
+
         if (settings.xdomain !== '*') {
             var regex = new RegExp(settings.xdomain + '$');
           
@@ -29,6 +31,15 @@
     }
 
     /*
+     * Transmit the current iframe width to the child.
+     */
+    function sendWidthToChild($elem, e) {
+        var width = $elem.width().toString();
+
+        $elem[0].contentWindow.postMessage(width, '*');
+    }
+
+    /*
      * Initialize one or many child iframes.
      */
     $.fn.responsiveIframe = function( config ) {
@@ -40,6 +51,14 @@
             window.addEventListener('message', function(e) {
                 processMessage($this, e);
             } , false);
+
+            window.addEventListener('load', function(e) {
+                sendWidthToChild($this, e);
+            });
+
+            window.addEventListener('resize', function(e) {
+                sendWidthToChild($this, e);
+            });
         });
     };
 }(jQuery));
