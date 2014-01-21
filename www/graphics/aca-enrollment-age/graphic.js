@@ -3,13 +3,12 @@ $(document).ready(function() {
     var graphic_data_url = 'enrollment.csv';
     var graphic_data;
     
-    function drawGraphic() {
+    function drawGraphic(width) {
         var bar_height = 25;
         var bar_gap = 10;
         var num_bars = graphic_data.length;
-        var margin = {top: 0, right: 50, bottom: 25, left: 85};
-        var width = $graphic.width() - margin.left - margin.right;
-//        var width = $(top).width() - margin.left - margin.right;
+        var margin = { top: 0, right: 50, bottom: 25, left: 85 };
+        var width = width - margin.left - margin.right;
         var height = ((bar_height + bar_gap) * num_bars);
         
         // clear out existing graphics
@@ -96,14 +95,13 @@ $(document).ready(function() {
             d3.csv(graphic_data_url, function(error, data) {
                 graphic_data = data;
 
-                drawGraphic();
+                drawGraphic($graphic.width());
 
                 setupResponsiveChild({
                     onWidthChanged: drawGraphic 
                 });
             });
         }
-
     }
     
     setup();

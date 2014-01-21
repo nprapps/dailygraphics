@@ -24,7 +24,7 @@
      * Process a new message from a child iframe.
      */
     function processMessage($elem, e) {
-        console.log('parent got: ' + e.data);
+        console.log('parent got height: ' + e.data);
 
         if (!isSafeMessage(e)) {
             return;

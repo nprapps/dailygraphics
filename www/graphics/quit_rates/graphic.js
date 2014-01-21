@@ -5,23 +5,9 @@ $(document).ready(function() {
     var parseDate = d3.time.format("%m/%d/%y").parse; // parsing date data
     var formatTime = d3.time.format("%B %Y"); // display date format 
 	
-    function loadData() {
-        d3.csv(graphic_data_url, function(error, data) {
-            graphic_data = data;
-
-            graphic_data.forEach(function(d) {
-                d.date = parseDate(d.date);
-            });
-
-            drawGraphic();
-            $(window).on('resize', onResize);
-        });
-    }
-
-    function drawGraphic() {
-        var margin = {top: 0, right: 100, bottom: 20, left: 50};
-//        var width = $(top).width() - margin.left - margin.right;
-        var width = $graphic.width() - margin.left - margin.right;
+    function drawGraphic(width) {
+        var margin = { top: 0, right: 100, bottom: 20, left: 50 };
+        var width = width - margin.left - margin.right;
         var height = 350 - margin.top - margin.bottom;
     
         // var num_x_ticks = 20;
@@ -171,15 +157,21 @@ $(document).ready(function() {
         };
     }
 
-    function onResize() {
-        drawGraphic();
-    }
-    
     function setup() {
-        setupResponsiveChild();
-
         if (Modernizr.svg) {
-            loadData();
+            d3.csv(graphic_data_url, function(error, data) {
+                graphic_data = data;
+
+                graphic_data.forEach(function(d) {
+                    d.date = parseDate(d.date);
+                });
+                
+                drawGraphic($graphic.width());
+
+                setupResponsiveChild({
+                    onWidthChanged: drawGraphic
+                });
+            });
         }
     }
     

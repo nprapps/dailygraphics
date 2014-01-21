@@ -27,7 +27,7 @@
      * Process a new message from parent frame.
      */
     processMessage = function(e) {
-        console.log('child got: ' + e.data);
+        console.log('child got width: ' + e.data);
 
         if (!isSafeMessage(e)) {
             return;
@@ -67,6 +67,8 @@
         $.extend(settings, config);
 
         window.addEventListener('message', processMessage, false);
+    
+        sendHeightToParent();
 
         if (settings.polling) {
             window.setInterval(sendHeightToParent, settings.polling);
