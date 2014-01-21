@@ -8,6 +8,12 @@
             display: block;
         }
     </style>
+
+    {% if xdomain %}
+    <script type="text/javascript">
+        document.domain = "{{ xdomain }}";
+    </script>
+    {% endif %}
 </head>
 <body>
     <iframe src="child.html" style="width: 100%;" scrolling="no" marginheight="0" marginwidth="0" frameborder="0"></iframe>

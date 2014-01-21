@@ -1,6 +1,4 @@
 $(document).ready(function() {
-    document.domain = "npr.org";
-
 	var $graphic = $('#graphic');
 	var graphic_data;
     var parseDate = d3.time.format("%m/%d/%y").parse; // parsing date data
