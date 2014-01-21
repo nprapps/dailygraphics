@@ -165,11 +165,9 @@ $(document).ready(function() {
                 graphic_data.forEach(function(d) {
                     d.date = parseDate(d.date);
                 });
-                
-                drawGraphic($graphic.width());
 
                 setupResponsiveChild({
-                    onWidthChanged: drawGraphic
+                    renderCallback: drawGraphic
                 });
             });
         }

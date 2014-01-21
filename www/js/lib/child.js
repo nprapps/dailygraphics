@@ -1,14 +1,26 @@
 (function($) {
     var settings = {
+        renderCallback: null,
         xdomain: '*',
-        polling: 0,
-        onWidthChanged: null
+        polling: 0
     };
 
     var parentWidth = null;
 
     /*
-     * Verify that the message came from a trustworthy domain.
+     * Extract a querystring parameter from the URL.
+     */
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
+
+        var regex = new RegExp("[\\?&]" + name + '=([^&#]*)');
+        var results = regex.exec(location.search);;
+        
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }    
+
+    /*
+     * Verify that the message came from a trustworthy domaine
      */
     function isSafeMessage(e) {
         if (settings.xdomain !== '*') {
@@ -45,8 +57,9 @@
         if (width != parentWidth) {
             parentWidth = width;
 
-            if (settings.onWidthChanged) {
-                settings.onWidthChanged(parentWidth);
+            if (settings.renderCallback) {
+                settings.renderCallback(width);
+                sendHeightToParent();
             }
         }
     }
@@ -67,7 +80,16 @@
         $.extend(settings, config);
 
         window.addEventListener('message', processMessage, false);
-    
+
+        // Initial width is sent as querystring parameter
+        var width = parseInt(getParameterByName('initialWidth'));
+
+        console.log('child got initial width: ' + width);
+
+        if (settings.renderCallback) {
+            settings.renderCallback(width);
+        }
+
         sendHeightToParent();
 
         if (settings.polling) {

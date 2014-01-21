@@ -40,8 +40,6 @@
         var height = parseInt(match[1]);
 
         $elem.find('iframe').css('height', height + 'px');
-
-        sendWidthToChild($elem);
     }
 
     /*
@@ -62,7 +60,10 @@
         return this.each(function() {
             var $this = $(this);
 
-            $this.append('<iframe src="' + settings.src + '" style="width: 100%;" scrolling="no" marginheight="0" marginwidth="0" frameborder="0"></iframe>')
+            var width = $this.width().toString();
+
+            // Send the initial width as a querystring parameter
+            $this.append('<iframe src="' + settings.src + '?initialWidth=' + width + '" style="width: 100%;" scrolling="no" marginheight="0" marginwidth="0" frameborder="0"></iframe>')
 
             window.addEventListener('message', function(e) {
                 processMessage($this, e);

@@ -188,10 +188,8 @@ $(document).ready(function() {
                     d.date = parseDate(d.date);
                 });
 
-                drawGraphic($graphic.width());
-	    
                 setupResponsiveChild({
-                    onWidthChanged: drawGraphic
+                    renderCallback: drawGraphic
                 });
             });
 	    }

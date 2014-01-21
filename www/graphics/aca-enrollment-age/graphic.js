@@ -95,10 +95,8 @@ $(document).ready(function() {
             d3.csv(graphic_data_url, function(error, data) {
                 graphic_data = data;
 
-                drawGraphic($graphic.width());
-
                 setupResponsiveChild({
-                    onWidthChanged: drawGraphic 
+                    renderCallback: drawGraphic 
                 });
             });
         }
