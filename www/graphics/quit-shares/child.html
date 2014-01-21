@@ -22,6 +22,8 @@
         #graphic svg {
             font-family: Arial, Helvetica, sans-serif;
             margin-bottom: 1em;
+            font-size: 11px;
+
         }
 
         #graphic path { 
@@ -43,22 +45,25 @@
         }
 
         #graphic .axis.y path { display: none; }
-        #graphic .axis.y .tick line { display: none; }
+        #graphic .axis.y .tick line { 
+            stroke: #ccc;
+            stroke-width: 1px;
+            shape-rendering: crispEdges; }
         #graphic .grid path { display: none; }
         #graphic .grid .tick {
             stroke: #ccc;
-            stroke-dasharray: 1px 3px;
+            stroke-dasharray: 2px 6px;
             stroke-width: 1px;
             shape-rendering: crispEdges;
         }
 
-        /*
-        #graphic .line {
-            fill: none;
-            stroke: #333;
-            stroke-width: 3px;
+        
+        #graphic .quint .text {
+            font-size: 11px;
+            line-height: 1.3;
+            color: #808080;
         }
-        */
+        
 
         .footer p {
             margin: 2px 0 0 0;

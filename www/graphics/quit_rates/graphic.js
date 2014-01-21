@@ -1,11 +1,11 @@
 $(document).ready(function() {
 	var $graphic = $('#graphic');
 	var graphic_data;
-    var parseDate = d3.time.format("%m/%d/%Y").parse; // parsing date data
+    var parseDate = d3.time.format("%m/%d/%y").parse; // parsing date data
     var formatTime = d3.time.format("%B %Y"); // display date format 
 	
     function loadData() {
-        d3.csv("quits.csv", function(error, data) {
+        d3.csv("quits4.csv", function(error, data) {
             graphic_data = data;
 
             graphic_data.forEach(function(d) {
@@ -20,14 +20,14 @@ $(document).ready(function() {
     function drawGraphic() {
         console.log('drawGraphic');
 
-        var margin = {top: 0, right: 10, bottom: 20, left: 20};
-        var width = $graphic.width() - margin.left - margin.right;
+        var margin = {top: 0, right: 100, bottom: 20, left: 50};
+        var width = $(top).width() - margin.left - margin.right;
         var height = 350 - margin.top - margin.bottom;
     
-        var num_x_ticks = 20;
-        if (width <= 480) {
-            num_x_ticks = 8;
-        }
+        // var num_x_ticks = 20;
+        // if (width <= 480) {
+        //     num_x_ticks = 8;
+        // }
 
         // clear out existing graphics
         $graphic.empty();
@@ -35,8 +35,10 @@ $(document).ready(function() {
         var x = d3.time.scale().range([0, width]);
         var y = d3.scale.linear().range([height, 0]);
 
-        var color = d3.scale.category10();
-        
+        // var color = d3.scale.category10();
+        var color = d3.scale.ordinal()
+        .range(["#D8472B", "#17807E", "#51AADE", "#EFC637", "#E38D2C", "#E27560", "#981E24"]); // colors
+
         var svg = d3.select("#graphic")
             .append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -46,8 +48,8 @@ $(document).ready(function() {
 
         var xAxis = d3.svg.axis().scale(x)
             .orient("bottom")
-            .tickSize(6)
-            .ticks(num_x_ticks);
+            .tickSize(6);
+            // .ticks(num_x_ticks);
 
         var x_axis_grid = function() { return xAxis; }
 
@@ -84,6 +86,15 @@ $(document).ready(function() {
             };
         });
 
+        var data2 = color.domain().map(function(name) {
+            return {
+                name: name,
+                All: graphic_data.map(function(d) {
+                    return {date: d.date, income: d.All};
+                })
+            };
+        });
+
         // Scale the range of the data
         x.domain(d3.extent(graphic_data, function(d) { return d.date; }));
         y.domain([
@@ -104,18 +115,32 @@ $(document).ready(function() {
             // .on("mouseover", mouseover)
             // .on("mouseout", mouseout);
 
+        
+        var data2 = svg.selectAll(".data2")
+            .data(data2)
+            .enter().append("g")
+            .attr("class", "data2");
+
+        data2.append("path")
+            .attr("class", "line")
+            .style("opacity", 1)
+            .attr("d", function(d) { return line(d.All); });
+            // .style("stroke", function(d) { return color(d.name); });
+            // .on("mouseover", mouseover)
+            // .on("mouseout", mouseout);
+
         svg.append("g") // Add the X Axis
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
     
-        svg.append('g')
-            .attr('class', 'x grid')
-            .attr('transform', 'translate(0,' + height + ')')
-            .call(x_axis_grid()
-                .tickSize(-height, 0, 0)
-                .tickFormat('')
-            );
+        // svg.append('g')
+        //     .attr('class', 'x grid')
+        //     .attr('transform', 'translate(0,' + height + ')')
+        //     .call(x_axis_grid()
+        //         .tickSize(-height, 0, 0)
+        //         .tickFormat('')
+        //     );
 
         svg.append("g") // Add the Y Axis
             .attr("class", "y axis")
@@ -127,6 +152,27 @@ $(document).ready(function() {
                 .tickSize(-width, 0, 0)
                 .tickFormat("")
             );
+
+          quint.append("text")
+              .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+              .attr("class", "text")
+              .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.income) + ")"; })
+              .attr("x", 3)
+              .attr("dy", ".15em")
+              .text(function(d) { return d.name; })
+              .style("opacity", .7);
+
+            svg.append("text")
+                    .attr("class", "y label")
+                    .attr("text-anchor", "end")
+                    .attr("y", 6)
+                    .attr("dy", ".75em")
+                    .attr("transform", "rotate(-90)")
+                    // .attr('transform', 'translate(' + -width/36 + ',' + height/6 + ') rotate(-90)')
+                    .attr('transform', 'translate( -40 ,' + height/6 + ') rotate(-90)')
+                    .text("Quits As A Share Of Total Employment (%)")
+                    .style("opacity", .7);
+
 
         sendHeightToParent();
 

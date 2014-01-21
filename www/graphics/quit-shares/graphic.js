@@ -5,7 +5,7 @@ $(document).ready(function() {
     var formatTime = d3.time.format("%B %Y"); // display date format 
 	
     function loadData() {
-        d3.csv("quits_share.csv", function(error, data) {
+        d3.csv("quits_share2.csv", function(error, data) {
             graphic_data = data;
 
             graphic_data.forEach(function(d) {
@@ -16,18 +16,18 @@ $(document).ready(function() {
             $(window).on('resize', onResize);
         });
     }
-
+ 
     function drawGraphic() {
         console.log('drawGraphic');
 
-        var margin = {top: 0, right: 10, bottom: 20, left: 20};
+        var margin = {top: 0, right: 200, bottom: 20, left: 40};
         var width = $(top).width() - margin.left - margin.right;
         var height = 350 - margin.top - margin.bottom;
     
-        var num_x_ticks = 20;
-        if (width <= 480) {
-            num_x_ticks = 8;
-        }
+        // var num_x_ticks = 20;
+        // if (width <= 480) {
+        //     num_x_ticks = 8;
+        // }
 
         // clear out existing graphics
         $graphic.empty();
@@ -38,20 +38,18 @@ $(document).ready(function() {
         // var color = d3.scale.category10();
         var color = d3.scale.ordinal()
 			.range(["#D8472B", "#17807E", "#51AADE", "#EFC637", "#E38D2C", "#E27560", "#981E24"]); // colors
-
-
         
         var svg = d3.select("#graphic")
             .append("svg")
-                .attr("width", width*(8/8) + margin.left + margin.right)
+                .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
             .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         var xAxis = d3.svg.axis().scale(x)
             .orient("bottom")
-            .tickSize(6)
-            .ticks(num_x_ticks);
+            .tickSize(6);
+            // .ticks(num_x_ticks);
 
         var x_axis_grid = function() { return xAxis; }
 
@@ -71,6 +69,10 @@ $(document).ready(function() {
             .interpolate("basis")
             .x(function(d) { return x(d.date); })
             .y(function(d) { return y(d.income); });
+
+        var line2 = d3.svg.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.total); });
 
 
         // finds the first header that is not 'date' 
@@ -95,6 +97,16 @@ $(document).ready(function() {
             d3.max(quintiles, function(c) { return d3.max(c.values, function(v) { return v.income; }); })
         ]);
 
+        var data2 = color.domain().map(function(name) {
+            return {
+                name: name,
+                Total: graphic_data.map(function(d) {
+                    return {date: d.date, income: d.Total};
+                })
+            };
+        });
+
+
         var quint = svg.selectAll(".quint")
             .data(quintiles)
             .enter().append("g")
@@ -104,23 +116,46 @@ $(document).ready(function() {
             .attr("class", "line")
             .style("opacity", .7)
             .attr("d", function(d) { return line(d.values); })
-            .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); });
             // .on("mouseover", mouseover)
             // .on("mouseout", mouseout);
+        
+        var data2 = svg.selectAll(".data2")
+            .data(data2)
+            .enter().append("g")
+            .attr("class", "data2");
+
+        data2.append("path")
+            .attr("class", "line")
+            .style("opacity", 1)
+            .attr("d", function(d) { return line(d.Total); });
+            // .style("stroke", function(d) { return color(d.name); });
+            // .on("mouseover", mouseover)
+            // .on("mouseout", mouseout);
+
 
         svg.append("g") // Add the X Axis
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
+
+        svg.append("text")
+            .attr("class", "y label")
+            .attr("text-anchor", "end")
+            .attr("y", 6)
+            .attr("dy", ".75em")
+            // .attr("transform", "rotate(-90)")
+            .attr('transform', 'translate( -45 ,' + height/6 + ') rotate(-90)')
+            .text("Quits As A Share Of Total Separations (%)")
+            .style("opacity", .7);
     
-        svg.append('g')
-            .attr('class', 'x grid')
-            .attr('transform', 'translate(0,' + height + ')')
-            .call(x_axis_grid()
-                .tickSize(-height, 0, 0)
-                .tickFormat('')
-            );
+        // svg.append('g')
+        //     .attr('class', 'x grid')
+        //     .attr('transform', 'translate(0,' + height + ')')
+        //     .call(x_axis_grid()
+        //         .tickSize(-height, 0, 0)
+        //         .tickFormat('')
+        //     );
 
         svg.append("g") // Add the Y Axis
             .attr("class", "y axis")
@@ -135,18 +170,14 @@ $(document).ready(function() {
 
 		  quint.append("text")
 		      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-		      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.income) + ")"; })
+              .attr("class", "text")
+              .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.income) + ")"; })
 		      .attr("x", 3)
-		      .attr("dy", ".35em")
-		      .text(function(d) { return d.name; });
+		      .attr("dy", ".15em")
+		      .text(function(d) { return d.name; })
+              .style("opacity", .7);
 
-		  legend = svg.append("g")
-		    .attr("class","legend")
-		    .attr("transform","translate(50,30)")
-		    .style("font-size","12px")
-		    .call(d3.legend)    
-
-
+   
         sendHeightToParent();
 
         // function to highlight lines: http://bl.ocks.org/AlexanderGraf/5416979#indfundbyregbytime.js
