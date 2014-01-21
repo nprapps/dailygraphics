@@ -119,7 +119,7 @@ $(document).ready(function() {
             .style("opacity", .7)
             .attr("d", function(d) { return line(d.values); })
             .style("stroke", function(d) { 
-                if (d.name.toLowerCase() == 'total') {
+                if (d.name.toLowerCase() == 'all industries') {
                     return '#333';
                 } else {
                     return color(d.name);
@@ -157,14 +157,6 @@ $(document).ready(function() {
             .attr('transform', 'translate( -45 ,' + height/6 + ') rotate(-90)')
             .text("Quits As A Share Of Total Separations (%)")
             .style("opacity", .7);
-    
-        // svg.append('g')
-        //     .attr('class', 'x grid')
-        //     .attr('transform', 'translate(0,' + height + ')')
-        //     .call(x_axis_grid()
-        //         .tickSize(-height, 0, 0)
-        //         .tickFormat('')
-        //     );
 
         svg.append("g") // Add the Y Axis
             .attr("class", "y axis")
