@@ -69,10 +69,6 @@
                 processMessage($this, e);
             } , false);
 
-            window.addEventListener('load', function(e) {
-                sendWidthToChild($this);
-            });
-
             window.addEventListener('resize', function(e) {
                 sendWidthToChild($this);
             });
