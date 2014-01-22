@@ -69,7 +69,7 @@
      * Transmit the current iframe height to the parent.
      */
     window.sendHeightToParent = function() {
-        var height = $(document).height().toString();
+        var height = $('body').height().toString();
 
         window.top.postMessage(height, '*');
     }
