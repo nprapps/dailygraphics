@@ -44,6 +44,8 @@ $(document).ready(function() {
 
         sendHeightToParent();
     });
+});
 
+$(window).load(function() {
     setupResponsiveChild();
 });

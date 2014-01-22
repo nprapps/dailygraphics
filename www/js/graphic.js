@@ -13,9 +13,10 @@ function render(width) {
 }
 
 /*
- * Ready
+ * NB: Use window.load instead of document.ready
+ * to ensure all images have loaded
  */
-$(document).ready(function() {
+$(window).load(function() {
     setupResponsiveChild({
         renderCallback: render
     });
