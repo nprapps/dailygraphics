@@ -83,10 +83,6 @@
         .bulbs {
             display: table;
             width: 100%;
-            margin-bottom: 33px;
-        }
-        .bulbs + .bulbs {
-            margin-top: -33px;
         }
         .bulb {
             display: table-cell;
@@ -100,6 +96,10 @@
         .bulb.halogen { background-color: #f8e39f; }
         .bulb.cfl { background-color: #f8ebb7; }
         .bulb.led { background-color: #faf0cd; }
+        
+        section {
+            margin-bottom: 44px;
+        }
         
         @media screen and (max-width: 640px) {
             .bulbs { display: block; }
@@ -177,29 +177,6 @@
                 75 watt: 1,100 lumens |
                 100 watt: 1,600 lumens
             </ul>
-
-            <div class="bulbs">
-                <div class="bulb standard">
-                    <h4>Standard Incandescent Bulb</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-
-                <div class="bulb halogen">
-                    <h4>Halogen Incandescent Bulb</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-
-                <div class="bulb cfl">
-                    <h4>Compact Fluorescent (CFL)</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-
-                <div class="bulb led">
-                    <h4>LED</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-            </div>
-
         </section>
     
         <section class="costs">
@@ -253,30 +230,9 @@
         <section class="appearance">
             <h2>Light Appearance</h2>
             <p>Among the new terms used to describe light appearance are Color Temperature and Color Rendering Index.</p>
-            <p><strong>Color Temperature</strong>, measured in degrees Kelvin, offers a sense of how warm or cool a light looks. Incandescents bulbs have a color temperature of about 2700K. CFLs and LEDs are offered in a range of color temperatures, from “soft white” at 2700K to “daylight” at 5000+K, which offers a more bluish light.</p>
-            <p><strong>Color Rendering Index (CRI)</strong> is a measurement of how accurately a light source displays colors. The CRI of traditional incandescent light is in the 90-100 range. For energy efficient bulbs, the EPA requires bulbs to have a CRI of 80 or above to qualify for the “Energy Star” label.</p>
-
-            <div class="bulbs">
-                <div class="bulb standard">
-                    <h4>Standard Incandescent Bulb</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-
-                <div class="bulb halogen">
-                    <h4>Halogen Incandescent Bulb</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-
-                <div class="bulb cfl">
-                    <h4>Compact Fluorescent (CFL)</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-
-                <div class="bulb led">
-                    <h4>LED</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-            </div>
+            <p><strong>Color Temperature</strong>, measured in degrees Kelvin, offers a sense of how warm or cool a light looks. Incandescents bulbs have a color temperature of about 2700K. CFLs and LEDs are offered in a range of color temperatures, from “soft white” at 2700K to “daylight” at 5000+K, which many perceive as a more bluish light.</p>
+            <p><strong>Color Rendering Index (CRI)</strong> is a measurement of how accurately a light source displays colors. Traditional incandescent bulbs have a CRI in the 90-100 range. For CFLs and LEDs, the EPA requires bulbs to have a CRI of 80 or above to qualify for the “Energy Star” label.</p>
+            <p>Still, lighting experts warn that Color Temperature and Color Rendering Index are inadequate measurements of color. Because there are many other factors at play, they say the best thing to do is to try a few options at home before committing to changing all your bulbs.</p>
         </section>
     
         <section class="usage">
