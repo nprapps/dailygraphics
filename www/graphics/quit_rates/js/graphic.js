@@ -34,7 +34,7 @@ $(document).ready(function() {
 
         var xAxis = d3.svg.axis().scale(x)
             .orient("bottom")
-            .tickSize(6);
+            .tickSize(6)
             .ticks(num_x_ticks);
 
         var x_axis_grid = function() { return xAxis; }
