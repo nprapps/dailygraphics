@@ -39,8 +39,6 @@
      * Process a new message from parent frame.
      */
     processMessage = function(e) {
-        console.log('child got width: ' + e.data);
-
         if (!isSafeMessage(e)) {
             return;
         }
@@ -53,6 +51,8 @@
         }
 
         width = parseInt(match[1]);
+        
+        console.log('child got width: ' + width);
 
         if (width != parentWidth) {
             parentWidth = width;

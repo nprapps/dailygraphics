@@ -24,8 +24,6 @@
      * Process a new message from a child iframe.
      */
     function processMessage($elem, e) {
-        console.log('parent got height: ' + e.data);
-
         if (!isSafeMessage(e)) {
             return;
         }
@@ -38,6 +36,8 @@
         }
 
         var height = parseInt(match[1]);
+        
+        console.log('parent got height: ' + height);
 
         $elem.find('iframe').css('height', height + 'px');
     }
