@@ -5,6 +5,7 @@
         polling: 0
     };
 
+    var childId = null;
     var parentWidth = null;
 
     /*
@@ -43,16 +44,22 @@
             return;
         }
 
-        var match = e.data.match(/^(\d+)$/);
+        // Parent sent width
+        var match = e.data.match(/^responsive-parent-(\d+)-(\d+)$/);
 
-        if (!match || match.length !== 2) {
+        if (!match || match.length !== 3) {
             // Not the message we're listening for
             return;
         }
 
-        width = parseInt(match[1]);
+        if (match[1] != childId) {
+            // Not meant for us
+            return;
+        }
+
+        var width = parseInt(match[2]);
         
-        console.log('child got width: ' + width);
+        console.log('child #' + childId + ' recieved width: ' + width);
 
         if (width != parentWidth) {
             parentWidth = width;
@@ -70,7 +77,7 @@
     window.sendHeightToParent = function() {
         var height = $(document).height().toString();
 
-        window.top.postMessage(height, '*');
+        window.top.postMessage('responsive-child-' + childId + '-' + height, '*');
     }
 
     /*
@@ -82,9 +89,10 @@
         window.addEventListener('message', processMessage, false);
 
         // Initial width is sent as querystring parameter
+        childId = parseInt(getParameterByName('childId'));
         var width = parseInt(getParameterByName('initialWidth'));
 
-        console.log('child got initial width: ' + width);
+        console.log('child #' + childId + ' received initial width: ' + width);
 
         if (settings.renderCallback) {
             settings.renderCallback(width);
