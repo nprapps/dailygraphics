@@ -50,7 +50,7 @@
      */
     function sendWidthToChild($elem) {
         var width = $elem.width().toString();
-        var childId = $elem.data('data-child-id');
+        var childId = $elem.attr('data-child-id');
 
         $elem.find('iframe')[0].contentWindow.postMessage('responsive-parent-' + childId + '-' + width, '*');
     }
@@ -67,7 +67,7 @@
             var $this = $(this);
 
             $this.addClass('responsive-iframe');
-            $this.data('data-child-id', nextChildId);
+            $this.attr('data-child-id', nextChildId);
 
             var width = $this.width().toString();
 

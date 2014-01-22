@@ -89,8 +89,10 @@
 
         window.addEventListener('message', processMessage, false);
 
-        // Initial width is sent as querystring parameter
+        // Unique child ID is sent as querystring parameter
         childId = parseInt(getParameterByName('childId'));
+        
+        // Initial width is sent as querystring parameter
         var width = parseInt(getParameterByName('initialWidth'));
 
         console.log('child #' + childId + ' received initial width: ' + width);
@@ -105,5 +107,4 @@
             window.setInterval(sendHeightToParent, settings.polling);
         }
     }
-
 }(jQuery));
