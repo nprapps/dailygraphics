@@ -35,10 +35,6 @@ def _graphics_detail(slug):
     context = make_context()
     context['slug'] = slug
     context['domain'] = app_config.S3_BASE_URL
-    context['xdomain'] = None 
-
-    if not app_config.DEBUG:
-        context['xdomain'] = 'npr.org'
 
     return render_template('parent.html', **context)
 
