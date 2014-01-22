@@ -66,8 +66,9 @@
 
             if (settings.renderCallback) {
                 settings.renderCallback(width);
-                sendHeightToParent();
             }
+                
+            sendHeightToParent();
         }
     }
 
