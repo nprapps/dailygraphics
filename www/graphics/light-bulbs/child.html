@@ -34,6 +34,7 @@
             margin: 0;
             padding: 0;
             font-family: Arial, Helvetica, sans-serif;
+            color: #121212;
         }
         .footer p {
             margin: 2px 0 0 0;
@@ -42,25 +43,65 @@
             color: #808080;
         }
         
+        /* headers */
+        h2 {
+            font-size: 22px;
+            font-weight: normal;
+            margin: 0 0 11px 0;
+        }
+        
+        h3 {
+            font-size: 18px;
+            font-weight: normal;
+            margin: 0 0 11px 0;
+        }
+        
+        h4 {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
+        
+        p {
+            font-size: 14px;
+            margin: 0 0 11px 0;
+        }
+        
+        ul {
+            list-style-type: none;
+            margin-left: 0;
+            padding-left: 0;
+            text-indent: 0;
+            margin: 0 0 6px 0;
+        }
+        li {
+            font-size: 14px;
+            margin: 0 0 5px 0;
+        }
+        
         /* bulbs */
         .bulbs {
             display: table;
             width: 100%;
+            margin-bottom: 33px;
+        }
+        .bulbs + .bulbs {
+            margin-top: -33px;
         }
         .bulb {
             display: table-cell;
             width: 25%;
             vertical-align: top;
-            padding: 11px;
+            padding: 15px 11px 4px 11px;
             border-right: 2px solid #fff;
         }
         
-        .bulb.standard { background-color: #e0e0e0; }
-        .bulb.halogen { background-color: #ebebeb; }
-        .bulb.cfl { background-color: #f1f1f1; }
-        .bulb.led { background-color: #f7f7f7; }
+        .bulb.standard { background-color: #f6de89; }
+        .bulb.halogen { background-color: #f8e39f; }
+        .bulb.cfl { background-color: #f8ebb7; }
+        .bulb.led { background-color: #faf0cd; }
         
-        @media screen and (max-width: 480px) {
+        @media screen and (max-width: 640px) {
             .bulbs { display: block; }
             .bulb { 
                 display: block; 
@@ -82,28 +123,42 @@
                 <div class="bulb standard">
                     <h3>Standard Incandescent Bulb</h3>
                     <p>[Product photo]
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <p>[Lighting Facts graphic?]
+                    <p>While you’ll still find traditional incandescent bulbs on store shelves today, they will become scarcer as major manufacturers have stopped production of the most common ones &mdash; the 40, 60, 75 and 100-watt bulbs. Incandescent bulbs give off the beautiful light that we’ve grown accustomed to, but they are highly inefficient, losing 90% of their energy to heat.</p>
                 </div>
 
                 <div class="bulb halogen">
                     <h3>Halogen Incandescent Bulb</h3>
                     <p>[Product photo]
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <p>[Lighting Facts graphic?]
+                    <p>Contrary to some reports, incandescent bulbs are not going away! In response to the 2007 law setting higher efficiency standards, manufacturers added halogen gas to incandescent bulbs to make them burn more efficiently &mdash; 28% more efficiently. The bulbs only last about a year, and are still far less efficient than CFLs or LEDs, but they give off that beautiful, warm light we have grown to love.</p>
                 </div>
 
                 <div class="bulb cfl">
                     <h3>Compact Fluorescent (CFL)</h3>
                     <p>[Product photo]
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <p>[Lighting Facts graphic?]
+                    <p>CFLs first came on the market in the 1980s with the promise of being 75% more efficient than incandescent bulbs. Unfortunately, early versions had many shortcomings: the light was harsh, they were slow to come on, they didn’t last as long as promised, and they were expensive, among other problems. Also, CFLs contain very small amounts of mercury and have to be disposed of properly. CFL technology has since come a long way, the color is much improved, and prices have dropped dramatically. Still, CFL market penetration remains low; it’s estimated to be about 20-30% of the domestic market. (CK)</p>
                 </div>
 
                 <div class="bulb led">
                     <h3>LED</h3>
                     <p>[Product photo]
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>Lighting experts and manufacturers alike believe that LEDs are the light of the future. Currently, LEDs make up less than 1% of the domestic market, but with prices dropping rapidly, adoption rates are expected to soar. LEDs use about 80% less energy than traditional incandescents and are purported to last more than 20 years. Unlike most CFLs, LEDs can be dimmed. The biggest barrier so far has been cost. While 60-watt equivalent LEDs are now selling for under $5, higher wattage equivalents run $20 or more per bulb.</p>
+                </div>
+            </div>
+
+            <div class="bulbs">
+                <div class="bulb standard">
+                    <p>[Lighting Facts graphic?]
+                </div>
+
+                <div class="bulb halogen">
+                    <p>[Lighting Facts graphic?]
+                </div>
+
+                <div class="bulb cfl">
+                    <p>[Lighting Facts graphic?]
+                </div>
+
+                <div class="bulb led">
                     <p>[Lighting Facts graphic?]
                 </div>
             </div>
@@ -112,12 +167,11 @@
     
         <section class="brightness">
             <h2>Brightness</h2>
-            <p>Explanation of what this means. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            <p>Incandescent equivalents:</p>
-            <ul>
-                <li>60 watt: ## lumens</li>
-                <li>75 watt: ## lumens</li>
-                <li>100 watt: ## lumens</li>
+            <p>Before energy efficient lighting was around, people thought about bulb brightness in terms of watts. Now, the lighting industry would like people to shift their thinking to lumens, which is a measurement of how much light a bulb actually gives off.</p>
+            <p><strong>Incandescent equivalents:</strong>
+                60 watt: 800 lumens | 
+                75 watt: 1,100 lumens |
+                100 watt: 1,600 lumens
             </ul>
 
             <div class="bulbs">
@@ -146,7 +200,7 @@
     
         <section class="costs">
             <h2>Cost And Average Lifespan</h2>
-            <p>Explanation of what this means. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p>In reality, the estimated life of a bulb as stated on a package is just that &mdash; an estimate. It’s based on simulations performed in labs. Some bulbs will not last as long as promised, others will last longer. Other factors also play a part in determining lifespan. A hot environment can cause LEDs to fail early, whereas CFLs may die sooner in the cold.</p>
 
             <div class="bulbs">
                 <div class="bulb standard">
@@ -187,34 +241,6 @@
                         <li>Estimated Lifespan: ##</li>
                     </ul>
                     <p>[Small chart of the bulb's cost over ten years]</p>
-                </div>
-            </div>
-
-        </section>
-    
-        <section class="brightness">
-            <h2>Brightness</h2>
-            <p>Explanation of what this means. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
-            <div class="bulbs">
-                <div class="bulb standard">
-                    <h4>Standard Incandescent Bulb</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-
-                <div class="bulb halogen">
-                    <h4>Halogen Incandescent Bulb</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-
-                <div class="bulb cfl">
-                    <h4>Compact Flourescent (CFL)</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-
-                <div class="bulb led">
-                    <h4>LED</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
             </div>
 
@@ -222,7 +248,9 @@
     
         <section class="appearance">
             <h2>Light Appearance</h2>
-            <p>Explanation of what this means. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p>Among the new terms used to describe light appearance are Color Temperature and Color Rendering Index.</p>
+            <p><strong>Color Temperature</strong>, measured in degrees Kelvin, offers a sense of how warm or cool a light looks. Incandescents bulbs have a color temperature of about 2700K. CFLs and LEDs are offered in a range of color temperatures, from “soft white” at 2700K to “daylight” at 5000+K, which offers a more bluish light.</p>
+            <p><strong>Color Rendering Index (CRI)</strong> is a measurement of how accurately a light source displays colors. The CRI of traditional incandescent light is in the 90-100 range. For energy efficient bulbs, the EPA requires bulbs to have a CRI of 80 or above to qualify for the “Energy Star” label.</p>
 
             <div class="bulbs">
                 <div class="bulb standard">
@@ -245,7 +273,6 @@
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
             </div>
-
         </section>
     
         <section class="usage">
