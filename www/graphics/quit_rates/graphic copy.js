@@ -1,12 +1,11 @@
 $(document).ready(function() {
 	var $graphic = $('#graphic');
-    var graphic_data_url = 'quits4.csv';
 	var graphic_data;
     var parseDate = d3.time.format("%m/%d/%y").parse; // parsing date data
     var formatTime = d3.time.format("%B %Y"); // display date format 
 	
     function loadData() {
-        d3.csv(graphic_data_url, function(error, data) {
+        d3.csv("quits4.csv", function(error, data) {
             graphic_data = data;
 
             graphic_data.forEach(function(d) {
@@ -19,9 +18,10 @@ $(document).ready(function() {
     }
 
     function drawGraphic() {
+        console.log('drawGraphic');
+
         var margin = {top: 0, right: 100, bottom: 20, left: 50};
-//        var width = $(top).width() - margin.left - margin.right;
-        var width = $graphic.width() - margin.left - margin.right;
+        var width = $(top).width() - margin.left - margin.right;
         var height = 350 - margin.top - margin.bottom;
     
         // var num_x_ticks = 20;
@@ -171,17 +171,17 @@ $(document).ready(function() {
         };
     }
 
-    function onResize() {
+	function onResize() {
         drawGraphic();
-    }
-    
-    function setup() {
-        setupResponsiveChild();
+	}
+	    
+	function setup() {
+	    setupResponsiveChild();
 
-        if (Modernizr.svg) {
-            loadData();
-        }
-    }
-    
+	 	if (Modernizr.svg) {
+	        loadData();
+	    }
+	}
+
     setup();
 });
