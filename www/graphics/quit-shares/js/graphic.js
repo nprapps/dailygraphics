@@ -9,10 +9,10 @@ $(document).ready(function() {
         var width = width - margin.left - margin.right;
         var height = 350 - margin.top - margin.bottom;
     
-        // var num_x_ticks = 20;
-        // if (width <= 480) {
-        //     num_x_ticks = 8;
-        // }
+        var num_x_ticks = 8;
+        if (width <= 480) {
+            num_x_ticks = 4;
+        }
 
         // clear out existing graphics
         $graphic.empty();
@@ -33,8 +33,8 @@ $(document).ready(function() {
 
         var xAxis = d3.svg.axis().scale(x)
             .orient("bottom")
-            .tickSize(6);
-            // .ticks(num_x_ticks);
+            .tickSize(6)
+            .ticks(num_x_ticks);
 
         var x_axis_grid = function() { return xAxis; }
 
