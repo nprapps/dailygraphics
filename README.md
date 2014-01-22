@@ -40,11 +40,8 @@ What's in here?
 The project contains the following folders and important files:
 
 * ``templates`` -- HTML ([Jinja2](http://jinja.pocoo.org/docs/)) templates, to be compiled locally.
-* ``tests`` -- Python unit tests.
 * ``www`` -- Static and compiled assets to be deployed. (a.k.a. "the output")
-* ``www/assets`` -- A symlink to an S3 bucket containing binary assets (images, audio).
-* ``www/live-data`` -- "Live" data deployed to S3 via cron jobs or other mechanisms. (Not deployed with the rest of the project.)
-* ``www/test`` -- Javascript tests and supporting files.
+* ``www/graphics`` -- Individual graphics projects.
 * ``app.py`` -- A [Flask](http://flask.pocoo.org/) app for rendering the project locally.
 * ``app_config.py`` -- Global project configuration for scripts, deployment, etc.
 * ``fabfile.py`` -- [Fabric](http://docs.fabfile.org/en/latest/) commands automating setup and deployment.
@@ -83,13 +80,13 @@ Alternatively, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in you
 Adding a new graphic to the project
 -------------------------
 
-All of the daily graphics to be put on NPR.org will live in this repo. To add a new graphic, run ```fab add_graphic:NAME_OF_GRAPHIC```.
+All of the daily graphics to be put on NPR.org will live in this repo. To add a new graphic, run ```fab add_graphic:name-of-graphic```.
 
-This will create the folder ```www/graphics/NAME_OF_GRAPHIC```. Within that folder will be a ```child.html``` file.
+This will create the folder ```www/graphics/name-of-graphic```. Within that folder will be a ```child.html``` file along with boilerplate Javascript files.
 
 Create the graphic in that file, and add any of the CSS/JS that you need within that folder.
 
-**Note**: `NAME_OF_GRAPHIC` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
+**Note**: `name-of-graphic` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
 Here are some examples:
 

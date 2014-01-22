@@ -4,8 +4,6 @@
         xdomain: '*'
     };
 
-    var nextChildId = 0;
-
     /* 
      * Verify that the message came from a trustworthy domain.
      */
@@ -25,24 +23,23 @@
     /*
      * Process a new message from a child iframe.
      */
-    function processMessage(e) {
+    function processMessage($elem, e) {
+        console.log('parent got height: ' + e.data);
+
         if (!isSafeMessage(e)) {
             return;
         }
 
         // Child sent height
-        var match = e.data.match(/^responsive-child-(\d+)-(\d+)$/);
+        var match = e.data.match(/^(\d+)$/);
 
-        if (!match || match.length !== 3) {
+        if (!match || match.length !== 2) {
             return false;
         }
 
-        var childId = match[1];
-        var height = parseInt(match[2]);
-        
-        console.log('child #' + childId + ' sent height: ' + height);
+        var height = parseInt(match[1]);
 
-        $('.responsive-iframe[data-child-id="' + childId + '"] iframe').css('height', height + 'px');
+        $elem.find('iframe').css('height', height + 'px');
     }
 
     /*
@@ -50,9 +47,8 @@
      */
     function sendWidthToChild($elem) {
         var width = $elem.width().toString();
-        var childId = $elem.data('data-child-id');
 
-        $elem.find('iframe')[0].contentWindow.postMessage('responsive-parent-' + childId + '-' + width, '*');
+        $elem.find('iframe')[0].contentWindow.postMessage(width, '*');
     }
 
     /*
@@ -61,20 +57,17 @@
     $.fn.responsiveIframe = function(config) {
         $.extend(settings, config);
 
-        window.addEventListener('message', processMessage, false);
-
         return this.each(function() {
             var $this = $(this);
-
-            $this.addClass('responsive-iframe');
-            $this.data('data-child-id', nextChildId);
 
             var width = $this.width().toString();
 
             // Send the initial width as a querystring parameter
-            $this.append('<iframe src="' + settings.src + '?initialWidth=' + width + '&childId=' + nextChildId + '" style="width: 100%;" scrolling="no" marginheight="0" marginwidth="0" frameborder="0"></iframe>')
+            $this.append('<iframe src="' + settings.src + '?initialWidth=' + width + '" style="width: 100%;" scrolling="no" marginheight="0" marginwidth="0" frameborder="0"></iframe>')
 
-            nextChildId += 1;
+            window.addEventListener('message', function(e) {
+                processMessage($this, e);
+            } , false);
 
             window.addEventListener('resize', function(e) {
                 sendWidthToChild($this);

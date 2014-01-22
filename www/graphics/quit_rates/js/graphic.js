@@ -1,27 +1,13 @@
 $(document).ready(function() {
 	var $graphic = $('#graphic');
+    var graphic_data_url = 'quits4.csv';
 	var graphic_data;
-    var parseDate = d3.time.format("%m/%d/%Y").parse; // parsing date data
+    var parseDate = d3.time.format("%m/%d/%y").parse; // parsing date data
     var formatTime = d3.time.format("%B %Y"); // display date format 
 	
-    function loadData() {
-        d3.csv("quits_share2.csv", function(error, data) {
-            graphic_data = data;
-
-            graphic_data.forEach(function(d) {
-                d.date = parseDate(d.date);
-            });
-
-            drawGraphic();
-            $(window).on('resize', onResize);
-        });
-    }
- 
-    function drawGraphic() {
-        console.log('drawGraphic');
-
-        var margin = {top: 0, right: 200, bottom: 20, left: 40};
-        var width = $(top).width() - margin.left - margin.right;
+    function drawGraphic(width) {
+        var margin = { top: 0, right: 100, bottom: 20, left: 50 };
+        var width = width - margin.left - margin.right;
         var height = 350 - margin.top - margin.bottom;
     
         var num_x_ticks = 8;
@@ -37,8 +23,8 @@ $(document).ready(function() {
 
         // var color = d3.scale.category10();
         var color = d3.scale.ordinal()
-			.range(["#D8472B", "#17807E", "#51AADE", "#EFC637", "#E38D2C", "#E27560", "#981E24"]); // colors
-        
+        .range(["#D8472B", "#17807E", "#51AADE", "#EFC637", "#E38D2C", "#E27560", "#981E24"]); // colors
+
         var svg = d3.select("#graphic")
             .append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -70,10 +56,6 @@ $(document).ready(function() {
             .x(function(d) { return x(d.date); })
             .y(function(d) { return y(d.income); });
 
-        var line2 = d3.svg.line()
-            .x(function(d) { return x(d.date); })
-            .y(function(d) { return y(d.total); });
-
 
         // finds the first header that is not 'date' 
         // gives each header a color
@@ -90,22 +72,13 @@ $(document).ready(function() {
             };
         });
 
+
         // Scale the range of the data
         x.domain(d3.extent(graphic_data, function(d) { return d.date; }));
         y.domain([
             d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.income; }); }),
             d3.max(quintiles, function(c) { return d3.max(c.values, function(v) { return v.income; }); })
         ]);
-
-        var data2 = color.domain().map(function(name) {
-            return {
-                name: name,
-                Total: graphic_data.map(function(d) {
-                    return {date: d.date, income: d.Total};
-                })
-            };
-        });
-
 
         var quint = svg.selectAll(".quint")
             .data(quintiles)
@@ -119,44 +92,24 @@ $(document).ready(function() {
             .style("opacity", .7)
             .attr("d", function(d) { return line(d.values); })
             .style("stroke", function(d) { 
-                if (d.name.toLowerCase() == 'all industries') {
-                    return '#333';
-                } else {
-                    return color(d.name);
-                }
-            });
-            // .on("mouseover", mouseover)
-            // .on("mouseout", mouseout);
-        
-        /*
-        var data2 = svg.selectAll(".data2")
-            .data(data2)
-            .enter().append("g")
-            .attr("class", "data2");
-
-        data2.append("path")
-            .attr("class", "line")
-            .style("opacity", 1)
-            .attr("d", function(d) { return line(d.Total); });
-            // .style("stroke", function(d) { return color(d.name); });
-            // .on("mouseover", mouseover)
-            // .on("mouseout", mouseout);
-        */
-
+                            if (d.name.toLowerCase() == 'all industries') {
+                                return '#333';
+                            } else {
+                                return color(d.name);
+                            }
+                        });
         svg.append("g") // Add the X Axis
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
-
-        svg.append("text")
-            .attr("class", "y label")
-            .attr("text-anchor", "end")
-            .attr("y", 6)
-            .attr("dy", ".75em")
-            // .attr("transform", "rotate(-90)")
-            .attr('transform', 'translate( -45 ,' + height/6 + ') rotate(-90)')
-            .text("Quits As A Share Of Total Separations (%)")
-            .style("opacity", .7);
+    
+        // svg.append('g')
+        //     .attr('class', 'x grid')
+        //     .attr('transform', 'translate(0,' + height + ')')
+        //     .call(x_axis_grid()
+        //         .tickSize(-height, 0, 0)
+        //         .tickFormat('')
+        //     );
 
         svg.append("g") // Add the Y Axis
             .attr("class", "y axis")
@@ -180,7 +133,18 @@ $(document).ready(function() {
             .text(function(d) { return d.name; })
             .style("opacity", .7);
 
-   
+            svg.append("text")
+                    .attr("class", "y label")
+                    .attr("text-anchor", "end")
+                    .attr("y", 6)
+                    .attr("dy", ".75em")
+                    .attr("transform", "rotate(-90)")
+                    // .attr('transform', 'translate(' + -width/36 + ',' + height/6 + ') rotate(-90)')
+                    .attr('transform', 'translate( -40 ,' + height/6 + ') rotate(-90)')
+                    .text("Quits As A Share Of Total Employment (%)")
+                    .style("opacity", .7);
+
+
         sendHeightToParent();
 
         // function to highlight lines: http://bl.ocks.org/AlexanderGraf/5416979#indfundbyregbytime.js
@@ -193,17 +157,21 @@ $(document).ready(function() {
         };
     }
 
-	function onResize() {
-        drawGraphic();
-	}
-	    
-	function setup() {
-	    setupResponsiveChild();
+    function setup() {
+        if (Modernizr.svg) {
+            d3.csv(graphic_data_url, function(error, data) {
+                graphic_data = data;
 
-	 	if (Modernizr.svg) {
-	        loadData();
-	    }
-	}
+                graphic_data.forEach(function(d) {
+                    d.date = parseDate(d.date);
+                });
 
+                setupResponsiveChild({
+                    renderCallback: drawGraphic
+                });
+            });
+        }
+    }
+    
     setup();
 });
