@@ -48,12 +48,12 @@
         h2 {
             font-size: 22px;
             font-weight: normal;
-            margin: 0 0 22px 0;
-            padding-bottom: 11px;
-            border-bottom: 2px solid #eee;
+            margin: 0 0 30px 0;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ebebeb;
         }
         .standards h2 {
-            margin-bottom: 0;
+            margin-bottom: 10px;
         }
         
         h3 {
@@ -94,13 +94,26 @@
             margin: 0 0 5px 0;
         }
         
+        .appearance ul,
         .brightness ul {
             display: table;
             width: 100%;
         }
+        
+        .appearance li {
+            display: table-cell;
+            width: 50%;
+            padding-right: 33px;
+        }
+        
         .brightness li {
             display: table-cell;
-            width: 33%;
+            width: 25%;
+        }
+        .brightness li span {
+            float: left;
+            display: inline-block;
+            margin-right: 11px;
         }
         
         .stats li {
@@ -137,7 +150,7 @@
             display: table-cell;
             width: 25%;
             vertical-align: top;
-            padding: 15px 22px 4px 0;
+            padding: 15px 33px 4px 0;
         }
         
 /*        .bulb.standard { background-color: #f6de89; }
@@ -158,12 +171,14 @@
             margin: -11px 11px 11px 0;
         }
         .standard .ico  { background-image: url('img/incandescent.svg'); }
-        .halogen .ico   { background-image: url('img/incandescent.svg'); }
+        .halogen .ico   { background-image: url('img/halogen.svg'); }
         .cfl .ico       { background-image: url('img/cfl.svg'); }
         .led .ico       { background-image: url('img/led.svg'); }
         
         section {
+            padding-bottom: 11px;
             margin-bottom: 55px;
+            border-bottom: 1px solid #ebebeb;
         }
         
         @media screen and (max-width: 768px) {
@@ -172,7 +187,7 @@
                 display: block; 
                 width: auto;
                 padding-right: 0;
-                border-bottom: 2px solid #eee;
+                border-bottom: 2px solid #ebebeb;
             }
         }
     </style>
@@ -350,8 +365,8 @@
         <section class="brightness">
             <h2>Brightness</h2>
             <p>Before energy efficient lighting was around, people thought about bulb brightness in terms of watts. Now, the lighting industry would like people to shift their thinking to <strong>lumens</strong>, which is a measurement of how much light a bulb actually gives off.</p>
-            <p><strong>Incandescent equivalents:</strong></p>
             <ul>
+                <li><strong>Incandescent equivalents:</strong></li>
                 <li><span>[icon]</span> 60-watt incandescent: 800 lumens</li>
                 <li><span>[icon]</span> 75-watt incandescent: 1,100 lumens</li>
                 <li><span>[icon]</span> 100-watt incandescent: 1,600 lumens</li>
@@ -366,8 +381,10 @@
         <section class="appearance">
             <h2>Light Appearance</h2>
             <p>Among the new terms used to describe light appearance are Color Temperature and Color Rendering Index.</p>
-            <p><strong>Color Temperature</strong>, measured in degrees Kelvin, offers a sense of how warm or cool a light looks. Incandescents bulbs have a color temperature of about 2700K. CFLs and LEDs are offered in a range of color temperatures, from “soft white” at 2700K to “daylight” at 5000+K, which many perceive as a more bluish light.</p>
-            <p><strong>Color Rendering Index (CRI)</strong> is a measurement of how accurately a light source displays colors. Traditional incandescent bulbs have a CRI in the 90-100 range. For CFLs and LEDs, the EPA requires bulbs to have a CRI of 80 or above to qualify for the “Energy Star” label.</p>
+            <ul>
+                <li><strong>Color Temperature</strong>, measured in degrees Kelvin, offers a sense of how warm or cool a light looks. Incandescents bulbs have a color temperature of about 2700K. CFLs and LEDs are offered in a range of color temperatures, from “soft white” at 2700K to “daylight” at 5000+K, which many perceive as a more bluish light.</li>
+                <li><strong>Color Rendering Index (CRI)</strong> is a measurement of how accurately a light source displays colors. Traditional incandescent bulbs have a CRI in the 90-100 range. For CFLs and LEDs, the EPA requires bulbs to have a CRI of 80 or above to qualify for the “Energy Star” label.</li>
+            </ul>
             <p>Still, lighting experts warn that Color Temperature and Color Rendering Index are inadequate measurements of color. Because there are many other factors at play, they say the best thing to do is to try a few options at home before committing to changing all your bulbs.</p>
         </section>
     
