@@ -10,6 +10,7 @@ Daily Graphics
 * [What's in here?](#whats-in-here)
 * [Bootstrap the project](#bootstrap-the-project)
 * [Hide project secrets](#hide-project-secrets)
+* [Save media assets](#save-media-assets)
 * [Run the project](#run-the-project)
 * [Adding a new graphic to the project](#adding-a-new-graphic-to-the-project)
 * [Run Python tests](#run-python-tests)
@@ -62,6 +63,17 @@ Hide project secrets
 --------------------
 
 Project secrets should **never** be stored in ``app_config.py`` or anywhere else in the repository. They will be leaked to the client if you do. Instead, always store passwords, keys, etc. in environment variables and document that they are needed here in the README.
+
+Save media assets
+-----------------
+
+Large media assets (images, videos, audio) are synced with an Amazon S3 bucket called ```assets.apps.npr.org``` in a folder with the name of the project. This allows everyone who works on the project to access these assets without storing them in the repo, giving us faster clone times and the ability to open source our work.
+
+Syncing these assets requires running a few different commands at the right times:
+
+* When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets_up```. **NOTE**: The newest push will *always* overwrite the current copy on the server.
+* When you need new assets or newly changed assets in your local environment that are on the server already, run ```fab assets_down``` (this will happen in ```fab bootstrap``` automatically).
+* When you want to remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets_rm:"file_name_here.jpg"```
 
 Run the project
 ---------------

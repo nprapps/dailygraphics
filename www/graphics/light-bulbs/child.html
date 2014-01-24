@@ -27,7 +27,7 @@
              timeout: 10000
          });
     </script>
-    
+
     <style type="text/css">
         /* base styles */
         body {
@@ -43,7 +43,7 @@
             line-height: 1.3;
             color: #808080;
         }
-        
+
         /* headers */
         h2 {
             font-size: 22px;
@@ -55,28 +55,28 @@
         .standards h2 {
             margin-bottom: 10px;
         }
-        
+
         h3 {
             font-size: 16px;
             font-weight: normal;
             margin: 11px 0 11px 0;
         }
-        
+
         h4 {
             font-size: 14px;
             font-weight: bold;
             margin: 0 0 5px 0;
         }
-        
+
         p {
             font-size: 14px;
             margin: 0 0 11px 0;
         }
-        
+
         .standards p { clear: both; }
 
         strong { color: #121212; }
-        
+
         ul {
             list-style-type: none;
             margin-left: 0;
@@ -89,19 +89,19 @@
             font-size: 14px;
             margin: 0 0 5px 0;
         }
-        
+
         .appearance ul,
         .brightness ul {
             display: table;
             width: 100%;
         }
-        
+
         .appearance li {
             display: table-cell;
             width: 50%;
             padding-right: 33px;
         }
-        
+
         .brightness li {
             display: table-cell;
             width: 25%;
@@ -111,13 +111,13 @@
             display: inline-block;
             margin-right: 11px;
         }
-        
+
         .sample p,
-        .sample li { 
+        .sample li {
             font-size: 12px;
             color: #444;
         }
-        
+
         .stats li {
             display: table;
             width: 100%;
@@ -129,7 +129,7 @@
             border-top: 1px solid #eee;
             padding-top: 5px;
         }
-        .stats .label { 
+        .stats .label {
             width: 50%;
             padding-right: 10px;
         }
@@ -148,20 +148,20 @@
             vertical-align: top;
             padding: 15px 33px 4px 0;
         }
-        
+
         .bulb img {
             width: 100%;
             height: auto;
             display: block;
         }
-        
+
 /*        .bulb.standard { background-color: #f6de89; }
         .bulb.halogen { background-color: #f8e39f; }
         .bulb.cfl { background-color: #f8ebb7; }
         .bulb.led { background-color: #faf0cd; } */
-        
-        .ico { 
-            background-color: #EFC637; 
+
+        .ico {
+            background-color: #EFC637;
             width: 44px;
             height: 44px;
             border-radius: 25px;
@@ -172,21 +172,21 @@
             float: left;
             margin: -11px 11px 11px 0;
         }
-        .standard .ico  { background-image: url('img/incandescent.svg'); }
-        .halogen .ico   { background-image: url('img/halogen.svg'); }
-        .cfl .ico       { background-image: url('img/cfl.svg'); }
-        .led .ico       { background-image: url('img/led.svg'); }
-        
+        .standard .ico  { background-image: url('../../assets/incandescent.svg'); }
+        .halogen .ico   { background-image: url('../../assets/halogen.svg'); }
+        .cfl .ico       { background-image: url('../../assets/cfl.svg'); }
+        .led .ico       { background-image: url('../../assets/led.svg'); }
+
         section {
             padding-bottom: 11px;
             margin-bottom: 55px;
             border-bottom: 1px solid #ebebeb;
         }
-        
+
         @media screen and (max-width: 768px) {
             .bulbs { display: block; }
-            .bulb { 
-                display: block; 
+            .bulb {
+                display: block;
                 width: auto;
                 padding-right: 0;
                 border-bottom: 2px solid #ebebeb;
@@ -197,10 +197,10 @@
 </head>
 <body>
     <div id="graphic">
-    
+
         <section class="standards">
             <h2>The Major Bulb Standards</h2>
-            
+
             <div class="bulbs">
                 <div class="bulb standard">
                     <h3><span class="ico"></span>Standard Incandescent</h3>
@@ -227,11 +227,11 @@
         <section class="comparison">
             <h2>A 60-Watt Comparison</h2>
             <p>We went to Home Depot to shop for bulbs equivalent to the common 60-watt standard incandescent bulb. <em>(Prices as of January 2014. Note: Bulb prices can vary wildly within a given category, depending on the manufacturer and factors like dimmability and Energy Star certification.)</em></p>
-            
+
             <div class="bulbs sample">
                 <div class="bulb standard">
                     <h4>Standard Incandescent</h4>
-                    <p><img src="img/incandescent.jpg" alt="Photo of a standard incandescent bulb" /></p>
+                    <p><img src="../../assets/incandescent.jpg" alt="Photo of a standard incandescent bulb" /></p>
                     <p><strong>Philips Soft White 60 Watt bulb (4 pack)</strong></p>
                     <ul class="stats">
                         <li>
@@ -264,7 +264,7 @@
 
                 <div class="bulb halogen">
                     <h4>Halogen Incandescent</h4>
-                    <p><img src="img/halogen.jpg" alt="Photo of a halogen incandescent bulb" /></p>
+                    <p><img src="../../assets/halogen.jpg" alt="Photo of a halogen incandescent bulb" /></p>
                     <p><strong>Philips EcoVantage 43-Watt (60-Watt equivalent) Soft White Dimmable Light Bulb (4-pack)</strong></p>
                     <ul class="stats">
                         <li>
@@ -297,7 +297,7 @@
 
                 <div class="bulb cfl">
                     <h4>Compact Fluorescent (CFL)</h4>
-                    <p><img src="img/cfl.jpg" alt="Photo of a compact fluorescent bulb" /></p>
+                    <p><img src="../../assets/cfl.jpg" alt="Photo of a compact fluorescent bulb" /></p>
                     <p><strong>ecosmart 60 Watt equivalent soft white dimmable CFL, instant on (2-pack)</strong></p>
                     <ul class="stats">
                         <li>
@@ -330,7 +330,7 @@
 
                 <div class="bulb led">
                     <h4>LED</h4>
-                    <p><img src="img/led.jpg" alt="Photo of an led bulb" /></p>
+                    <p><img src="../../assets/led.jpg" alt="Photo of an led bulb" /></p>
                     <p><strong>Cree 60 watt equivalent Soft White Dimmable LED Light Bulb</strong></p>
                     <ul class="stats">
                         <li>
@@ -363,7 +363,7 @@
             </div>
 
         </section>
-    
+
         <section class="brightness">
             <h2>Brightness</h2>
             <p>Before energy efficient lighting was around, people thought about bulb brightness in terms of watts. Now, the lighting industry would like people to shift their thinking to <strong>lumens</strong>, which is a measurement of how much light a bulb actually gives off.</p>
@@ -374,12 +374,12 @@
                 <li><span>[icon]</span> 100-watt incandescent: 1,600 lumens</li>
             </ul>
         </section>
-    
+
         <section class="costs">
             <h2>Cost And Average Lifespan</h2>
             <p>In reality, the estimated life of a bulb as stated on a package is just that &mdash; an estimate. It’s based on simulations performed in labs. Some bulbs will not last as long as promised, others will last longer. Other factors also play a part in determining lifespan. A hot environment can cause LEDs to fail early, whereas CFLs may die sooner in the cold.</p>
         </section>
-    
+
         <section class="appearance">
             <h2>Light Appearance</h2>
             <p>Among the new terms used to describe light appearance are Color Temperature and Color Rendering Index.</p>
@@ -389,13 +389,13 @@
             </ul>
             <p>Still, lighting experts warn that Color Temperature and Color Rendering Index are inadequate measurements of color. Because there are many other factors at play, they say the best thing to do is to try a few options at home before committing to changing all your bulbs.</p>
         </section>
-    
+
         <section class="usage">
             <h2>Energy Used</h2>
             <p>In the old days, we thought of lightbulbs in terms of wattage. Nowadays, all packages have <strong>watt-equivalents</strong>, to help consumers decide what bulb to buy. LEDs and CFLs typically use a quarter or less of the energy that traditional incandescents use.</p>
         </section>
    </div>
-    
+
     <div class="footer">
         <p>Source: Natural Resources Defense Council</p>
         <p>Credit: April Fehling, Andrea Hsu, Alyson Hurt, Avie Schneider and Jim Tuttle/NPR</p>
