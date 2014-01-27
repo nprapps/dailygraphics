@@ -267,22 +267,17 @@ def _deploy_to_s3(path='.gzip'):
     sync = 'aws s3 sync %s %s --acl "public-read" ' + exclude_flags + ' --cache-control "max-age=5" --region "us-east-1"'
     sync_gzip = 'aws s3 sync %s %s --acl "public-read" --content-encoding "gzip" --exclude "*" ' + include_flags + ' --cache-control "max-age=5" --region "us-east-1"'
 
-    if path == '.gzip/graphics/':
-        for bucket in app_config.S3_BUCKETS:
-            local(sync % (path, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
-            local(sync_gzip % (path, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
-    else:
-        for bucket in app_config.S3_BUCKETS:
-            local(sync % (path, 's3://%s/%s/%s/' % (
-                bucket,
-                app_config.PROJECT_SLUG,
-                path.split('.gzip/')[1].split('/')[0],
-            )))
-            local(sync_gzip % (path, 's3://%s/%s/%s/' % (
-                bucket,
-                app_config.PROJECT_SLUG,
-                path.split('.gzip/')[1].split('/')[0],
-            )))
+    for bucket in app_config.S3_BUCKETS:
+        local(sync % (path, 's3://%s/%s/%s/' % (
+            bucket,
+            app_config.PROJECT_SLUG,
+            path.split('.gzip/')[1].split('/')[0],
+        )))
+        local(sync_gzip % (path, 's3://%s/%s/%s/' % (
+            bucket,
+            app_config.PROJECT_SLUG,
+            path.split('.gzip/')[1].split('/')[0],
+        )))
 
 def _gzip(in_path='www', out_path='.gzip'):
     """
