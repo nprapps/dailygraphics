@@ -1,41 +1,23 @@
-$(document).ready(function() {
-    var colors = {
-        'red1': '#6C2315', 'red2': '#A23520', 'red3': '#D8472B', 'red4': '#E27560', 'red5': '#ECA395', 'red6': '#F5D1CA',
-        'orange1': '#714616', 'orange2': '#AA6A21', 'orange3': '#E38D2C', 'orange4': '#EAAA61', 'orange5': '#F1C696', 'orange6': '#F8E2CA',
-        'yellow1': '#77631B', 'yellow2': '#B39429', 'yellow3': '#EFC637', 'yellow4': '#F3D469', 'yellow5': '#F7E39B', 'yellow6': '#FBF1CD',
-        'teal1': '#0B403F', 'teal2': '#11605E', 'teal3': '#17807E', 'teal4': '#51A09E', 'teal5': '#8BC0BF', 'teal6': '#C5DFDF',
-        'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
-    };
+var colors = {
+    'red1': '#6C2315', 'red2': '#A23520', 'red3': '#D8472B', 'red4': '#E27560', 'red5': '#ECA395', 'red6': '#F5D1CA',
+    'orange1': '#714616', 'orange2': '#AA6A21', 'orange3': '#E38D2C', 'orange4': '#EAAA61', 'orange5': '#F1C696', 'orange6': '#F8E2CA',
+    'yellow1': '#77631B', 'yellow2': '#B39429', 'yellow3': '#EFC637', 'yellow4': '#F3D469', 'yellow5': '#F7E39B', 'yellow6': '#FBF1CD',
+    'teal1': '#0B403F', 'teal2': '#11605E', 'teal3': '#17807E', 'teal4': '#51A09E', 'teal5': '#8BC0BF', 'teal6': '#C5DFDF',
+    'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
+};
 
+/*
+ * NB: Use window.load instead of document.ready
+ * to ensure all images have loaded
+ */
+$(window).load(function() {
 	var $graphic = $('#graphic');
     var graphic_data_url = 'mtcars2.csv';
 	var graphic_data;
 
-    function loadData() {
-        d3.csv(graphic_data_url, function(error, data) {
-            graphic_data = data;
-
-           graphic_data.forEach(function(d) {
-           		// d = +d
-                d.mpg = +d.mpg;
-                d.wt = +d.wt;
-                // d.disp = +d.disp;
-                // d.hp = +d.hp;
-                // d.drat = +d.drat;
-	           console.log(d.mpg)
-	           console.log(d.wt)
-
-            });
-
-            drawGraphic();
-            $(window).on('resize', onResize);
-        });
-    }
-
-    function drawGraphic() {
+    function drawGraphic(width) {
         var margin = {top: 0, right: 100, bottom: 20, left: 50};
-//        var width = $(top).width() - margin.left - margin.right;
-        var width = $graphic.width() - margin.left - margin.right;
+        var width = width - margin.left - margin.right;
         var height = 400 - margin.top - margin.bottom;
     
         var num_x_ticks = 10;
@@ -158,9 +140,6 @@ $(document).ready(function() {
                 .tickFormat("")
             );
 
-
-        sendHeightToParent();
-
         // function to highlight lines: http://bl.ocks.org/AlexanderGraf/5416979#indfundbyregbytime.js
         function mouseover(d, i) {
             d3.select(this).style("opacity", "1");
@@ -169,34 +148,34 @@ $(document).ready(function() {
         function mouseout(d, i) {
             d3.select(this).style("opacity", ".3");
         };
+
+        // update responsive iframe
+        sendHeightToParent();
     }
 
-    function onResize() {
-        drawGraphic();
-    }
-    
     function setup() {
-    setupResponsiveChild();
+        if (Modernizr.svg) {
+            d3.csv(graphic_data_url, function(error, data) {
+                graphic_data = data;
 
-      if (Modernizr.svg) {
-            loadData();
+                graphic_data.forEach(function(d) {
+                    // d = +d
+                    d.mpg = +d.mpg;
+                    d.wt = +d.wt;
+                    // d.disp = +d.disp;
+                    // d.hp = +d.hp;
+                    // d.drat = +d.drat;
+                    console.log(d.mpg)
+                    console.log(d.wt)
+                });
+
+                setupResponsiveChild({
+                    renderCallback: drawGraphic 
+                });
+            });
         }
     }
 
     setup();
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
