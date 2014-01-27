@@ -264,6 +264,8 @@ def _deploy_to_s3(path='.gzip'):
             exclude_flags += '--exclude "%s" ' % line.strip()
             include_flags += '--include "%s" ' % line.strip()
 
+    print path
+
     sync = 'aws s3 sync %s %s --acl "public-read" ' + exclude_flags + ' --cache-control "max-age=5" --region "us-east-1"'
     sync_gzip = 'aws s3 sync %s %s --acl "public-read" --content-encoding "gzip" --exclude "*" ' + include_flags + ' --cache-control "max-age=5" --region "us-east-1"'
 
@@ -271,12 +273,12 @@ def _deploy_to_s3(path='.gzip'):
         local(sync % (path, 's3://%s/%s/%s/' % (
             bucket,
             app_config.PROJECT_SLUG,
-            path.split('.gzip/')[1].split('/')[0],
+            path.split('.gzip/')[1],
         )))
         local(sync_gzip % (path, 's3://%s/%s/%s/' % (
             bucket,
             app_config.PROJECT_SLUG,
-            path.split('.gzip/')[1].split('/')[0],
+            path.split('.gzip/')[1],
         )))
 
 def _gzip(in_path='www', out_path='.gzip'):
