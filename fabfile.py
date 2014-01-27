@@ -259,8 +259,6 @@ def _deploy_to_s3(path='.gzip'):
             exclude_flags += '--exclude "%s" ' % line.strip()
             include_flags += '--include "%s" ' % line.strip()
 
-    exclude_flags += '--exclude "www/assets" '
-
     sync = 'aws s3 sync %s/ %s --acl "public-read" ' + exclude_flags + ' --cache-control "max-age=5" --region "us-east-1"'
     sync_gzip = 'aws s3 sync %s/ %s --acl "public-read" --content-encoding "gzip" --exclude "*" ' + include_flags + ' --cache-control "max-age=5" --region "us-east-1"'
 
