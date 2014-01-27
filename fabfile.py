@@ -110,9 +110,14 @@ def render():
 
 def _render_iterable(iterable):
     """
-    View should be named _model_detail().
-    Path should be model-lookup.html.
-    Template is handled from the view.
+    For rendering routes with an iterable.
+    E.g., /blogs/<blog-id>/ would be a route.
+    And [1,2,3] would be an iterable.
+    And this would render:
+        /blogs/1/
+        /blogs/2/
+        /blogs/3/
+    Get it?
     """
 
     # Fake out deployment target
@@ -248,8 +253,8 @@ def _deploy_to_s3(path='.gzip'):
     Deploy the gzipped stuff to S3.
     """
     # Clear files that should never be deployed
-    local('rm -rf %s/live-data' % path)
-    local('rm -rf %s/sitemap.xml' % path)
+    local('rm -rf %slive-data' % path)
+    local('rm -rf %ssitemap.xml' % path)
 
     exclude_flags = ''
     include_flags = ''
@@ -259,10 +264,8 @@ def _deploy_to_s3(path='.gzip'):
             exclude_flags += '--exclude "%s" ' % line.strip()
             include_flags += '--include "%s" ' % line.strip()
 
-    exclude_flags += '--exclude "www/assets" '
-
-    sync = 'aws s3 sync %s/ %s --acl "public-read" ' + exclude_flags + ' --cache-control "max-age=5" --region "us-east-1"'
-    sync_gzip = 'aws s3 sync %s/ %s --acl "public-read" --content-encoding "gzip" --exclude "*" ' + include_flags + ' --cache-control "max-age=5" --region "us-east-1"'
+    sync = 'aws s3 sync %s %s --acl "public-read" ' + exclude_flags + ' --cache-control "max-age=5" --region "us-east-1"'
+    sync_gzip = 'aws s3 sync %s %s --acl "public-read" --content-encoding "gzip" --exclude "*" ' + include_flags + ' --cache-control "max-age=5" --region "us-east-1"'
 
     if path == '.gzip/graphics/':
         for bucket in app_config.S3_BUCKETS:
@@ -270,17 +273,15 @@ def _deploy_to_s3(path='.gzip'):
             local(sync_gzip % (path, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
     else:
         for bucket in app_config.S3_BUCKETS:
-            local(sync % (path, 's3://%s/%s/%s/%s/' % (
+            local(sync % (path, 's3://%s/%s/%s/' % (
                 bucket,
                 app_config.PROJECT_SLUG,
                 path.split('.gzip/')[1].split('/')[0],
-                path.split('.gzip/')[1].split('/')[1]
             )))
-            local(sync_gzip % (path, 's3://%s/%s/%s/%s/' % (
+            local(sync_gzip % (path, 's3://%s/%s/%s/' % (
                 bucket,
                 app_config.PROJECT_SLUG,
                 path.split('.gzip/')[1].split('/')[0],
-                path.split('.gzip/')[1].split('/')[1]
             )))
 
 def _gzip(in_path='www', out_path='.gzip'):
@@ -402,6 +403,7 @@ def deploy(remote='origin', slug=''):
 
     render()
     _gzip('www', '.gzip')
+    _deploy_to_s3('.gzip/assets/')
     _deploy_to_s3('.gzip/graphics/%s' % slug)
 
 
