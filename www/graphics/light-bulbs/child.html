@@ -40,22 +40,32 @@
 
         h3 {
             font-size: 16px;
-            font-weight: normal;
+            font-weight: bold;
             margin: 11px 0 11px 0;
         }
+        .bulb h3 { text-align: center; }
 
         h4 {
             font-size: 14px;
             font-weight: bold;
             margin: 0 0 5px 0;
         }
+        
+        h5 {
+            font-size: 12px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
+        .comparison h5 { height: 6em; }
 
         p {
             font-size: 14px;
             margin: 0 0 11px 0;
         }
-
-        .standards p { clear: both; }
+        .standards p { 
+            clear: both;
+            margin-bottom: 0;
+        }
 
         strong { color: #121212; }
 
@@ -72,18 +82,10 @@
             margin: 0 0 5px 0;
         }
 
-        .appearance ul,
         .brightness ul {
             display: table;
             width: 100%;
         }
-
-        .appearance li {
-            display: table-cell;
-            width: 50%;
-            padding-right: 33px;
-        }
-
         .brightness li {
             display: table-cell;
             width: 25%;
@@ -125,12 +127,20 @@
             display: table;
             width: 100%;
         }
+
         .bulb {
             display: table-cell;
             width: 25%;
             vertical-align: top;
-            padding: 15px 33px 4px 0;
+            padding: 15px 33px 15px 0;
         }
+
+        .bulb:before,
+        .bulb:after {
+            content: " "; /* 1 */
+            display: table; /* 2 */
+        }
+        .bulb:after { clear: both; }
 
         .bulb img {
             width: 100%;
@@ -138,41 +148,69 @@
             display: block;
         }
 
-/*        .bulb.standard { background-color: #f6de89; }
-        .bulb.halogen { background-color: #f8e39f; }
-        .bulb.cfl { background-color: #f8ebb7; }
-        .bulb.led { background-color: #faf0cd; } */
-
         .ico {
             background-color: #EFC637;
-            width: 44px;
-            height: 44px;
-            border-radius: 25px;
-            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border-radius: 100px;
             background-repeat: no-repeat;
             background-position: 50% 50%;
             background-size: 70% 70%;
+            display: block;
+            margin: 0 auto 11px auto;
+            /*
+            display: inline-block;
             float: left;
             margin: -11px 11px 11px 0;
+            */
         }
-        .standard .ico  { background-image: url('http://assets.apps.npr.org/dailygraphics/light-bulbs/incandescent.svg'); }
-        .halogen .ico   { background-image: url('http://assets.apps.npr.org/dailygraphics/light-bulbs/halogen.svg'); }
-        .cfl .ico       { background-image: url('http://assets.apps.npr.org/dailygraphics/light-bulbs/cfl.svg'); }
-        .led .ico       { background-image: url('http://assets.apps.npr.org/dailygraphics/light-bulbs/led.svg'); }
+        .standard .ico  { background-image: url('../../assets/light-bulbs/incandescent.svg'); }
+        .halogen .ico   { background-image: url('../../assets/light-bulbs/halogen.svg'); }
+        .cfl .ico       { background-image: url('../../assets/light-bulbs/cfl.svg'); }
+        .led .ico       { background-image: url('../../assets/light-bulbs/led.svg'); }
 
         section {
-            padding-bottom: 11px;
             margin-bottom: 55px;
-            border-bottom: 1px solid #ebebeb;
+        }
+        
+        .term {
+            margin-bottom: 33px;
         }
 
+        @media screen and (min-width: 1200px) {
+            .comparison h5 { height: 3em; }
+        }
         @media screen and (max-width: 768px) {
             .bulbs { display: block; }
             .bulb {
                 display: block;
                 width: auto;
                 padding-right: 0;
-                border-bottom: 2px solid #ebebeb;
+                border-bottom: 1px solid #ebebeb;
+            }
+            .bulb h3 { text-align: left; }
+            .ico {
+                width: 44px;
+                height: 44px;
+                display: inline-block;
+                float: left;
+                margin: -11px 11px 11px 0;
+            }
+            .bulb-photo {
+                float: left;
+                width: 47%;
+            }
+            .bulb-info {
+                width: 50%;
+                float: right;
+            }
+            .comparison h5 { height: auto; }
+        }
+        @media screen and (max-width: 480px) {
+            .bulb-photo,
+            .bulb-info {
+                width: auto;
+                float: none;
             }
         }
     </style>
@@ -187,200 +225,231 @@
             <div class="bulbs">
                 <div class="bulb standard">
                     <h3><span class="ico"></span>Standard Incandescent</h3>
-                    <p>Incandescent bulbs give off the warm, yellowish-white light that we’ve grown to love, but they are highly inefficient, losing 90% of their energy to heat. While you’ll still find traditional incandescent bulbs on store shelves today, they will become scarcer in months to come as major manufacturers have stopped making the most common ones -- the 40, 60, 75 and 100-watt bulbs. Production of specialty incandescent bulbs, such as 3-way bulbs, will continue.</p>
+                    <p>Incandescent bulbs give off the warm, yellowish-white light we’ve grown to love, but they are highly inefficient, losing 90 percent of their energy to heat. You can still find traditional incandescent bulbs on store shelves, but major manufacturers have stopped producing the most common varieties &mdash; meaning that 40-, 60-, 75- and 100-watt bulbs will become scarcer in the coming months. Production of specialty incandescents like three-way bulbs will continue.</p>
                 </div>
 
                 <div class="bulb halogen">
                     <h3><span class="ico"></span>Halogen Incandescent</h3>
-                    <p>Contrary to some reports, incandescent bulbs are not banned. In response to the 2007 law setting higher efficiency standards, manufacturers added halogen gas to incandescent bulbs to make them burn more efficiently. Halogen incandescents use 28% less energy than traditional incandescents, and give off the same light. Like the old bulbs, they last about a year.</p>
+                    <p>Contrary to some reports, incandescent bulbs have not been banned. In response to a 2007 law setting higher efficiency standards, manufacturers added halogen gas to incandescent bulbs to make them burn more efficiently. Halogen incandescents give off the same light as traditional incandescents, but use 28 percent less energy. Like standard incandescents, they last about one year.</p>
                 </div>
 
                 <div class="bulb cfl">
                     <h3><span class="ico"></span>Compact Fluorescent (CFL)</h3>
-                    <p>CFLs have come a long way since they were first introduced. Nowadays, the color of the light is much improved, some can be dimmed, and the price has dropped dramatically to a few dollars per bulb or less. They use about 75% less energy than incandescents and have an estimated life of 9 years. CFLs contain very small amounts of mercury and should be disposed of properly.</p>
+                    <p>CFLs have come a long way since becoming widely available in the 1990s. Today, the color of the light is much improved, some bulbs can be dimmed, and the price per bulb has dropped dramatically to a few dollars or less. They use about 75 percent less energy than incandescents and have an estimated life of 9 years. CFLs contain very small amounts of mercury and should be disposed of properly.</p>
                 </div>
 
                 <div class="bulb led">
                     <h3><span class="ico"></span>LED</h3>
-                    <p>Currently, LEDs make up less than 1% of the domestic market, but with prices dropping rapidly, adoption rates are expected to soar. LEDs use about 80% less energy than incandescents and have an estimated life of more than 20 years. Most LEDs can be dimmed. The biggest barrier so far has been cost. While 60-watt equivalent LED bulbs are now selling for under $10, higher wattage equivalents are twice that or more.</p>
+                    <p>Currently, LEDs make up less than 1 percent of the domestic market. But with prices dropping rapidly, adoption rates are expected to soar. LEDs use about 80 percent less energy than incandescents and have an estimated life of more than 20 years. Most LEDs can be dimmed. So far, cost has been the biggest obstacle to wider use; while 60-watt equivalent LED bulbs are now selling for less than $10, the price for higher wattage equivalents is at least twice that.</p>
                 </div>
             </div>
         </section>
 
         <section class="comparison">
             <h2>A 60-Watt Comparison</h2>
-            <p>We went to Home Depot to shop for bulbs equivalent to the common 60-watt soft white standard incandescent bulb. <em>(Prices as of January 2014. Note: Bulb prices vary greatly within a given category, depending on the manufacturer and features such as dimmability and color temperature. This is a sample of what we found.)</em></p>
+            <p>We went to Home Depot to shop for bulbs equivalent to the common 60-watt “soft white” standard incandescent bulb. <em>(Prices as of January 2014. Note: Bulb prices vary greatly within a given category, depending on the manufacturer and features such as dimmability and color temperature. This is a sample of what we found.)</em></p>
 
             <div class="bulbs sample">
                 <div class="bulb standard">
                     <h4>Standard Incandescent</h4>
-                    <p><img src="http://assets.apps.npr.org/dailygraphics/light-bulbs/incandescent.jpg" alt="Photo of a standard incandescent bulb" /></p>
-                    <p><strong>Philips Soft White 60 Watt bulb (4 pack)</strong></p>
-                    <ul class="stats">
-                        <li>
-                            <span class="label">Cost:</span>
-                            <span class="value">$1.58 ($0.40/bulb)</span>
-                        </li>
-                        <li>
-                            <span class="label">Brightness:</span>
-                            <span class="value">860 lumens</span>
-                        </li>
-                        <li>
-                            <span class="label">Estimated Yearly Energy Cost:</span>
-                            <span class="value">$7.23</span>
-                        </li>
-                        <li>
-                            <span class="label">Life:</span>
-                            <span class="value">0.9 years</span>
-                        </li>
-                        <li>
-                            <span class="label">Light Appearance:</span>
-                            <span class="value">2770K</span>
-                        <li>
-                        <li>
-                            <span class="label">Energy Used:</span>
-                            <span class="value">60 watts</span>
-                        </li>
-                    </ul>
-                    <p>[chart: costs over a 10-yr period]</p>
+                    <p class="bulb-photo"><img src="http://assets.apps.npr.org/dailygraphics/light-bulbs/incandescent.jpg" alt="Photo of a standard incandescent bulb" /></p>
+                    <div class="bulb-info">
+                        <h5>Philips Soft White 60-Watt Bulb (four-pack)</h5>
+                        <ul class="stats">
+                            <li>
+                                <span class="label">Cost:</span>
+                                <span class="value">$1.58 ($0.40/bulb)</span>
+                            </li>
+                            <li>
+                                <span class="label">Brightness:</span>
+                                <span class="value">860 lumens</span>
+                            </li>
+                            <li>
+                                <span class="label">Estimated Yearly Energy Cost*:</span>
+                                <span class="value">$7.23</span>
+                            </li>
+                            <li>
+                                <span class="label">Life:</span>
+                                <span class="value">0.9 years</span>
+                            </li>
+                            <li>
+                                <span class="label">Light Appearance:</span>
+                                <span class="value">2770K</span>
+                            <li>
+                            <li>
+                                <span class="label">Energy Used:</span>
+                                <span class="value">60 watts</span>
+                            </li>
+                            <li>
+                                <span class="label">Cost Over 10 Years:</span>
+                                <span class="value">$76.70</span>
+                            </li>
+                        </ul>
+                        <p>[chart: costs over a 10-yr period]</p>
+                    </div>
                 </div>
 
                 <div class="bulb halogen">
                     <h4>Halogen Incandescent</h4>
-                    <p><img src="http://assets.apps.npr.org/dailygraphics/light-bulbs/halogen.jpg" alt="Photo of a halogen incandescent bulb" /></p>
-                    <p><strong>Philips EcoVantage 43-Watt (60-Watt equivalent) Soft White Dimmable Light Bulb (4-pack)</strong></p>
-                    <ul class="stats">
-                        <li>
-                            <span class="label">Cost:</span>
-                            <span class="value">$5.97 ($1.49/bulb)</span>
-                        </li>
-                        <li>
-                            <span class="label">Brightness:</span>
-                            <span class="value">750 lumens</span>
-                        </li>
-                        <li>
-                            <span class="label">Estimated Yearly Energy Cost:</span>
-                            <span class="value">$5.18</span>
-                        </li>
-                        <li>
-                            <span class="label">Life:</span>
-                            <span class="value">0.9 years</span>
-                        </li>
-                        <li>
-                            <span class="label">Light Appearance:</span>
-                            <span class="value">2920K</span>
-                        <li>
-                        <li>
-                            <span class="label">Energy Used:</span>
-                            <span class="value">43 watts</span>
-                        </li>
-                    </ul>
-                    <p>[chart: costs over a 10-yr period]</p>
+                    <p class="bulb-photo"><img src="http://assets.apps.npr.org/dailygraphics/light-bulbs/halogen.jpg" alt="Photo of a halogen incandescent bulb" /></p>
+                    <div class="bulb-info">
+                        <h5>Philips EcoVantage 43-watt (60-Watt Equivalent) Soft White Dimmable Light Bulb (four-pack)</h5>
+                        <ul class="stats">
+                            <li>
+                                <span class="label">Cost:</span>
+                                <span class="value">$5.97 ($1.49/bulb)</span>
+                            </li>
+                            <li>
+                                <span class="label">Brightness:</span>
+                                <span class="value">750 lumens</span>
+                            </li>
+                            <li>
+                                <span class="label">Estimated Yearly Energy Cost*:</span>
+                                <span class="value">$5.18</span>
+                            </li>
+                            <li>
+                                <span class="label">Life:</span>
+                                <span class="value">0.9 years</span>
+                            </li>
+                            <li>
+                                <span class="label">Light Appearance:</span>
+                                <span class="value">2920K</span>
+                            <li>
+                            <li>
+                                <span class="label">Energy Used:</span>
+                                <span class="value">43 watts</span>
+                            </li>
+                            <li>
+                                <span class="label">Cost Over 10 Years:</span>
+                                <span class="value">$68.19</span>
+                            </li>
+                        </ul>
+                        <p>[chart: costs over a 10-yr period]</p>
+                    </div>
                 </div>
 
                 <div class="bulb cfl">
-                    <h4>Compact Fluorescent (CFL)</h4>
-                    <p><img src="http://assets.apps.npr.org/dailygraphics/light-bulbs/cfl.jpg" alt="Photo of a compact fluorescent bulb" /></p>
-                    <p><strong>ecosmart 60 Watt equivalent soft white dimmable CFL, instant on (2-pack)</strong></p>
-                    <ul class="stats">
-                        <li>
-                            <span class="label">Cost:</span>
-                            <span class="value">$5.97 ($2.99/bulb)</span>
-                        </li>
-                        <li>
-                            <span class="label">Brightness:</span>
-                            <span class="value">850 lumens</span>
-                        </li>
-                        <li>
-                            <span class="label">Estimated Yearly Energy Cost:</span>
-                            <span class="value">$1.69</span>
-                        </li>
-                        <li>
-                            <span class="label">Life:</span>
-                            <span class="value">9.1 years</span>
-                        </li>
-                        <li>
-                            <span class="label">Light Appearance:</span>
-                            <span class="value">2700K</span>
-                        <li>
-                        <li>
-                            <span class="label">Energy Used:</span>
-                            <span class="value">14 watts</span>
-                        </li>
-                    </ul>
-                    <p>[chart: costs over a 10-yr period]</p>
+                    <h4>CFL</h4>
+                    <p class="bulb-photo"><img src="http://assets.apps.npr.org/dailygraphics/light-bulbs/cfl.jpg" alt="Photo of a compact fluorescent bulb" /></p>
+                    <div class="bulb-info">
+                        <h5>EcoSmart 60-Watt Equivalent Soft White Dimmable CFL, Instant On (two-pack)</h5>
+                        <ul class="stats">
+                            <li>
+                                <span class="label">Cost:</span>
+                                <span class="value">$5.97 ($2.99/bulb)</span>
+                            </li>
+                            <li>
+                                <span class="label">Brightness:</span>
+                                <span class="value">850 lumens</span>
+                            </li>
+                            <li>
+                                <span class="label">Estimated Yearly Energy Cost*:</span>
+                                <span class="value">$1.69</span>
+                            </li>
+                            <li>
+                                <span class="label">Life:</span>
+                                <span class="value">9.1 years</span>
+                            </li>
+                            <li>
+                                <span class="label">Light Appearance:</span>
+                                <span class="value">2700K</span>
+                            <li>
+                            <li>
+                                <span class="label">Energy Used:</span>
+                                <span class="value">14 watts</span>
+                            </li>
+                            <li>
+                                <span class="label">Cost Over 10 Years:</span>
+                                <span class="value">$22.88</span>
+                            </li>
+                        </ul>
+                        <p>[chart: costs over a 10-yr period]</p>
+                    </div>
                 </div>
 
                 <div class="bulb led">
                     <h4>LED</h4>
-                    <p><img src="http://assets.apps.npr.org/dailygraphics/light-bulbs/led.jpg" alt="Photo of an led bulb" /></p>
-                    <p><strong>Cree 60 watt equivalent Soft White Dimmable LED Light Bulb</strong></p>
-                    <ul class="stats">
-                        <li>
-                            <span class="label">Cost:</span>
-                            <span class="value">$4.97*</span>
-                        </li>
-                        <li>
-                            <span class="label">Brightness:</span>
-                            <span class="value">800 lumens</span>
-                        </li>
-                        <li>
-                            <span class="label">Estimated Yearly Energy Cost:</span>
-                            <span class="value">$1.14</span>
-                        </li>
-                        <li>
-                            <span class="label">Life:</span>
-                            <span class="value">22.8 years</span>
-                        </li>
-                        <li>
-                            <span class="label">Light Appearance:</span>
-                            <span class="value">2700K</span>
-                        <li>
-                        <li>
-                            <span class="label">Energy Used:</span>
-                            <span class="value">9.5 watts</span>
-                        </li>
-                    </ul>
-                    <p>[chart: costs over a 10-yr period]</p>
+                    <p class="bulb-photo"><img src="http://assets.apps.npr.org/dailygraphics/light-bulbs/led.jpg" alt="Photo of an led bulb" /></p>
+                    <div class="bulb-info">
+                        <h5>Cree 60-Watt Equivalent Soft White Dimmable LED Light Bulb</h5>
+                        <ul class="stats">
+                            <li>
+                                <span class="label">Cost:</span>
+                                <span class="value">$4.97*</span>
+                            </li>
+                            <li>
+                                <span class="label">Brightness:</span>
+                                <span class="value">800 lumens</span>
+                            </li>
+                            <li>
+                                <span class="label">Estimated Yearly Energy Cost*:</span>
+                                <span class="value">$1.14</span>
+                            </li>
+                            <li>
+                                <span class="label">Life:</span>
+                                <span class="value">22.8 years</span>
+                            </li>
+                            <li>
+                                <span class="label">Light Appearance:</span>
+                                <span class="value">2700K</span>
+                            <li>
+                            <li>
+                                <span class="label">Energy Used:</span>
+                                <span class="value">9.5 watts</span>
+                            </li>
+                            <li>
+                                <span class="label">Cost Over 10 Years:</span>
+                                <span class="value">$24.37</span>
+                            </li>
+                        </ul>
+                        <p>[chart: costs over a 10-yr period]</p>
+                    </div>
                 </div>
             </div>
-
+            
+            <div class="footer">
+                <p><strong>Notes:</strong></p>
+                <p>
+                    - Estimated yearly energy costs assume 3 hours of daily use.<br />
+                    - LED bulb: Price paid at Home Depot in Washington, D.C., which reflects an instant rebate from the DC Sustainable Energy Utility. Similar rebates are offered in other states. The MSRP is $12.97.
+                </p>
+            </div>
         </section>
 
-        <section class="brightness">
-            <h2>Brightness</h2>
-            <p>We are accustomed to thinking about bulb brightness in terms of watts. Now, the lighting industry and the energy efficiency community would like us to shift our thinking to lumens, which is a measurement of how much light a bulb actually gives off.</p>
-            <ul>
-                <li><strong>Incandescent equivalents:</strong></li>
-                <li><span>[icon]</span> 60 watts: 800 lumens</li>
-                <li><span>[icon]</span> 75 watts: 1100 lumens</li>
-                <li><span>[icon]</span> 100 watts: 1600 lumens</li>
-            </ul>
-        </section>
-
-        <section class="costs">
-            <h2>Cost And Average Lifespan</h2>
-            <p>The estimated life of a bulb as stated on a package is just that &mdash; an estimate, based on simulations performed in labs. Some bulbs will not last as long as promised, others will last longer, but most major manufacturers do offer a limited warranty on energy-efficient light bulbs. Experts urge consumers to choose bulbs with the EPA’s Energy Star rating, which have gone through verification testing.</p>
-        </section>
-
-        <section class="appearance">
-            <h2>Light Appearance</h2>
-            <p>The Light Appearance number found on light bulb packages these days is a measurement of something called Correlated Color Temperature (CCT), measured in degrees Kelvin. This number offers a sense of how “warm” or “cool” a light looks. The yellowish glow of incandescent bulbs, often called “soft white” on packaging, is considered warm light, and comes in at 2700K. Your old fluorescent tubes in your basement give off a much cooler bluish light, and could measure 5000K or above.</p>
-            <p>Separately, some light bulb packages include another measurement called the Color Rendering Index (CRI), which is a measurement of how accurately a light source displays colors. Traditional incandescent bulbs have a CRI of close to 100. For CFLs and LEDs, the EPA requires bulbs to have a CRI of 80 or above to qualify for the “Energy Star” label.</p>
-            <p>All these numbers aside, lighting experts say the best thing to do is to try a few options at home before committing to changing all your bulbs.</p>
-        </section>
-
-        <section class="usage">
-            <h2>Energy Used</h2>
-            <p>This is a measurement of how many watts a lightbulb uses. A 60-watt equivalent CFL bulb may use only 13 watts, whereas an LED may use only 11 watts.</p>
+        <section class="terms">
+            <h2>What Are These Terms?</h2>
+            
+            <div class="term brightness">
+                <h3>Brightness</h3>
+                <p>Consumers are accustomed to thinking about bulb brightness in terms of watts. Now, the lighting industry and energy efficiency community would like us to shift our thinking to “lumens,” a measure of how much light a bulb actually gives off.</p>
+                <ul>
+                    <li><strong>Approximate incandescent equivalents:</strong></li>
+                    <li><span>[icon]</span> 60-watt: 800 lumens</li>
+                    <li><span>[icon]</span> 75-watt: 1,100 lumens</li>
+                    <li><span>[icon]</span> 100-watt: 1,600 lumens</li>
+                </ul>
+            </div>
+            
+            <div class="term cost">
+                <h3>Life</h3>
+                <p>The estimated life of a bulb as stated on a package is just that &mdash; an estimate, based on simulations performed in labs. Some bulbs will not last as long as promised and others will last longer, but most major manufacturers do offer a limited warranty on energy-efficient light bulbs. Experts urge consumers to choose bulbs with the EPA’s Energy Star rating.  These bulbs have gone through verification testing.</p>
+            </div>
+            
+            <div class="term appearance">
+                <h3>Light Appearance</h3>
+                <p>The “<strong>Light Appearance</strong>” number found on light bulb packaging is a measurement of something called correlated color temperature (CCT), measured in degrees Kelvin. This number offers a sense of how “warm” or “cool” a light looks. The yellowish glow of incandescent bulbs, often called “soft white” on packaging, is considered warm light, and comes in at 2700K. Your old fluorescent tubes in your basement give off a much cooler, bluish light and could measure 5000K or above.</p>
+                <p>Separately, some light bulb packages include another measurement called the <strong>color rendering index (CRI)</strong>. This is a measurement of how accurately a light source displays colors. Traditional incandescent bulbs have a CRI of close to 100. For CFLs and LEDs, the EPA requires bulbs to have a CRI of 80 or higher to qualify for the Energy Star label.</p>
+                <p>All these numbers aside, lighting experts say the best thing to do is to try a few options at home before committing to changing all your bulbs.</p>
+            </div>
+            
+            <div class="term energy">
+                <h3>Energy Used</h3>
+                <p>This is a measurement of how many watts a light bulb uses. A 60-watt equivalent CFL bulb may use only 13 watts, whereas an LED may use only 11 watts.</p>
+            <div>
         </section>
    </div>
 
     <div class="footer">
-        <p>
-            <strong>Notes:</strong><br />
-            Price paid at Home Depot in Washington DC, which reflects an instant rebate from the DC Sustainable Energy Utility. Similar rebates are offered in other states. The MSRP is $12.97.
-        </p>
         <p>Sources: Natural Resources Defense Council, Environmental Protection Agency, Department of Energy</p>
         <p>Credit: April Fehling, Andrea Hsu, Alyson Hurt, Avie Schneider and Jim Tuttle/NPR</p>
     </div>
