@@ -57,6 +57,14 @@
             margin: 0 0 5px 0;
         }
         .comparison h5 { height: 6em; }
+        
+        .comparison h6 {
+            font-size: 12px;
+            font-weight: normal;
+            margin: 0 0 3px 0;
+            border-top: 1px solid #eee;
+            padding-top: 5px;
+        }
 
         p {
             font-size: 14px;
@@ -177,6 +185,44 @@
             margin-bottom: 33px;
         }
 
+        .chart svg {
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 1em;
+        }
+        .chart .axis {
+            font-size: 12px;
+            color: #666;
+        }
+        .chart .axis path,
+        .chart .axis line {
+            fill: none;
+            stroke: #666;
+            shape-rendering: crispEdges;
+        }
+        .chart .axis.y line,
+        .chart .axis.y path {
+            display: none;
+        }
+        .chart .grid path { display: none; }
+        .chart .grid .tick {
+            stroke: #ccc;
+            stroke-dasharray: 1px 3px;
+            stroke-width: 1px;
+            shape-rendering: crispEdges;
+        }
+        .chart .line {
+            fill: none;
+            stroke: #333;
+            stroke-width: 3px;
+        }
+        .chart .bars rect { fill: #8BC0BF; }
+        .chart .label text,
+        .chart .value text {
+            font-weight: normal;
+            font-size: 12px;
+            fill: #333;
+        }
+
         @media screen and (min-width: 1200px) {
             .comparison h5 { height: 3em; }
         }
@@ -257,35 +303,37 @@
                         <h5>Philips Soft White 60-Watt Bulb (four-pack)</h5>
                         <ul class="stats">
                             <li>
-                                <span class="label">Cost:</span>
+                                <span class="label">Cost</span>
                                 <span class="value">$1.58 ($0.40/bulb)</span>
                             </li>
                             <li>
-                                <span class="label">Brightness:</span>
+                                <span class="label">Brightness</span>
                                 <span class="value">860 lumens</span>
                             </li>
                             <li>
-                                <span class="label">Estimated Yearly Energy Cost*:</span>
+                                <span class="label">Estimated Yearly Energy Cost*</span>
                                 <span class="value">$7.23</span>
                             </li>
                             <li>
-                                <span class="label">Life:</span>
+                                <span class="label">Life</span>
                                 <span class="value">0.9 years</span>
                             </li>
                             <li>
-                                <span class="label">Light Appearance:</span>
+                                <span class="label">Light Appearance</span>
                                 <span class="value">2770K</span>
+                            </li>
                             <li>
-                            <li>
-                                <span class="label">Energy Used:</span>
+                                <span class="label">Energy Used</span>
                                 <span class="value">60 watts</span>
                             </li>
                             <li>
-                                <span class="label">Cost Over 10 Years:</span>
+                                <span class="label">Cost Over 10 Years</span>
                                 <span class="value">$76.70</span>
                             </li>
                         </ul>
-                        <p>[chart: costs over a 10-yr period]</p>
+                        
+                        <h6>Total Cost Per Year</h6>
+                        <div id="costs-standard" class="chart">[chart: costs over a 10-yr period]</div>
                     </div>
                 </div>
 
@@ -296,35 +344,37 @@
                         <h5>Philips EcoVantage 43-watt (60-Watt Equivalent) Soft White Dimmable Light Bulb (four-pack)</h5>
                         <ul class="stats">
                             <li>
-                                <span class="label">Cost:</span>
+                                <span class="label">Cost</span>
                                 <span class="value">$5.97 ($1.49/bulb)</span>
                             </li>
                             <li>
-                                <span class="label">Brightness:</span>
+                                <span class="label">Brightness</span>
                                 <span class="value">750 lumens</span>
                             </li>
                             <li>
-                                <span class="label">Estimated Yearly Energy Cost*:</span>
+                                <span class="label">Estimated Yearly Energy Cost*</span>
                                 <span class="value">$5.18</span>
                             </li>
                             <li>
-                                <span class="label">Life:</span>
+                                <span class="label">Life</span>
                                 <span class="value">0.9 years</span>
                             </li>
                             <li>
-                                <span class="label">Light Appearance:</span>
+                                <span class="label">Light Appearance</span>
                                 <span class="value">2920K</span>
+                            </li>
                             <li>
-                            <li>
-                                <span class="label">Energy Used:</span>
+                                <span class="label">Energy Used</span>
                                 <span class="value">43 watts</span>
                             </li>
                             <li>
-                                <span class="label">Cost Over 10 Years:</span>
+                                <span class="label">Cost Over 10 Years</span>
                                 <span class="value">$68.19</span>
                             </li>
                         </ul>
-                        <p>[chart: costs over a 10-yr period]</p>
+
+                        <h6>Total Cost Per Year</h6>
+                        <div id="costs-halogen" class="chart">[chart: costs over a 10-yr period]</div>
                     </div>
                 </div>
 
@@ -335,35 +385,37 @@
                         <h5>EcoSmart 60-Watt Equivalent Soft White Dimmable CFL, Instant On (two-pack)</h5>
                         <ul class="stats">
                             <li>
-                                <span class="label">Cost:</span>
+                                <span class="label">Cost</span>
                                 <span class="value">$5.97 ($2.99/bulb)</span>
                             </li>
                             <li>
-                                <span class="label">Brightness:</span>
+                                <span class="label">Brightness</span>
                                 <span class="value">850 lumens</span>
                             </li>
                             <li>
-                                <span class="label">Estimated Yearly Energy Cost*:</span>
+                                <span class="label">Estimated Yearly Energy Cost*</span>
                                 <span class="value">$1.69</span>
                             </li>
                             <li>
-                                <span class="label">Life:</span>
+                                <span class="label">Life</span>
                                 <span class="value">9.1 years</span>
                             </li>
                             <li>
-                                <span class="label">Light Appearance:</span>
+                                <span class="label">Light Appearance</span>
                                 <span class="value">2700K</span>
+                            </li>
                             <li>
-                            <li>
-                                <span class="label">Energy Used:</span>
+                                <span class="label">Energy Used</span>
                                 <span class="value">14 watts</span>
                             </li>
                             <li>
-                                <span class="label">Cost Over 10 Years:</span>
+                                <span class="label">Cost Over 10 Years</span>
                                 <span class="value">$22.88</span>
                             </li>
                         </ul>
-                        <p>[chart: costs over a 10-yr period]</p>
+
+                        <h6>Total Cost Per Year</h6>
+                        <div id="costs-cfl" class="chart">[chart: costs over a 10-yr period]</div>
                     </div>
                 </div>
 
@@ -374,35 +426,37 @@
                         <h5>Cree 60-Watt Equivalent Soft White Dimmable LED Light Bulb</h5>
                         <ul class="stats">
                             <li>
-                                <span class="label">Cost:</span>
+                                <span class="label">Cost</span>
                                 <span class="value">$4.97*</span>
                             </li>
                             <li>
-                                <span class="label">Brightness:</span>
+                                <span class="label">Brightness</span>
                                 <span class="value">800 lumens</span>
                             </li>
                             <li>
-                                <span class="label">Estimated Yearly Energy Cost*:</span>
+                                <span class="label">Estimated Yearly Energy Cost*</span>
                                 <span class="value">$1.14</span>
                             </li>
                             <li>
-                                <span class="label">Life:</span>
+                                <span class="label">Life</span>
                                 <span class="value">22.8 years</span>
                             </li>
                             <li>
-                                <span class="label">Light Appearance:</span>
+                                <span class="label">Light Appearance</span>
                                 <span class="value">2700K</span>
+                            </li>
                             <li>
-                            <li>
-                                <span class="label">Energy Used:</span>
+                                <span class="label">Energy Used</span>
                                 <span class="value">9.5 watts</span>
                             </li>
                             <li>
-                                <span class="label">Cost Over 10 Years:</span>
+                                <span class="label">Cost Over 10 Years</span>
                                 <span class="value">$24.37</span>
                             </li>
                         </ul>
-                        <p>[chart: costs over a 10-yr period]</p>
+
+                        <h6>Total Cost Per Year</h6>
+                        <div id="costs-led" class="chart">[chart: costs over a 10-yr period]</div>
                     </div>
                 </div>
             </div>
@@ -456,6 +510,8 @@
 
 
     <script src="js/lib/jquery.js" type="text/javascript"></script>
+    <script src="js/lib/d3.v3.min.js" type="text/javascript"></script>
+    <script src="js/lib/modernizr.svg.min.js" type="text/javascript"></script>
     <script src="js/lib/child.js" type="text/javascript"></script>
     <script src="js/graphic.js" type="text/javascript"></script>
 </body>
