@@ -3,7 +3,7 @@ $(window).load(function() {
 
     var graphic_data_url = 'costs.csv';
     var graphic_data;
-    var height = 100;
+    var height = 75;
     var num_bars;
     
     function drawGraphic(width) {
@@ -17,7 +17,7 @@ $(window).load(function() {
     }
     
     function drawChart(id, width) {
-        var margin = { top: 10, right: 5, bottom: 25, left: 30 };
+        var margin = { top: 10, right: 0, bottom: 35, left: 30 };
 //        var width = (width / 5) - margin.left - margin.right;
         var width = $('.bulb-info').width() - margin.left - margin.right;
         
@@ -34,7 +34,8 @@ $(window).load(function() {
         
         var xAxis = d3.svg.axis()
             .scale(x)
-            .orient('bottom');
+            .orient('bottom')
+            .tickSize(6,0);
             
         var num_ticks = num_bars / 2;
             
@@ -70,7 +71,7 @@ $(window).load(function() {
         svg.append('g')
             .attr('class', 'y grid')
             .call(y_axis_grid()
-                .tickSize(-width, 0, 0)
+                .tickSize(-width, 0)
                 .tickFormat('')
             );
 
@@ -84,6 +85,13 @@ $(window).load(function() {
                 .attr("width", x.rangeBand())
                 .attr("height", function(d){ return height - y(d[id]); })
                 .attr('class', function(d) { return 'year-' + d.year.replace(/\s+/g, '-').toLowerCase() });
+
+        svg.append('text')
+            .attr('class', 'x axis-label')
+            .attr('x', width / 2)
+            .attr('y', height + margin.top + margin.bottom - 12)
+            .attr('text-anchor', 'middle')
+            .text('Year of ownership');
 
 
         /* update responsive iframe */

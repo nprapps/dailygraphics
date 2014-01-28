@@ -201,7 +201,7 @@
         }
         .chart .axis {
             font-size: 12px;
-            color: #666;
+            fill: #666;
         }
         .chart .axis path,
         .chart .axis line {
@@ -210,8 +210,7 @@
             shape-rendering: crispEdges;
         }
         .chart .axis.y line,
-        .chart .axis.y path,
-        .chart .axis.y .tick:nth-child(1) {
+        .chart .axis.y path {
             display: none;
         }
         .chart .grid path { display: none; }
@@ -220,6 +219,9 @@
             stroke-dasharray: 1px 3px;
             stroke-width: 1px;
             shape-rendering: crispEdges;
+        }
+        .chart .grid.y .tick:nth-child(1) {
+            display: none;
         }
         .chart .line {
             fill: none;
@@ -232,6 +234,12 @@
             font-weight: normal;
             font-size: 12px;
             fill: #333;
+        }
+        .chart .axis-label {
+            font-style: italic;
+            fill: #999;
+            font-size: 12px;
+            text-align: center;
         }
 
         @media screen and (min-width: 1200px) {
@@ -344,7 +352,7 @@
                                 <span class="value">$7.23</span>
                             </li>
                             <li>
-                                <h6>Cost Per Year<sup>2</sup></h6>
+                                <h6>Total Cost Per Year<sup>2</sup></h6>
                                 <div id="costs-standard" class="chart">[chart: costs over a 10-yr period]</div>
                             </li>
                             <li class="total">
@@ -386,11 +394,11 @@
                                 <span class="value">$5.18</span>
                             </li>
                             <li>
-                                <h6>Cost Per Year<sup>2</sup></h6>
+                                <h6>Total Cost Per Year<sup>2</sup></h6>
                                 <div id="costs-halogen" class="chart">[chart: costs over a 10-yr period]</div>
                             </li>
                             <li class="total">
-                                <span class="label">Total Cost Over 10 Years</span>
+                                <span class="label">Cost Over 10 Years</span>
                                 <span class="value">$68.19</span>
                             </li>
                         </ul>
@@ -428,11 +436,11 @@
                                 <span class="value">$1.69</span>
                             </li>
                             <li>
-                                <h6>Cost Per Year<sup>2</sup></h6>
+                                <h6>Total Cost Per Year<sup>2</sup></h6>
                                 <div id="costs-cfl" class="chart">[chart: costs over a 10-yr period]</div>
                             </li>
                             <li class="total">
-                                <span class="label">Total Cost Over 10 Years</span>
+                                <span class="label">Cost Over 10 Years</span>
                                 <span class="value">$22.88</span>
                             </li>
                         </ul>
@@ -470,11 +478,11 @@
                                 <span class="value">$1.14</span>
                             </li>
                             <li>
-                                <h6>Cost Per Year<sup>2</sup></h6>
+                                <h6>Total Cost Per Year<sup>2</sup></h6>
                                 <div id="costs-led" class="chart">[chart: costs over a 10-yr period]</div>
                             </li>
                             <li class="total">
-                                <span class="label">Total Cost Over 10 Years</span>
+                                <span class="label">Cost Over 10 Years</span>
                                 <span class="value">$24.37</span>
                             </li>
                         </ul>
