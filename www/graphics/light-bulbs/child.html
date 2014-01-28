@@ -96,20 +96,6 @@
             margin: 0 0 5px 0;
         }
 
-        .brightness ul {
-            display: table;
-            width: 100%;
-        }
-        .brightness li {
-            display: table-cell;
-            width: 25%;
-        }
-        .brightness li span {
-            float: left;
-            display: inline-block;
-            margin-right: 11px;
-        }
-        
         .appearance img {
             float: right;
             margin-left: 10px;
@@ -143,6 +129,21 @@
             text-align: right;
         }
         .stats .total { font-weight: bold; }
+        
+        .wattage {
+            display: table;
+            width: 100%;
+            margin-bottom: 0;
+        }
+        .wattage li {
+            display: table-cell;
+            width: 33%;
+            padding:  22px 11px 3px 11px;
+            background-color: #f1f1f1;
+            border-right: 2px solid #fff;
+            margin: 0;
+        }
+        .wattage .watts { font-weight: bold; }
 
         /* bulbs */
         .bulbs {
@@ -194,6 +195,18 @@
             border-bottom: 1px solid #ebebeb;
             margin-bottom: 33px;
         }
+        
+        .wattage .ico {
+            width: 33px;
+            height: 33px;
+            float: left;
+            margin-right: 11px;
+            margin-top: -8px;
+            background-image: url('../../assets/light-bulbs/incandescent.svg');
+        }
+        .wattage .ico.watt60 { background-color: #F7E39B; }
+        .wattage .ico.watt75 { background-color: #F3D469; }
+        .wattage .ico.watt100 { background-color: #EFC637; }
 
         .chart svg {
             font-family: Arial, Helvetica, sans-serif;
@@ -270,6 +283,16 @@
                 float: right;
             }
             .comparison h5 { height: auto; }
+            .wattage {
+                display: block;
+            }
+            .wattage li {
+                display: block;
+                width: auto;
+                border-right: none;
+                border-bottom: 2px solid #fff;
+                padding-bottom: 22px;
+            }
         }
         @media screen and (max-width: 480px) {
             .bulb-photo,
@@ -506,11 +529,35 @@
             <div class="term brightness">
                 <h3>Brightness</h3>
                 <p>Consumers are accustomed to thinking about bulb brightness in terms of watts. Now, the lighting industry and energy efficiency community would like us to shift our thinking to “lumens,” a measure of how much light a bulb actually gives off.</p>
-                <ul>
-                    <li><strong>Approximate incandescent equivalents:</strong></li>
-                    <li><span>[icon]</span> 60-watt: 800 lumens</li>
-                    <li><span>[icon]</span> 75-watt: 1,100 lumens</li>
-                    <li><span>[icon]</span> 100-watt: 1,600 lumens</li>
+                <p><strong>Approximate incandescent equivalents:</strong></p>
+                <ul class="wattage">
+                    <li>
+                        <span class="watts">
+                            <i class="ico watt60"></i>
+                            60-watt:
+                        </span>
+                        <span class="lumen">
+                            800 lumens
+                        </span>
+                    </li>
+                    <li>
+                        <span class="watts">
+                            <i class="ico watt75"></i>
+                            75-watt:
+                        </span>
+                        <span class="lumen">
+                            1,100 lumens
+                        </span>
+                    </li>
+                    <li>
+                        <span class="watts">
+                            <i class="ico watt100"></i>
+                            100-watt:
+                        </span>
+                        <span class="lumen">
+                            1,600 lumens
+                        </span>
+                    </li>
                 </ul>
             </div>
             
