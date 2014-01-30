@@ -58,6 +58,7 @@
 
         #graphic .scatter .circle {
             fill: #666;
+            opacity: .5;
             /*shape-rendering: crispEdges;*/
         }   
 
@@ -101,6 +102,10 @@
 
         }
 
+        .arc path {
+         stroke: #fff;
+        }
+
         #graphic .axis.y path { display: none; }
         #graphic .axis.y .tick line { 
             stroke: #ccc;
@@ -139,7 +144,7 @@
     <div id="graphic"></div>
     
     <div class="footer">
-        <p>Source: MTCARS(TEMP)</p>
+        <p>Source: Grubhub/Seamless</p>
         <p>Credit: Quoctrung Bui/NPR</p>
     </div>
     

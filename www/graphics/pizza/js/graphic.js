@@ -12,13 +12,13 @@ var colors = {
  */
 $(window).load(function() {
 	var $graphic = $('#graphic');
-    var graphic_data_url = 'mtcars2.csv';
+    var graphic_data_url = 'pizza_m.csv';
 	var graphic_data;
 
     function drawGraphic(width) {
-        var margin = {top: 0, right: 100, bottom: 20, left: 50};
+        var margin = {top: 0, right: 100, bottom: 40, left: 50};
         var width = width - margin.left - margin.right;
-        var height = 400 - margin.top - margin.bottom;
+        var height = 1000 - margin.top - margin.bottom;
     
         var num_x_ticks = 10;
         if (width <= 480) {
@@ -32,36 +32,45 @@ $(window).load(function() {
         // clear out existing graphics
         $graphic.empty();
 
-        // var color = d3.scale.ordinal()
-        // .range(["#D8472B", "#17807E", "#51AADE", "#EFC637", "#E38D2C", "#E27560", "#981E24"]); // colors
+        var width1 = width
+        var height1 = 3*height/4
 
-        var xVal = function(d) { return d.mpg;};
+        var width2 = width
+        var height2 = 7*height/8
+
+        var xVal = function(d) { return d.size;};
         var x = d3.scale.linear().range([0, width])
         		.domain([d3.min(graphic_data, xVal)-1, d3.max(graphic_data, xVal)+1]);;
 		var xMap = function(d) { return x(xVal(d));}; 
 
-		var yVal = function(d) { return d.wt;};
-        var y = d3.scale.linear().range([height, 0])
-        		.domain([d3.min(graphic_data, yVal)-1, d3.max(graphic_data, yVal)+1]);
+		var yVal = function(d) { return d.value;};
+        var y = d3.scale.linear().range([height1, 0])
+        		.domain([0,.6]);
 	    var yMap = function(d) { return y(yVal(d));}; // data -> display
 
-        // var xValue = function(d) { return d.Calories;}
-        // var xMap = function(d) { return x(xValue(d));}, // data -> display
 
 
 	    var svg = d3.select("#graphic")
-	            .append("svg")
-	                .attr("width", width + margin.left + margin.right)
-	                .attr("height", height + margin.top + margin.bottom)
-	            .append("g")
-	                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .append("svg")
+                    .attr("width", width1 + margin.left + margin.right)
+                    .attr("height", height1 + margin.top + margin.bottom)
+                .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var svg2 = d3.select("#graphic")
+                    .append("svg")
+                        .attr("width", width2 + margin.left + margin.right)
+                        .attr("height", height2 + margin.top + margin.bottom)
+                    .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-        var xAxis = d3.svg.axis()
-        	.scale(x)
-            .orient("bottom")
-            .tickSize(6)
-            .ticks(num_x_ticks);
+
+        // var xAxis = d3.svg.axis()
+        // 	.scale(x)
+        //     .orient("bottom")
+        //     .tickSize(6)
+        //     .ticks(num_x_ticks);
 
         var x_axis_grid = function() { return xAxis; }
 
@@ -72,9 +81,210 @@ $(window).load(function() {
 
         var y_axis_grid = function() { return yAxis; }
 
+// Scale Tooltip begin
+
+var jsonCircles = [
+  { "x_axis": 30, "y_axis": 30, "radius": 20, "color" : "green" },
+  { "x_axis": 70, "y_axis": 70, "radius": 20, "color" : "purple"},
+  { "x_axis": 110, "y_axis": 100, "radius": 20, "color" : "red"}];
+ 
+// make pizza
+        var color = d3.scale.category10();
+        var pie = d3.layout.pie();
+
+        var piedata = []
+        var rr = []
+        var sqinch = []
+        var brush = d3.svg.brush()
+            .x(x)
+            .extent([0, 0])
+            .on("brush", brushed);
+            
+        svg.append("g")
+            .attr("class", "x axis brush")
+            .attr("transform", "translate(0," + height1 + ")")
+            .call(d3.svg.axis()
+              .scale(x)
+              .orient("bottom")
+              .tickSize(6)
+              .tickPadding(12))
+          .select(".domain")
+          .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+            .attr("class", "halo");
 
 
-        // color.domain(d3.keys(graphic_data[0]).filter(function(key) { return key !== "mpg"; }));
+        var slider = svg.append("g")
+            .attr("class", "slider")
+            .call(brush);
+
+        slider.selectAll(".extent,.resize")
+            .remove();
+
+        slider.select(".background")
+            .attr("height", height1);
+
+
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+// arc
+//////////////////////////////////////////////////////////////////
+// var dataset = [ 5,25 ];
+// // var w = 300;
+// // var h = 300;
+
+// var outerRadius = width / 4;
+// var innerRadius = 0;
+// var arc = d3.svg.arc()
+//                 .innerRadius(innerRadius)
+//                 .outerRadius(outerRadius);
+
+
+//         var pie = d3.layout.pie();
+//         var arcs = svg.selectAll("g.arc")
+//         .data(pie(dataset))
+//         .enter()
+//         .append("g")
+//         .attr("class", "arc");
+
+//         arcs.append("path")
+//         .attr("fill", function(d, i) {
+//             return color(i);
+//         })
+//         .attr("d", arc)
+//         .attr("transform", "translate(" + width/4 + ", " + height/4 + ")");
+//////////////////////////////////////////////////////////////////
+
+// var arc = d3.svg.arc()
+// .innerRadius(50)
+// .outerRadius(100)
+// .startAngle(0)
+// .endAngle(1.5*Math.PI);
+
+// svg.append("path")
+// .attr("d", arc)
+// .attr("transform", "translate(300,200)");
+
+// - See more at: http://schoolofdata.org/2013/10/01/pie-and-donut-charts-in-d3-js/#sthash.oEs21fYm.dpuf
+// - See more at: http://schoolofdata.org/2013/10/01/pie-and-donut-charts-in-d3-js/#sthash.KsHA33CQ.dpuf
+
+
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+// code for slider
+//////////////////////////////////////////////////////////////////
+
+        var pizza = svg2.append("circle")
+                    .attr("class", "pizza")
+                    .attr("transform", "translate(" + width2/2 + "," + height2/4 + ")")
+                    .attr("r", 20)
+                    .style('opacity', .7);
+
+
+        var handle = slider.append("circle")
+            .attr("class", "handle")
+            .attr("transform", "translate(0," + height1 + ")")
+            .attr("r", 20);
+
+        slider
+            .call(brush.event)
+          // .transition() // gratuitous intro!
+            // .duration(750)
+            .call(brush.extent([6, 6]))
+            .call(brush.event);
+
+        function brushed() {
+          var value = brush.extent()[0];
+          console.log(value);
+
+          if (d3.event.sourceEvent) { // not a programmatic event
+            value = x.invert(d3.mouse(this)[0]);
+            brush.extent([value, value]);
+          }
+
+          handle.attr("cx", x(value));
+          svg2.selectAll(".pizza")
+                .style("fill", d3.hsl(value*(3/2), .8, .8))
+                .attr("r", pies(value)); // attribute = radius
+                // .attr("r", value);
+          var sqinch = [];  
+          arc(value);   
+
+          // console.log(value);
+        }
+//////////////////////////////////////////////////////////////////
+function pies(d) { 
+    // make multiple pies
+    var rr = 10*(d/2);
+    // counts the area
+    // if (sqinch>(Math.pow(4,2)*Math.PI)) {
+    // take the mod and remainder
+    // call circle of that size
+    // then make something of the remainder
+    // piedata = [sqinch_b, sqinch];
+    // piedata.push(sqinch_b);
+
+    // console.log(piedata);
+    // arc data
+    // arc(d);   
+    return rr;
+                }
+
+function arc(diam) {
+
+    var sqinch_max = 64*Math.PI
+    var sqinch_val = Math.pow((diam/2),2)*Math.PI
+    var sqinch_norm = 2*(sqinch_val/sqinch_max)
+    var arc = d3.svg.arc()
+    .innerRadius(0)
+    .outerRadius(100)
+    .startAngle(0)
+    .endAngle(sqinch_norm*Math.PI);
+
+    svg2.append("path")
+    .attr("d", arc)
+      .transition()
+      // .duration(50)
+    .ease("quad")
+    // .attr("transform", "translate("  + width + " ," + height+ ")")
+    .attr("transform", "translate(200,200)")
+    .style("opacity", sqinch_val/sqinch_max)
+    .style("fill", "#CCC");
+
+}
+
+// function arc(data) {
+//     var outerRadius = width / 20;
+//     var innerRadius = 0;
+//     var arc = d3.svg.arc()
+//                 .innerRadius(innerRadius)
+//                 .outerRadius(outerRadius);
+
+
+//         var pie = d3.layout.pie();
+//         var arcs = svg.selectAll("g.arc")
+//         .data(pie(data))
+//         .enter()
+//         .append("g")
+//         .attr("class", "arc");
+
+//         arcs.append("path")
+//         .attr("fill", function(d, i) {
+//             return color(i);
+//         })
+//         .attr("d", arc)
+//         .attr("transform", "translate(" + width/2 + ", " + height/4 + ")");
+
+// }
+
+//////////////////////////////////////////////////////////////////
+
+// Tooltip end
+
+        // color.domain(d3.keys(graphic_data[0]).filter(function(key) { return key !== "size"; }));
 
 
         // mapping data from csv file
@@ -83,7 +293,7 @@ $(window).load(function() {
         //     return {
         //         name: name,
         //         values: graphic_data.map(function(d) {
-        //             return {date: d.mpg, income: +d[name]};
+        //             return {date: d.size, income: +d[name]};
         //         })
         //     };
 
@@ -105,6 +315,9 @@ $(window).load(function() {
         //     .data(graphic_data)
         //     .enter().append("g")
 
+////////////////////////////////////////////
+// scatter starts here
+////////////////////////////////////////////
         svg.attr('class', 'scatter')
 	        .selectAll('circle')
 	            .data(graphic_data)
@@ -114,6 +327,40 @@ $(window).load(function() {
 				.attr("cx", xMap)
 				.attr("cy", yMap)
                 .style("color", "#666");
+
+////////////////////////////////////////////
+////////////////////////////////////////////                
+
+        // svg.attr('class', 'scatter_two')
+        //     .selectAll('circle')
+        //         .data(graphic_data)
+        //     .enter().append('circle')
+        //         .attr('class', "circle")
+        //         .attr("r", 3.5)
+        //         .attr("cx", xMap2)
+        //         .attr("cy", yMap2)
+        //         .style("color", "#F00");
+
+        // svg.attr('class', 'scatter_three')
+        //     .selectAll('circle')
+        //         .data(graphic_data)
+        //     .enter().append('circle')
+        //         .attr('class', "circle")
+        //         .attr("r", 3.5)
+        //         .attr("cx", xMap3)
+        //         .attr("cy", yMap3)
+        //         .style("color", "#666");
+
+        // svg.attr('class', 'scatter_four')
+        //     .selectAll('circle')
+        //         .data(graphic_data)
+        //     .enter().append('circle')
+        //         .attr('class', "circle")
+        //         .attr("r", 3.5)
+        //         .attr("cx", xMap4)
+        //         .attr("cy", yMap4)
+        //         .style("color", "#666");                
+
                 // .style("fill", "#666");
 		        // .style("opacity", 1);
 	            // .style("stroke", function(d) { 
@@ -124,10 +371,10 @@ $(window).load(function() {
             //     }
             // });
 
-        svg.append("g") // Add the X Axis
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
+        // svg.append("g") // Add the X Axis
+        //     .attr("class", "x axis")
+        //     .attr("transform", "translate(0," + height + ")")
+        //     .call(xAxis);
     
         svg.append("g") // Add the Y Axis
             .attr("class", "y axis")
@@ -136,7 +383,7 @@ $(window).load(function() {
         svg.append("g")         
             .attr("class", "y grid")
             .call(y_axis_grid()
-                .tickSize(-width, 0, 0)
+                .tickSize(-width1, 0, 0)
                 .tickFormat("")
             );
 
@@ -160,13 +407,16 @@ $(window).load(function() {
 
                 graphic_data.forEach(function(d) {
                     // d = +d
-                    d.mpg = +d.mpg;
-                    d.wt = +d.wt;
+                    d.size = +d.size;
+                    d.value = +d.value;
+                    // d.two_pxin = +d.two_pxin;
+                    // d.three_pxin = +d.three_pxin;
+                    // d.four_pxin = +d.four_pxin;
                     // d.disp = +d.disp;
                     // d.hp = +d.hp;
                     // d.drat = +d.drat;
-                    console.log(d.mpg)
-                    console.log(d.wt)
+                    // console.log(d.size)
+                    // console.log(d.value)
                 });
 
                 setupResponsiveChild({
