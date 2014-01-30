@@ -6,7 +6,7 @@ var orig_height = 675;
 
 
 function render(width) {
-    var new_width = $ba.width();
+    var new_width = width;
     var ratio = new_width / orig_width;
     var new_height = orig_height * ratio;
     
