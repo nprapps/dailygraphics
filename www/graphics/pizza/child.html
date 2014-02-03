@@ -46,9 +46,17 @@
         #graphic svg {
             font-family: Arial, Helvetica, sans-serif;
             margin-bottom: 1em;
-            font-size: 11px;
+            font-size: 14px;
 
         }
+
+        /*.slider .handle {
+          fill: #fff;
+          stroke: #000;
+          stroke-opacity: .5;
+          stroke-width: 1.25px;
+          pointer-events: none;
+        }*/
 /*
         #graphic path { 
             stroke: #666;
@@ -56,14 +64,34 @@
             fill: none;
         }*/
 
-        #graphic .scatter .circle {
+        #graphic .zero_pxin {
             fill: #666;
-            opacity: .5;
+            opacity: .2;
+        }
+         #graphic .one_pxin {
+            fill: #666;
+            opacity: .2;
+            /*shape-rendering: crispEdges;*/
+        }   
+        #graphic .two_pxin {
+            fill: #666;
+            opacity: .2;
+            /*shape-rendering: crispEdges;*/
+        }   
+        #graphic .three_pxin {
+            fill: #666;
+            opacity: .2;
+            /*shape-rendering: crispEdges;*/
+        }   
+        #graphic .four_pxin {
+            fill: #666;
+            opacity: .2;
             /*shape-rendering: crispEdges;*/
         }   
 
+
         #graphic .axis {
-            font-size: 12px;
+            font-size: 20px;
             color: #666;
         }
         #graphic .axis path,
@@ -74,31 +102,85 @@
             shape-rendering: crispEdges;
         }
 
-        .region {
+        .deep {
           padding:5px;
           background-color: #C5DFDF;
           border: none;
           color:#000;
+          height: 80px;
+          width: 14%;
           text-decoration:none;
           border-radius: 2px;
+          line-height: 1.3;
+        }  
 
+        .thin {
+          padding:5px;
+          background-color: #C5DFDF;
+          border: none;
+          color:#000;
+          height: 80px;
+          width: 14%;
+          text-decoration:none;
+          border-radius: 2px;
+          line-height: 1.3;
         }    
 
-        .crust {
+        .hand {
           padding:5px;
-          background-color: #F5D1CA;
+          background-color: #C5DFDF;
           border: none;
           color:#000;
+          height: 80px;
+          width: 14%%;
           text-decoration:none;
-          border-radius: 2px;
+          border-radius: 4px;
         } 
-        .toppings {
+        .toppings1  {
           padding:5px;
-          background-color: #D3EAF7;
+          background-color: #ECA395;
           border: none;
           color:#000;
+          height: 80px;
+          width: 14.27%;
           text-decoration:none;
-          border-radius: 2px;
+          border-radius: 4px;
+          line-height: 1.3;
+
+
+        } 
+        .toppings2 {
+          padding:5px;
+          background-color: #A8D5EF;
+          border: none;
+          color:#000;
+          height: 80px;
+          width: 14%;
+          text-decoration:none;
+          border-radius: 4px;
+          /*position:relative;left:0px;bottom:-4px*/
+
+        }
+        .toppings3 {
+          padding:5px;
+          background-color: #FBF1CD;
+          border: none;
+          color:#000;
+          height: 80px;
+          width: 14%;
+          text-decoration:none;
+          border-radius: 4px;
+
+        }
+        .toppings4 {
+          padding:5px;
+          background-color: #8BC0BF;
+          border: none;
+          color:#000;
+          height: 80px;
+          width: 14%;
+          text-decoration:none;
+          border-radius: 4px;
 
         }
 
@@ -125,18 +207,17 @@
 
      <div id="demo">
         <div id="buttons">
-        <button id="data1" class = "region">Northeast</button>
+<!--         <button id="data1" class = "region">Northeast</button>
         <button id="data2" class = "region">South</button>
         <button id="data3" class = "region">Midwest</button>
-        <button id="data4" class = "region">West</button>
-        <button id="data5" class = "toppings">1 Topping</button>
-        <button id="data6" class = "toppings">2 Toppings</button>
-        <button id="data7" class = "toppings">3 Toppings</button>
-        <button id="data8" class = "toppings">4 Toppings</button>
-        <button id="data9" class = "toppings">5 Toppings</button>
-        <button id="data10" class = "crust">Deep Dish</button>
-        <button id="data11" class = "crust">Thin</button>
-        <button id="data11" class = "crust">Hand Tossed</button>
+        <button id="data4" class = "region">West</button> -->
+        <button id="data10" class = "deep">Deep Dish</button>
+        <button id="data11" class = "thin">Thin</button>
+        <button id="data11" class = "hand">Hand Tossed</button>
+        <button id="data5" class = "toppings1">1 Topping</button>
+        <button id="data6" class = "toppings2">2 Toppings</button>
+        <button id="data7" class = "toppings3">3 Toppings</button>
+        <button id="data8" class = "toppings4">4 Toppings</button>
         <!-- <button id="data11">7 Topping</button> -->
         <!-- <button id="data11">7 Topping</button> -->
 
