@@ -13,7 +13,7 @@ var data = {
         { 'label': 'Grocery stores', 'amt': 6.3 },
         { 'label': 'Discounters', 'amt': 3.8 },
         { 'label': 'Pharmacies', 'amt': 3.6 },
-        { 'label': 'Hypermarkets', 'amt': 0.9 },
+        { 'label': 'Big box stores', 'amt': 0.9 },
         { 'label': 'Nonretail channels', 'amt': 0.5 },
         { 'label': 'Newsstands', 'amt': 0.3 },
         { 'label': 'Internet', 'amt': 0.1 },
@@ -42,7 +42,7 @@ $(window).load(function() {
         var chart_data = data[id];
         var num_bars = chart_data.length;
         
-        var margin = { top: 10, right: 7, bottom: 35, left: 130 };
+        var margin = { top: 10, right: 7, bottom: 35, left: 120 };
         var width = width - margin.left - margin.right;
         var height = ((bar_height + bar_gap) * num_bars);
         
