@@ -13,7 +13,16 @@
     $(window).load(function() {
     	var $graphic = $('#graphic');
         var graphic_data_url = 'pizza_m.csv';
+        var graphic_data_url2 = 'fittedvals_deep_all.csv';
+        var graphic_data_url3 = 'fittedvals_regular_all.csv';
+        var graphic_data_url4 = 'fittedvals_stuffed_all.csv';
+        var graphic_data_url5 = 'fittedvals_thin_all.csv';
     	var graphic_data;
+        var graphic_data2;
+        var graphic_data3;
+        var graphic_data4;
+        var graphic_data5;
+
 
         function drawGraphic(width) {
 
@@ -24,8 +33,9 @@
               });
             };
 
-            var margin = {top: 0, right: 100, bottom: 40, left: 50};
-            var width = width - margin.left - margin.right;
+            var margin = {top: 0, right: 220, bottom: 40, left: 60};
+            var margin2 = {top: 20, right: 20, bottom: 40, left: 20};
+            var width = width - margin.left ;
             var height = 1000 - margin.top - margin.bottom;
         
             var num_x_ticks = 10;
@@ -40,11 +50,11 @@
             // clear out existing graphics
             $graphic.empty();
 
-            var width1 = width
-            var height1 = 3*height/4
+            var width1 = 3*width/4
+            var height1 = 3*height/8
 
-            var width2 = width
-            var height2 = 7*height/8
+            var width2 = 2*width/8
+            var height2 = 3*height/8
 
             var xVal = function(d) { return d.size;};
             var x = d3.scale.linear().range([0, width])
@@ -53,37 +63,35 @@
 
     		var xMap = function(d) { return x(xVal(d));}; 
 
-    		var yVal = function(d) { return d.mean;};
+    		var yVal = function(d) { return d.px_inc;};
             var y = d3.scale.linear().range([height1, 0])
             		.domain([0,.4]);
     	    var yMap = function(d) { return y(yVal(d));}; // data -> display
 
 
-
     	    var svg = d3.select("#graphic")
                     .append("svg")
-                        .attr("width", width1 + margin.left + margin.right)
+                        .attr("width", width1 + margin.left )
                         .attr("height", height1 + margin.top + margin.bottom)
                     .append("g")
                         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             var svg2 = d3.select("#graphic")
                         .append("svg")
-                            .attr("width", width2 + margin.left + margin.right)
-                            .attr("height", height2 + margin.top + margin.bottom)
+                            .attr("width", width2 )
+                            .attr("height", height2 )
                         .append("g")
-                            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                            .attr("transform", "translate(0, 100)");
 
 
-            var xAxis = d3.svg.axis().scale(x)
+            var xAxis = d3.svg.axis()
+                .scale(x)
                 .orient("bottom")
                 .tickSize(6)
                 .ticks(num_x_ticks);
 
 
             var x_axis_grid = function() { return xAxis; }
-
-
 
             var yAxis = d3.svg.axis()
                 .orient("left")
@@ -92,8 +100,13 @@
 
             var y_axis_grid = function() { return yAxis; }
 
+// fitlines
+            var line = d3.svg.line()
+                .x(function(d) { return x(d.size); })
+                .y(function(d) { return y(d.fitted); });
+// .interpolate("basis")
+// 
 
-     
     // make pizza
             var color = d3.scale.category10();
             var pie = d3.layout.pie();
@@ -130,55 +143,6 @@
                 .attr("height", height1);
 
 
-
-    //////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////
-    // arc
-    //////////////////////////////////////////////////////////////////
-    // var dataset = [ 5,25 ];
-    // // var w = 300;
-    // // var h = 300;
-
-    // var outerRadius = width / 4;
-    // var innerRadius = 0;
-    // var arc = d3.svg.arc()
-    //                 .innerRadius(innerRadius)
-    //                 .outerRadius(outerRadius);
-
-
-    //         var pie = d3.layout.pie();
-    //         var arcs = svg.selectAll("g.arc")
-    //         .data(pie(dataset))
-    //         .enter()
-    //         .append("g")
-    //         .attr("class", "arc");
-
-    //         arcs.append("path")
-    //         .attr("fill", function(d, i) {
-    //             return color(i);
-    //         })
-    //         .attr("d", arc)
-    //         .attr("transform", "translate(" + width/4 + ", " + height/4 + ")");
-    //////////////////////////////////////////////////////////////////
-
-    // var arc = d3.svg.arc()
-    // .innerRadius(50)
-    // .outerRadius(100)
-    // .startAngle(0)
-    // .endAngle(1.5*Math.PI);
-
-    // svg.append("path")
-    // .attr("d", arc)
-    // .attr("transform", "translate(300,200)");
-
-    // - See more at: http://schoolofdata.org/2013/10/01/pie-and-donut-charts-in-d3-js/#sthash.oEs21fYm.dpuf
-    // - See more at: http://schoolofdata.org/2013/10/01/pie-and-donut-charts-in-d3-js/#sthash.KsHA33CQ.dpuf
-
-
-
-
-
     //////////////////////////////////////////////////////////////////
     //////////////////////////////////1////////////////////////////////
 
@@ -206,14 +170,42 @@
                         .style('opacity', .7);
 
 
+            // barDemo.selectAll("rect").
+            //   data(data).
+            //   enter().
+            //   append("svg:rect").
+            //   attr("x", function(datum, index) { return x(index); }).
+            //   attr("y", function(datum) { return height - y(datum.books); }).
+            //   attr("height", function(datum) { return y(datum.books); }).
+            //   attr("width", barWidth).
+            //   attr("fill", "#2d578b");
+
+            var handle2 = slider.append("rect") 
+              // .attr("y", function() { return height - y(.4); })
+              .attr("class", "handle2")
+              .attr("height", height)
+              .attr("width", 10)
+              .attr("fill", "#ccc")
+              .style("opacity", .4);
+              // .attr("transform", "translate(0," + height1 + ")");
+
+
+
             var handle = slider.append("circle")
                 .attr("class", "handle")
                 .attr("transform", "translate(0," + height1 + ")")
-                .attr("r", 20);
+                .attr("r", 20)
+                .style("stroke", "gray")
+                // .attr("fill", "#ccc")
+                .style("opacity", .4);
+
 
 // labels
+            var labelvarpizza = svg2.append("text")
+            .attr("x", 0)
+            .attr("y", height2*(3/5))
 
-           var bigprice = svg2.append("text")
+            var bigprice = svg2.append("text")
                         .attr("x", bigpricex)
                         .attr("y", bigpricey);
             var midprice = svg2.append("text")
@@ -222,7 +214,6 @@
             var smallprice = svg2.append("text")
                         .attr("x", smallpricex)
                         .attr("y", smallpricey);
-
             var bigpizza = svg2.append("text")
                         .attr("x", label1x)
                         .attr("y", label1y);
@@ -246,13 +237,13 @@
                         .attr("font-family", "sans-serif")
                         .attr("font-size", "200px")
                         .attr("fill", "#ccc");
-            var labelvarpizza = svg2.append("text")
-                        .attr("x", 0)
-                        .attr("y", height2*(2/5))
-                        .text("1")
-                        .attr("font-family", "sans-serif")
-                        .attr("font-size", "60px")
-                        .attr("fill", "#ccc");
+            // var labelvarpizza = svg2.append("text")
+            //             .attr("x", 0)
+            //             .attr("y", height2*(2/5))
+            //             .text("1")
+            //             .attr("font-family", "sans-serif")
+            //             .attr("font-size", "60px")
+            //             .attr("fill", "#ccc");
             var label16 = svg2.append("text")
                         .attr("x", label2x)
                         .attr("y", height2*(9.5/20))
@@ -260,14 +251,17 @@
                         .attr("font-family", "sans-serif")
                         .attr("font-size", "50px")
                         .attr("fill", "#ccc");
-
-         var label8 = svg2.append("text")
+            var label8 = svg2.append("text")
                         .attr("x", label3x)
                         .attr("y", height2*(9.5/20))
                         .text("8 inch pizzas")
                         .attr("font-family", "sans-serif")
                         .attr("font-size", "50px")
                         .attr("fill", "#ccc");
+
+
+
+
             slider
                 .call(brush.event)
               .transition() 
@@ -284,6 +278,7 @@
               }
 
               handle.attr("cx", x(value));
+              handle2.attr("x", x(value)-4);
 
 
               svg2.selectAll(".pizza")
@@ -300,7 +295,6 @@
               $(".arcpie2").remove();
               $(".pies").remove();
               arc(value); 
-
 
               // console.log(value);
             }
@@ -363,8 +357,31 @@
     function pies(d) { 
         // make multiple pies
         var diam_base_px_for_big_circle = 7*d/2; // base diameter of pizza express in pixels for graphic
+        var diam_val = d3.round(diam_base_px_for_big_circle); // base diameter of pizza express in pixels for graphic
+
+        // var a = graphic_data2.indexOf(diam_val);
+        // console.log("this is the value")
+        // console.log(a)
+
+        labelvarpizza_act(diam_base_px_for_big_circle);
         return diam_base_px_for_big_circle;
+        
                     }
+
+    function labelvarpizza_act(d) {
+        // var varpizzaprice = function(d) { return d["mean"]};
+        var varpizzaprice = "gonna figure";
+        // console.log(varpizzaprice)
+
+        // labelvarpizza
+        //     .data(graphic_data2)
+        //     .text("$" + varpizzaprice)
+        //     .attr("font-family", "sans-serif")
+        //     .attr("font-size", "60px")
+        //     .attr("fill", "#ccc");
+
+    }
+
 
     function arc(diam) {
 
@@ -385,14 +402,15 @@
     var smallpizza_diam = d3.round((sqinch_norm/2),1)
     
     var bigprice_ave = d3.round(diam,1)
-    var midprice_ave = d3.round((sqinch_val*0.07076404/2),1)
-    var smallprice_ave = d3.round((sqinch_val*0.10772809/2),1)
+    var midprice_ave = d3.round((sqinch_norm2*15.990/2),1)
+    var smallprice_ave = d3.round((sqinch_norm*6.990/2),1)
 
     var piedata = [1];
     var piecount = Math.ceil(sqinch_val/sqinch_max);
     var arc_array = [];
     var width_pie = width/1.2;
     var width_pieb = width/2.2;
+
 
     for (var i =1; i<piecount; i++)
     {
@@ -751,7 +769,7 @@
     	            .data(graphic_data)
     	        .enter().append('circle')
                     // .filter(function(d) { return d.variable == "one_pxin" })        // <== This line
-                    .attr('class', function(d) { return d.variable})				
+                    .attr('class', function(d) { return d.crust + "_circle"})				
                     .attr("r", 9)
     				.attr("cx", xMap)
     				.attr("cy", yMap);
@@ -759,18 +777,41 @@
 
 
 
+        d3.select('.deep')
+            .on("click", deep_act); 
+        d3.select('.thin')
+            .on("click", thin_act); 
+        d3.select('.hand')
+            .on("click", hand_act); 
+
+        console.log("graphic_data2");
+        console.log(graphic_data2);
+
+// deeplines
+
+            // svg.append("path")
+            //     .data(graphic_data2)
+            //     .attr("class", "line")
+            //     .attr("d", line );
+
+
+                // .style("stroke", function(d) { return color(d.name); })
+                // .on("mouseover", mouseover)
+                // .on("mouseout", mouseout);
+
+
         // d3.select('.deep')
             // .on("click", deep_act); 
-        d3.select('.toppings0')
-            .on("click", zero_pxin_act); 
-        d3.select('.toppings1')
-            .on("click", one_pxin_act); 
-        d3.select('.toppings2')
-            .on("click", two_pxin_act); 
-        d3.select('.toppings3')
-            .on("click", three_pxin_act); 
-        d3.select('.toppings4')
-            .on("click", four_pxin_act); 
+        // d3.select('.toppings0')
+        //     .on("click", zero_pxin_act); 
+        // d3.select('.toppings1')
+        //     .on("click", one_pxin_act); 
+        // d3.select('.toppings2')
+        //     .on("click", two_pxin_act); 
+        // d3.select('.toppings3')
+        //     .on("click", three_pxin_act); 
+        // d3.select('.toppings4')
+        //     .on("click", four_pxin_act); 
 
             // {
             // svg.selectAll("one_pxin")                               
@@ -862,22 +903,101 @@
 
 
 
+
+            function deep_act() 
+            {
+                d3.selectAll(".deep.dish_circle")
+                .attr("r", 9)
+                .style("opacity", 0)    
+                .style("fill", "#666");                            // <== and this one
+                d3.selectAll(".thin_circle")
+                .attr("r", 9)
+                .style("opacity", 0)    
+                .style("fill", "#666");                            // <== and this one
+                d3.selectAll(".hand-tossed_circle")
+                .attr("r", 9)
+                .style("opacity", 0);    
+                                        // <== and this one
+                                   
+                d3.selectAll(".deep.dish_circle")
+                .moveToFront()                                                                                                     
+                .transition() 
+                .duration(500)
+                .style("fill", "#E27560")                            // <== and this one
+                .style("opacity", .3)  
+                .attr("r", 16);
+            }
+
+            function thin_act() 
+            {
+                d3.selectAll(".deep.dish_circle")
+                .attr("r", 9)
+                .style("opacity", 0)    
+                .style("fill", "#666");                            // <== and this one
+                d3.selectAll(".thin_circle")
+                .attr("r", 9)
+                .style("opacity", 0)    
+                .style("fill", "#666");                            // <== and this one
+                d3.selectAll(".hand-tossed_circle")
+                .attr("r", 9)
+                .style("opacity", 0);    
+                                        // <== and this one
+                                   
+                d3.selectAll(".thin_circle")
+                .moveToFront()                                                                                                     
+                .transition() 
+                .duration(500)
+                .style("fill", "#E27560")                            // <== and this one
+                .style("opacity", .3)  
+                .attr("r", 16);
+            }
+
+            function hand_act() 
+            {
+                d3.selectAll(".deep.dish_circle")
+                .attr("r", 9)
+                .style("opacity", 0)    
+                .style("fill", "#666");                            // <== and this one
+                d3.selectAll(".thin_circle")
+                .attr("r", 9)
+                .style("opacity", 0)    
+                .style("fill", "#666");                            // <== and this one
+                d3.selectAll(".hand-tossed_circle")
+                .attr("r", 9)
+                .style("opacity", 0);    
+                                        // <== and this one
+                                   
+                d3.selectAll(".hand-tossed_circle")
+                .moveToFront()                                                                                                     
+                .transition() 
+                .duration(500)
+                .style("fill", "#E27560")                            // <== and this one
+                .style("opacity", .3)  
+                .attr("r", 16);
+            }
+
+
             function zero_pxin_act() 
             {
                 d3.selectAll(".zero_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
-                d3.selectAll(".one_pxin")
+                d3.selectAll(".thin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".two_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".three_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".four_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                                    
                 d3.selectAll(".zero_pxin")
@@ -892,18 +1012,23 @@
             {
                 d3.selectAll(".zero_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".one_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".two_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".three_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".four_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                                    
                 d3.selectAll(".one_pxin")
@@ -919,18 +1044,23 @@
             {
                 d3.selectAll(".zero_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".one_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".two_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".three_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".four_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                                    
 
@@ -947,18 +1077,23 @@
             {
                 d3.selectAll(".zero_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".one_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".two_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".three_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".four_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                                    
                 d3.selectAll(".three_pxin")
@@ -973,18 +1108,23 @@
             {
                 d3.selectAll(".zero_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".one_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".two_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".three_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".four_pxin")
                 .attr("r", 9)
+                .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                                    
                 d3.selectAll(".four_pxin")                               
@@ -1002,11 +1142,9 @@
                     graphic_data = data;
 
                     graphic_data.forEach(function(d) {
-                        // d = +d
                         d.size = +d.size;
-                        d.median = +d.median;
-                        d.mean = +d.mean;
                         d.value = +d.value;
+                        d.px_inc = +d.px_inc;
                         d.crust = d.crust;
                         // d.three_pxin = +d.three_pxin;
                         // d.four_pxin = +d.four_pxin;
@@ -1016,11 +1154,32 @@
                         // console.log(d.size)
                         // console.log(d.value)
                     });
-                    console.log(graphic_data);
+
+
+                    // console.log(graphic_data);
+                });
+
+                // second csv
+                for (var i = 2; i <6; i++) {
+                var urlname = eval("graphic_data_url" + i)
+                var csvname = eval("graphic_data" + i)
+                // console.log(urlname);
+                d3.csv(urlname, function(error, data) {
+                    csvname = data; 
+
+                    csvname.forEach(function(d) {
+                        d.size = +d.size;
+                        d.fitted = +d.fitted;
+                        d.crust = d.crust;
+
+                    });
+
                     setupResponsiveChild({
                         renderCallback: drawGraphic 
                     });
-                });
+
+                    });
+                }
             }
         }
 
