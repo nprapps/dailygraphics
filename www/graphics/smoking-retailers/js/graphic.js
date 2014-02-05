@@ -8,14 +8,14 @@ var colors = {
 
 var data = {
     'retailer': [
-        { 'label': 'Grocery stores', 'amt': 53.8 },
+        { 'label': 'Convenience stores', 'amt': 63.4 },
         { 'label': 'Tobacco specialists', 'amt': 21.1 },
-        { 'label': 'Convenience stores', 'amt': 15.9 },
+        { 'label': 'Grocery stores', 'amt': 6.3 },
         { 'label': 'Discounters', 'amt': 3.8 },
         { 'label': 'Pharmacies', 'amt': 3.6 },
         { 'label': 'Hypermarkets', 'amt': 0.9 },
-        { 'label': 'Non-retail channels', 'amt': 0.5 },
-        { 'label': 'Newsagents/kiosks', 'amt': 0.3 },
+        { 'label': 'Nonretail channels', 'amt': 0.5 },
+        { 'label': 'Newsstands', 'amt': 0.3 },
         { 'label': 'Internet', 'amt': 0.1 },
         { 'label': 'Vending', 'amt': 0.1 }
     ]
@@ -47,7 +47,7 @@ $(window).load(function() {
         var height = ((bar_height + bar_gap) * num_bars);
         
         var x = d3.scale.linear()
-            .domain([0, 60])
+            .domain([0, 70])
             .range([0, width]);
 
         var y = d3.scale.linear()
