@@ -6,40 +6,18 @@ var colors = {
     'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
 };
 
-var titles = {
-    'gender': 'Overall and by gender',
-    'age': 'By age group',
-    'race': 'By race',
-    'education': 'By education'
-};
-
 var data = {
-    'gender': [
-        { 'label': 'Overall', 'amt': 19 },
-        { 'label': 'Men', 'amt': 21.6 },
-        { 'label': 'Women', 'amt': 16.5 }
-    ],
-    'age': [
-        { 'label': '18-24', 'amt': 18.9 },
-        { 'label': '25-44', 'amt': 22.1 },
-        { 'label': '45-64', 'amt': 21.4 },
-        { 'label': '65 or older', 'amt': 7.9 }
-    ],
-    'race': [
-        { 'label': 'White', 'amt': 20.6 },
-        { 'label': 'Black', 'amt': 19.4 },
-        { 'label': 'Hispanic', 'amt': 12.9 },
-        { 'label': 'American Indian', 'amt': 31.5 },
-        { 'label': 'Asian', 'amt': 9.9 },
-        { 'label': 'Multiple race', 'amt': 27.4 }
-    ],
-    'education': [
-        { 'label': 'Less than high school', 'amt': 25.5 },
-        { 'label': 'GED', 'amt': 45.3 },
-        { 'label': 'High school diploma', 'amt': 23.8 },
-        { 'label': 'Some college', 'amt': 22.3 },
-        { 'label': 'Undergraduate degree', 'amt': 9.3 },
-        { 'label': 'Graduate degree', 'amt': 5.0 }
+    'retailer': [
+        { 'label': 'Grocery stores', 'amt': 53.8 },
+        { 'label': 'Tobacco specialists', 'amt': 21.1 },
+        { 'label': 'Convenience stores', 'amt': 15.9 },
+        { 'label': 'Discounters', 'amt': 3.8 },
+        { 'label': 'Pharmacies', 'amt': 3.6 },
+        { 'label': 'Hypermarkets', 'amt': 0.9 },
+        { 'label': 'Non-retail channels', 'amt': 0.5 },
+        { 'label': 'Newsagents/kiosks', 'amt': 0.3 },
+        { 'label': 'Internet', 'amt': 0.1 },
+        { 'label': 'Vending', 'amt': 0.1 }
     ]
 };
 
@@ -49,10 +27,7 @@ var data = {
  * to ensure all images have loaded
  */
 $(window).load(function() {
-    var $charts = $('.chart');
-    var graphic_data_url = 'data.csv';
-    var graphic_data;
-    var height = 200;
+    var $charts = $('#graphic');
     var bar_height = 25;
     var bar_gap = 10;
     
@@ -60,22 +35,19 @@ $(window).load(function() {
         // clear out existing graphics
         $charts.empty();
 
-        drawChart('gender', width);
-        drawChart('age', width);
-        drawChart('race', width);
-        drawChart('education', width);
+        drawChart('retailer', width);
     }
     
     function drawChart(id, width) {
         var chart_data = data[id];
         var num_bars = chart_data.length;
-
+        
         var margin = { top: 10, right: 7, bottom: 35, left: 130 };
-        var width = $('#' + id).width() - margin.left - margin.right;
+        var width = width - margin.left - margin.right;
         var height = ((bar_height + bar_gap) * num_bars);
         
         var x = d3.scale.linear()
-            .domain([0, 50])
+            .domain([0, 60])
             .range([0, width]);
 
         var y = d3.scale.linear()
@@ -83,16 +55,12 @@ $(window).load(function() {
         
         var xAxis = d3.svg.axis()
             .scale(x)
-            .orient("bottom")
+            .orient('bottom')
             .ticks(6);
             
         var x_axis_grid = function() { return xAxis; }
-
-        var title = d3.select('#' + id).append('h3')
-            .append('text')
-                .text(titles[id]);
-
-        var svg = d3.select('#' + id).append('svg')
+        
+        var svg = d3.select('#graphic').append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
@@ -119,7 +87,7 @@ $(window).load(function() {
                 .attr("y", function(d, i) { return i * (bar_height + bar_gap); })
                 .attr("width", function(d){ return x(d.amt); })
                 .attr("height", bar_height)
-                .attr('class', function(d) { return 'l-' + d.label.replace(/\s+/g, '-').toLowerCase() });
+                .attr('class', function(d) { return 'bar-' + d.label.replace(/\s+/g, '-').toLowerCase() });
         
         svg.append('g')
             .attr('class', 'value')
@@ -128,9 +96,9 @@ $(window).load(function() {
             .enter().append('text')
                 .attr('x', function(d) { return x(d.amt) })
                 .attr('y', function(d, i) { return i * (bar_height + bar_gap); })
-//                .attr('dx', 6)
+                .attr('dx', 6)
                 .attr('dy', 17)
-                .attr('text-anchor', 'end')
+                .attr('text-anchor', 'start')
                 .attr('class', function(d) { return 'l-' + d.label.replace(/\s+/g, '-').toLowerCase() })
                 .text(function(d) { return d.amt + '%' });
         
@@ -147,19 +115,14 @@ $(window).load(function() {
                 .attr('class', function(d) { return 'l-' + d.label.replace(/\s+/g, '-').toLowerCase() })
                 .text(function(d) { return d.label });
 
-
         /* update responsive iframe */
         sendHeightToParent();
     }
 
     function setup() {
         if (Modernizr.svg) {
-            d3.csv(graphic_data_url, function(error, data) {
-                graphic_data = data;
-
-                setupResponsiveChild({
-                    renderCallback: drawGraphic 
-                });
+            setupResponsiveChild({
+                renderCallback: drawGraphic 
             });
         } else {
             setupResponsiveChild();

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Smoking Demographics : NPR</title>
+    <title>Smoking Retailers : NPR</title>
 
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -84,46 +84,38 @@
             stroke: #333;
             stroke-width: 3px;
         }
-        #graphic .bars rect { fill: #17807E; }
+        #graphic .bars rect { fill: #8BC0BF; }
+        #graphic .bars rect.bar-pharmacies { fill: #17807E; }
         #graphic .label text,
         #graphic .value text {
             font-weight: normal;
             font-size: 12px;
-            fill: #333;
+            fill: #555;
             text-align: right;
         }
         #graphic .value text { 
-            fill: #fff;
-            font-size: 11px;
-        }
-        
-        .chart { 
-            width: 48%;
-            float: left;
-            margin-right: 2%;
+            text-align: left;
         }
 
-        @media screen and (max-width: 640px) {
-            .chart {
-                width: auto;
-                float: none;
-                margin-right: 0;
-                margin-bottom: 22px;
-            }
+        #graphic .label text.l-pharmacies,
+        #graphic .value text.l-pharmacies { 
+            font-weight: bold;
+            color: #121212;
         }
+
     </style>
 
 </head>
 <body>
-    <div id="graphic">
-        <div id="gender" class="chart"></div>
-        <div id="age" class="chart"></div>
-        <div id="race" class="chart"></div>
-        <div id="education" class="chart"></div>
-    </div>
+    <div id="graphic"></div>
     
+    <div class="footnotes">
+        <h4>Notes</h4>
+        <p>- Grocery stores includes forecourt retailers, hypermarkets, supermarkets and independent small grocers.</p>
+    </div>
+
     <div class="footer">
-        <p>Source: <a href="http://www.cdc.gov/mmwr/preview/mmwrhtml/mm6144a2.htm?s_cid=%20mm6144a2.htm_w" target="_blank">CDC Morbidity and Mortality Weekly Report</a></p>
+        <p>Source: Euromonitor International</p>
         <p>Credit: Alyson Hurt/NPR</p>
     </div>
 
