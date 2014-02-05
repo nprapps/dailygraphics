@@ -16,11 +16,14 @@
             margin: 0;
             padding: 0;
             font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #555;
         }
         .footnotes { margin-bottom: 20px; }
         .footnotes h4 {
             margin: 2px 0 7px 0;
-            color: #666;
+            color: #444;
             font-size: 11px;
         }
         .footnotes p,
@@ -30,32 +33,177 @@
             line-height: 1.3;
             color: #808080;
         }
+        
+        h1, h2, h3, h4, h5, h6, p, ul, li {
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            font-size: 20px;
+            font-weight: normal;
+            background-color: #ccc;
+            padding: 22px;
+            border-bottom: 2px solid #fff;
+            color: #333;
+        }
+        
+        h3 {
+            font-weight: normal;
+            color: #333;
+        }
+        
+        p.related {
+            margin-top: 11px;
+            font-size: 12px;
+        }
+        
+        section {
+            background-color: #f7f7f7;
+            border-bottom: 2px solid #fff;
+            padding: 22px 22px;
+        }
+        section.primary {
+            background-color: #ebebeb;
+        }
+        section.secondary {
+            padding-left: 88px;
+        }
+        
+        b {
+            background-color: #bababa;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: normal;
+        }
     </style>
 
 </head>
 <body>
     <div id="graphic">
     
-    
-        <section id="people">
-            Peter G. Peterson
-                Founder & chairman: Peter G. Peterson Foundation
-                Co-founder: Concord Coalition
-                Board of Directors: Committee for a Responsible Federal Budget 
-                Hedge-fund billionaire
-                Former Nixon administration commerce secretary
-                Former corporate CEO
-                
-                Related: direct personal connections to PGP Foundation; Committee for a Responsible Federal Budget; Concord Coalition; Fiscal Times LLC 
+        <h1>Peter G. Peterson</h1>
+        
+        <section id="peterson" class="primary">
+            <ul>
+                <li>Founder & chairman: Peter G. Peterson Foundation</li>
+                <li>Co-founder: <b>Concord Coalition</b></li>
+                <li>Board of Directors: <b>Committee for a Responsible Federal Budget</b></li>
+                <li>Hedge-fund billionaire</li>
+                <li>Former Nixon administration commerce secretary</li>
+                <li>Former corporate CEO</li>
+            </ul>
+            <p class="related">
+                Related: direct personal connections to 
+                <b>PGP Foundation</b>
+                <b>Committee for a Responsible Federal Budget</b>
+                <b>Concord Coalition</b>
+                <b>Fiscal Times LLC</b>
+            </p>
         </section>
         
-        <section id="organizations">
+        <h1>Organizations Directly Connected To Peterson</h1>
+        
+        <section id="crfb" class="primary">
+            <h3>Committee for a Responsible Federal Budget</h3>
+            <p>related organization</p>
+            <p>Founded 1981</p>
+            <p>Mission is public education on issues with "significant fiscal policy impact"</p>
+            <p class="related">
+                Related: 
+                <b>New America Foundation</b>
+                <b>National Commission on Fiscal Responsibility and Reform</b>
+             </p>
         </section>
         
-        <section id="grants">
+        <section class="secondary">
+            <h3>Moment of Truth</h3>
+            <p>CRFB project</p>
+            <p>2011</p>
+            <p>Grassroots effort in aftermath of <b>Simpson-Bowles Commission</b></p>
+            <p class="related">
+                Related: 
+                <b>New America Foundation</b>
+                <b>National Commission on Fiscal Responsibility and Reform</b>
+            </p>
         </section>
-    
-    
+
+        <section class="secondary">
+            <h3>Campaign to Fix the Debt</h3>
+            <p>CFRB project</p>
+            <p>Launched 2012</p>
+            <p>Has promoted "grand bargain" to cut deficit and debt </p>
+            <p class="related">
+                Related:
+                <b>Committee for a Responsible Federal Budget</b>
+                <b>Comeback America Initiative</b>
+                <b>Fix the Debt Coalition</b>
+                <b>The Can Kicks Back</b>
+            </p>
+        </section>
+
+        <section class="secondary">
+            <h3>Fix the Debt Coalition</h3>
+            <p>CFRB-related organization</p>
+            <p>Founded 2012</p>
+            <p>Lobbying and advocacy arm of <b>Campaign to Fix the Debt</b></p>
+        </section>
+
+        <section id="concord" class="primary">
+            <h3>Concord Coalition</h3>
+            <p>related organization</p>
+            <p>Founded 1992</p>
+            <p>Educational organization focused on budget deficits and "unsustainable entitlement programs." Peterson is a co-founder.</p>
+            <p><em>Related: "Fiscal Wake-Up" and "Fiscal Solutions" tours</em></p>
+        </section>
+        
+        <section class="secondary">
+            <h3>"Fiscal Wake-Up" and "Fiscal Solutions" tours</h3>
+            <p>Concord Coalition projects</p>
+            <p>2010-11</p>
+            <p>Grassroots events and town hall meetings to promote goals of Simpson-Bowles and Peterson-Pew commissions</p>
+        </section>
+        
+        <section class="secondary">
+            <h3>"I.O.U.S.A"</h3>
+            <p>project</p>
+            <p>2009</p>
+            <p>Documentary film covering Concord Coalition issues and its Fiscal Wake-Up Tour</p>
+        </section>
+        
+        <section id="pgpf" class="primary">
+            <h3>Peter G. Peterson Foundation</h3>
+            <p>related organization</p>
+            <p>Founded 2008</p>
+        </section>
+        
+        <section id="fiscal-times" class="primary">
+            <h3>Fiscal Times LLC</h3>
+            <p>corporation</p>
+            <p>Founded 2009</p>
+            <p>Digital news service focused on fiscal policy; media partners include Washington Post, Kaiser Health News, CNBC, Thomson Reuters</p>
+        </section>
+        
+        <h1>Related Organizations</h1>
+        
+        <section id="simpson-bowles" class="primary">
+            <h3>National Commission on Fiscal Responsibility and Reform (Simpson-Bowles Commission)</h3>
+            <p>federal commission appointed by President Obama</p>
+            <p>2010</p>
+            <p>Co-chaired by Alan Simpson and Erskine Bowles. Staff included representatives from Committee for a Responsible Federal Budget and Concord Coalition</p>
+            <p><em>Related: Alan Simpson; Erskine Bowles; Committee for a Responsible Federal Budget; Concord Coalition</em></p>
+        </section>
+
+        <section id="comeback" class="primary">
+            <h3>Comeback America Initiative</h3>
+            <p>organization (PGPF-affiliated, but not legally linked)</p>
+            <p>Founded 2010</p>
+            <p>Founded by David Walker; partner in Campaign to Fix the Debt</p>
+            <p><em>Related: Campaign To Fix The Debt; David Walker</em></p>
+        </section>
+        
+        
     </div>
     
     <div class="footnotes">
