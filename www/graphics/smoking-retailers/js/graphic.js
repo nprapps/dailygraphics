@@ -11,7 +11,7 @@ var data = {
         { 'label': 'Convenience stores', 'amt': 63.4 },
         { 'label': 'Tobacco specialists', 'amt': 21.1 },
         { 'label': 'Supermarkets & discounters', 'amt': 10.1 },
-        { 'label': 'Pharmacies', 'amt': 3.6 },
+        { 'label': 'Drugstores', 'amt': 3.6 },
         { 'label': 'Other', 'amt': 1.9 },
     ]
 };
