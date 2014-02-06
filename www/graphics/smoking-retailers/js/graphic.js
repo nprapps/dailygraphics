@@ -42,7 +42,7 @@ $(window).load(function() {
             tick_count = 3;
         }
         
-        var margin = { top: 10, right: 7, bottom: 35, left: 160 };
+        var margin = { top: 10, right: 7, bottom: 35, left: 165 };
         var width = width - margin.left - margin.right;
         var height = ((bar_height + bar_gap) * num_bars);
         
