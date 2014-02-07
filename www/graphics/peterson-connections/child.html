@@ -42,10 +42,11 @@
         h1 {
             font-size: 20px;
             font-weight: normal;
-            background-color: #ccc;
-            padding: 22px;
-            border-bottom: 2px solid #fff;
+            border-bottom: 2px solid #ebebeb;
+            padding-bottom: 11px;
+            margin-bottom: 22px;
             color: #333;
+            margin-top: 44px;
         }
         
         h2 {
@@ -58,32 +59,38 @@
         h3 {
             font-weight: normal;
             color: #333;
-        }
-        
-        p.related {
-            margin-top: 11px;
-            font-size: 12px;
+            margin-bottom: 11px;
         }
         
         section {
-            background-color: #f7f7f7;
-            border-bottom: 2px solid #fff;
-            padding: 22px 22px;
+            border-bottom: 2px solid #f1f1f1;
+            padding: 0 0 22px 0;
+            margin-bottom: 22px;
         }
-        section.primary {
-            background-color: #ebebeb;
+        section.primary { }
+        section.secondary { padding-left: 26px; }
+        section.tertiary { padding-left: 52px; }
+        
+        section p,
+        section li {
+            margin-left: 26px;
+            margin-bottom: 3px;
         }
-        section.secondary {
-            padding-left: 88px;
+        
+        section ul {
+            list-style-type: none;
         }
-        section.tertiary {
-            padding-left: 154px;
+        
+        section p.related {
+            margin-top: 11px;
+            margin-bottom: 0;
+            font-size: 12px;
         }
         
         b {
             background-color: #bababa;
             color: #fff;
-            padding: 3px 10px;
+            padding: 2px 6px;
             margin-bottom: 1px;
             border-radius: 3px;
             font-weight: normal;
@@ -93,9 +100,9 @@
         
         img#diagram {
             display: block;
-            margin-bottom: 22px;
             max-width: 100%;
             height: auto;
+            display: none;
         }
 
         .key {
@@ -125,11 +132,23 @@
             color: #333;
             font-weight: normal;
         }
-        .key .key-0 b { background-color: #EAAA61; }
-        .key .key-1 b { background-color: #7DBFE6; }
-        .key .key-2 b { background-color: #F3D469; }
-        .key .key-3 b { background-color: #8BC0BF; }
-        .key .key-4 b { background-color: #CCCCCC; }
+        .key .key-0 b,
+        .dot0 { background-color: #EAAA61; }
+        .key .key-1 b,
+        .dot1 { background-color: #7DBFE6; }
+        .key .key-2 b,
+        .dot2 { background-color: #F3D469; }
+        .key .key-3 b,
+        .dot3 { background-color: #8BC0BF; }
+        .key .key-4 b,
+        .dot4 { background-color: #CCCCCC; }
+        
+        .dot {
+            width: 15px;
+            height: 15px;
+            margin-right: 6px;
+            display: inline-block;
+        }
 
     </style>
 
@@ -147,81 +166,75 @@
         <img id="diagram" src="peterson-connections.png" alt="network diagram" />
     
     
-        <h1>Peter G. Peterson</h1>
+        <h1><span class="dot dot0"></span> Peter G. Peterson</h1>
         
         <section id="peterson" class="primary">
             <ul>
                 <li>Founder & chairman: Peter G. Peterson Foundation</li>
-                <li>Co-founder: <b>Concord Coalition</b></li>
-                <li>Board of Directors: <b>Committee for a Responsible Federal Budget</b></li>
+                <li>Co-founder: <b class="dot0">Concord Coalition</b></li>
+                <li>Board of Directors: <b class="dot0">Committee for a Responsible Federal Budget</b></li>
                 <li>Hedge-fund billionaire</li>
                 <li>Former Nixon administration commerce secretary</li>
                 <li>Former corporate CEO</li>
             </ul>
             <p class="related">
                 Related: direct personal connections to 
-                <b>PGP Foundation</b>
-                <b>Committee for a Responsible Federal Budget</b>
-                <b>Concord Coalition</b>
-                <b>Fiscal Times LLC</b>
+                <b class="dot0">PGP Foundation</b>
+                <b class="dot0">Committee for a Responsible Federal Budget</b>
+                <b class="dot0">Concord Coalition</b>
+                <b class="dot0">Fiscal Times LLC</b>
             </p>
         </section>
 
         <h1>Organizations Directly Connected To Peterson</h1>
         
         <section id="crfb" class="primary">
-            <h3>Committee for a Responsible Federal Budget</h3>
-            <p>related organization</p>
+            <h3><span class="dot dot0"></span> Committee for a Responsible Federal Budget</h3>
             <p>Founded 1981</p>
             <p>Mission is public education on issues with "significant fiscal policy impact"</p>
             <p class="related">
                 Related: 
-                <b>National Commission on Fiscal Responsibility and Reform</b>
+                <b class="dot4">National Commission on Fiscal Responsibility and Reform</b>
              </p>
         </section>
         
         <section class="secondary">
-            <h3>Moment of Truth</h3>
-            <p>CRFB project</p>
+            <h3><span class="dot dot1"></span> Moment of Truth</h3>
             <p>2011</p>
-            <p>Grassroots effort in aftermath of <b>Simpson-Bowles Commission</b></p>
+            <p>Grassroots effort in aftermath of <b class="dot4">Simpson-Bowles Commission</b></p>
             <p class="related">
                 Related: 
-                <b>National Commission on Fiscal Responsibility and Reform</b>
+                <b class="dot4">National Commission on Fiscal Responsibility and Reform</b>
             </p>
         </section>
 
         <section class="secondary">
-            <h3>Campaign to Fix the Debt</h3>
-            <p>CFRB project</p>
+            <h3><span class="dot dot1"></span> Campaign to Fix the Debt</h3>
             <p>Launched 2012</p>
             <p>Has promoted "grand bargain" to cut deficit and debt </p>
             <p class="related">
                 Related:
-                <b>Committee for a Responsible Federal Budget</b>
-                <b>Comeback America Initiative</b>
-                <b>Fix the Debt Coalition</b>
-                <b>The Can Kicks Back</b>
+                <b class="dot1">Committee for a Responsible Federal Budget</b>
+                <b class="dot1">Fix the Debt Coalition</b>
+                <b class="dot1">The Can Kicks Back</b>
+                <b class="dot4">Comeback America Initiative</b>
             </p>
         </section>
 
         <section class="tertiary">
-            <h3>The Can Kicks Back</h3>
-            <p>project</p>
+            <h3><span class="dot dot1"></span> The Can Kicks Back</h3>
             <p>Launched 2012</p>
-            <p>Working with <b>Campaign to Fix the Debt</b> to mobilize millennials for "sustainable and generationally equitable" budget. Advisory board includes <b>Erskine Bowles</b> <b>Alan Simpson</b> <b>David Walker</b></p>
+            <p>Working with <b class="dot1">Campaign to Fix the Debt</b> to mobilize millennials for "sustainable and generationally equitable" budget. Advisory board includes <b class="dot2">Erskine Bowles</b> <b class="dot2">Alan Simpson</b> <b class="dot2">David Walker</b></p>
         </section>
 
-        <section class="secondary">
-            <h3>Fix the Debt Coalition</h3>
-            <p>CFRB-related organization</p>
+        <section class="tertiary">
+            <h3><span class="dot dot1"></span> Fix the Debt Coalition</h3>
             <p>Founded 2012</p>
-            <p>Lobbying and advocacy arm of <b>Campaign to Fix the Debt</b></p>
+            <p>Lobbying and advocacy arm of <b class="dot1">Campaign to Fix the Debt</b></p>
         </section>
 
         <section id="concord" class="primary">
-            <h3>Concord Coalition</h3>
-            <p>related organization</p>
+            <h3><span class="dot dot0"></span> Concord Coalition</h3>
             <p>Founded 1992</p>
             <p>Educational organization focused on budget deficits and "unsustainable entitlement programs." Peterson is a co-founder.</p>
         </section>
