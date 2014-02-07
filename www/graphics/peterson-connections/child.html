@@ -97,11 +97,52 @@
             max-width: 100%;
             height: auto;
         }
+
+        .key {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0 0 22px 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        .key-item { 
+            display: inline-block;
+            margin: 0 18px 0 0;
+            padding: 0;
+            line-height: 15px;
+        }
+        .key-item b {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 6px;
+            border-radius: 0;
+            padding: 0;
+            float: left;
+        }
+        .key-item label {
+            white-space: nowrap;
+            font-size: 12px;
+            color: #333;
+            font-weight: normal;
+        }
+        .key .key-0 b { background-color: #EAAA61; }
+        .key .key-1 b { background-color: #7DBFE6; }
+        .key .key-2 b { background-color: #F3D469; }
+        .key .key-3 b { background-color: #8BC0BF; }
+        .key .key-4 b { background-color: #CCCCCC; }
+
     </style>
 
 </head>
 <body>
     <div id="graphic">
+        <ul class="key">
+            <li class="key-item key-0"><b></b><label>Peterson and directly related organizations</label></li>
+            <li class="key-item key-1"><b></b><label>Related projects and organizations</label></li>
+            <li class="key-item key-2"><b></b><label>Related people</label></li>
+            <li class="key-item key-3"><b></b><label>Grant recipients</label></li>
+            <li class="key-item key-4"><b></b><label>Partner organizations</label></li>
+        </ul>
     
         <img id="diagram" src="peterson-connections.png" alt="network diagram" />
     
