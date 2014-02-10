@@ -50,84 +50,92 @@
 
         }
 
-        /*.slider .handle {
-          fill: #fff;
-          stroke: #000;
-          stroke-opacity: .5;
-          stroke-width: 1.25px;
-          pointer-events: none;
-        }*/
-/*
-        #graphic path { 
-            stroke: #666;
-            stroke-width: 2;
-            fill: none;
-        }*/
+/*        path {
+          fill: none;
+        }
+        */
+        .line_all {
+          fill: none;
+          stroke: #66a7ff;
+          stroke-width: 3px;
+        }        
+        
+        .line_thin {
+          fill: none;
+          stroke: #d966ff;
+          stroke-width: 3px;
+        }
+        
+        .line_deep {
+          fill: none;
+          stroke: #ff9166;
+          stroke-width: 3px;
+        }
+
+        .line_regular {
+          fill: none;
+          stroke: #a0ff66;
+          stroke-width: 3px;
+        }
+
+
+
+        #graphic .circle {
+            fill: #66a7ff;
+            opacity: .8;
+        }
+        #graphic .yourcircle {
+            fill: firebrick;
+            opacity: .8;
+        }
 
         #graphic .deep.dish_circle {
-            fill: #666;
+            fill: #ff9166;
             opacity: .2;
         }
          #graphic .thin_circle {
-            fill: #666;
+            fill: #d966ff;
             opacity: .2;
             /*shape-rendering: crispEdges;*/
         }   
         #graphic .hand-tossed_circle {
-            fill: #666;
+            fill: #a0;
             opacity: .2;
             /*shape-rendering: crispEdges;*/
         }   
         #graphic .three_pxin {
-            fill: #666;
+            fill: #3399FF;
             opacity: .2;
             /*shape-rendering: crispEdges;*/
         }   
         #graphic .four_pxin {
-            fill: #666;
+            fill: #3399FF;
             opacity: .2;
             /*shape-rendering: crispEdges;*/
         }   
 
 
         #graphic .axis {
-            font-size: 20px;
-            color: #666;
+            font-size: 14px;
         }
         #graphic .axis path,
         #graphic .axis line {
             fill: none;
-            stroke: #666;
-            stroke-width: 1;
+            stroke: #ccc;
+            stroke-width: 2;
             shape-rendering: crispEdges;
         }
 /*
         button {
           display: block;
         }*/
-        #crustbutton {
-        float: right;
-        position: relative;
-        top: 50px;
-        display: block;
-        padding:5px;
-        border: none;
-        color:#000;
-        height: 20px;
-        width: 6%;
-        text-decoration:none;
-        border-radius: 20px;
-        line-height: 1.3;
-        } 
+
 
         .deep {
-        position: relative;
-        top: 100px;
         background-color: #C5DFDF;
         }  
 
         .thin {
-
           background-color: #C5DFDF;
         }    
 
@@ -146,7 +154,7 @@
           background-color: #C5DFDF;
         } 
 
-        .prices  {
+/*        .prices  {
           display:inline-block;
           margin-right:10px;          
           font-family: Arial, Helvetica, sans-serif;  
@@ -154,7 +162,7 @@
           font-size: 16px;
 
 
-        } 
+        } */
         .pizzalabels {
           display:inline-block;
           margin-right:10px;           
@@ -163,6 +171,10 @@
           color:#ccc;
           font-size: 24px;
 
+        }
+
+        .equallab {
+          font-size: 30px;  
         }
 
         .pizzavar {
@@ -246,33 +258,114 @@
 
         button:hover {
         background: #C5DFDF;
-        border-top: 1px solid #2a73a6;
-        border-right: 1px solid #165899;
-        border-bottom: 1px solid #07428f;
-        border-left: 1px solid #165899;
         cursor: pointer;
+        opacity: 1;
+        }
+
+        .slider:hover {
+        background: #C5DFDF;
+        cursor: pointer;
+        opacity: 1;
         }
 
       button:active {
         background: #3282d3;
         text-shadow: 0 -1px 1px #2361a4;
+        opacity: 1;
         }
 
 
+      #crustbutton {
+        float: right;
+        position: relative;
+        top: 50px;
+        display: block;
+        padding:5px;
+        border: none;
+        color:#000;
+        height: 20px;
+        width: 6%;
+        text-decoration:none;
+        border-radius: 20px;
+        line-height: 1.3;
+        opacity: .2;
+        } 
+
+
+        .pizza  {
+
+          fill: #6689fe;
+        }
+
+        .arcpie2 {
+
+          fill : #98ff66;
+          opacity: .8;
+        }
+
+        .arcpie {
+          fill: #ff7866;
+          opacity: .8;
+
+        }
+
+        .handle2 {
+          fill: #ffd966;
+          opacity: .8;
+
+        }
+
+        .handle {
+          fill: #ffd966;
+          opacity: .8;
+        }
     </style>
 
 </head>
 <body>
+  <p>Pizza Size (Diameter In Inches)</p>
+    <select class="target" value="Field 1">
+    <option>6</option>
+    <option>7</option>
+    <option>8</option>
+    <option>8</option>
+    <option>9</option>
+    <option>10</option>
+    <option>11</option>
+    <option>12</option>
+    <option>13</option>
+    <option>14</option>
+    <option>15</option>
+    <option>16</option>
+    <option>17</option>
+    <option>18</option>
+    <option>19</option>
+    <option>20</option>
+    <option>21</option>
+    <option>22</option>
+    <option>23</option>
+    <option>24</option>
+    <option>25</option>
+    <option>26</option>
+    <option>27</option>
+    <option>28</option>
+    <option>29</option>
+    <option>30</option>
+    </select>
 
-        <div id = 'inputspan'>
-          Price:
-          <input id="price_input"/> 
-        </div>
-        <div id = 'inputspan'>
-          Pizza Size:
-          <input id="price_input"/> 
-        </div>
-        <button id="enter" class = "enter">Enter</button>
+<!-- <select name=select1 onchange='OnChange(this.form.select1);'> -->
+
+<p>Pizza Price</p>
+<form action="javascript:alert( 'success!');">
+  <div>
+    <input type="text">
+    <input type="submit">
+  </div>
+</form>
+<span></span>
+
+
+  <!-- <button id="enter" class = "enter">Enter</button> -->
 
      <div id="demo">
         <div id="buttons">
@@ -281,7 +374,7 @@
         <button id="crustbutton" class = "all">All</button> 
         <button id="crustbutton" class = "deep">Deep Dish</button>
         <button id="crustbutton" class = "thin">Thin</button>
-        <button id="crustbutton" class = "hand">Hand Tossed</button>
+        <button id="crustbutton" class = "hand">Regular</button>
         <button id="crustbutton" class = "stuffed">Stuffed Crust</button>
 
     </div>  

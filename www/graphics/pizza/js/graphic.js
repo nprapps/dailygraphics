@@ -6,7 +6,18 @@
         'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
     };
 
-    book = inputspan;
+
+
+
+
+
+
+
+    $(document).ready(function() {
+      $('#hit').click(function() {
+        alert($('#term').val());
+      });
+    });
 
     /*
      * NB: Use window.load instead of document.ready
@@ -15,9 +26,13 @@
 
     Build 
     regression line
+    need to build in medians for crust types
     field to enter data
     calculator + point on graphic
-
+    labels
+    smaller dotsize
+    handle--make more clear--change and highlight
+    median price
 
 
 
@@ -29,14 +44,32 @@
         var graphic_data_url3 = 'fittedvals_regular_all.csv';
         var graphic_data_url4 = 'fittedvals_stuffed_all.csv';
         var graphic_data_url5 = 'fittedvals_thin_all.csv';
+        var graphic_data_url6 = 'pricelinear_pout.csv';
     	var graphic_data;
         var graphic_data2;
         var graphic_data3;
         var graphic_data4;
         var graphic_data5;
+        var graphic_data6;
 
 
-        function drawGraphic(width,book) {
+    // function answers() {
+    // var myindex  = dropdown.selectedIndex
+    // var SelValue = dropdown.options[myindex].value
+    // // var baseURL  = <Some value based on SelValue>
+    
+    // $('#price_input').val();
+    // var price = $('#price_input').val();;
+    // price = parseInt(price);
+    // alert( "Handler for .change( " + price + " ) called." );
+    
+    // // console.log(SelValue);
+    // // console.log(price);
+    // }
+
+
+
+        function drawGraphic(width, size, price) {
 
     // function to move stuff to front
           d3.selection.prototype.moveToFront = function() {
@@ -45,7 +78,7 @@
               });
             };
 
-            var margin = {top: 100, right: 20, bottom: 40, left: 60};
+            var margin = {top: 100, right: 20, bottom: 40, left: 80};
             var margin2 = {top: 100, right: 20, bottom: 40, left: 0};
             var width = width - margin.left ;
             var height = 1000 - margin.top - margin.bottom;
@@ -56,8 +89,13 @@
             }
 
 
-            bookltext = book;
+            $('#price_input').val();
+            var price = $('#price_input').val();;
+            price = parseFloat(price);
 
+            console.log(price)
+            // if (!price) { error handler }
+            // parseFloat(price);
             // bookltext = book.toLowerCase();
 
 
@@ -98,7 +136,7 @@
             var svg2 = d3.select("#graphic")
                         .append("svg")
                         .attr("class", "svg2")
-                            .attr("width", width2 )
+                            .attr("width", width2 + margin.left )
                         .attr("height", height2 + margin.top + margin.bottom)
                         .append("g")
                         .attr("transform", "translate( 0 ,20)");
@@ -122,8 +160,10 @@
 
 // fitlines
             var line = d3.svg.line()
+                .interpolate("basis")
                 .x(function(d) { return x(d.size); })
                 .y(function(d) { return y(d.fitted); });
+
 // .interpolate("basis")
 // 
 
@@ -184,34 +224,41 @@
             var smallpricex = width1*(1/30);
             var smallpricey = height2*(24/30);
             var scalef = width/250;
-            var pizzax = 2.5*width/20;
+            var pizzax = 2.7*width/30;
             var pizza = svg2.append("circle")
                         .attr("class", "pizza")
                         .attr("transform", "translate(" + pizzax + " , 70)")
                         .attr("r", 20)
                         .style('opacity', .7);
+
+            var bigprice = svg2.append("text")
+                        .attr("class", "prices")
+                        .attr("x", bigpricex)
+                        .attr("y", bigpricey);                        
     //////////////////////////////////////////////////////////////////
     //////////////////////////////////1////////////////////////////////
     // code for slider
     //////////////////////////////////////////////////////////////////
 
+
             var handle2 = slider.append("rect") 
-              // .attr("y", function() { return height - y(.4); })
               .attr("class", "handle2")
-              .attr("height", height)
+              .attr("height", height*(3/4))
               .attr("width", width/200)
-              .attr("fill", "#ccc")
-              .style("opacity", .4);
-              // .attr("transform", "translate(0," + height1 + ")");
-
-
+              .style("opacity", .5);
+            
+            var handle_label = slider.append("text") 
+              .attr("class", "handle_label")
+              .attr("y", y(0)+8)
+              .text("< >")
+              .style("opacity", 1)
+              .style("fill", "#3399FF")
+              .attr("font-size", "24px");
 
             var handle = slider.append("circle")
                 .attr("class", "handle")
                 .attr("transform", "translate(0," + height1 + ")")
                 .attr("r", width/50)
-                .style("stroke", "gray")
-                // .attr("fill", "#ccc")
                 .style("opacity", .4);
 
 
@@ -252,7 +299,6 @@
                         .text("Is equal to.. ")
                         .attr("fill", "#ccc");
 
-
             var equal2 = svg2.append("text")
                         .attr("class", "equallab")
                         .attr("x", equal2x)
@@ -261,33 +307,24 @@
                         .attr("fill", "#ccc");
 
 
-            // var equal2 = svg2.append("text")
-            //             .attr("x", equal1x)
-            //             .attr("y", (15*height2/20))
-            //             .text("=")
-            //             .attr("font-family", "sans-serif")
-            //             .attr("font-size", "100px")
-            //             .attr("fill", "#ccc");
-            // var labelvarpizza = svg2.append("text")
-            //             .attr("x", 0)
-            //             .attr("y", height2*(2/5))
-            //             .text("1")
-            //             .attr("font-family", "sans-serif")
-            //             .attr("font-size", "60px")
-            //             .attr("fill", "#ccc");
-            // var label16 = svg2.append("text")
-            //             .attr("class", "pizzavar")
-            //             .attr("x", label2x)
-            //             .attr("y", height2*(15/30))
-            //             .text("16 inch pizzas");
-            // var label8 = svg2.append("text")
-            //             .attr("class", "pizzavar")
-            //             .attr("x", label3x)
-            //             .attr("y", height2*(24/30))
-            //             .text("8 inch pizzas");
-
-
-
+           
+            var xaxislabel = svg.append("text") 
+                          .attr("class", "xaxis_label")
+                          .attr("y", y(0)+60)
+                          .attr("x", x(16)-50)
+                          .text("Pizza Size (Diameter In Inches)")
+                          .style("opacity", .5)
+                          .style("fill", "#000000")
+                          .attr("font-size", "14px");           
+            var yaxislabel = svg.append("text") 
+                          .attr("class", "yaxis_label")
+                          .attr("y", y(.5)-55)
+                          .attr("x", -height*(3/8))
+                          .attr("transform", "rotate(-90)")
+                          .text("$ Per Square Inch")
+                          .style("opacity", .5)
+                          .style("fill", "#000000")
+                          .attr("font-size", "16px");
 
             slider
                 .call(brush.event)
@@ -304,12 +341,12 @@
                 brush.extent([value, value]);
               }
 
+              
               handle.attr("cx", x(value));
               handle2.attr("x", x(value)-4);
-
+              handle_label.attr("x", x(value)-18);
 
               svg2.selectAll(".pizza")
-                    .style("fill","#F7E39B" )
                     .style("opacity",function() { 
                         var cscaled = value/15;
                         return cscaled; } )
@@ -331,7 +368,8 @@
             .text( "A " + value + "    Inch Pizza" )
             .attr("font-family", "sans-serif")
             .attr("font-size", "24px")
-            .attr("fill", "#ccc");
+            .attr("fill", "#000")
+            .style("opacity",.6);
 
     }
     function midpizzacall(value) {
@@ -339,36 +377,41 @@
             .text(value + " -- 16 Inch Pizzas")
             .attr("font-family", "sans-serif")
             .attr("font-size", "24px")
-            .attr("fill", "#ccc");
+            .attr("fill", "#000")
+            .style("opacity",.6);
         }
     function smallpizzacall(value) {
         smallpizza          
             .text(value + " -- 8 Inch Pizzas")
             .attr("font-family", "sans-serif")
             .attr("font-size", "24px")
-            .attr("fill", "#ccc");
+            .attr("fill", "#000")
+            .style("opacity",.6);
         }
     function bigpricecall(value) {
         bigprice
             .text( "$"  )
             .attr("font-family", "sans-serif")
-            .attr("font-size", "16px")
-            .attr("fill", "#ccc");
+            .attr("font-size", "18px")
+            .attr("fill", "#000")
+            .style("opacity",.6);
 
     }
     function midpricecall(value) {
         midprice          
             .text("$" + value )
             .attr("font-family", "sans-serif")
-            .attr("font-size", "24px")
-            .attr("fill", "#ccc");
+            .attr("font-size", "18px")
+            .attr("fill", "#000")
+            .style("opacity",.6);
         }
     function smallpricecall(value) {
         smallprice
             .text("$" + value)
             .attr("font-family", "sans-serif")
-            .attr("font-size", "24px")
-            .attr("fill", "#ccc");
+            .attr("font-size", "18px")
+            .attr("fill", "#000")
+            .style("opacity",.6);
         }
 
     function pies(d) { 
@@ -469,9 +512,7 @@
     svg2.append("path")
     .attr("class", "arcpie2")
     .attr("d", arcb)
-    .attr("transform", "translate(" + width_pieb  +  "," + pizzay + ")")
-    // .style("opacity", sqinch_val/sqinch_max2)
-    .style("fill", "#3D7FA6");
+    .attr("transform", "translate(" + width_pieb  +  "," + pizzay + ")");
 
     if (sqinch_norm2 > 2) {
 
@@ -479,10 +520,7 @@
         svg2.append("path")
         .attr("class", "arcpie2")
         .attr("d", arcb2)
-        .attr("transform", "translate(" + width_pieb  +  "," + pizzay + ")")
-        .style("opacity", .8)
-        .style("fill", "#3D7FA6");
-
+        .attr("transform", "translate(" + width_pieb  +  "," + pizzay + ")");
     }
 
     if (sqinch_norm2 > 4) {
@@ -492,10 +530,7 @@
         svg2.append("path")
         .attr("class", "arcpie2")
         .attr("d", arcb3)
-    .attr("transform", "translate(" + width_pieb  +  "," + pizzay + ")")
-        .style("opacity", .8)
-        .style("fill", "#3D7FA6");
-
+    .attr("transform", "translate(" + width_pieb  +  "," + pizzay + ")");
     }
 
 
@@ -504,10 +539,7 @@
         svg2.append("path")
         .attr("class", "arcpie2")
         .attr("d", arcb4)
-    .attr("transform", "translate(" + width_pieb  +  "," + pizzay + ")")
-        .style("opacity", .8)
-        .style("fill", "#3D7FA6");
-
+    .attr("transform", "translate(" + width_pieb  +  "," + pizzay + ")");
     }
 
 
@@ -599,10 +631,7 @@
     svg2.append("path")
     .attr("class", "arcpie")
     .attr("d", arc)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-    .style("opacity", sqinch_val/sqinch_max)
-    .style("fill", "#D8472B");
-
+    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
 
     if (sqinch_norm > 2) {
 
@@ -610,10 +639,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc2)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 4) {
@@ -622,10 +648,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc3)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
 
@@ -634,10 +657,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc4)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 8) {
@@ -646,21 +666,14 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc5)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
-    }
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");    }
 
     if (sqinch_norm > 10) {
         width_pieb2 = width_pieb2 + diam_base_px*2;    
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc6)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 12) {
@@ -668,10 +681,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc7)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 14) {
@@ -679,10 +689,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc8)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 16) {
@@ -691,10 +698,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc9)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 18) {
@@ -702,10 +706,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc10)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 20) {
@@ -713,10 +714,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc11)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 22) {
@@ -724,10 +722,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc12)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 24) {
@@ -736,10 +731,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc13)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 26) {
@@ -747,10 +739,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc14)
-    .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");
     }
 
     if (sqinch_norm > 28) {
@@ -758,10 +747,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc15)
-    .attr("transform", "translate(" + width_pie +",250)")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pie +",250)");
     }
 
     if (sqinch_norm > 30) {
@@ -769,10 +755,7 @@
         svg2.append("path")
         .attr("class", "arcpie")
         .attr("d", arc16)
-    .attr("transform", "translate(" + width_pie +",250)")
-        .style("opacity", sqinch_val/sqinch_max)
-        .style("fill", "#D8472B");
-
+        .attr("transform", "translate(" + width_pie +",250)");
     }
 
 ////////////////////////////////////////////////////////
@@ -787,25 +770,136 @@
 
     }
 
+//   svg.append("path")
+//       .datum(data)
+//       .attr("class", "line")
+//       .attr("d", line);
+// });
 
     ////////////////////////////////////////////
     // scatter starts here
     ////////////////////////////////////////////
-            svg.attr('class', 'scatter')
-    	        .selectAll('circle')
-    	            .data(graphic_data)
-    	        .enter().append('circle')
-                    // .filter(function(d) { return d.variable == "one_pxin" })        // <== This line
-                    .attr('class', function(d) { return d.crust + "_circle"})				
-                    .attr("r", width/150)
-    				.attr("cx", xMap)
-    				.attr("cy", yMap);
-                    // .style("color", "#666")
+
+        svg.attr('class', 'scatter')
+            .selectAll('circle')
+                .data(graphic_data)
+            .enter().append('circle')
+                .attr('class', function(d) { return d.crust + "_circle"})               
+                .attr("r", width/200)
+                .attr("cx", xMap)
+                .attr("cy", yMap);
+
+
+
+
+
+        var psize = 6;
+        var pprice = 0;
+        var psizearea = 0;
+
+
+
+    // get size
+    $( ".target" ).change(function(value) {
+        $( "select option:selected" ).each(function() {
+         psize = $( this ).val();
+        });
+      // alert( "Handler for .change( " + psize + " ) called." );
+    });
+
+
+    
+    // get price
+    $( "form" ).submit(function( event ) {
+
+      if ( !isNaN($( "input:first" ).val()) ) {
+            
+            $(".yourcircle").first().remove();
+            var bprice = parseFloat($( "input:first" ).val());
+            // alert( "Handler for .change( " + pprice + " ) called." );
+             psizearea = Math.pow((psize/2),2)*Math.PI;
+             pprice =  bprice / psizearea; 
+            // console.log(p)
+            svg.append('circle')
+                .attr('class', "yourcircle")
+                .attr("r", width/150)
+               
+                .transition() 
+                .duration(500)
+
+                .attr("cx", function() { return x(psize);})
+                .attr("cy", function() { return y(pprice);})
+                .style("color","red");
+
+            svg.append("text")
+                .text("Your Price Per Square Inch: $" + pprice.toFixed(2) )
+                .attr("class", "yourcircle_label")
+                .attr("x", function() { return x(psize);} )
+                .attr("y", function() { return y(pprice+.01);});
+
+            svg.append("text")
+                .text("Area Of Your Pizza: " + psizearea.toFixed(1) + " Square Inches")
+                .attr("class", "yourcircle_label")
+                .attr("x", function() { return x(psize);} )
+                .attr("y", function() { return y(pprice+.025);});
+
+                 psize = 6;
+                 pprice = 0;
+                 psizearea = 0;
+
+        return;
+      }
+     
+      $( "span" ).text( "Not valid!" ).show().fadeOut( 3000 );
+      event.preventDefault();
+    });
+
+
+        // var yourcircle = svg.append('circle')
+        //         .attr('class', "yourcircle")
+        //         .attr("r", width/150)
+        //         .style('opacity', 0);
+
+
+
+     // var graphic_data_url = 'pizza_m.csv';
+     //    var graphic_data_url2 = 'fittedvals_deep_all.csv';
+     //    var graphic_data_url3 = 'fittedvals_regular_all.csv';
+     //    var graphic_data_url4 = 'fittedvals_stuffed_all.csv';
+     //    var graphic_data_url5 = 'fittedvals_thin_all.csv';
+
+        svg.append("path")
+            .datum(graphic_data4)
+            .attr("class", "line_all")
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(graphic_data3)
+            .attr("class", "line_regular")
+            .attr("d", line)
+            .style("opacity",0);
+       
+        svg.append("path")
+            .datum(graphic_data2)
+            .attr("class", "line_deep")
+            .attr("d", line)
+            .style("opacity",0);
+        // svg.append("path")
+            // .datum(graphic_data4)
+            // .attr("class", "line_stuffed")
+            // .attr("d", line)
+            // .style("opacity",0);
+        svg.append("path")
+            .datum(graphic_data5)
+            .attr("class", "line_thin")
+            .attr("d", line)
+            .style("opacity",0);
+
+
+
 
         d3.select('.stage1')
-            .on("mouseover", function() {
-                    d3.select('.stage1').style("opacity",1);
-            })
+            .on("mouseover", mouseover)
             .on("click", stage1_act); 
         d3.select('.deep')
             .on("click", deep_act); 
@@ -816,15 +910,22 @@
         d3.select('.all')
             .on("click", all_act); 
 
-        console.log("graphic_data2");
-        console.log(graphic_data2);
+        // console.log("graphic_data2");
+        // console.log(graphic_data2);
+        // console.log("graphic_data");
+        // console.log(graphic_data);
+        // console.log("graphic_data3");
+        // console.log(graphic_data3);
+        // console.log("graphic_data4");
+        // console.log(graphic_data4);
+        // console.log("graphic_data5");
+        // console.log(graphic_data5);
+        // console.log("graphic_data5");
+        // console.log(graphic_data5);
 
 // deeplines
 
-            // svg.append("path")
-            //     .data(graphic_data2)
-            //     .attr("class", "line")
-            //     .attr("d", line );
+
 
 
                 // .style("stroke", function(d) { return color(d.name); })
@@ -938,6 +1039,9 @@
             }
 
 
+
+
+
             function deep_act() 
             {
                 d3.selectAll(".deep.dish_circle")
@@ -947,16 +1051,35 @@
                 .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".hand-tossed_circle")
-                .style("opacity", 0);    
+                .style("opacity", 0);
+
+
+
                                         // <== and this one
                                    
                 d3.selectAll(".deep.dish_circle")
                 .moveToFront()                                                                                                     
                 .transition() 
                 .duration(500)
-                .style("fill", "#E27560")                            // <== and this one
+                .style("fill", "#ff9166")                            // <== and this one
                 .style("opacity", .3)  
-                .attr("r", 14);
+                .attr("r", width/200);
+
+
+                d3.selectAll(".line_thin")
+                .style("opacity", 0);    
+                d3.selectAll(".line_deep")                                                                                                 
+                .style("opacity", 1)
+                .moveToFront();    
+                d3.selectAll(".line_all")
+                .style("opacity", 0);    
+                d3.selectAll(".line_regular")
+                .style("opacity", 0) ;   
+                // d3.selectAll(".line_stuffed")
+                // .style("opacity", 0)    
+
+
+
             }
 
             function thin_act() 
@@ -968,16 +1091,33 @@
                 .style("opacity", 0)    
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".hand-tossed_circle")
-                .style("opacity", 0);    
+                .style("opacity", 0);
+
                                         // <== and this one
                                    
                 d3.selectAll(".thin_circle")
                 .moveToFront()                                                                                                     
                 .transition() 
                 .duration(500)
-                .style("fill", "#E27560")                            // <== and this one
+                .style("fill", "#d966ff")                            // <== and this one
                 .style("opacity", .3)  
-                .attr("r", 14);
+                .attr("r", width/200);
+
+
+
+                d3.selectAll(".line_thin")
+                .style("opacity", 1)
+                .moveToFront();                                                                                                         
+                d3.selectAll(".line_deep")
+                .style("opacity", 0);    
+                d3.selectAll(".line_all")
+                .style("opacity", 0);    
+                d3.selectAll(".line_regular")
+                .style("opacity", 0);    
+                // d3.selectAll(".line_stuffed")
+                // .style("opacity", 0)    
+
+
             }
 
             function hand_act() 
@@ -990,15 +1130,30 @@
                 .style("fill", "#666");                            // <== and this one
                 d3.selectAll(".hand-tossed_circle")
                 .style("opacity", 0);    
+
                                         // <== and this one
                                    
                 d3.selectAll(".hand-tossed_circle")
                 .moveToFront()                                                                                                     
                 .transition() 
                 .duration(500)
-                .style("fill", "#E27560")                            // <== and this one
+                .style("fill", "#a0ff66")                            // <== and this one
                 .style("opacity", .3)  
-                .attr("r", 14);
+                .attr("r", width/200);
+
+                d3.selectAll(".line_thin")
+                .style("opacity", 0);    
+                d3.selectAll(".line_deep")
+                .style("opacity", 0);    
+                d3.selectAll(".line_all")
+                .style("opacity", 0);    
+                d3.selectAll(".line_regular")
+                .style("opacity", 1)
+                .moveToFront();                    
+                // d3.selectAll(".line_stuffed")
+                // .style("opacity", 0)    
+
+
             }
 
 
@@ -1006,35 +1161,64 @@
             {
 
                 d3.selectAll(".deep.dish_circle")
-                .style("opacity", 0)    
-                .style("fill", "#666");                            // <== and this one
-                d3.selectAll(".thin_circle")
-                .style("opacity", 0)    
-                .style("fill", "#666");                            // <== and this one
-                d3.selectAll(".hand-tossed_circle")
-                .style("opacity", 0);    
-                
-                console.log(bookltext)               
-
-                d3.selectAll(".deep.dish_circle")
+                .moveToFront()                                                                                                                     
                 .transition() 
-                .duration(500)
-                .attr("r", 14)
-                .style("opacity", .2)    
-                .style("fill", "#666");                            // <== and this one
-                d3.selectAll(".thin_circle")
-                .transition() 
-                .duration(500)
-                .attr("r", 14)
-                .style("opacity", .2)    
-                .style("fill", "#666");                            // <== and this one
-                d3.selectAll(".hand-tossed_circle")
-                .transition() 
-                .duration(500)
-                .attr("r", 14)
+                .duration(500)                
                 .style("opacity", .2)
-                .style("fill", "#666");                            // <== and this one
+                .style("fill", "#66a7ff");                            // <== and this one;    
+                d3.selectAll(".thin_circle")
+                .transition() 
+                .duration(500)
+                .style("opacity", .2)
+                .style("fill", "#66a7ff");                            // <== and this one;                        
+                d3.selectAll(".hand-tossed_circle")
+                .transition() 
+                .duration(500)
+                .style("opacity", .2)    
+                .style("fill", "#66a7ff");                            // <== and this one;    
+
+                
+                // console.log(bookltext)               
+
+
+                d3.selectAll(".line_thin")
+                .style("opacity", 0)    
+                d3.selectAll(".line_deep")
+                .style("opacity", 0)    
+                d3.selectAll(".line_all")
+                .style("opacity", 1)
+                .moveToFront();                                        
+                d3.selectAll(".line_regular")
+                .style("opacity", 0)    
+                // d3.selectAll(".line_stuffed")
+                // .style("opacity", 0)           
+                        // <== and this one
      
+
+
+                // d3.selectAll(".deep.dish_circle")
+                // .transition() 
+                // .duration(500)
+                // .attr("r", width/200)
+                // .style("opacity", .2)    
+                // .style("fill", "#666");                            // <== and this one
+                // d3.selectAll(".thin_circle")
+                // .transition() 
+                // .duration(500)
+                // .attr("r", width/200)
+                // .style("opacity", .2)    
+                // .style("fill", "#666");                            // <== and this one
+                // d3.selectAll(".hand-tossed_circle")
+                // .transition() 
+                // .duration(500)
+                // .attr("r", width/200)
+                // .style("opacity", .2)
+                // .style("fill", "#666");
+
+            }
+
+            function mouseover() {
+                this.style("opacity",1);
             }
 
           
@@ -1049,28 +1233,17 @@
                         d.value = +d.value;
                         d.px_inc = +d.px_inc;
                         d.crust = d.crust;
-                        // d.three_pxin = +d.three_pxin;
-                        // d.four_pxin = +d.four_pxin;
-                        // d.disp = +d.disp;
-                        // d.hp = +d.hp;
-                        // d.drat = +d.drat;
-                        // console.log(d.size)
-                        // console.log(d.value)
+
                     });
 
 
-                    // console.log(graphic_data);
+
                 });
 
-                // second csv
-                for (var i = 2; i <6; i++) {
-                var urlname = eval("graphic_data_url" + i)
-                var csvname = eval("graphic_data" + i)
-                // console.log(urlname);
-                d3.csv(urlname, function(error, data) {
-                    csvname = data; 
+                d3.csv(graphic_data_url2, function(error, data) {
+                    graphic_data2 = data;
 
-                    csvname.forEach(function(d) {
+                    graphic_data2.forEach(function(d) {
                         d.size = +d.size;
                         d.fitted = +d.fitted;
                         d.crust = d.crust;
@@ -1081,8 +1254,93 @@
                         renderCallback: drawGraphic 
                     });
 
+               
+                });
+
+
+                d3.csv(graphic_data_url3, function(error, data) {
+                    graphic_data3 = data;
+
+                    graphic_data3.forEach(function(d) {
+                        d.size = +d.size;
+                        d.fitted = +d.fitted;
+                        d.crust = d.crust;
+
+
                     });
-                }
+
+
+
+                });
+
+
+                d3.csv(graphic_data_url4, function(error, data) {
+                    graphic_data4 = data;
+
+                    graphic_data4.forEach(function(d) {
+                        d.size = +d.size;
+                        d.fitted = +d.fitted;
+                        d.crust = d.crust;
+
+
+                    });
+
+
+
+                });
+
+
+                d3.csv(graphic_data_url4, function(error, data) {
+                    graphic_data4 = data;
+
+                    graphic_data4.forEach(function(d) {
+                        d.size = +d.size;
+                        d.fitted = +d.fitted;
+                        d.crust = d.crust;
+
+
+                    });
+
+
+
+                });
+
+                d3.csv(graphic_data_url5, function(error, data) {
+                    graphic_data5 = data;
+
+                    graphic_data5.forEach(function(d) {
+                        d.size = +d.size;
+                        d.fitted = +d.fitted;
+                        d.crust = d.crust;
+
+
+                    });
+
+
+                });
+
+                d3.csv(graphic_data_url6, function(error, data) {
+                    graphic_data6 = data;
+
+                    graphic_data6.forEach(function(d) {
+                        d.size = +d.size;
+                        d.median = +d.median;
+
+
+                    });
+
+                    setupResponsiveChild({
+                        renderCallback: drawGraphic 
+                    });
+
+
+
+                });
+
+           
+
+
+
             }
         }
 
