@@ -13,8 +13,6 @@ Daily Graphics
 * [Save media assets](#save-media-assets)
 * [Run the project](#run-the-project)
 * [Adding a new graphic to the project](#adding-a-new-graphic-to-the-project)
-* [Run Python tests](#run-python-tests)
-* [Run Javascript tests](#run-javascript-tests)
 * [Deploy to S3](#deploy-to-s3)
 * [Embedding on NPR](#embedding-on-npr)
 
@@ -40,12 +38,12 @@ What's in here?
 
 The project contains the following folders and important files:
 
+* ``fabfile`` -- [Fabric](http://docs.fabfile.org/en/latest/) commands for automating setup and deployment.
 * ``templates`` -- HTML ([Jinja2](http://jinja.pocoo.org/docs/)) templates, to be compiled locally.
 * ``www`` -- Static and compiled assets to be deployed. (a.k.a. "the output")
 * ``www/graphics`` -- Individual graphics projects.
 * ``app.py`` -- A [Flask](http://flask.pocoo.org/) app for rendering the project locally.
 * ``app_config.py`` -- Global project configuration for scripts, deployment, etc.
-* ``fabfile.py`` -- [Fabric](http://docs.fabfile.org/en/latest/) commands automating setup and deployment.
 * ``render_utils.py`` -- Code supporting template rendering.
 * ``requirements.txt`` -- Python requirements.
 * ``static.py`` -- Static Flask views used in both ``app.py`` and ``public_app.py``.
@@ -69,11 +67,16 @@ Save media assets
 
 Large media assets (images, videos, audio) are synced with an Amazon S3 bucket called ```assets.apps.npr.org``` in a folder with the name of the project. This allows everyone who works on the project to access these assets without storing them in the repo, giving us faster clone times and the ability to open source our work.
 
-Syncing these assets requires running a few different commands at the right times:
+Syncing these assets requires running a couple different commands at the right times. When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets.sync```. This will do a few things:
 
-* When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets_up```. **NOTE**: The newest push will *always* overwrite the current copy on the server.
-* When you need new assets or newly changed assets in your local environment that are on the server already, run ```fab assets_down``` (this will happen in ```fab bootstrap``` automatically).
-* When you want to remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets_rm:"file_name_here.jpg"```
+* If there is an asset on S3 that does not exist on your local filesystem it will be downloaded.
+* If there is an asset on that exists on your local filesystem but not on S3, you will be prompted to either upload (type "u") OR delete (type "d") your local copy.
+* You can also upload all local files (type "la") or delete all local files (type "da"). Type "c" to cancel if you aren't sure what to do.
+* If both you and the server have an asset and they are the same, it will be skipped.
+* If both you and the server have an asset and they are different, you will be prompted to take either the remote version (type "r") or the local version (type "l").
+* You can also take all remote versions (type "ra") or all local versions (type "la"). Type "c" to cancel if you aren't sure what to do.
+
+Unfortunantely, there is no automatic way to know when a file has been intentionally deleted from the server or your local directory. When you want to simultaneously remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets.rm:"www/assets/file_name_here.jpg"```
 
 Run the project
 ---------------
