@@ -82,68 +82,150 @@
             text-align: right;
             float: none;
         }
+        
+        /* page-specific styles */
+        .chart table th { white-space: normal; }
+        .chart table td { vertical-align: middle; }
+        .chart table td.img { width: 40px; }
+
+        i.icon {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background-size: 60%;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            background-color: #777;
+            border-radius: 50px;
+        }
+        .icon.alpine-skiing { background-image: url('img/alpine-skiing.svg'); }
+        .icon.biathlon { background-image: url('img/biathlon.svg'); }
+        .icon.figure-skating { background-image: url('img/figure-skating.svg'); }
+        .icon.ice-hockey { background-image: url('img/ice-hockey.svg'); }
+        .icon.nordic-combined { background-image: url('img/nordic-combined.svg'); }
+        .icon.ski-jump { background-image: url('img/ski-jump.svg'); }
+        .icon.snowboarding { background-image: url('img/snowboarding.svg'); }
+        .icon.speed-skating-long { background-image: url('img/speed-skating-long.svg'); }
+        .icon.speed-skating-short { 
+            background-image: url('img/speed-skating-short.svg');
+        }
+        
+        /* responsive table */
+        @media screen and (max-width: 480px) {
+            .chart table,
+            .chart tbody {
+                display: block;
+                width: 100%:
+            }
+            .chart thead {
+                display: none;
+            }
+            .chart table tr,
+            .chart table th,
+            .chart table td {
+                display: block;
+                padding: 0;
+                text-align: left;
+                white-space: normal;
+            }
+            .chart table td.right,
+            .chart table th.right,
+            .chart table td.amt,
+            .chart table th.amt {
+                text-align: inherit;
+            }
+            .chart table td {
+                border: none;
+                margin-left: 50px;
+            }
+            .chart table td.img {
+                float: left;
+                margin-left: 0;
+            }
+            .chart table tr {
+                border-bottom: 1px solid #eee;
+                padding-bottom: 11px;
+                margin-bottom: 11px;
+            }
+            .chart table th[data-title]:before,
+            .chart table td[data-title]:before {
+                content: attr(data-title) ":\00A0";
+                font-weight: bold;
+            }
+        }
     </style>
 
 </head>
 <body>
     <div id="graphic" class="chart">
         <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Type of athlete</th>
+                    <th>Pre-event nutrition</th>
+                    <th class="right">Energy (calories) consumed per day</th>
+                </tr>
+            </thead>
             <tr>
-                <th>Type of athlete</th>
-                <th>Pre-event nutrition</th>
-                <th class="right">Energy (calories) consumed per day</th>
-            </tr>
-            <tr>
-                <td>Ski jumping</td>
-				<td>Some restriction likely before competition</td>
-				<td class="amt">1800 - 2500</td>
+                <td class="img"><i class="icon ski-jump"></i></td>
+                <td data-title="Event">Ski jumping</td>
+				<td data-title="Pre-event nutrition">Some restriction likely before competition</td>
+				<td data-title="Calories per day" class="amt">1800 - 2500</td>
 			</tr>
 			<tr>
-			    <td>Figure skating</td>
-				<td>Some restriction likely before competition</td>
-				<td class="amt">1800 - 3000</td>
+                <td class="img"><i class="icon figure-skating"></i></td>
+			    <td data-title="Event">Figure skating</td>
+				<td data-title="Pre-event nutrition">Some restriction likely before competition</td>
+				<td data-title="Calories per day" class="amt">1800 - 3000</td>
 			</tr>
 			<tr>
-			    <td>Snowboarding</td>
-				<td>Moderate carbohydrate intake</td>
-				<td class="amt">2200 - 3200</td>
+                <td class="img"><i class="icon snowboarding"></i></td>
+			    <td data-title="Event">Snowboarding</td>
+				<td data-title="Pre-event nutrition">Moderate carbohydrate intake</td>
+				<td data-title="Calories per day" class="amt">2200 - 3200</td>
 			</tr>
 			<tr>
-			    <td>Alpine skiing</td>
-				<td>Moderate to high carbohydrate intake</td>
-				<td class="amt">2800 - 4000</td>
+                <td class="img"><i class="icon alpine-skiing"></i></td>
+			    <td data-title="Event">Alpine skiing</td>
+				<td data-title="Pre-event nutrition">Moderate to high carbohydrate intake</td>
+				<td data-title="Calories per day" class="amt">2800 - 4000</td>
 			</tr>
 			<tr>
-			    <td>Speed Skating (long track)</td>
-				<td>Moderate to high carbohydrate intake</td>
-				<td class="amt">2800 - 4000</td>
+                <td class="img"><i class="icon speed-skating-long"></i></td>
+			    <td data-title="Event">Speed Skating (long track)</td>
+				<td data-title="Pre-event nutrition">Moderate to high carbohydrate intake</td>
+				<td data-title="Calories per day" class="amt">2800 - 4000</td>
 			</tr>
 			<tr>
-			    <td>Speed Skating (short track)</td>
-				<td>Moderate to high carbohydrate intake</td>
-				<td class="amt">2500 - 3500</td>
+                <td class="img"><i class="icon speed-skating-short"></i></td>
+			    <td data-title="Event">Speed Skating (short track)</td>
+				<td data-title="Pre-event nutrition">Moderate to high carbohydrate intake</td>
+				<td data-title="Calories per day" class="amt">2500 - 3500</td>
 			</tr>
 			<tr>
-			    <td>Ice hockey</td>
-				<td>High carbohydrate intake</td>
-				<td class="amt">2800 - 4000</td>
+                <td class="img"><i class="icon ice-hockey"></i></td>
+			    <td data-title="Event">Ice hockey</td>
+				<td data-title="Pre-event nutrition">High carbohydrate intake</td>
+				<td data-title="Calories per day" class="amt">2800 - 4000</td>
 			</tr>
 			<tr>
-			    <td>Nordic Combined</td>
-				<td>High carbohydrate intake</td>
-				<td class="amt">3000 - 5000</td>
+                <td class="img"><i class="icon nordic-combined"></i></td>
+			    <td data-title="Event">Nordic Combined</td>
+				<td data-title="Pre-event nutrition">High carbohydrate intake</td>
+				<td data-title="Calories per day" class="amt">3000 - 5000</td>
 			</tr>
 			<tr>
-			    <td>Biathalon</td>
-				<td>Carbohydrate loading</td>
-				<td class="amt">3000 - 5000</td>
+                <td class="img"><i class="icon biathlon"></i></td>
+			    <td data-title="Event">Biathlon</td>
+				<td data-title="Pre-event nutrition">Carbohydrate loading</td>
+				<td data-title="Calories per day" class="amt">3000 - 5000</td>
 			</tr>
 		</table>
     </div>
     
     <div class="footer">
         <p>Source: Nanna Meyer, Sports Dietitian for the U.S. Olympics Committee</p>
-        <p>Credit: YOUR-NAME/NPR</p>
+        <p>Credit: Icons by cajoer / iStockPhoto</p>
     </div>
 
 
