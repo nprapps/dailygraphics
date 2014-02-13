@@ -184,6 +184,7 @@ def deploy(remote='origin', slug=''):
 """
 App-specific commands
 """
+@task
 def add_graphic(slug):
     with settings(warn_only=True):
         local('mkdir www/graphics/%s' % slug)
