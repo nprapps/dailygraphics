@@ -32,7 +32,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Helvetica;
         }
         .footer p {
             margin: 2px 0 0 0;
@@ -42,6 +42,8 @@
         }
 
         #graphic { width: 100%; }
+
+        /*#graphic { display: none;}*/
 
         #graphic svg {
             font-family: Arial, Helvetica, sans-serif;
@@ -56,31 +58,30 @@
         */
         .line_all {
           fill: none;
-          stroke: #66a7ff;
+          stroke: #011b3e;
           stroke-width: 3px;
         }        
-        
         .line_thin {
           fill: none;
-          stroke: #d966ff;
+          stroke: #3a814a;
           stroke-width: 3px;
         }
-        
         .line_deep {
           fill: none;
-          stroke: #ff9166;
+          stroke: #ab3a16;
           stroke-width: 3px;
         }
 
         .line_regular {
           fill: none;
-          stroke: #a0ff66;
+          stroke: #cfba4f;
           stroke-width: 3px;
         }
 
 
 
         #graphic .circle {
+            3d46ff
             fill: #66a7ff;
             opacity: .8;
         }
@@ -115,54 +116,25 @@
         }   
 
 
+
         #graphic .axis {
+            font-family: Arial, Helvetica, sans-serif;
             font-size: 14px;
+            color:#ccc;
+
         }
         #graphic .axis path,
         #graphic .axis line {
             fill: none;
             stroke: #ccc;
-            stroke-width: 2;
+            stroke-width: 3;
             shape-rendering: crispEdges;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color:#ccc;
         }
-/*
-        button {
-          display: block;
-        }*/
 
-
-        .deep {
-        background-color: #C5DFDF;
-        }  
-
-        .thin {
-          background-color: #C5DFDF;
-        }    
-
-        .hand {
-
-          background-color: #C5DFDF;
-
-        } 
-        .all {
-
-          background-color: #C5DFDF;
-
-        } 
-        .stuffed {
-
-          background-color: #C5DFDF;
-        } 
-
-/*        .prices  {
-          display:inline-block;
-          margin-right:10px;          
-          font-family: Arial, Helvetica, sans-serif;  
-          color:#ccc;
-          font-size: 16px;
-
-
-        } */
+      
         .pizzalabels {
           display:inline-block;
           margin-right:10px;           
@@ -214,30 +186,6 @@
         fill:#3D7FA6;
         }
 
-/*        
-        .toppings3 {
-          padding:5px;
-          background-color: #FBF1CD;
-          border: none;
-          color:#000;
-          height: 80px;
-          width: 14%;
-          text-decoration:none;
-          border-radius: 4px;
-
-        }
-        .toppings4 {
-          padding:5px;
-          background-color: #8BC0BF;
-          border: none;
-          color:#000;
-          height: 80px;
-          width: 14%;
-          text-decoration:none;
-          border-radius: 4px;
-
-        }*/
-
         .arc path {
          stroke: #fff;
         }
@@ -262,12 +210,33 @@
         opacity: 1;
         }
 
-        .slider:hover {
-        background: #C5DFDF;
+
+        .handle2 {
+          fill: #ffdd66;
+          opacity: 1;
+
+        }
+
+        .handle {
+          fill: #ffdd66;
+          opacity: 1;
+        }
+
+        .handle:hover {
+        fill: #d8a800;
         cursor: pointer;
         opacity: 1;
         }
 
+        .handle:active {
+        fill: #d8a800;
+        }
+ /*       .handle2:hover {
+        background: #C5DFDF;
+        cursor: pointer;
+        opacity: 1;
+        }
+*/
       button:active {
         background: #3282d3;
         text-shadow: 0 -1px 1px #2361a4;
@@ -294,35 +263,96 @@
 
         .pizza  {
 
-          fill: #6689fe;
+          fill: #e7b362;
+          opacity: 1;
         }
 
         .arcpie2 {
 
-          fill : #98ff66;
-          opacity: .8;
+          fill : #e7b362;
+          /*fill : #E79F2F;*/
+          opacity: .5;
         }
+        
+/**/
 
         .arcpie {
-          fill: #ff7866;
-          opacity: .8;
+          fill: #e7b362;
+          /*fill: #E79F2F;*/
+          opacity: .75;
 
         }
 
-        .handle2 {
-          fill: #ffd966;
-          opacity: .8;
 
+        select {
+          margin-bottom: 0px
+          margin-top: 0px;
         }
 
-        .handle {
-          fill: #ffd966;
-          opacity: .8;
+        .target2 {
+        width: width/300;
+        padding: 10px;
+        margin: 0 auto;
+        color: #fff;
+        outline: none;
+        cursor: pointer;
         }
+
     </style>
 
 </head>
 <body>
+  <ul class = "todo">To do:
+<!--     <li>
+Add intro "Why you should always get the bigger pizza"
+    </li>
+  Make distribution on bottom
+     </li>
+       <li>
+Landing page
+     </li>      
+      <li>
+  Add some sugar--illustrations of pizza
+     </li>
+      </ul>
+
+ -->
+
+   <h1>
+    Why You Should Always Get The Larger Pizza
+    </h1>
+<p>Crust Type</p>
+<select class="target2" value="Field 1">
+    <option id="crustbutton" class = "all">All</option> 
+    <option id="crustbutton" class = "deep">Deep Dish</option>
+    <option id="crustbutton" class = "thin">Thin</option>
+    <option id="crustbutton" class = "hand">Regular</option>
+</select>  
+
+<div id="graphic"></div>
+
+<!-- <ul class = "facts" >Interest facts:
+    <li>pizza tend to be sold in even sizes--sorry odd numbers. </li>
+
+    <li>
+    "There's one variable that is remain elusive: quality. Everyone knows there's a big difference in quality between a gonzo sized pizza reserved for late night drinking and a tiny single serving sized artisnal pizza. In these two cases, we're definitely not comparing apples to apples, so the case to get the bigger slice falls short because it implies a reduction in quality--which is something that is true in almost anything. But on the whole, if you keep your slices within the middle of the pack--sizes tk to tk, (approximately 2 SD) about the mean (size tk), then you have a better chance of isolating yourself from these weird outliers. 
+    </li>
+    <li>
+    How many toppings is most popular?
+    </li>
+    <li>
+    What is the most popular crust types?
+    Ranking?
+    </li>
+    <li>
+    What is the most popular crust type?
+    </li>
+ 
+</ul> -->
+
+
+<!-- buttons -->
+<!-- 
   <p>Pizza Size (Diameter In Inches)</p>
     <select class="target" value="Field 1">
     <option>6</option>
@@ -353,7 +383,7 @@
     <option>30</option>
     </select>
 
-<!-- <select name=select1 onchange='OnChange(this.form.select1);'> -->
+<!-- <select name=select1 onchange='OnChange(this.form.select1);'>
 
 <p>Pizza Price</p>
 <form action="javascript:alert( 'success!');">
@@ -364,22 +394,10 @@
 </form>
 <span></span>
 
+ --> -->
 
-  <!-- <button id="enter" class = "enter">Enter</button> -->
 
-     <div id="demo">
-        <div id="buttons">
-        <button id="data1" class = "stage1">1</button>
-        <button id="data2" class = "stage2">2</button>
-        <button id="crustbutton" class = "all">All</button> 
-        <button id="crustbutton" class = "deep">Deep Dish</button>
-        <button id="crustbutton" class = "thin">Thin</button>
-        <button id="crustbutton" class = "hand">Regular</button>
-        <button id="crustbutton" class = "stuffed">Stuffed Crust</button>
 
-    </div>  
-    <div id="graphic"></div>
-    
     <div class="footer">
         <p>Source: Grubhub/Seamless</p>
         <p>Credit: Quoctrung Bui/NPR</p>
@@ -393,3 +411,14 @@
     <script src="js/graphic.js" type="text/javascript"></script>
 </body>
 </html>
+
+<!--    <h4>
+    Think of pizzas as flat circles. Rack your memory from geomtry class : Area Of A Circle = radius^2*PI, which implies every extra inch in diameter will give you an exponentially more pizza. 
+  </h4>
+  <h4>
+    Since pizzas are measure in diameter and aren't priced exponentially--the price you pay per square inch of pizza falls exponentially the bigger it gets.  
+  </h4>
+   <h4>
+  Using data from GrubHub/Seamless, we analyzed all the pizza prices in their database to show you why you really should get the bigger pizza. 
+  </h4> -->
+
