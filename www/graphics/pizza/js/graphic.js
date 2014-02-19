@@ -41,6 +41,8 @@
               });
             };
 
+console.log(width);
+
             var margin = {top: 100, right: 20, bottom: 40, left: 100};
             var margin2 = {top: 100, right: 20, bottom: 40, left: 0};
             var width = width - margin.left ;
@@ -55,7 +57,7 @@
             $graphic.empty();
 
 
-            var width1 = 4*width/8
+            var width1 = 7*width/8
             var height1 = height/3
 
             var width2 = width
@@ -88,7 +90,7 @@
                             .attr("width", width2 + margin.left )
                         .attr("height", height2 + margin.top + margin.bottom)
                         .append("g")
-                        .attr("transform", "translate( 0, 0)");
+                        .attr("transform", "translate( 0, 10)");
 
 
             var xAxis = d3.svg.axis()
@@ -157,11 +159,11 @@
             var equal2y = height1*(21/30);
             var label2x = width1*(5/30);
             var label2y = height2*(19/30);
-            var scalef = width/280;
-            var pizzax = 3*width/30;
+            var scalef = width/200;
+            var pizzax = 5*width/30;
             var pizza = svg2.append("circle")
                         .attr("class", "pizza")
-                        .attr("transform", "translate(" + pizzax + " ," +  height1*(22/100) + ")")
+                        .attr("transform", "translate(" + pizzax + " ," +  height1*(30/100) + ")")
                         .attr("r", 20)
                         .style('opacity', .7);
 
@@ -182,14 +184,14 @@
             var handle2 = slider.append("rect") 
               .attr("class", "handle")
               .attr("height", height1)
-              .attr("width", width/100)
-              .attr("transform", "translate(" +width*(-1/400) + ",0)")
+              .attr("width", width/200)
+              .attr("transform", "translate(" +width*(1/400) + ",0)")
               .style("opacity", .5);
             
             var handle_label = slider.append("text") 
               .attr("class", "handle_label")
               .attr("y", y(0)+8)
-              .text("< >")
+              .text(" ")
               .style("opacity", 1)
               .attr("font-size", "24px");
 
@@ -204,62 +206,59 @@ var bigpricex = width1*(3/30);
 var bigpricey = height2*(9/30);
 
             var bigprice = svg2.append("text")
-                        .attr("class", "prices")
+                        .attr("class", "bigprices")
                         .attr("x", bigpricex)
                         .attr("y", bigpricey)
-                        .style("font-size", "45px")
                         .attr("fill", "#70725A");
 
 var midpricex = width1*(16/30);
 var midpricey = height2*(9/30);
 
             var midprice = svg2.append("text")
-                        .attr("class", "prices")
+                        .attr("class", "midprices")
                         .attr("x", midpricex)
                         .attr("y", midpricey)
-                        .style("font-size", "45px")
                         .attr("fill", "#70725A");
 
 var smallpricex = width1*(26/30);
 var smallpricey = height2*(9/30);
 
             var smallprice = svg2.append("text")
-                        .attr("class", "prices")
+                        .attr("class", "smallprices")
                         .attr("x", smallpricex)
                         .attr("y", smallpricey)
-                        .style("font-size", "45px")
                         .attr("fill", "#70725A");
 
 
 var crustname = svg.append("text")
             .attr("class", "crustname")
-            .attr("x", x(23.5))
-            .attr("y", y(.396))
+            .attr("x", x(18.5))
+            .attr("y", y(.41))
             .text("All Pizzas")
             .attr("fill", "#3270cc")
             .style("font-size", "25px")
             .style("font-weight", "bold")
             .style("opacity",.3);
 
-var annot1 = svg.append("text")
-            .attr("class", "annote")
-            .attr("x", x(12))
-            .attr("y", y(.41))
-            .html("Price of Pizza Falls Exponentially")
-            .attr("fill", "#ccc")
-            .style("font-size", "14px");
-var annot1 = svg.append("text")
-            .attr("class", "annote")
-            .attr("x", x(14.3))
-            .attr("y", y(.39))
-            .text("Across All Styles Of Pizza")
-            .attr("fill", "#ccc")
-            .style("font-size", "14px");
+// var annot1 = svg.append("text")
+//             .attr("class", "annote")
+//             .attr("x", x(12))
+//             .attr("y", y(.41))
+//             .html("Price of Pizza Falls Exponentially")
+//             .attr("fill", "#ccc")
+//             .style("font-size", "14px");
+// var annot1 = svg.append("text")
+//             .attr("class", "annote")
+//             .attr("x", x(14.3))
+//             .attr("y", y(.39))
+//             .text("Across All Styles Of Pizza")
+//             .attr("fill", "#ccc")
+//             .style("font-size", "14px");
 
 var labelbigx = width1*(5/30);
 var labelbigy = height2*(2.5/30);
             var bigpizza = svg2.append("text")
-                        .attr("class", "equallab")
+                        .attr("class", "equallabbig")
                         .attr("x", labelbigx)
                         .attr("y", labelbigy)
                         .attr("fill", "#70725A");
@@ -282,35 +281,37 @@ var labelbigy = height2*(2.5/30);
             //             .text("...has the same area ")
             //             .attr("fill", "#70725A");
 
-var label3x = width1*(3/30);
+var label3x = width1*(6/30);
 var label3y = height2*(10/30);
-            var equal4 = svg2.append("text")
-                        .attr("class", "equallab")
-                        .attr("x", label3x)
-                        .attr("y", label3y)
-                        .text("has the same amount of pizza as...")
-                        .attr("fill", "#70725A")
-                        .style("font-size", "21px");
+            // var equal4 = svg2.append("text")
+            //             .attr("class", "equallab")
+            //             .attr("x", label3x)
+            //             .attr("y", label3y)
+            //             .text("has the same amount of pizza as...")
+            //             .attr("fill", "#70725A")
+            //             .style("font-size", "21px");
 
-var label5x = width1*(19/30);
-var label5y = height2*(2.8/30);
+var label5x = width1*(21/30);
+var label5y = height2*(2.5/30);
             var equal5 = svg2.append("text")
-                        .attr("class", "equallab")
+                        .attr("class", "equallab14")
                         .attr("x", label5x)
                         .attr("y", label5y)
-                        .text(" 8\"")
+                        .text(" 14\"")
                         .attr("fill", "#70725A")
                         .style("font-size", "24px");
 
-var label6x = width1*(28/30);
-var label6y = height2*(2.8/30);
+var label6x = width1*(31/30);
+var label6y = height2*(2.5/30);
+            
+
             var equal6 = svg2.append("text")
-                        .attr("class", "equallab")
+                        .attr("class", "equallab8")
                         .attr("x", label6x)
                         .attr("y", label6y)
-                        .text(" 14\"")
+                        .text(" 8\"")
                         .attr("fill", "#70725A")
-                        .style("font-size", "24px")
+                        // .style("font-size", fontsize8)
                         .moveToFront();
 
 
@@ -379,8 +380,7 @@ var label6y = height2*(2.8/30);
         bigpizza
             .text(value + "\"")
             // .text("This " + value + "    inch pizza..." )
-            .attr("font-family", "sans-serif")
-            .style("font-size" , "24px");
+            .attr("font-family", "sans-serif");
 
     }
     function midpizzacall(value) {
@@ -408,7 +408,6 @@ var label6y = height2*(2.8/30);
         bigprice          
             .text("$" + bigprices )
             .attr("font-family", "sans-serif")
-            .style("font-size", "30px")
             .attr("fill", "#70725A");        
         }
 
@@ -416,14 +415,12 @@ var label6y = height2*(2.8/30);
         midprice          
             .text("$" + value )
             .attr("font-family", "sans-serif")
-            .style("font-size", "30px")
             .attr("fill", "#70725A");        
         }
     function smallpricecall(value) {
         smallprice
             .text("$" + value)
             .attr("font-family", "sans-serif")
-            .style("font-size", "30px")
             .attr("fill", "#70725A");        
         }
 
@@ -500,14 +497,60 @@ var label6y = height2*(2.8/30);
                                 var piecount = Math.ceil(sqinch_val/sqinch_max);
                                 var arc_array = [];
                                 var width_pie = width/1.2;
-                                var width_pieb = 60*width1/100 ;
-                                var width_pieb2 = 90*width1/100 ;
+                                var width_pieb = 50*width1/100 ;
+                                var width_pieb2 = 80*width1/100 ;
 
                                 var pizzay =  height*(5/100);
                                 // var pizzay = 8.5*height2/10;
                                 var pizza2y = height*(5/100);
                                 
 
+                                var unit = width1/50
+                                
+                                if (width1 <400) {
+                                    unit = 10;
+                                }
+
+                                d3.selectAll(".smallprices")
+                                .attr("x", smallpricex);
+
+                                var small_label = width_pieb2+unit*8.5;
+                                var fontsize_1 = width1/25;
+                                var fontsize = fontsize_1 + "px";
+                                var fontsize_2 = width1/25;
+                                var fontsize2 = fontsize_2 + "px";
+
+
+                                d3.selectAll(".equallab8")
+                                .attr("x", small_label)
+                                .style("font-size", fontsize);
+                                
+                                var medium_label = width_pieb+unit*6.5;
+                                
+                                d3.selectAll(".equallab14")
+                                .attr("x", medium_label)
+                                .style("font-size", fontsize);
+
+                                var small_labely = pizzay + unit*5.5;
+                                var big_label = pizzax+unit*(diam/5);
+                                 d3.selectAll(".equallabbig")
+                                .attr("x", big_label)
+                                .style("font-size", fontsize);
+                                
+                                 d3.selectAll(".bigprices")
+                                .attr("x", big_label)
+                                .attr("y", small_labely)
+                                .style("font-size", fontsize2);
+
+                                 d3.selectAll(".midprices")
+                                .attr("x", medium_label)
+                                .attr("y", small_labely)
+                                .style("font-size", fontsize2);
+
+                                 d3.selectAll(".smallprices")
+                                .attr("x", small_label)
+                                .attr("y", small_labely)
+                                .style("font-size", fontsize2);
 
 
                                 for (var i =1; i<piecount; i++)
@@ -575,7 +618,7 @@ var label6y = height2*(2.8/30);
 
                                 if (sqinch_norm2 > 4) {
                                     
-                                    width_pieb = 60*width1/100 ;
+                                    width_pieb = 50*width1/100 ;
                                     pizzay = pizzay + diam_base_px*3.5;        
                                     svg2.append("path")
                                     .attr("class", "arcpie2")
@@ -593,7 +636,7 @@ var label6y = height2*(2.8/30);
                                 }
 
                                 if (sqinch_norm2 > 8) {
-                                    width_pieb = 60*width1/100 ;
+                                    width_pieb = 50*width1/100 ;
                                     pizzay = pizzay + diam_base_px*3.5;        
                                     svg2.append("path")
                                     .attr("class", "arcpie2")
@@ -729,7 +772,7 @@ var label6y = height2*(2.8/30);
                                 }
 
                                 if (sqinch_norm > 8) {
-                                    width_pieb2 = 90*width1/100 ;
+                                    width_pieb2 = 80*width1/100 ;
                                     pizza2y = pizza2y + diam_base_px*2;
                                     svg2.append("path")
                                     .attr("class", "arcpie")
@@ -761,7 +804,7 @@ var label6y = height2*(2.8/30);
                                 }
 
                                 if (sqinch_norm > 16) {
-                                    width_pieb2 = 90*width1/100 ;
+                                    width_pieb2 = 80*width1/100 ;
                                     pizza2y = pizza2y + diam_base_px*2
                                     svg2.append("path")
                                     .attr("class", "arcpie")
@@ -794,7 +837,7 @@ var label6y = height2*(2.8/30);
                                 }
 
                                 if (sqinch_norm > 24) {
-                                    width_pieb2 = 90*width1/100;
+                                    width_pieb2 = 80*width1/100;
                                     pizza2y = pizza2y + diam_base_px*2
                                     svg2.append("path")
                                     .attr("class", "arcpie")
@@ -1045,8 +1088,8 @@ var label6y = height2*(2.8/30);
         d3.select('.handle2')
             .on("mouseover", mouseover);
 
-console.log("graphic_data6");
-console.log(graphic_data6);
+// console.log("graphic_data6");
+// console.log(graphic_data6);
         
             svg.append("g") // Add the Y Axis
                 .attr("class", "y axis")
