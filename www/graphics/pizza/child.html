@@ -57,7 +57,7 @@
         */
         .line_all {
           fill: none;
-          stroke: #011b3e;
+          stroke: #3D7FA6;
           stroke-width: 3px;
         }        
         .line_thin {
@@ -262,23 +262,23 @@
 
         .pizza  {
 
-          fill: #e7b362;
-          opacity: 1;
+          fill: #e38d2c;
+          opacity: .9;
         }
 
         .arcpie2 {
 
-          fill : #e7b362;
+          fill : #e38d2c;
           /*fill : #E79F2F;*/
-          opacity: .5;
+          opacity: .9;
         }
         
 /**/
 
         .arcpie {
-          fill: #e7b362;
+          fill: #e38d2c;
           /*fill: #E79F2F;*/
-          opacity: .75;
+          opacity: .9;
 
         }
 
@@ -295,24 +295,29 @@
         cursor: pointer;
         }
 
+    <style>#slider { margin: 10px; }  </style>
+
     </style>
 
 </head>
 <body>
 
-   <h1>
-    Why You Should Always Get The Larger Pizza
-    </h1>
-<p>Crust Type</p>
+
+<!-- <p>Crust Type</p>
 <select class="target2" value="Field 1">
     <option id="crustbutton" class = "all">All</option> 
     <option id="crustbutton" class = "deep">Deep Dish</option>
     <option id="crustbutton" class = "thin">Thin</option>
     <option id="crustbutton" class = "hand">Regular</option>
-</select>  
+</select>   -->
 
+
+<div id="slider"></div>
+
+
+<h1> TK***********    </h1>
 <div id="graphic"></div>
-
+<!-- <div id="slider" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a class="ui-slider-handle ui-state-default ui-corner-all ui-state-active" href="#" style="left: 45.348837209302324%;"></a></div> -->
 <!-- <ul class = "facts" >Interest facts:
     <li>pizza tend to be sold in even sizes--sorry odd numbers. </li>
 
@@ -384,13 +389,23 @@
         <p>Source: Grubhub/Seamless</p>
         <p>Credit: Quoctrung Bui/NPR</p>
     </div>
-    
 
     <script src="js/lib/jquery.js" type="text/javascript"></script>
     <script src="js/lib/d3.v3.min.js" type="text/javascript"></script>
     <script src="js/lib/modernizr.svg.min.js" type="text/javascript"></script>
     <script src="js/lib/child.js" type="text/javascript"></script>
+    <script src="js/lib/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+    <script src="js/lib/jquery-1.10.2.js" type="text/javascript"></script>
     <script src="js/graphic.js" type="text/javascript"></script>
+
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js" type="text/javascript"></script>
+
+    
+<script>
+$( "#slider" ).slider();
+</script>
+
+
 </body>
 </html>
 
