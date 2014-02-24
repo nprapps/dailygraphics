@@ -6,25 +6,15 @@
         'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
     };
 
-
-/*
-     * NB: Use window.load instead of document.ready
-     * to ensure all images have loaded
-     
-
-     */
     $(window).load(function() {
     	var $graphic = $('#graphic');
         var graphic_data_url = 'pizza_m.csv';
         var graphic_data_url4 = 'fittedvals_all.csv';
-    	var graphic_data;
+    	  var graphic_data;
         var graphic_data4;
 
     function drawGraphic(width) {
 
-// console.log("graphic_data4")
-// console.log(graphic_data4)
-    // function to move stuff to front
           d3.selection.prototype.moveToFront = function() {
               return this.each(function(){
                 this.parentNode.appendChild(this);
@@ -49,7 +39,7 @@
             var height1 = height/3
 
             var width2 = width
-            var height2 = height/7
+            var height2 = height/16
 
             var xVal = function(d) { return d.size;};
             var x = d3.scale.linear().range([0, width1])
@@ -222,7 +212,7 @@ var smallpricey = height2*(9/30);
                         .attr("x", smallpricex)
                         .attr("y", smallpricey);
 var sizex = width1*(0/30);
-var sizey = height2*(18/30);
+var sizey = height2*(17/30);
 
             var size = svg2.append("text")
                         .attr("class", "size")
@@ -269,7 +259,7 @@ var pricelabely = height2*(38/30);
 //             .style("font-size", "14px");
 
 var labelbigx = width1*(5/30);
-var labelbigy = height2*(18/30);
+var labelbigy = height2*(17/30);
             var bigpizza = svg2.append("text")
                         .attr("class", "equallabbig")
                         .attr("x", labelbigx)
@@ -316,7 +306,7 @@ var label3y = height2*(50/30);
 //                         .style("font-size", "21px");
 
 var label5x = width1*(21/30);
-var label5y = height2*(18/30);
+var label5y = height2*(17/30);
             var equal5 = svg2.append("text")
                         .attr("class", "equallab14")
                         .attr("x", label5x)
@@ -326,7 +316,7 @@ var label5y = height2*(18/30);
                         .style("font-size", "24px");
 
 var label6x = width1*(31/30);
-var label6y = height2*(18/30);
+var label6y = height2*(17/30);
             
 
             var equal6 = svg2.append("text")
@@ -1018,8 +1008,6 @@ var label6y = height2*(18/30);
             
             return null;
             }
-             
-
 
             function mouseover() {
                 this.style("opacity",1);
@@ -1055,9 +1043,9 @@ var label6y = height2*(18/30);
 
                     });
 
-               setupResponsiveChild({
-                        renderCallback: drawGraphic 
-                    });
+                   setupResponsiveChild({
+                            renderCallback: drawGraphic 
+                        });
 
                 });
 
