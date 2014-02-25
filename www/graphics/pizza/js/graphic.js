@@ -188,7 +188,7 @@
                 .attr("class", "handle_tooltip")
                 .attr("xlink:href", "../pizza/img/slider.png")
                 .attr("width", 150)
-                .attr("height", 27)
+                .attr("height", 19)
                 .style("opacity",.7);
 
 
