@@ -27,9 +27,7 @@
             var height = 1000 - margin.top - margin.bottom;
         
             var num_x_ticks = 30;
-            if (width <= 480) {
-                num_x_ticks = 10;
-            }
+
 
             // clear out existing graphics
             $graphic.empty();
@@ -40,7 +38,7 @@
 
             var width2 = width
             var height2 = height
-            var height2_svg = height2/4
+            var height2_svg = height2/8
             var xVal = function(d) { return d.size;};
             var x = d3.scale.linear().range([0, width1])
             		.domain([8, 30])
@@ -103,7 +101,15 @@
                 .x(x)
                 .extent([14, 14])
                 .on("brush", brushed);
-                
+
+            if (width <= 624) {
+                num_x_ticks = 10;
+            }
+            if (width <= 400) {
+                num_x_ticks = 5;
+            }
+
+
             svg.append("g")
                 .attr("class", "x axis brush")
                 .attr("transform", "translate(0," + height1 + ")")
@@ -268,17 +274,18 @@ var labelbigy = height2*(1.5);
 var labelbigxx = width2*(100/30);
 var labelbigyy = height2*(1);
             var bigpizza2 = svg2.append("foreignObject")
-                        .attr("class", "equallabbig2")
                         .attr("width", width2)
-                        // .attr("height2", width2)
+                        .append("xhtml:div") 
+                        .attr("class", "equallabbig2")
                         .attr("x", labelbigxx)
                         .attr("y", labelbigyy)
                         .attr("fill", "#464738");
 var labelbigyyy = 1;
 var labelbigxxx = width2/2;            
             var bigpizza3 = svg2.append("foreignObject")
-                        .attr("class", "equallabbig3")
                         .attr("width", width2)
+                        .append("xhtml:div") 
+                        .attr("class", "equallabbig3")  
                         .attr("x", labelbigxxx)
                         .attr("y", labelbigyyy+100)
                         .attr("fill", "#464738");
@@ -429,11 +436,11 @@ var label6y = height2*(1/20);
 
           if ( value2 == 1) 
           {
-            bigpizza2.html("<em>One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizza or <strong>" + value3 + "</strong> 8\"  pizzas.</em>");        
+            d3.selectAll("#bigamount").html("<em>One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizza or <strong>" + value3 + "</strong> 8\"  pizzas.</em>");        
           } else 
 
           {
-            bigpizza2.html("<em>One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizzas or <strong>" + value3 + "</strong> 8\"  pizzas.</em>");        
+            d3.selectAll("#bigamount").html("<em>One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizzas or <strong>" + value3 + "</strong> 8\"  pizzas.</em>");        
           }
         // }
 
@@ -481,10 +488,10 @@ var label6y = height2*(1/20);
         // if (width1 < 400 )  {
             if ( medSavings <= 0) 
                 {
-                    bigpizza3.html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + smallSavings + "</strong> on 8\" pizzas.<em>");        
+                    d3.selectAll("#bigprice").html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + smallSavings + "</strong> on 8\" pizzas.<em>");        
                 } else 
                 {
-                    bigpizza3.html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + medSavings + "</strong> on 14\" pizzas, or an extra <strong>$" + smallSavings + "</strong>  on 8\" pizzas.</em>");        
+                    d3.selectAll("#bigprice").html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + medSavings + "</strong> on 14\" pizzas, or an extra <strong>$" + smallSavings + "</strong>  on 8\" pizzas.</em>");        
                 }
                  
         // }
@@ -602,10 +609,23 @@ var label6y = height2*(1/20);
                                 var width_pieb2 = 35*width1/100 ;
                                 var width_pieb3 = 35*width1/100 ;
 
-                                var pizzay =  height*(19/100);
+                                if (width < 400) {
+                                 width_pieb = 60*width1/100 ;
+                                 width_pieb2 = 60*width1/100 ;
+                                 width_pieb3 = 60*width1/100 ;
+                                }
+                                else {
+                                 width_pieb = 35*width1/100 ;
+                                 width_pieb2 = 35*width1/100 ;
+                                 width_pieb3 = 35*width1/100 ;
+
+                                }
+
+
+                                var pizzay =  height*(11/100);
                                 // var pizzay = 8.5*height2/10;
-                                var pizza2y = height*(27/100);
-                                var pizza3y = height*(10/100) ;
+                                var pizza2y = height*(19/100);
+                                var pizza3y = height*(3/100) ;
                                 
 
                                 var unit = width1/50;
@@ -622,12 +642,12 @@ var label6y = height2*(1/20);
                                 
                                 var leftcolumn = width*(7/100);
                                 var leftcolumn2 = width*(12/100);
-                                var leftcolumn_bigyy = height2*(9/100);
-                                var leftcolumn_bigy = height2*(12/100);
-                                var leftcolumn_smally = height2*(28/100);
-                                var leftcolumn_smallyy = height2*(25/100);
-                                var leftcolumn_midy = height2*(20/100);
-                                var leftcolumn_midyy = height2*(17/100);
+                                var leftcolumn_bigyy = height2*(3/100);
+                                var leftcolumn_bigy = height2*(5/100);
+                                var leftcolumn_smally = height2*(21/100);
+                                var leftcolumn_smallyy = height2*(18/100);
+                                var leftcolumn_midy = height2*(13/100);
+                                var leftcolumn_midyy = height2*(10/100);
                              
                                  if (width1 <400) {
                                         unit = 10;
