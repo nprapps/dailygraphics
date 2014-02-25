@@ -118,7 +118,6 @@
                   .scale(x)
                   .orient("bottom")
                   .ticks(num_x_ticks)
-                  .tickFormat(function(d) { return d == 8 ? d + '"' : d; })
                   .tickSize(10)
                   .tickPadding(12))
               .select(".domain")
@@ -356,7 +355,7 @@ var label6y = height2*(1/20);
                           .attr("class", "xaxis_label")
                           .attr("y", y(0)+55)
                           .attr("x", width1*(3/8))
-                          .text("Pizza Diameter")
+                          .text("Pizza Diameter In Inches")
                           .style("opacity", 1)
                           .style("fill", "#777")
                           .attr("font-size", "14px");  
