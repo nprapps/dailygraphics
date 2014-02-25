@@ -40,7 +40,7 @@
 
             var width2 = width
             var height2 = height
-            var height2_svg = height2/5
+            var height2_svg = height2/4
             var xVal = function(d) { return d.size;};
             var x = d3.scale.linear().range([0, width1])
             		.domain([8, 30])
@@ -161,7 +161,7 @@
               .attr("class", "handle")
               .attr("height", height1)
               .attr("width", width/200)
-              .attr("transform", "translate(" +width*(0/600) + ",0)")
+              .attr("transform", "translate(" + width*(1/200) + ",0)")
               .style("opacity", .5);
             
             var handle_label = slider.append("text") 
@@ -177,11 +177,11 @@
   //     .attr("height", 200);
 
             var handle = slider.append("svg:image")
-                .attr("transform", "translate(0," + height1-200 + ")")
+                .attr("transform", "translate(0," + height1-150 + ")")
                 .attr("class", "handle_tooltip")
                 .attr("xlink:href", "../pizza/img/slider.png")
                 .attr("width", 150)
-                .attr("height", 20)
+                .attr("height", 27)
                 .style("opacity",.7);
 
 
@@ -398,8 +398,9 @@ var label6y = height2*(1/20);
 
               var toolPosition = x(value)-75;
 
+              var toolPositiony = height1-10
               handle
-                .attr("transform", "translate(" + toolPosition + "," + height1 + ")");
+                .attr("transform", "translate(" + toolPosition + "," + toolPositiony + ")");
               
               handle2.attr("x", x(value)-4);
               handle_label.attr("x", x(value)-18);
@@ -422,12 +423,20 @@ var label6y = height2*(1/20);
 
     //////////////////////////////////////////////////////////////////
     function bigpizzacall(value1,value2,value3) {
-        bigpizza2.html("<em>One <strong>" + value1 + "\"</strong> pizza is roughly the same area <br> as <strong>" + value2 + "</strong> 16\" pizzas or <strong>" + value3 + "</strong> 8\" pizzas.</em>");        
+        // bigpizza2.html("<em>One <strong>" + value1 + "\"</strong> pizza has roughly the same area as <strong>" + value2 + "</strong> 14\" pizzas or <strong>" + value3 + "</strong> 8\"  pizzas.</em>");        
 
-        if (width1 < 400) {
-        bigpizza2.html("<em>One <strong>" + value1 + "\"</strong> pizza is roughly the <br> same area  as <strong>" + value2 + "</strong> 16\" pizzas <br>or <strong>" + value3 + "</strong> 8\" pizzas.</em>");        
+        // if (width1 < 400) {
 
-        }
+          if ( value2 == 1) 
+          {
+            bigpizza2.html("<em>One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizza or <strong>" + value3 + "</strong> 8\"  pizzas.</em>");        
+          } else 
+
+          {
+            bigpizza2.html("<em>One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizzas or <strong>" + value3 + "</strong> 8\"  pizzas.</em>");        
+          }
+        // }
+
 
         bigpizza
             .text(value1 + "\"")
@@ -468,21 +477,29 @@ var label6y = height2*(1/20);
         var medSavings = d3.round((value2-value1),2)
         var smallSavings = d3.round((value3-value1),2)
         
-        if (medSavings <= 0)
-            {
-                bigpizza3.html("<em>Buying the <strong>" + largestpizza + "\" </strong> pizza saves you <strong>$" + smallSavings + "</strong> <br>over the same number of the 8\" <br>pizzas.<em>");        
-            } else 
-            {
-                bigpizza3.html("<em>Buying the <strong>" + largestpizza + "\" </strong> pizza saves you <strong>$" + medSavings + "</strong> <br>over the same number of the 14\" <br>pizzas, and <strong>$" + smallSavings + "</strong> over the <br>same number of 8\" pizzas.</em>");        
-            }
 
-        if (width1 < 400 && medSavings <= 0) 
-            {
-                bigpizza3.html("<em>Buying the <strong>" + largestpizza + "\" </strong> pizza saves you<br> <strong>$" + smallSavings + "</strong> over the same number <br>of 8\" pizzas.<em>");        
-            } else 
-            {
-                bigpizza3.html("<em>Buying the <strong>" + largestpizza + "\" </strong> pizza saves you<br> <strong>$" + medSavings + "</strong> over the same number<br> of 14\" pizzas, and <strong>$" + smallSavings + "</strong>  over <br> the same number of 8\" pizzas.</em>");        
-            }
+        // if (width1 < 400 )  {
+            if ( medSavings <= 0) 
+                {
+                    bigpizza3.html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + smallSavings + "</strong> on 8\" pizzas.<em>");        
+                } else 
+                {
+                    bigpizza3.html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + medSavings + "</strong> on 14\" pizzas, or an extra <strong>$" + smallSavings + "</strong>  on 8\" pizzas.</em>");        
+                }
+                 
+        // }
+
+        // else {
+            
+        //     if (medSavings <= 0)
+        //         {
+        //             bigpizza3.html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + smallSavings + "</strong> on 8\" <br>pizzas.<em>");        
+        //         } else 
+        //         {
+        //             bigpizza3.html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + medSavings + "</strong> on 14\" pizzas, or <strong>$" + smallSavings + "</strong> on 8\" pizzas.</em>");        
+        //         }
+        // }
+
 
         bigprice          
             .text("$" + value1.toFixed(2) )
@@ -588,7 +605,7 @@ var label6y = height2*(1/20);
                                 var pizzay =  height*(19/100);
                                 // var pizzay = 8.5*height2/10;
                                 var pizza2y = height*(27/100);
-                                var pizza3y = height*(1/100) + 2*diam;
+                                var pizza3y = height*(10/100) ;
                                 
 
                                 var unit = width1/50;
@@ -604,9 +621,9 @@ var label6y = height2*(1/20);
                    
                                 
                                 var leftcolumn = width*(7/100);
-                                var leftcolumn2 = width*(15/100);
-                                var leftcolumn_bigyy = height2*(5/100);
-                                var leftcolumn_bigy = height2*(8/100);
+                                var leftcolumn2 = width*(12/100);
+                                var leftcolumn_bigyy = height2*(9/100);
+                                var leftcolumn_bigy = height2*(12/100);
                                 var leftcolumn_smally = height2*(28/100);
                                 var leftcolumn_smallyy = height2*(25/100);
                                 var leftcolumn_midy = height2*(20/100);
@@ -640,13 +657,13 @@ var label6y = height2*(1/20);
                                 .style("font-size", fontsize);
 
                                 d3.selectAll(".equallabbig2")
-                                .attr("x", leftcolumn2+width2/3)
-                                .attr("y", leftcolumn_bigyy-width2/20)
+                                .attr("x", leftcolumn2)
+                                .attr("y", leftcolumn_bigyy-60)
                                 .style("font-size", fontsize);
 
                                 d3.selectAll(".equallabbig3")
-                                .attr("x", leftcolumn2+width2/3)
-                                .attr("y", leftcolumn_bigyy+width2/25)
+                                .attr("x", leftcolumn2)
+                                .attr("y", leftcolumn_bigyy+230)
                                 .style("font-size", fontsize);
                                 
                                 if (diam <10)
@@ -680,13 +697,11 @@ var label6y = height2*(1/20);
        
                                 if (width1 <400) {
                                 d3.selectAll(".equallabbig2")
-                                .attr("x", leftcolumn2+width2/3.4 + 5)
-                                .attr("y", leftcolumn_bigyy-width2/20)
+                                .attr("x", leftcolumn2)
                                 .style("font-size", fontsize);
 
                                 d3.selectAll(".equallabbig3")
-                                .attr("x", leftcolumn2+width2/3.4 + 5)
-                                .attr("y", leftcolumn_bigyy+width2/6+5)
+                                .attr("x", leftcolumn2)
                                 .style("font-size", fontsize);
                                 
                                 d3.selectAll(".xaxis_label").attr("x", width1*(1/8))
@@ -1035,7 +1050,7 @@ var label6y = height2*(1/20);
                 .data(graphic_data)
             .enter().append('circle')
                 .attr('class', function(d) { return d.crust + "_circle"})               
-                .attr("r", width/200)
+                .attr("r", width/100)
                 .attr("cx", xMap)
                 .attr("cy", yMap)
                 .style("fill", "#17807E")
@@ -1105,18 +1120,12 @@ var label6y = height2*(1/20);
 
                     });
 
+                    d3.csv(graphic_data_url4, function(error, data) {
+                        graphic_data4 = data;
 
-
-                });
-
-
-
-                d3.csv(graphic_data_url4, function(error, data) {
-                    graphic_data4 = data;
-
-                    graphic_data4.forEach(function(d) {
-                        d.size = +d.sizes;
-                        d.fitted = +d.fitted;
+                        graphic_data4.forEach(function(d) {
+                            d.size = +d.sizes;
+                            d.fitted = +d.fitted;
 
                     });
 
@@ -1124,7 +1133,9 @@ var label6y = height2*(1/20);
                             renderCallback: drawGraphic 
                         });
 
-                });
+                    });
+                    
+                    });
 
 
 
