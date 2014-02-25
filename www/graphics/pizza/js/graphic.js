@@ -81,6 +81,7 @@
             var yAxis = d3.svg.axis()
                 .orient("left")
                 .scale(y)
+                .tickFormat(function(d) { return d == 0.4 ? "$" + d.toFixed(2) : d.toFixed(2); })
                 .tickPadding(14)
                 .tickSize(0)
                 .ticks(10);
@@ -117,6 +118,7 @@
                   .scale(x)
                   .orient("bottom")
                   .ticks(num_x_ticks)
+                  .tickFormat(function(d) { return d == 8 ? d + '"' : d; })
                   .tickSize(10)
                   .tickPadding(12))
               .select(".domain")
@@ -352,12 +354,12 @@ var label6y = height2*(1/20);
 
             var xaxislabel = svg.append("text") 
                           .attr("class", "xaxis_label")
-                          .attr("y", y(0)+60)
+                          .attr("y", y(0)+55)
                           .attr("x", width1*(3/8))
-                          .text("Pizza Size (Diameter In Inches)")
+                          .text("Pizza Diameter")
                           .style("opacity", 1)
-                          .style("fill", "#464738")
-                          .attr("font-size", "16px");  
+                          .style("fill", "#777")
+                          .attr("font-size", "14px");  
 
 
             var yaxislabel = svg.append("text") 
@@ -365,10 +367,10 @@ var label6y = height2*(1/20);
                           .attr("y", y(.4)-55)
                           .attr("x", -height1*(3.1/4))
                           .attr("transform", "rotate(-90)")
-                          .text("Price Per Square Inch ($)")
+                          .text("Price Per Square Inch")
                           .style("opacity", 1)
-                          .style("fill", "#464738")
-                          .attr("font-size", "16px");
+                          .style("fill", "#777")
+                          .attr("font-size", "14px");
 
             var psize2 = "all";
 
