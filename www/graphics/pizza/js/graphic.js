@@ -663,7 +663,7 @@ var label6y = height2*(1/20);
 
                                 d3.selectAll(".equallabbig3")
                                 .attr("x", leftcolumn2)
-                                .attr("y", leftcolumn_bigyy+230)
+                                .attr("y", leftcolumn_smallyy+height2/10)
                                 .style("font-size", fontsize);
                                 
                                 if (diam <10)
