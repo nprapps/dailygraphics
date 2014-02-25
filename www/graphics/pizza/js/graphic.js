@@ -56,7 +56,7 @@
                     .append("svg")
                     .attr("class", "svg1")
                         .attr("width", width1 + margin.left+ margin.right )
-                        .attr("height", height1 + margin.top)
+                        .attr("height", height1 + margin.top + margin.bottom)
                     .append("g")
                         .attr("transform", "translate(" + margin.left + ",40)");
 
@@ -66,7 +66,7 @@
                             .attr("width", width2 + margin2.right )
                         .attr("height", height2_svg + margin.top + margin.bottom)
                         .append("g")
-                        .attr("transform", "translate(20, 30)");
+                        .attr("transform", "translate(20,20)");
 
 
             var xAxis = d3.svg.axis()
@@ -640,9 +640,10 @@ var label6y = height2*(1/20);
 
                    
                                 
-                                var leftcolumn = width*(7/100);
+                                var leftcolumn = width*(4/100);
                                 var leftcolumn2 = width*(12/100);
-                                var leftcolumn_bigyy = height2*(3/100);
+                                var leftcolumn_bigyy = height2*(2/100);
+                                var leftcolumn_bigyyy = height2*(3/100);
                                 var leftcolumn_bigy = height2*(5/100);
                                 var leftcolumn_smally = height2*(21/100);
                                 var leftcolumn_smallyy = height2*(18/100);
@@ -678,12 +679,12 @@ var label6y = height2*(1/20);
 
                                 d3.selectAll(".equallabbig2")
                                 .attr("x", leftcolumn2)
-                                .attr("y", leftcolumn_bigyy-60)
+                                .attr("y", leftcolumn_midyy)
                                 .style("font-size", fontsize);
 
                                 d3.selectAll(".equallabbig3")
                                 .attr("x", leftcolumn2)
-                                .attr("y", leftcolumn_smallyy+height2/10)
+                                .attr("y", leftcolumn_smallyy)
                                 .style("font-size", fontsize);
                                 
                                 if (diam <10)
