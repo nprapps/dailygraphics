@@ -21,7 +21,7 @@
               });
             };
 
-            var margin = {top: 100, right: 40, bottom: 40, left: 100};
+            var margin = {top: 100, right: 40, bottom: 0, left: 80};
             var margin2 = {top: 100, right: 100, bottom: 40, left: 10};
             var width = width - margin.left ;
             var height = 1000 - margin.top - margin.bottom;
@@ -726,7 +726,7 @@ var label6y = height2*(1/20);
                                 .attr("x", leftcolumn2)
                                 .style("font-size", fontsize);
                                 
-                                d3.selectAll(".xaxis_label").attr("x", width1*(1/8))
+                                d3.selectAll(".xaxis_label").attr("x", width1 * (0.5)  - (138/2))
 
 
                                 }
