@@ -21,7 +21,7 @@
               });
             };
 
-            var margin = {top: 100, right: 40, bottom: 40, left: 100};
+            var margin = {top: 100, right: 40, bottom: 0, left: 80};
             var margin2 = {top: 100, right: 100, bottom: 40, left: 10};
             var width = width - margin.left ;
             var height = 1000 - margin.top - margin.bottom;
@@ -81,6 +81,7 @@
             var yAxis = d3.svg.axis()
                 .orient("left")
                 .scale(y)
+                .tickFormat(function(d) { return d == 0.4 ? "$" + d.toFixed(2) : d.toFixed(2); })
                 .tickPadding(14)
                 .tickSize(0)
                 .ticks(10);
@@ -187,7 +188,7 @@
                 .attr("class", "handle_tooltip")
                 .attr("xlink:href", "../pizza/img/slider.png")
                 .attr("width", 150)
-                .attr("height", 27)
+                .attr("height", 19)
                 .style("opacity",.7);
 
 
@@ -352,12 +353,12 @@ var label6y = height2*(1/20);
 
             var xaxislabel = svg.append("text") 
                           .attr("class", "xaxis_label")
-                          .attr("y", y(0)+60)
+                          .attr("y", y(0)+55)
                           .attr("x", width1*(3/8))
-                          .text("Pizza Size (Diameter In Inches)")
+                          .text("Pizza Diameter In Inches")
                           .style("opacity", 1)
-                          .style("fill", "#464738")
-                          .attr("font-size", "16px");  
+                          .style("fill", "#777")
+                          .attr("font-size", "14px");  
 
 
             var yaxislabel = svg.append("text") 
@@ -365,10 +366,10 @@ var label6y = height2*(1/20);
                           .attr("y", y(.4)-55)
                           .attr("x", -height1*(3.1/4))
                           .attr("transform", "rotate(-90)")
-                          .text("Price Per Square Inch ($)")
+                          .text("Price Per Square Inch")
                           .style("opacity", 1)
-                          .style("fill", "#464738")
-                          .attr("font-size", "16px");
+                          .style("fill", "#777")
+                          .attr("font-size", "14px");
 
             var psize2 = "all";
 
@@ -712,7 +713,7 @@ var label6y = height2*(1/20);
                                 .attr("x", leftcolumn2)
                                 .style("font-size", fontsize);
                                 
-                                d3.selectAll(".xaxis_label").attr("x", width1*(1/8))
+                                d3.selectAll(".xaxis_label").attr("x", width1 * (0.5)  - (138/2))
 
 
                                 }
