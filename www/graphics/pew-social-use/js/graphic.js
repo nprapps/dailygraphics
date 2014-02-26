@@ -68,6 +68,7 @@ $(document).ready(function() {
 
         y.domain([
             0,
+//            d3.max(d3.entries(lines), function(c) { return d3.max(c.value, function(v) { return v.amt; }); })
             d3.max(d3.entries(lines), function(c) { 
                 return d3.max(c.value, function(v) { 
                     var n = parseInt(v.amt);
