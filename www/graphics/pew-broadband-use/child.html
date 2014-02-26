@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Graphic : NPR</title>
+    <title>Graphic Embed : NPR</title>
 
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -17,6 +17,20 @@
             padding: 0;
             font-family: Arial, Helvetica, sans-serif;
         }
+        
+        h3 {
+            font-weight: normal;
+            color: #333;
+            font-size: 16px;
+            margin: 0 0 11px 0;
+        }
+        
+        a, a:link, a:visited { 
+            color: #4774CC; 
+            text-decoration: none;
+        }
+        a:hover, a:active { opacity: 0.7; }
+
         .footnotes { margin-bottom: 20px; }
         .footnotes h4 {
             margin: 2px 0 7px 0;
@@ -31,67 +45,82 @@
             color: #808080;
         }
         
-                .chart svg {
+        /* chart */
+        #graphic { 
+            width: 100%;
+        }
+        #graphic:before,
+        #graphic:after {
+            content: " "; /* 1 */
+            display: table; /* 2 */
+        }
+        #graphic:after { clear: both; }
+        
+        #graphic svg {
             font-family: Arial, Helvetica, sans-serif;
             margin-bottom: 1em;
         }
-        svg .axis {
+        #graphic .axis {
             font-size: 12px;
             fill: #666;
         }
-        svg .axis path,
-        svg .axis line {
+        #graphic .axis path,
+        #graphic .axis line {
             fill: none;
             stroke: #666;
             shape-rendering: crispEdges;
         }
-        svg .axis.y line,
-        svg .axis.y path {
-            display: none;
-        }
-        svg .grid path { display: none; }
-        svg .grid .tick {
+        #graphic .axis.y path { display: none; }
+        #graphic .axis.y .tick line { display: none; }
+        #graphic .grid path { display: none; }
+        #graphic .grid .tick {
             stroke: #ccc;
             stroke-dasharray: 1px 3px;
             stroke-width: 1px;
             shape-rendering: crispEdges;
         }
-        svg .grid.y .tick:nth-child(1) {
-            display: none;
-        }
-        svg .line {
+        #graphic .line {
             fill: none;
-            stroke: #333;
+            stroke: #17807E;
             stroke-width: 3px;
         }
-        svg .bars rect { fill: #F3D469; }
-        svg .label text,
-        svg .value text {
+        #graphic .bars rect { fill: #17807E; }
+        #graphic .label text,
+        #graphic .value text {
             font-weight: normal;
             font-size: 12px;
             fill: #333;
+            text-align: right;
         }
-        svg .axis-label {
-            font-style: italic;
-            fill: #999;
-            font-size: 12px;
-            text-align: center;
+        #graphic .value text { 
+            fill: #fff;
+            font-size: 11px;
+        }
+        
+        .chart { 
+            width: 48%;
+            float: left;
+            margin-right: 2%;
         }
 
+        @media screen and (max-width: 640px) {
+            .chart {
+                width: auto;
+                float: none;
+                margin-right: 0;
+                margin-bottom: 22px;
+            }
+        }
     </style>
 
 </head>
 <body>
+    <h3>Percentage of American adults who access the Internet via broadband (2000-2013)</h3>
     <div id="graphic"></div>
     
-    <div class="footnotes">
-        <h4>Notes</h4>
-        <p>- Lorem ipsum dolor sit amet</p>
-    </div>
-
     <div class="footer">
-        <p>Source: Sunlight Foundation, White House Office of Management and Budget</p>
-        <p>Credit: Alyson Hurt and Tamara Keith/NPR</p>
+        <p>Source: Pew Internet and American Life Project surveys</p>
+        <p>Credit: Alyson Hurt/NPR</p>
     </div>
 
 
