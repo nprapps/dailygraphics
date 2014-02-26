@@ -781,7 +781,7 @@ var label6y = height2*(1/20);
 
                                 if (sqinch_norm2 > 2) {
 
-                                    width_pieb = width_pieb + diam_base_px*3.5;    
+                                    width_pieb = width_pieb + diam_base_px*4;    
                                     svg2.append("path")
                                     .attr("class", "arcpie2")
                                     .attr("d", arcb2)
@@ -789,7 +789,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm2 > 4) {
-                                    width_pieb = width_pieb + diam_base_px*3.5;    
+                                    width_pieb = width_pieb + diam_base_px*4;    
                                     svg2.append("path")
                                     .attr("class", "arcpie2")
                                     .attr("d", arcb3)
@@ -798,7 +798,7 @@ var label6y = height2*(1/20);
 
 
                                 if (sqinch_norm2 > 6) {
-                                    width_pieb = width_pieb + diam_base_px*3.5;    
+                                    width_pieb = width_pieb + diam_base_px*4;    
                                     svg2.append("path")
                                     .attr("class", "arcpie2")
                                     .attr("d", arcb4)
@@ -806,7 +806,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm2 > 8) {
-                                    width_pieb = width_pieb + diam_base_px*3.5;    
+                                    width_pieb = width_pieb + diam_base_px*4;    
                                     svg2.append("path")
                                     .attr("class", "arcpie2")
                                     .attr("d", arcb5)
@@ -814,7 +814,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm2 > 10) {
-                                    width_pieb = width_pieb + diam_base_px*3.5;    
+                                    width_pieb = width_pieb + diam_base_px*4;    
                                     svg2.append("path")
                                     .attr("class", "arcpie2")
                                     .attr("d", arcb6)
@@ -921,7 +921,7 @@ var label6y = height2*(1/20);
 
                                 if (sqinch_norm > 2) {
 
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc2)
@@ -930,7 +930,7 @@ var label6y = height2*(1/20);
 
                                 if (sqinch_norm > 4) {
                                     
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc3)
@@ -939,7 +939,7 @@ var label6y = height2*(1/20);
 
 
                                 if (sqinch_norm > 6) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc4)
@@ -947,14 +947,14 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm > 8) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;                                      
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;                                      
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc5)
                                     .attr("transform", "translate(" + width_pieb2  +  "," + pizza2y + ")");    }
 
                                 if (sqinch_norm > 10) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc6)
@@ -962,7 +962,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm > 12) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc7)
@@ -970,7 +970,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm > 14) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc8)
@@ -978,7 +978,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm > 16) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;                                      
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;                                      
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc9)
@@ -986,7 +986,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm > 18) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc10)
@@ -994,7 +994,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm > 20) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc11)
@@ -1002,7 +1002,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm > 22) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc12)
@@ -1010,7 +1010,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm > 24) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc13)
@@ -1018,7 +1018,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm > 26) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc14)
@@ -1026,7 +1026,7 @@ var label6y = height2*(1/20);
                                 }
 
                                 if (sqinch_norm > 28) {
-                                    width_pieb2 = width_pieb2 + diam_base_px*2;    
+                                    width_pieb2 = width_pieb2 + diam_base_px*2.5;    
                                     svg2.append("path")
                                     .attr("class", "arcpie")
                                     .attr("d", arc15)
