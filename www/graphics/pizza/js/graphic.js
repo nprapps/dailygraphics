@@ -343,7 +343,7 @@ var label5y = height2*(1/20);
                         .attr("class", "equallab14")
                         .attr("x", label5x)
                         .attr("y", label5y)
-                        .text(" 14\"")
+                        .text(" 14-inch")
                         .attr("fill", "#464738")
                         .style("font-size", "24px");
 
@@ -355,7 +355,7 @@ var label6y = height2*(1/20);
                         .attr("class", "equallab8")
                         .attr("x", label6x)
                         .attr("y", label6y)
-                        .text(" 8\"")
+                        .text(" 8-inch")
                         .attr("fill", "#464738");
 
             var xaxislabel = svg.append("text") 
@@ -420,23 +420,23 @@ var label6y = height2*(1/20);
 
     //////////////////////////////////////////////////////////////////
     function bigpizzacall(value1,value2,value3) {
-        // bigpizza2.html("<em>One <strong>" + value1 + "\"</strong> pizza has roughly the same area as <strong>" + value2 + "</strong> 14\" pizzas or <strong>" + value3 + "</strong> 8\"  pizzas.</em>");        
+        // bigpizza2.html("<em>One <strong>" + value1 + "-inch</strong> pizza has roughly the same area as <strong>" + value2 + "</strong> 14-inch pizzas or <strong>" + value3 + "</strong> 8-inch  pizzas.</em>");        
 
         // if (width1 < 400) {
 
           if ( value2 == 1) 
           {
-            d3.selectAll("#bigamount").html("One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizza or <strong>" + value3 + "</strong> 8\"  pizzas.");        
+            d3.selectAll("#bigamount").html("One <strong>" + value1 + "-inch</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14-inch pizza or <strong>" + value3 + "</strong> 8-inch  pizzas.");        
           } else 
 
           {
-            d3.selectAll("#bigamount").html("One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizzas or <strong>" + value3 + "</strong> 8\"  pizzas.");        
+            d3.selectAll("#bigamount").html("One <strong>" + value1 + "-inch</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14-inch pizzas or <strong>" + value3 + "</strong> 8-inch  pizzas.");        
           }
         // }
 
 
         bigpizza
-            .text(value1 + "\"")
+            .text(value1 + "-inch")
             // .text("This " + value + "    inch pizza..." )
             .attr("font-family", "sans-serif");
 
@@ -449,7 +449,7 @@ var label6y = height2*(1/20);
         }
 
          // function midpizzacall(value1,value2) {
-    //         d3.selectAll('#midamount').text("Is roughly the same area as " + value1 + " 16\" pizzas or " + value2 + " 8\" pizzas.");        
+    //         d3.selectAll('#midamount').text("Is roughly the same area as " + value1 + " 16-inch pizzas or " + value2 + " 8-inch pizzas.");        
         // midpizza          
         //     .text(value ) //+ " -- 16 Inch Pizzas")
         //     .attr("font-family", "sans-serif")
@@ -459,7 +459,7 @@ var label6y = height2*(1/20);
         //     .moveToFront();
         //}
     // function smallpizzacall(value) {
-    //         d3.selectAll('#smallamount').text("Or " + value + " 8\" pizzas.");              
+    //         d3.selectAll('#smallamount').text("Or " + value + " 8-inch pizzas.");              
         // smallpizza          
         //     .text(value) //+ " -- 8 Inch Pizzas")
         //     .attr("font-family", "sans-serif")
@@ -477,10 +477,10 @@ var label6y = height2*(1/20);
         // if (width1 < 400 )  {
             if ( medSavings <= 0) 
                 {
-                    d3.selectAll("#bigprice").html("To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + smallSavings + "</strong> on 8\" pizzas.");        
+                    d3.selectAll("#bigprice").html("To get the same amount of pizza you get in a <strong>" + largestpizza + "-inch</strong> pizza, you'd have to spend an extra <strong>$" + smallSavings + "</strong> on 8-inch pizzas.");        
                 } else 
                 {
-                    d3.selectAll("#bigprice").html("To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + medSavings + "</strong> on 14\" pizzas, or an extra <strong>$" + smallSavings + "</strong>  on 8\" pizzas.");        
+                    d3.selectAll("#bigprice").html("To get the same amount of pizza you get in a <strong>" + largestpizza + "-inch</strong> pizza, you'd have to spend an extra <strong>$" + medSavings + "</strong> on 14-inch pizzas, or an extra <strong>$" + smallSavings + "</strong>  on 8-inch pizzas.");        
                 }
                  
         // }
@@ -489,10 +489,10 @@ var label6y = height2*(1/20);
             
         //     if (medSavings <= 0)
         //         {
-        //             bigpizza3.html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + smallSavings + "</strong> on 8\" <br>pizzas.<em>");        
+        //             bigpizza3.html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "-inch</strong> pizza, you'd have to spend an extra <strong>$" + smallSavings + "</strong> on 8-inch <br>pizzas.<em>");        
         //         } else 
         //         {
-        //             bigpizza3.html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + medSavings + "</strong> on 14\" pizzas, or <strong>$" + smallSavings + "</strong> on 8\" pizzas.</em>");        
+        //             bigpizza3.html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "-inch</strong> pizza, you'd have to spend an extra <strong>$" + medSavings + "</strong> on 14-inch pizzas, or <strong>$" + smallSavings + "</strong> on 8-inch pizzas.</em>");        
         //         }
         // }
 
@@ -629,7 +629,7 @@ var label6y = height2*(1/20);
                    
                                 
                                 var leftcolumn = width*(4/100);
-                                var leftcolumn2 = width*(8/100);
+                                var leftcolumn2 = width*(1/100);
                                 var leftcolumn_bigyy = height2*(2/100);
                                 var leftcolumn_bigyyy = height2*(3/100);
                                 var leftcolumn_bigy = height2*(5/100);
@@ -646,10 +646,10 @@ var label6y = height2*(1/20);
 
                                     }
                                  if (width1 <400) {
-                                    leftcolumn2 = width*(16/100);
+                                    leftcolumn2 = width*(7/100);
                                     }
                                     else {
-                                    leftcolumn2 = width*(12/100);   
+                                    leftcolumn2 = width*(6/100);   
                                     }
    
 
