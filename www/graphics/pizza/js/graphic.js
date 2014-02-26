@@ -60,7 +60,7 @@
                     .append("g")
                         .attr("transform", "translate(" + margin.left + ",40)");
 
-            var $sentences = $('#statement').detach();
+            var $sentences = $('<div id="statement" class = "deck"> <div id="bigamount"></div> <div id="bigprice"></div> </div>');
 
 
             $('#graphic').append($sentences);
@@ -196,8 +196,7 @@
                 .attr("class", "handle_tooltip")
                 .attr("xlink:href", "../pizza/img/slider.png")
                 .attr("width", 150)
-                .attr("height", 19)
-                .style("opacity",.7);
+                .attr("height", 19);
 
 
 
