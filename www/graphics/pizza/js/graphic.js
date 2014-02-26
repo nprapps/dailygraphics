@@ -622,7 +622,7 @@ var label6y = height2*(1/20);
                    
                                 
                                 var leftcolumn = width*(4/100);
-                                var leftcolumn2 = width*(12/100);
+                                var leftcolumn2 = width*(8/100);
                                 var leftcolumn_bigyy = height2*(2/100);
                                 var leftcolumn_bigyyy = height2*(3/100);
                                 var leftcolumn_bigy = height2*(5/100);
@@ -637,6 +637,12 @@ var label6y = height2*(1/20);
                                         fontsize2 = 16 + "px";
                                         leftcolumn = width*(7/100)-10;
 
+                                    }
+                                 if (width1 <400) {
+                                    leftcolumn2 = width*(18/100);
+                                    }
+                                    else {
+                                    leftcolumn2 = width*(12/100);   
                                     }
    
 
