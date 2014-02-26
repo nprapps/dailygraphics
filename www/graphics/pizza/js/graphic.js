@@ -640,7 +640,7 @@ var label6y = height2*(1/20);
 
                                     }
                                  if (width1 <400) {
-                                    leftcolumn2 = width*(18/100);
+                                    leftcolumn2 = width*(16/100);
                                     }
                                     else {
                                     leftcolumn2 = width*(12/100);   
@@ -650,12 +650,14 @@ var label6y = height2*(1/20);
                                 d3.selectAll(".equallab8")
                                 .attr("x", leftcolumn2)
                                 .attr("y", leftcolumn_smallyy)
-                                .style("font-size", fontsize);
+                                .style("font-size", fontsize)
+                                .attr("text-anchor", "start");
 
                                 d3.selectAll(".equallab14")
                                 .attr("x", leftcolumn2-10)
                                 .attr("y", leftcolumn_midyy)
-                                .style("font-size", fontsize);
+                                .style("font-size", fontsize)
+                                .attr("text-anchor", "start");
 
                                 var small_labely = pizzay + unit*5.5;
                                 
@@ -663,17 +665,20 @@ var label6y = height2*(1/20);
                                  d3.selectAll(".equallabbig")
                                 .attr("x", leftcolumn2-10)
                                 .attr("y", leftcolumn_bigyy)
-                                .style("font-size", fontsize);
+                                .style("font-size", fontsize)
+                                .attr("text-anchor", "start");
 
                                 d3.selectAll(".equallabbig2")
                                 .attr("x", leftcolumn2)
                                 .attr("y", leftcolumn_midyy)
-                                .style("font-size", fontsize);
+                                .style("font-size", fontsize)
+                                .attr("text-anchor", "start");
 
                                 d3.selectAll(".equallabbig3")
                                 .attr("x", leftcolumn2)
                                 .attr("y", leftcolumn_smallyy)
-                                .style("font-size", fontsize);
+                                .style("font-size", fontsize)
+                                .attr("text-anchor", "start");
                                 
                                 if (diam <10)
                                 {
