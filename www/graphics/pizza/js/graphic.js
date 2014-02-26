@@ -60,6 +60,14 @@
                     .append("g")
                         .attr("transform", "translate(" + margin.left + ",40)");
 
+            var $sentences = $('#statement').detach();
+
+
+            $('#graphic').append($sentences);
+
+
+
+
             var svg2 = d3.select("#graphic")
                         .append("svg")
                         .attr("class", "svg2")
@@ -419,11 +427,11 @@ var label6y = height2*(1/20);
 
           if ( value2 == 1) 
           {
-            d3.selectAll("#bigamount").html("<em>One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizza or <strong>" + value3 + "</strong> 8\"  pizzas.</em>");        
+            d3.selectAll("#bigamount").html("One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizza or <strong>" + value3 + "</strong> 8\"  pizzas.");        
           } else 
 
           {
-            d3.selectAll("#bigamount").html("<em>One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizzas or <strong>" + value3 + "</strong> 8\"  pizzas.</em>");        
+            d3.selectAll("#bigamount").html("One <strong>" + value1 + "\"</strong> pizza has roughly the same area  as <strong>" + value2 + "</strong> 14\" pizzas or <strong>" + value3 + "</strong> 8\"  pizzas.");        
           }
         // }
 
@@ -438,7 +446,6 @@ var label6y = height2*(1/20);
         midpizza          
             .text(value ) //+ " -- 16 Inch Pizzas")
             .attr("font-family", "sans-serif")
-            .attr("font-size", "24px")
             .moveToFront();
         }
 
@@ -471,10 +478,10 @@ var label6y = height2*(1/20);
         // if (width1 < 400 )  {
             if ( medSavings <= 0) 
                 {
-                    d3.selectAll("#bigprice").html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + smallSavings + "</strong> on 8\" pizzas.<em>");        
+                    d3.selectAll("#bigprice").html("To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + smallSavings + "</strong> on 8\" pizzas.");        
                 } else 
                 {
-                    d3.selectAll("#bigprice").html("<em>To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + medSavings + "</strong> on 14\" pizzas, or an extra <strong>$" + smallSavings + "</strong>  on 8\" pizzas.</em>");        
+                    d3.selectAll("#bigprice").html("To get the same amount of pizza you get in a <strong>" + largestpizza + "\"</strong> pizza, you'd have to spend an extra <strong>$" + medSavings + "</strong> on 14\" pizzas, or an extra <strong>$" + smallSavings + "</strong>  on 8\" pizzas.");        
                 }
                  
         // }
