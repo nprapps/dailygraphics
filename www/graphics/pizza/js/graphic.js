@@ -99,7 +99,7 @@
 
             var brush = d3.svg.brush()
                 .x(x)
-                .extent([14, 14])
+                .extent([16, 16])
                 .on("brush", brushed);
 
             if (width <= 624) {
@@ -374,25 +374,8 @@ var label6y = height2*(1/20);
 
             slider
                 .call(brush.event)
-              // .transition() 
-              //   .duration(1000)
-              //   .call(brush.extent([18, 18]))
-              //   .call(brush.event);
 
             function brushed() {
-              
-             // var value = brush.extent(),
-             //      extent1;
-
-             //  // if dragging, preserve the width of the extent
-             //  if (d3.event.mode === "move") {
-             //    var d0 = d3.round(extent0[0],1),
-             //        d1 = d3.offset(d0, Math.round((extent0[1] - extent0[0]) / 864e5));
-             //    extent1 = [d0, d1];
-             //  }
-
-
-
             var value = brush.extent()[0];
        
 
@@ -414,7 +397,6 @@ var label6y = height2*(1/20);
 
               svg2.selectAll(".pizza")
                     .attr("r", pies(value)); // attribute = radius
-                    // .attr("r", value);
 
               var sqinch = [];  
               // $(".arcpie").remove();
@@ -604,20 +586,19 @@ var label6y = height2*(1/20);
                                 var piedata = [1];
                                 var piecount = Math.ceil(sqinch_val/sqinch_max);
                                 var arc_array = [];
-                                var width_pie = width/1.2;
                                 var width_pieb = 35*width1/100 ;
-                                var width_pieb2 = 35*width1/100 ;
+                                var width_pieb2 = 34*width1/100 ;
                                 var width_pieb3 = 35*width1/100 ;
 
                                 if (width < 400) {
-                                 width_pieb = 60*width1/100 ;
-                                 width_pieb2 = 60*width1/100 ;
-                                 width_pieb3 = 60*width1/100 ;
+                                 width_pieb = 42*width1/100 ;
+                                 width_pieb2 = 41*width1/100 ;
+                                 width_pieb3 = 42*width1/100 ;
                                 }
                                 else {
-                                 width_pieb = 35*width1/100 ;
-                                 width_pieb2 = 35*width1/100 ;
-                                 width_pieb3 = 35*width1/100 ;
+                                 width_pieb = 32*width1/100 ;
+                                 width_pieb2 = 31*width1/100 ;
+                                 width_pieb3 = 32*width1/100 ;
 
                                 }
 
@@ -913,7 +894,13 @@ var label6y = height2*(1/20);
                                 .startAngle(0)
                                 .endAngle((sqinch_norm-30)*Math.PI);
 
-                                pizza.attr("transform", "translate(" + width_pieb3  +  "," + pizza3y + ")");
+                                var width_pieb4 = width_pieb3
+                                if (diam>14) {
+                                  width_pieb4 = width_pieb3 + diam/1.8
+                                }
+     
+
+                                pizza.attr("transform", "translate(" + width_pieb4  +  "," + pizza3y + ")");
 
                                 svg2.append("path")
                                 .attr("class", "arcpie")
