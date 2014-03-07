@@ -59,6 +59,31 @@
             display: none;
             font-weight: normal;
         }
+        
+        #quiz .answer img {
+            width: 50%;
+            max-width: 100%;
+            height: auto;
+            margin-right: 11px;
+            float: left;
+        }
+        
+        #quiz .answer:before,
+        #quiz .answer:after {
+            content: " ";
+            display: table;
+        }
+        #quiz .answer:after { clear: both; }
+
+        
+        @media (max-width: 480px) {
+            #quiz .answer img {
+                width: auto;
+                margin-right: 0;
+                margin-bottom: 11px;
+                float: none;
+            }
+        }
 
         #quiz .answered ul {
             display: table;
@@ -289,7 +314,10 @@
                 </li>
                 <li class="correct">
                     <strong>aircraft carrier</strong>
-                    <span class="answer"> The HMS Furious was built as a battle cruiser and later converted into an aircraft carrier when the Royal Navy removed a turret and added a flight deck. Edwin Dunning became the first person to land an aircraft on a moving ship when he did so on Furious in 1917.</span>
+                    <span class="answer">
+                        <img src="../../assets/quiz-wwi/getty-dunning-airplane.jpg" alt="Photo" />
+                        The HMS Furious was built as a battle cruiser and later converted into an aircraft carrier when the Royal Navy removed a turret and added a flight deck. Edwin Dunning became the first person to land an aircraft on a moving ship when he did so on Furious in 1917. <em>(Photo: Hulton Archive/Getty Images)</em>
+                    </span>
                 </li>
                 <li class="incorrect">
                     <strong>torpedo</strong>
