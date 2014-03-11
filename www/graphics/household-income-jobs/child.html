@@ -60,24 +60,26 @@
 
         .income {
             font-weight: 100;
-            font-size: 24px;
-            text-align: right;
-            vertical-align:center;
-            padding-bottom: 20px;
-            padding-right: 20px;
+            font-size: 21px;
+            text-align: left;
+            padding-bottom: 8px;
+            padding-left: 10px;
+            padding-right: 10px;
             opacity: 70%;
             width: 240px;
+            vertical-align:bottom;
+
             /*line-height: 300%;*/
 
         }
         .occ {
             font-weight: 100;
-            font-size: 24px;
+            font-size: 21px;
             text-align: left;
-            vertical-align:bottom;
-            padding-bottom: 20px;
-            padding-left: 20px;
+            padding-bottom: 8px;
+            padding-left: 45px;
             width: 400px;
+            vertical-align:bottom;
 
 
         }
@@ -85,25 +87,22 @@
             font-weight: 100;
             font-size: 21px;
             color: #79797e;
-            text-align: right;
+            text-align: left;
             vertical-align:middle;
             border-bottom-style:solid;
-            padding-bottom: 10px;
-            padding-right: 20px;
-            padding-top: 10px;
-            width: 24   0px;
+            padding: 10px 10px 10px 10px;
             border-right:1px solid #ddd;
 
 
         }
         .occ-text {
-            font-weight: 100;
+            font-weight: 125;
+            font-size: 16px;
             text-align: left;
             border-bottom:1px solid #ddd;
-            padding-left: 20px;
+            padding-left: 10px;
             padding-bottom: 20px;
             padding-top: 10px;
-            line-height: 21px;
             vertical-align:middle;
             width: 300px;
 
@@ -172,12 +171,18 @@
       @media screen and (max-width: 480px) {
             .income, .occ {
                 font-size: 20px;
+                padding-right: 0px;
+
             }
             .income-text {
                 font-size: 18px;
+                padding-left: 5px;
+
             }
             .occ-text {
                 font-size: 14px;
+                padding-left: 1px;
+
 
             }
             
@@ -189,6 +194,14 @@
                 display: none;
             }
         }
+
+    li {
+        list-style-position: outside;
+        list-style-type: none;
+        padding-bottom: 15px;        
+        vertical-align:middle;
+
+    }
 
     </style>
 
@@ -203,20 +216,23 @@
     <th class = "placeholder"><!--spacer--></th>
 
      <th class="income"> Family Income During Childhood </th>
-     <th class="occ">Jobs As An Adult</th>
+     <th class="occ">Jobs As An Adult </th>
 
     <!-- <th>icon</th> -->
 
     </tr>
 
-    <br>
 
     <tr class="table-row">
         <td class ="house-img" id = "house1"> <img src = "house0.gif">
         </td>
         <td class="income-text">less than $35,000</td>
         
-        <td class="occ-text">-Farming, Fishing, And Forestry</td>
+        <td class="occ-text">
+        <ul>
+            <li> Farming, Fishing, And Forestry </li>
+        </ul>
+        </td>
 <!-- 
         <td class ="occ-img"> <img src = "house0.gif">
         </td> -->
@@ -228,8 +244,12 @@
 
         <td class = "income-text">$35,000-  39,000</td>
 
-        <td class = "occ-text">- Janitors, Maids, etc.
-            <br>- Child Care Workers, Home Care Workers, etc.</td>
+        <td class = "occ-text">
+            <ul>
+                <li>Child Care Workers, Home Care Workers, etc. </li>
+                <li>Janitors, Maids, etc. </li>
+            </ul>
+        </td>
 
     </tr>
     <tr class ="table-row">
@@ -239,13 +259,12 @@
         <td class = "income-text">$40,000-44,999</td>
 
         <td class = "occ-text">
-            - Construction
-            <br>
-            - Legal Support
-            <br>
-            - Machinists, Welders, etc.
-            <br>
-            - Truck Drivers, Heavy Equipment Operators, etc.
+            <ul>
+            <li> Construction </li> 
+            <li> Legal Support </li> 
+            <li> Machinists, Welders, etc. </li> 
+            <li> Truck Drivers, Heavy Equipment Operators, etc. </li> 
+            </ul>
             </td>
 
     </tr>
@@ -256,14 +275,12 @@
         <td class = "income-text">$45,000-49,999</td>
 
         <td class = "occ-text">
-           - Designers, Musicians, Artists, etc.
-            <br>
-           - Education, Training, And Librarians
-            <br>
-           - Food Preparation
-            <br>
-           - Health Care Technical and Support
-            <br>            
+            <ul>
+           <li>Designers, Musicians, Artists, etc. </li>
+           <li>Education, Training, And Librarians </li>
+           <li>Food Preparation </li>
+           <li>Health Care Technical and Support </li>
+            </ul>
             </td>
 
     </tr>
@@ -275,14 +292,12 @@
         <td class = "income-text">$50,000-54,999</td>
 
         <td class = "occ-text">
-           - Chief Executives
-           <br>
-           - Financial Analysts and Accountants
-           <br>
-           - Mechanics, Repairmen, etc.
-           <br>
-           - Police Officers, Firefighters, Security, etc.
-           <br>           
+            <ul>
+           <li>Chief Executives </li>
+           <li>Financial Analysts and Accountants </li>
+           <li>Mechanics, Repairmen, etc. </li>
+           <li>Police Officers, Firefighters, Security, etc. </li>
+           </ul>           
             </td>
 
     </tr>
@@ -294,14 +309,12 @@
          <td class = "income-text">$55,000-59,999</td>
 
         <td class = "occ-text">
-            - Counselors, Social, And Religious Workers
-            <br>
-            - Factory Workers
-            <br>
-            - Human Resources, Management Analysts, etc.
-            <br>
-            - Lawyers And Judges*
-            <br>
+            <ul>
+            <li> Counselors, Social, And Religious Workers </li>
+            <li> Factory Workers </li>
+            <li> Human Resources, Management Analysts, etc. </li>
+            <li> Lawyers And Judges* </li>
+            </ul>
             </td>
    
     </tr>
@@ -313,10 +326,11 @@
         <td class = "income-text">$60,000-64,999</td>
 
         <td class = "occ-text">
-            - Doctors, Dentists, And Surgeons
-            <br>
-            - Engineers, Architects, And Surveyors
-            <br>- Sales
+            <ul>
+            <li> Doctors, Dentists, And Surgeons </li>
+            <li> Engineers, Architects, And Surveyors </li>
+            <li> Sales </li>
+            </ul>
             </td>
 
     </tr>
@@ -329,12 +343,11 @@
         <td class = "income-text">$65,000-69,999</td>
 
         <td class = "occ-text">
-           - Managers
-            <br>
-           - Mathematical And Computer Scientists
-           <br>
-            - Teachers
-            <br>
+           <ul>
+               <li> Managers </li>
+               <li> Mathematical And Computer Scientists </li>
+               <li> Teachers </li>
+            </ul>
        </td>
 
     </tr>
@@ -345,15 +358,22 @@
 
         <td class = "income-text">$75,000</td>
 
-        <td class = "occ-text">- Physical, Life, And Social Scientists</td>
-
+        <td class = "occ-text">
+            <ul>
+                <li> Physical, Life, And Social Scientists</li>
+            </ul>
+        </td>             
     </tr>
     <tr class ="table-row">
         <td class ="house-img" id = "house10"> <img src = "house2.gif">
         </td>
         <td class = "income-text">$90,000</td>
 
-        <td class = "occ-text">- Media And Communications</td>
+        <td class = "occ-text">
+            <ul>
+                <li> Media And Communications</li>
+            </ul>
+        </td>     
     
 
     </tr>
