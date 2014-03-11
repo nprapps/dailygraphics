@@ -60,7 +60,7 @@
 
         .income {
             font-weight: 100;
-            font-size: 28px;
+            font-size: 24px;
             text-align: right;
             vertical-align:center;
             padding-bottom: 20px;
@@ -72,7 +72,7 @@
         }
         .occ {
             font-weight: 100;
-            font-size: 28px;
+            font-size: 24px;
             text-align: left;
             vertical-align:bottom;
             padding-bottom: 20px;
@@ -83,7 +83,7 @@
         }
         .income-text {
             font-weight: 100;
-            font-size: 24px;
+            font-size: 21px;
             color: #79797e;
             text-align: right;
             vertical-align:middle;
@@ -97,6 +97,7 @@
 
         }
         .occ-text {
+            font-weight: 100;
             text-align: left;
             border-bottom:1px solid #ddd;
             padding-left: 20px;
@@ -110,10 +111,10 @@
         }
 
         .house-img {
-            width: 150px;
+            width: 250px;
         }
         .occ-img {
-            width: 150px;
+            width: 250px;
             padding: 10px 10px 10px 10px;
         }
 
@@ -125,6 +126,8 @@
             margin-right: auto;     
 
         }
+
+
 
         #house1 img {
                 width: 30%; 
@@ -166,6 +169,26 @@
                 height: auto;
         }
 
+      @media screen and (max-width: 480px) {
+            .income, .occ {
+                font-size: 20px;
+            }
+            .income-text {
+                font-size: 18px;
+            }
+            .occ-text {
+                font-size: 14px;
+
+            }
+            
+            .placeholder {
+                width: 1%;
+            }
+
+            img {
+                display: none;
+            }
+        }
 
     </style>
 
@@ -177,7 +200,7 @@
 <tbody><tr>
 <!--     <tr class="income-sub"> Household income in 1979 for men and women age 55</tr>
  -->   
-    <th><!--spacer--></th>
+    <th class = "placeholder"><!--spacer--></th>
 
      <th class="income"> Family Income During Childhood </th>
      <th class="occ">Jobs As An Adult</th>
