@@ -61,12 +61,12 @@
         .income {
             font-weight: 100;
             font-size: 28px;
-            text-align: left;
+            text-align: right;
             vertical-align:center;
             padding-bottom: 20px;
-            padding-left: 20px;
+            padding-right: 20px;
             opacity: 70%;
-            width: 500px;
+            width: 240px;
             /*line-height: 300%;*/
 
         }
@@ -76,8 +76,7 @@
             text-align: left;
             vertical-align:bottom;
             padding-bottom: 20px;
-/*            padding-right: 20px;
-*/            opacity: 70%;
+            padding-left: 20px;
             width: 400px;
 
 
@@ -86,72 +85,86 @@
             font-weight: 200;
             font-size: 24px;
             color: #79797e;
-            text-align: left;
+            text-align: right;
             vertical-align:middle;
             border-bottom-style:solid;
             padding-bottom: 10px;
-            padding-left: 20px;
+            padding-right: 20px;
             padding-top: 10px;
-            width: 300px;
+            width: 24   0px;
+            border-right:1px solid #ddd;
 
 
         }
         .occ-text {
             text-align: left;
             border-bottom:1px solid #ddd;
-            padding-right: 20px;
+            padding-left: 20px;
             padding-bottom: 20px;
-            padding-top: 20px;
-            border-right:1px solid #ddd;
+            padding-top: 10px;
             line-height: 21px;
             vertical-align:middle;
+            width: 200px;
 
         }
 
         .house-img {
             width: 150px;
-            padding-right: 10px;
-            padding-left: 10px;
-            margin-left: 10px;
         }
         .occ-img {
             width: 150px;
             padding: 10px 10px 10px 10px;
         }
-/*
-        #house1 {
-            opacity: .5;
+
+        img {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;     
+
         }
-        #house2 {
-            opacity: .5;
+
+        #house1 img {
+                width: 30%; 
         }
-        #house3 {
-            opacity: .5;
+        #house2 img {
+                width: 35%; 
+                height: auto;
         }
-        #house4 {
-            opacity: .5;
+        #house3 img {
+                width: 40%; 
+                height: auto;
         }
-        #house5 {
-            opacity: .8;
+        #house4 img {
+                width: 45%; 
+                height: auto;
         }
-        #house6 {
-            opacity: .8;
+        #house5 img {
+                width: 50%; 
+                height: auto;
         }
-        #house7 {
-            opacity: .8;
+        #house6 img {
+                width: 55%; 
+                height: auto;
         }
-        #house8 {
-            opacity: .8;
+        #house7 img {
+                width: 60%; 
+                height: auto;
         }
-        #house9 {
-            opacity: 1;
+        #house8 img {
+                width: 65%; 
+                height: auto;
         }
-        #house10 {
-            opacity: 1;
+        #house9 img {
+                width: 75%; 
+                height: auto;
         }
-        #house11 {
-            opacity: 1;
-        }*/
+        #house10 img {
+                width: 90%; 
+                height: auto;
+        }
+
 
     </style>
 
@@ -161,14 +174,15 @@
 
 <table id="graphic-table" cellspacing="0">
 <tbody><tr>
-    <th><!--spacer--></th>  
 <!--     <tr class="income-sub"> Household income in 1979 for men and women age 55</tr>
  -->   
-     <th class="occ">Your Job In 2010</th>
-     <th class="income"> How Much Your Parents Made In 1979<br> </th>
-
-    <th><!--icon--></th>
     <th><!--spacer--></th>
+
+     <th class="income"> How Much Your Parents Made In 1979<br> </th>
+     <th class="occ">Your Job In 2010</th>
+
+    <!-- <th>icon</th> -->
+
     </tr>
 
     <br>
@@ -176,98 +190,110 @@
     <tr class="table-row">
         <td class ="house-img" id = "house1"> <img src = "house0.gif">
         </td>
-        <td class="occ-text">-Farming, Fishing, And Forestry</td>
         <td class="income-text">less than $35,000</td>
+        
+        <td class="occ-text">-Farming, Fishing, And Forestry</td>
 <!-- 
         <td class ="occ-img"> <img src = "house0.gif">
         </td> -->
-
+        
     </tr>
     <tr class ="table-row">
         <td class ="house-img" id = "house2"> <img src = "house0.gif">
         </td>
-        <td class = "occ-text">- Personal Care and Service 
-            <br>- Entertainment Support
-            <br>- Cleaning and Building Service </td>
-            <td class = "income-text">$35,000-39,000</td>
+
+        <td class = "income-text">$35,000-  39,000</td>
+
+        <td class = "occ-text">- Janitors, Maids, etc.
+            <br>- Child Care Workers, Home Care Workers, etc.</td>
 
     </tr>
     <tr class ="table-row">
         <td class ="house-img" id = "house3"> <img src = "house0.gif">
         </td>
+
+        <td class = "income-text">$40,000-44,999</td>
+
         <td class = "occ-text">
-            - Construction, Trade, and Extraction
+            - Construction
             <br>
             - Legal Support
             <br>
-            - Setters, Operators, and Tenders
+            - Machinists, Welders, etc.
             <br>
-            - Transportation and Material Moving
+            - Truck Drivers, Heavy Equipment Operators, etc.
             </td>
-        <td class = "income-text">$40,000-44,999</td>
 
     </tr>
     <tr class ="table-row">
         <td class ="house-img" id = "house4"> <img src = "house0.gif">
         </td>
+
+        <td class = "income-text">$45,000-49,999</td>
+
         <td class = "occ-text">
-           - Food Preparation and Serving
+           - Designers, Musicians, Artists, etc.
+            <br>
+           - Education, Training, And Librarians
+            <br>
+           - Food Preparation
             <br>
            - Health Care Technical and Support
-            <br>
-           - Education, Training, and Library
-            <br>
-           - Actors, Artists, Designers, Sports, and Entertainment Related
-            <br>
+            <br>            
             </td>
-        <td class = "income-text">$45,000-49,999</td>
 
     </tr>
    
     <tr class ="table-row">
         <td class ="house-img" id = "house5"> <img src = "house1.gif">
         </td>
-        <td class = "occ-text">- Food Preparation
-            <br>
-           - Protective Service
-            <br>
-           - Installation Maintenance and Repairs
-            <br>
-           - Financial Analysts and Accountants
-            <br>
-           - Chief Executives
-            </td>
+
         <td class = "income-text">$50,000-54,999</td>
+
+        <td class = "occ-text">
+           - Chief Executives
+           <br>
+           - Financial Analysts and Accountants
+           <br>
+           - Mechanics, Repairmen, etc.
+           <br>
+           - Police Officers, Firefighters, Security, etc.
+           <br>           
+            </td>
 
     </tr>
 
     <tr class ="table-row">
         <td class ="house-img" id = "house6"> <img src = "house1.gif">
         </td>
-        <td class = "occ-text">- Business Operations
-            <br>
-           - Production And Operating
-            <br>
-           - Lawyers And Judges*
-            <br>
-           - Office And Administrative Support
-            <br>
-           - Counselors, Social And Religious Workers
-            </td>
+        
          <td class = "income-text">$55,000-59,999</td>
+
+        <td class = "occ-text">
+            - Counselors, Social, And Religious Workers
+            <br>
+            - Factory Workers
+            <br>
+            - Human Resources, Management Aanlysts, etc.
+            <br>
+            - Lawyers And Judges*
+            <br>
+            </td>
    
     </tr>
 
     <tr class ="table-row">
         <td class ="house-img" id = "house7"> <img src = "house1.gif">
         </td>
-        <td class = "occ-text">- Sales
-            <br>
-            - Engineers, Architects And Surveyors
-            <br>
-            - Doctors, Dentists, And Surgeons
-            </td>
+        
         <td class = "income-text">$60,000-64,999</td>
+
+        <td class = "occ-text">
+            - Doctors, Dentists, And Surgeons
+            <br>
+            - Engineers, Architects, And Surveyors
+            <br>- Sales
+            </td>
 
     </tr>
 
@@ -275,36 +301,37 @@
     <tr class ="table-row">
         <td class ="house-img" id = "house8"> <img src = "house1.gif">
         </td>
-        <td class = "occ-text">- Teachers
+
+        <td class = "income-text">$65,000-69,999</td>
+
+        <td class = "occ-text">
+           - Managers
             <br>
-           - Managerial
+           - Mathematical And Computer Scientists
+           <br>
+            - Teachers
             <br>
-           - Mathematical And Computer Scientists</td>
-       <td class = "income-text">$65,000-69,999</td>
+       </td>
 
     </tr>
 
     <tr class ="table-row">
         <td class ="house-img" id = "house9" > <img src = "house2.gif">
         </td>
-        <td class = "occ-text">- Physical And Life Scientists</td>
-        <td class = "income-text">$70,000-74,999</td>
+
+        <td class = "income-text">$75,000</td>
+
+        <td class = "occ-text">- Physical, Life, And Social Scientists</td>
 
     </tr>
     <tr class ="table-row">
         <td class ="house-img" id = "house10"> <img src = "house2.gif">
         </td>
-        <td class = "occ-text">- Media And Communications Workers</td>
         <td class = "income-text">$90,000</td>
-    </tr>
-    <tr class ="table-row">
 
-        <td class ="house-img" id = "house11"> <img src = "house2.gif">
-        </td>
-
+        <td class = "occ-text">- Media And Communications</td>
     
-     <td class = "occ-text">- Social Scientists And Related</td>
-     <td class = "income-text">$102,000</td>  
+
     </tr>
 </table>
 
