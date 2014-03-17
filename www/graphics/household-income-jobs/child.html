@@ -53,55 +53,64 @@
 
         }
 
-        td {
-            border-bottom:1px solid #ddd;
+/*        ul {
+            vertical-align: top;
+        }
+*/
+        li {
+            vertical-align: top;
+        }
 
+        tr {
+            vertical-align: top;
+        }
+
+        td {
+            padding: 5px 0;
+            border-bottom:1px dotted #ccc;
+
+        }
+        th {
+            border-bottom:double #ccc;
+            padding-bottom: 5px
         }
 
         .income {
             font-weight: 100;
-            font-size: 21px;
+            font-size: 18px;
             text-align: left;
-            padding-bottom: 8px;
-            padding-right: 10px;
             opacity: 70%;
-            width: 300px;
+            width: 200px;
             vertical-align:bottom;
             padding-left: 40px;
+
 
         }
         .occ {
             font-weight: 100;
-            font-size: 21px;
+            font-size: 18px;
             text-align: left;
-            padding-bottom: 8px;
-            padding-left: 45px;
-            width: 400px;
+            width: 350px;
             vertical-align:bottom;
+            padding-left: 22px
 
 
         }
         .income-text {
             font-weight: 100;
-            font-size: 21px;
+            font-size: 16px;
             color: #79797e;
             text-align: left;
-            vertical-align:middle;
-            border-bottom-style:solid;
-            padding-left: 30px;
+            padding-left: 40px;
 
 
         }
         .occ-text {
             font-weight: 125;
-            font-size: 16px;
+            font-size: 14px;
             text-align: left;
-            border-bottom:1px solid #ddd;
-            padding-bottom: 20px;
-            padding-top: 10px;
-            vertical-align:middle;
             width: 300px;
-            border-right:1px solid #ddd;
+            /*border-right:1px solid #ddd;*/
 
 
         }
@@ -171,17 +180,17 @@
 
       @media screen and (max-width: 480px) {
             .income, .occ {
-                font-size: 20px;
+                font-size: 18px;
                 padding-right: 0px;
 
             }
 
             .income {
-                padding-left: 20px;
+                padding-left: 18px;
             }
             .income-text {
                 font-size: 18px;
-                padding-left: 30px;
+                padding-left: 20px;
 
             }
 
@@ -201,14 +210,6 @@
             }
         }
 
-    li {
-        list-style-position: outside;
-        list-style-type: none;
-        padding-bottom: 15px;        
-        vertical-align:middle;
-
-    }
-
     </style>
 
 </head>
@@ -221,7 +222,7 @@
  -->   
      <th class="occ">Current Job</th>
 
-     <th class="income">Parents' Income</th>
+     <th class="income">How Much Their Parents' Made When They Were Kids</th>
 
     <!-- <th>icon</th> -->
 
@@ -238,7 +239,7 @@
         </td>
 
         <td class="income-text">less than $35,000</td>
-        <td class ="house-img" id = "house2"> <img src = "house2.gif">
+        <!-- <td class ="house-img" id = "house2"> <img src = "house2.gif"> -->
 
     </tr>
     <tr class ="table-row"> 
@@ -246,13 +247,13 @@
         <td class = "occ-text">
             <ul>
                 <li>Child Care Workers, Home Care Workers, etc. </li>
-                <li>Food Preparation Occupations </li>
+                <li>Food Preparation </li>
                 <li>Janitors, Maids, etc. </li>
                 <li>Servers, Waiters, etc. </li>                
             </ul>
         </td>
         <td class = "income-text">$35,000-  39,999</td>        
-<td class ="house-img" id = "house2"> <img src = "house2.gif">
+<!-- <td class ="house-img" id = "house2"> <img src = "house2.gif"> -->
         </td>
  
 
@@ -268,7 +269,7 @@
             </ul>
             </td>
         <td class = "income-text">$40,000-44,999</td>            
-  <td class ="house-img" id = "house3"> <img src = "house2.gif"> 
+  <!-- <td class ="house-img" id = "house3"> <img src = "house2.gif">  -->
 
     </tr>
     <tr class ="table-row">
@@ -284,7 +285,7 @@
         </td>
         <td class = "income-text">$45,000-49,999</td>
  
-        <td class ="house-img" id = "house4"> <img src = "house2.gif">
+        <!-- <td class ="house-img" id = "house4"> <img src = "house2.gif"> -->
         </td> 
 
 
@@ -307,7 +308,7 @@
            </ul>           
             </td>
         <td class = "income-text">$50,000-54,999</td>
-         <td class ="house-img" id = "house5"> <img src = "house2.gif">
+         <!-- <td class ="house-img" id = "house5"> <img src = "house2.gif"> -->
         </td> 
 
 
@@ -335,7 +336,7 @@
         </td>
         
          <td class = "income-text">$55,000-59,999</td>
-          <td class ="house-img" id = "house6"> <img src = "house2.gif">
+          <!-- <td class ="house-img" id = "house6"> <img src = "house2.gif"> -->
         </td> 
 
     </tr>
@@ -352,7 +353,7 @@
                 <li> Accountants And Auditors
                 </li>
                 
-                <li> Computer Programmers/Analysts, And System Administrators </li>            
+                <li> Computer Programmers And Administrators </li>            
                 
                 <li> Media and Communications Workers
                 </li>
@@ -361,7 +362,7 @@
 
         <td class = "income-text">$60,000-64,999</td>
 
-<td class ="house-img" id = "house7"> <img src = "house2.gif">
+<!-- <td class ="house-i    mg" id = "house7"> <img src = "house2.gif"> -->
         </td> 
 
 
@@ -381,7 +382,7 @@
             </ul>
        </td>
         <td class = "income-text">$65,000-69,999</td>
-         <td class ="house-img" id = "house8"> <img src = "house2.gif">
+         <!-- <td class ="house-img" id = "house8"> <img src = "house2.gif"> -->
         </td> 
 
 
@@ -396,7 +397,6 @@
             </ul>
         </td>
         <td class = "income-text">$70,000-74,999</td 
-        <td class ="house-img" id = "house9" > <img src = "house2.gif">
         </td> 
 
 
@@ -408,7 +408,7 @@
             </ul>
         </td> 
         <td class = "income-text">$80,000-85,999</td>
-        <td class ="house-img" id = "house10"> <img src = "house2.gif">
+        <!-- <td class ="house-img" id = "house10"> <img src = "house2.gif"> -->
         </td>
  
     </tr>    
@@ -421,7 +421,7 @@
         </td>     
         <td class = "income-text">$85,000-89,999</td>
  
-        <td class ="house-img" id = "house11"> <img src = "house2.gif">
+        <!-- <td class ="house-img" id = "house11"> <img src = "house2.gif"> -->
         </td>     
     </tr>
 
@@ -431,7 +431,7 @@
     
     <div class="footnotes">
         <h4>Notes</h4>
-        <p>- Represents household income for surveyed children in 1979 adjusted for inflation. </p>
+        <p>- Parents' income is average household income between 1979-1981 for surveyed children in 1979, adjusted for inflation. </p>
     </div>
 
     <div class="footer">
