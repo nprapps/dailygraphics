@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Graphic : NPR</title>
+    <title>Graphic Embed : NPR</title>
 
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -19,7 +19,7 @@
         }
         
         h1 {
-            margin: 0 0 11px 0;
+            margin: 0 0 22px 0;
             font-size: 14px;
             color: #333;
         }
@@ -54,7 +54,6 @@
         /* chart */
         #graphic { 
             width: 100%;
-            position: relative;
         }
         #graphic:before,
         #graphic:after {
@@ -88,62 +87,71 @@
         }
         #graphic .line {
             fill: none;
-            stroke: #333;
             stroke-width: 3px;
         }
-        #graphic .bars rect { fill: #8BC0BF; }
-        #graphic .bars rect.bar-drugstores { fill: #17807E; }
+
+        #graphic .bars rect { fill: #17807E; }
         #graphic .label text,
         #graphic .value text {
             font-weight: normal;
             font-size: 12px;
-            fill: #555;
+            fill: #333;
             text-align: right;
         }
         #graphic .value text { 
             fill: #fff;
-        }
-
-        #graphic .label text.l-pharmacies,
-        #graphic .value text.l-pharmacies { 
-            font-weight: bold;
-            color: #121212;
+            font-size: 11px;
         }
         
-        #graphic .labels {
-            position: absolute;
-            margin: 0;
+        #graphic .key {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0 0 1em 0;
             padding: 0;
             list-style-type: none;
-            border: none;
         }
-        #graphic .labels li {
-            position: absolute;
-            text-align: right;
+        
+        #graphic .key .key-item { 
+            display: inline-block;
+            margin: 0 18px 0 0;
+            padding: 0;
+            line-height: 15px;
+        }
+
+        #graphic .key .key-item b { 
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 6px;
+            float: left;
+        }
+
+        #graphic .key .key-item label { 
+            white-space: nowrap;
             font-size: 12px;
-            line-height: 1.4;
-            color: #555;
-            display: table;
+            color: #333;
+            font-weight: normal;
         }
-        #graphic .labels li span {
-            display: table-cell;
-            vertical-align: middle;
-        }
+
+        .line-0 { stroke: #11605E; }
+        .line-1 { stroke: #8BC0BF; }
+        
+        .key-0 b { background-color: #11605E; }
+        .key-1 b { background-color: #8BC0BF; }
     </style>
 
 </head>
 <body>
-    <h1>Top Reasons Why Students Didn&rsquo;t Enroll In The First-Choice School They Were Accepted To (Fall 2013)</h1>
+    <h1>Maximum Pell Grant As A Percentage Of Total College Cost, By School Year (1976-2010)</h1>
 
-    <div id="graphic"><img src="placeholder.png" alt="Graphic" /></div>
+    <div id="graphic"><img src="fallback.png" alt="" /></div>
     
     <div class="footnotes">
         <h4>Note</h4>
-        <p>Factors shown reflect the top answers survey respondents indicated were &ldquo;very important.&rdquo;</p>
+        <p>Total college cost includes tuition, fees, room and board.</p>
     </div>
 
     <div class="footer">
-        <p>Source: UCLA Cooperative Institutional Research Program survey of 165,743 entering first-year college students. &ldquo;<a href="http://www.heri.ucla.edu/monographs/TheAmericanFreshman2013.pdf" target="_blank">The American Freshman: National Norms Fall 2013</a>&rdquo; (PDF)</p>
+        <p>Source: American Council on Education fact sheet: &ldquo;<a href="http://www.acenet.edu/news-room/Documents/FactSheet-Pell-Grant-Funding-History-1976-2010.pdf" target="_blank">Pell Grant Funding History (1976 to 2010)</a>&rdquo; (PDF)</p>
         <p>Credit: Alyson Hurt/NPR</p>
     </div>
 
