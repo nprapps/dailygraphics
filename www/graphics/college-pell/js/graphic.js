@@ -4,6 +4,7 @@ $(document).ready(function() {
     var graphic_data;
     var graphic_aspect_width = 16;
     var graphic_aspect_height = 9;
+    var mobile_threshold = 500;
     
     var labels = [ 'Four-year public universities', 'Four-year private universities' ];
         
@@ -12,8 +13,8 @@ $(document).ready(function() {
         var margin = {top: 10, right: 15, bottom: 25, left: 35};
         var width = width - margin.left - margin.right;
         var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
-        var num_ticks = 10;
-        if (width < 500) {
+        var num_ticks = 13;
+        if (width < mobile_threshold) {
             num_ticks = 5;
         }
 
@@ -31,7 +32,16 @@ $(document).ready(function() {
         var xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom")
-            .ticks(num_ticks);
+            .ticks(num_ticks)
+            .tickFormat(function(d,i) {
+                if (width >= mobile_threshold) {
+                    var fmt = d3.time.format('%y');
+                    return '\u2019' + fmt(d);
+                } else {
+                    var fmt = d3.time.format('%Y');
+                    return fmt(d);
+                }
+            });
             
         var x_axis_grid = function() { return xAxis; }
 
