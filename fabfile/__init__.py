@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
 from glob import glob
+import imp
+import os
 
 from fabric.api import local, require, settings, task 
 from fabric.state import env
 
 import app
 import app_config
+from etc.gdocs import GoogleDoc
 
 # Other fabfiles
 import assets
@@ -15,10 +18,6 @@ import utils
 """
 Base configuration
 """
-env.user = app_config.SERVER_USER
-env.forward_agent = True
-
-env.hosts = []
 env.settings = None
 
 """
@@ -35,7 +34,6 @@ def production():
     """
     env.settings = 'production'
     app_config.configure_targets(env.settings)
-    env.hosts = app_config.SERVERS
 
 @task
 def staging():
@@ -44,7 +42,6 @@ def staging():
     """
     env.settings = 'staging'
     app_config.configure_targets(env.settings)
-    env.hosts = app_config.SERVERS
 
 """
 Branches
@@ -101,15 +98,27 @@ def _render_iterable(iterable):
     app_config.configure_targets(env.get('settings', None))
 
     for instance in iterable:
-        keyword = instance.split('www/graphics/')[1].split('/')[0]
-        path = 'www/graphics/%s/index.html' % keyword
+        slug = instance.split('www/graphics/')[1].split('/')[0]
+        path = 'www/graphics/%s/' % slug
 
-        with app.app.test_request_context(path='graphics/%s/' % keyword):
-
+        with app.app.test_request_context(path='graphics/%s/' % slug):
             view = app.__dict__['_graphics_detail']
-            content = view(keyword)
+            content = view(slug)
 
-        with open(path, 'w') as writefile:
+        with open('%s/index.html' % path, 'w') as writefile:
+            writefile.write(content.encode('utf-8'))
+
+        # Fallback for legacy projects w/o child templates 
+        if not os.path.exists('%s/child_template.html' % path):
+            continue
+
+        download_copy(slug)
+
+        with app.app.test_request_context(path='graphics/%s/child.html' % slug):
+            view = app.__dict__['_graphics_child']
+            content = view(slug)
+
+        with open('%s/child.html' % path, 'w') as writefile:
             writefile.write(content.encode('utf-8'))
 
     # Un-fake-out deployment target
@@ -171,9 +180,6 @@ def deploy(remote='origin', slug=''):
     """
     require('settings', provided_by=[production, staging])
 
-    if app_config.DEPLOY_TO_SERVERS:
-        require('branch', provided_by=[stable, master, branch])
-
     if (app_config.DEPLOYMENT_TARGET == 'production' and env.branch != 'stable'):
         utils.confirm("You are trying to deploy the '%s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env.branch)
 
@@ -181,15 +187,35 @@ def deploy(remote='origin', slug=''):
     _gzip('www', '.gzip')
     _deploy_to_s3('.gzip/graphics/%s' % slug)
 
+@task
+def download_copy(slug):
+    """
+    Downloads a Google Doc as an .xls file.
+    """
+    graphic_config = imp.load_source('graphic_config', 'www/graphics/%s/graphic_config.py' % slug)
+
+    doc = {}
+    doc['key'] = graphic_config.COPY_GOOGLE_DOC_KEY
+    doc['file_name'] = slug
+
+    g = GoogleDoc(**doc)
+    g.get_auth()
+    g.get_document()
+
+@task
+def update_copy(slug):
+    """
+    Fetches the latest Google Doc and updates local JSON.
+    """
+    download_copy(slug)
+
 """
 App-specific commands
 """
 @task
 def add_graphic(slug):
-    with settings(warn_only=True):
-        local('mkdir www/graphics/%s' % slug)
-        local('cp www/child.html www/graphics/%s/child.html' % slug)
-        local('cp -r www/js www/graphics/%s/js' % slug)
+    local('cp -r new_graphic www/graphics/%s' % slug)
+    download_copy(slug)
 
 """
 Destruction
