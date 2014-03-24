@@ -126,10 +126,10 @@ When it's time to publish your graphic, it's better to deploy a single graphic r
 To deploy a specific graphic:
 
 ```
-fab staging master deploy:slug=NAME_OF_GRAPHIC
+fab staging master deploy:NAME_OF_GRAPHIC
 ```
 ```
-fab production master deploy:slug=NAME_OF_GRAPHIC
+fab production master deploy:NAME_OF_GRAPHIC
 ```
 
 To deploy all graphics:
