@@ -5,6 +5,7 @@
         polling: 0
     };
 
+    var childId = null;
     var parentWidth = null;
 
     /*
@@ -39,28 +40,35 @@
      * Process a new message from parent frame.
      */
     processMessage = function(e) {
-        console.log('child got width: ' + e.data);
-
         if (!isSafeMessage(e)) {
             return;
         }
 
-        var match = e.data.match(/^(\d+)$/);
+        // Parent sent width
+        var match = e.data.match(/^responsive-parent-(\d+)-(\d+)$/);
 
-        if (!match || match.length !== 2) {
+        if (!match || match.length !== 3) {
             // Not the message we're listening for
             return;
         }
 
-        width = parseInt(match[1]);
+        if (match[1] != childId) {
+            // Not meant for us
+            return;
+        }
+
+        var width = parseInt(match[2]);
+        
+        console.log('child #' + childId + ' recieved width: ' + width);
 
         if (width != parentWidth) {
             parentWidth = width;
 
             if (settings.renderCallback) {
                 settings.renderCallback(width);
-                sendHeightToParent();
             }
+                
+            sendHeightToParent();
         }
     }
 
@@ -68,9 +76,9 @@
      * Transmit the current iframe height to the parent.
      */
     window.sendHeightToParent = function() {
-        var height = $(document).height().toString();
+        var height = $('body').height().toString();
 
-        window.top.postMessage(height, '*');
+        window.top.postMessage('responsive-child-' + childId + '-' + height, '*');
     }
 
     /*
@@ -81,10 +89,13 @@
 
         window.addEventListener('message', processMessage, false);
 
+        // Unique child ID is sent as querystring parameter
+        childId = parseInt(getParameterByName('childId'));
+        
         // Initial width is sent as querystring parameter
         var width = parseInt(getParameterByName('initialWidth'));
 
-        console.log('child got initial width: ' + width);
+        console.log('child #' + childId + ' received initial width: ' + width);
 
         if (settings.renderCallback) {
             settings.renderCallback(width);
@@ -96,5 +107,4 @@
             window.setInterval(sendHeightToParent, settings.polling);
         }
     }
-
 }(jQuery));
