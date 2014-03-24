@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from glob import glob
+import os
 
 from fabric.api import local, require, settings, task 
 from fabric.state import env
@@ -95,15 +96,25 @@ def _render_iterable(iterable):
     app_config.configure_targets(env.get('settings', None))
 
     for instance in iterable:
-        keyword = instance.split('www/graphics/')[1].split('/')[0]
-        path = 'www/graphics/%s/index.html' % keyword
+        slug = instance.split('www/graphics/')[1].split('/')[0]
+        path = 'www/graphics/%s/' % slug
 
-        with app.app.test_request_context(path='graphics/%s/' % keyword):
-
+        with app.app.test_request_context(path='graphics/%s/' % slug):
             view = app.__dict__['_graphics_detail']
-            content = view(keyword)
+            content = view(slug)
 
-        with open(path, 'w') as writefile:
+        with open('%s/index.html' % path, 'w') as writefile:
+            writefile.write(content.encode('utf-8'))
+
+        # Fallback for legacy projects w/o child templates 
+        if not os.path.exists('%s/child_template.html' % path):
+            continue
+
+        with app.app.test_request_context(path='graphics/%s/child.html' % slug):
+            view = app.__dict__['_graphics_child']
+            content = view(slug)
+
+        with open('%s/child.html' % path, 'w') as writefile:
             writefile.write(content.encode('utf-8'))
 
     # Un-fake-out deployment target

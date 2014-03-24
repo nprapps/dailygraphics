@@ -3,6 +3,7 @@
 import argparse
 from glob import glob
 import imp
+import os
 
 from flask import Flask, render_template, render_template_string
 
@@ -45,6 +46,13 @@ def _graphics_child(slug):
     """
     Renders a child.html for embedding.
     """
+    # Fallback for legacy projects w/o child templates
+    if not os.path.exists('www/graphics/%s/child_template.html' % slug):
+        with open('www/graphics/%s/child.html' % slug) as f:
+            contents = f.read()
+
+        return contents
+
     context = make_context()
     context['slug'] = slug
     
@@ -54,7 +62,7 @@ def _graphics_child(slug):
     except IOError:
         pass
 
-    with open('www/graphics/%s/child.html' % slug) as f:
+    with open('www/graphics/%s/child_template.html' % slug) as f:
         template = f.read().decode('utf-8')
 
     return render_template_string(template, **context)
