@@ -180,9 +180,6 @@ def deploy(remote='origin', slug=''):
     """
     require('settings', provided_by=[production, staging])
 
-    if app_config.DEPLOY_TO_SERVERS:
-        require('branch', provided_by=[stable, master, branch])
-
     if (app_config.DEPLOYMENT_TARGET == 'production' and env.branch != 'stable'):
         utils.confirm("You are trying to deploy the '%s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env.branch)
 
