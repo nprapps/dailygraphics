@@ -55,6 +55,7 @@
     <div id="quiz">
     
     {% for row in COPY.quiz %}
+    {% if loop.index != 1 %}
         <div class="question {{ row.category }}">
             <h3><strong>{{ row.title }}</strong></h3>
             <ul>
@@ -66,6 +67,7 @@
                 </li>
             </ul>
         </div>
+    {% endif %}
     {% endfor %}
 
         <p id="results"> </p>
