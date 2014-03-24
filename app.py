@@ -37,7 +37,6 @@ def _graphics_detail(slug):
     """
     context = make_context()
     context['slug'] = slug
-    context['domain'] = app_config.S3_BASE_URL
 
     return render_template('parent.html', **context)
 
@@ -47,6 +46,7 @@ def _graphics_child(slug):
     Renders a child.html for embedding.
     """
     context = make_context()
+    context['slug'] = slug
     
     try:
         graphic_config = imp.load_source('graphic_config', 'www/graphics/%s/graphic_config.py' % slug)
