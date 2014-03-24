@@ -38,12 +38,16 @@ What's in here?
 
 The project contains the following folders and important files:
 
+* ``data`` -- Place for downloaded COPY spreadsheets and other incidental data.
+* ``etc`` -- Miscellanous Python libraries.
 * ``fabfile`` -- [Fabric](http://docs.fabfile.org/en/latest/) commands for automating setup and deployment.
+* ``new_graphic`` -- This directory is copied for each new graphic.
 * ``templates`` -- HTML ([Jinja2](http://jinja.pocoo.org/docs/)) templates, to be compiled locally.
 * ``www`` -- Static and compiled assets to be deployed. (a.k.a. "the output")
 * ``www/graphics`` -- Individual graphics projects.
 * ``app.py`` -- A [Flask](http://flask.pocoo.org/) app for rendering the project locally.
 * ``app_config.py`` -- Global project configuration for scripts, deployment, etc.
+* ``copytext.py`` -- Backbone of our COPY rig.
 * ``render_utils.py`` -- Code supporting template rendering.
 * ``requirements.txt`` -- Python requirements.
 * ``static.py`` -- Static Flask views used in both ``app.py`` and ``public_app.py``.
@@ -97,9 +101,9 @@ Adding a new graphic to the project
 
 All of the daily graphics to be put on NPR.org will live in this repo. To add a new graphic, run ```fab add_graphic:name-of-graphic```.
 
-This will create the folder ```www/graphics/name-of-graphic```. Within that folder will be a ```child.html``` file along with boilerplate Javascript files.
+This will create the folder ```www/graphics/name-of-graphic```. Within that folder will be a ```child_template.html``` file along with boilerplate Javascript files. That Jinja template will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
 
-Create the graphic in that file, and add any of the CSS/JS that you need within that folder.
+Create your graphic in the template file, and add any of the CSS/JS that you need within that folder.
 
 **Note**: `name-of-graphic` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
