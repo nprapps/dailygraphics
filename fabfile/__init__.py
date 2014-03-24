@@ -77,13 +77,16 @@ with fab render without any exceptions. Any file used
 by the site templates should be rendered by fab render.
 """
 @task
-def render():
+def render(slug=''):
     """
     Render HTML templates and compile assets.
     """
-    _render_iterable(glob('www/graphics/*'))
+    if slug:
+        _render_graphics(['www/graphics/%s' % slug])
+    else:
+        _render_graphics(glob('www/graphics/*'))
 
-def _render_iterable(iterable):
+def _render_graphics(paths):
     """
     For rendering routes with an iterable.
     E.g., /blogs/<blog-id>/ would be a route.
@@ -97,9 +100,8 @@ def _render_iterable(iterable):
     # Fake out deployment target
     app_config.configure_targets(env.get('settings', None))
 
-    for instance in iterable:
-        slug = instance.split('www/graphics/')[1].split('/')[0]
-        path = 'www/graphics/%s/' % slug
+    for path in paths:
+        slug = path.split('www/graphics/')[1].split('/')[0]
 
         with app.app.test_request_context(path='graphics/%s/' % slug):
             view = app.__dict__['_graphics_detail']
@@ -174,7 +176,7 @@ def _gzip(in_path='www', out_path='.gzip'):
     local('python gzip_assets.py %s %s' % (in_path, out_path))
 
 @task
-def deploy(remote='origin', slug=''):
+def deploy(slug=''):
     """
     Deploy the latest app to S3 and, if configured, to our servers.
     """
@@ -183,7 +185,7 @@ def deploy(remote='origin', slug=''):
     if (app_config.DEPLOYMENT_TARGET == 'production' and env.branch != 'stable'):
         utils.confirm("You are trying to deploy the '%s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env.branch)
 
-    render()
+    render(slug)
     _gzip('www', '.gzip')
     _deploy_to_s3('.gzip/graphics/%s' % slug)
 
