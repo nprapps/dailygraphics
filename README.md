@@ -13,6 +13,7 @@ Daily Graphics
 * [Save media assets](#save-media-assets)
 * [Run the project](#run-the-project)
 * [Adding a new graphic to the project](#adding-a-new-graphic-to-the-project)
+* [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Deploy to S3](#deploy-to-s3)
 * [Embedding on NPR](#embedding-on-npr)
 
@@ -117,6 +118,27 @@ Here are some examples:
 
 * Good: my-wonderful-project
 * Bad: my wonderful project!
+
+Connecting to a Google Spreadsheet
+----------------------------------
+
+New graphics by default point to the main [app-template](https://github.com/nprapps/app-template)'s copy spreadsheet template. If you want to use this spreadsheet template as the basis for your project, make a copy and save it to the shared NPR folder in Google Drive.
+
+To connect this spreadsheet (or any spreadsheet) to your graphic, update the ```graphic_config.py``` file in your graphic's folder with the ID of your spreadsheet:
+
+```
+COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHZuX1UycXplRlBfLVB0UVNldHJYZmc'
+```
+
+Run this command to pull down the latest copy of the spreadsheet:
+
+```
+fab update_copy:NAME_OF_GRAPHIC
+```
+
+The deploy process also will automatically pull down the latest spreadsheet and render the contents to your page.
+
+Note: Your graphic will NOT auto-update every time your spreadsheet updates. It will ONLY update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
 
 Deploy to S3
 ------------
