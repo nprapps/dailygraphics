@@ -186,10 +186,7 @@ App-specific commands
 """
 @task
 def add_graphic(slug):
-    with settings(warn_only=True):
-        local('mkdir www/graphics/%s' % slug)
-        local('cp www/child.html www/graphics/%s/child.html' % slug)
-        local('cp -r www/js www/graphics/%s/js' % slug)
+    local('cp -r new_graphic www/graphics/%s' % slug)
 
 """
 Destruction
