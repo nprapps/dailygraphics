@@ -1,4 +1,4 @@
-Copyright 2013 NPR.  All rights reserved.  No part of these materials may be reproduced, modified, stored in a retrieval system, or retransmitted, in any form or by any means, electronic, mechanical or otherwise, without prior written permission from NPR.
+Copyright 2014 NPR.  All rights reserved.  No part of these materials may be reproduced, modified, stored in a retrieval system, or retransmitted, in any form or by any means, electronic, mechanical or otherwise, without prior written permission from NPR.
 
 (Want to use this code? Send an email to nprapps@npr.org!)
 
@@ -138,7 +138,7 @@ fab update_copy:NAME_OF_GRAPHIC
 
 The deploy process also will automatically pull down the latest spreadsheet and render the contents to your page.
 
-Note: Your graphic will NOT auto-update every time your spreadsheet updates. It will ONLY update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
+Note: Your graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
 
 Deploy to S3
 ------------
