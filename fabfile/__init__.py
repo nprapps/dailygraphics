@@ -15,10 +15,6 @@ import utils
 """
 Base configuration
 """
-env.user = app_config.SERVER_USER
-env.forward_agent = True
-
-env.hosts = []
 env.settings = None
 
 """
@@ -35,7 +31,6 @@ def production():
     """
     env.settings = 'production'
     app_config.configure_targets(env.settings)
-    env.hosts = app_config.SERVERS
 
 @task
 def staging():
@@ -44,7 +39,6 @@ def staging():
     """
     env.settings = 'staging'
     app_config.configure_targets(env.settings)
-    env.hosts = app_config.SERVERS
 
 """
 Branches
