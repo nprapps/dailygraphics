@@ -8,6 +8,7 @@ import os
 from flask import Flask, render_template, render_template_string
 
 import app_config
+import copytext
 from render_utils import make_context, urlencode_filter
 import static
 
@@ -55,6 +56,7 @@ def _graphics_child(slug):
 
     context = make_context()
     context['slug'] = slug
+    context['COPY'] = copytext.Copy(filename='data/%s.xls' % slug)
     
     try:
         graphic_config = imp.load_source('graphic_config', 'www/graphics/%s/graphic_config.py' % slug)
