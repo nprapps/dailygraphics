@@ -2,8 +2,9 @@
 
 import argparse
 from glob import glob
+import imp
 
-from flask import Flask, render_template
+from flask import Flask, render_template, render_template_string
 
 import app_config
 from render_utils import make_context, urlencode_filter
@@ -15,6 +16,9 @@ app.jinja_env.filters['urlencode'] = urlencode_filter
 
 @app.route('/')
 def _graphics_list():
+    """
+    Renders a list of all graphics for local testing.
+    """
     context = make_context()
     context['graphics'] = []
 
@@ -31,12 +35,29 @@ def _graphics_detail(slug):
     """
     Renders a parent.html index with child.html embedded as iframe.
     """
-
     context = make_context()
     context['slug'] = slug
     context['domain'] = app_config.S3_BASE_URL
 
     return render_template('parent.html', **context)
+
+@app.route('/graphics/<slug>/child.html')
+def _graphics_child(slug):
+    """
+    Renders a child.html for embedding.
+    """
+    context = make_context()
+    
+    try:
+        graphic_config = imp.load_source('graphic_config', 'www/graphics/%s/graphic_config.py' % slug)
+        context.update(graphic_config.__dict__)
+    except IOError:
+        pass
+
+    with open('www/graphics/%s/child.html' % slug) as f:
+        template = f.read().decode('utf-8')
+
+    return render_template_string(template, **context)
 
 app.register_blueprint(static.static)
 
