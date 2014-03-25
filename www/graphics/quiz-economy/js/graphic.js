@@ -1,14 +1,21 @@
-$(document).ready(function() {
-    var $quiz = $('#quiz');
-    var $results = $('#results');
-    var $scoreboard = $('#scoreboard');
-    var $tiebreaker = $quiz.find('.question.tiebreaker');
+var $quiz;
+var $results;
+var $scoreboard;
+var $tiebreaker;
 
-    var current_question = 0; // 0-indexed
-    var num_taken = 0;
-    var num_questions = $quiz.find('div.question').length - 1;
-    var total_mattress = 0;
-    var total_stocks = 0;
+var current_question = 0; // 0-indexed
+var num_taken = 0;
+var num_questions;
+var total_mattress = 0;
+var total_stocks = 0;
+
+$(document).ready(function() {
+    $quiz = $('#quiz');
+    $results = $('#results');
+    $scoreboard = $('#scoreboard');
+    $tiebreaker = $quiz.find('.question.tiebreaker');
+
+    num_questions = $quiz.find('div.question').length - 1;
     
     $tiebreaker.hide();
     $results.hide();
@@ -23,10 +30,20 @@ $(document).ready(function() {
         
         if ($a.hasClass('stocks')) {
             total_stocks++;
+            category = 'stocks';
         } else if ($a.hasClass('mattress')) {
             total_mattress++;
+            category = 'mattress'
         }
  
+        // update the scoreboard
+        $scoreboard.find('.mattress').find('i').text(total_mattress);
+        $scoreboard.find('.stocks').find('i').text(total_stocks);
+        clear_scoreboard_animations();
+        $scoreboard.find('.' + category).find('div').addClass('animated flash').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+            $(this).removeClass();
+        });
+
         $q.addClass('answered');
         $a.addClass('correct').siblings('li').addClass('incorrect');
         num_taken++
@@ -35,7 +52,6 @@ $(document).ready(function() {
             $(this).unbind('click');
         });
  
-        console.log(total_mattress, total_stocks);
         if (num_taken == num_questions) {
             if (total_mattress == total_stocks) {
                 $q.hide();
@@ -50,9 +66,13 @@ $(document).ready(function() {
                 }
             
                 $q.hide();
+                $results.find('.' + winning_category).addClass('winner').show();
                 $results.fadeIn();
-                $('#results').find('.' + winning_category).show();
-                $scoreboard.find('.' + winning_category).addClass('winner');
+                
+                clear_scoreboard_animations();
+                $scoreboard.find('.' + winning_category).addClass('winner').find('div').addClass('animated flash').addClass('animated flash').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                    $(this).removeClass();
+                });
             }
         } else {
             // show the next question
@@ -60,13 +80,14 @@ $(document).ready(function() {
             $q.next('.question').fadeIn();
         }
         
-        // update the scoreboard
-        $scoreboard.find('.mattress').find('i').text(total_mattress);
-        $scoreboard.find('.stocks').find('i').text(total_stocks);
-        
         sendHeightToParent();
     });
 });
+
+function clear_scoreboard_animations() {
+    $scoreboard.find('.mattress').find('div').removeClass('animated flash');
+    $scoreboard.find('.stocks').find('div').removeClass('animated flash');
+}
 
 $(window).load(function() {
     setupResponsiveChild();
