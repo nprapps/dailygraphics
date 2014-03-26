@@ -15,6 +15,7 @@
             margin: 0;
             padding: 0;
             font: 14px/1.5 Helvetica, Arial, sans-serif;
+            background-color: #F5F5F5;
         }
         #quiz ul { 
             margin: 0; 
@@ -38,33 +39,36 @@
             cursor: pointer;
         }
 
-        #quiz .question { display: none; }
+        #quiz .question { 
+            display: none; 
+            padding: 22px 11px;
+        }
 
-        #quiz .question h3 { 
+        #quiz .question h3 {
+            margin: 0 0 22px 0;
             font-weight: normal;
             font-size: 20px;
-            color: #666;
-            padding: 22px 11px 11px 11px;
-            margin: 0;
+            color: #787878;
         }
 
-        #quiz .answered ul {
-            display: table;
-            width: 100%;
-        }
-        #quiz .answered li {
-            display: table-row;
-        }
-        #quiz .answered li strong:hover {
-            cursor: default;
-            opacity: 1;
+        #quiz .question h3 b {
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
         }
 
-        #quiz .answered .correct strong {
+        #quiz .question h3 span {
             background-color: #EAAA61;
-        }
-        #quiz .answered .incorrect strong {
-            background-color: #bbb;
+            color: #fff;
+            border-radius: 2px;
+            padding: 2px 6px;
+            font-size: 11px;
+            margin-top: 5px;
+            margin-right: 10px;
+            letter-spacing: 0.02em;
+            font-weight: bold;
+            text-transform: uppercase;
+            vertical-align: middle;
         }
 
         #results {
@@ -77,7 +81,7 @@
         
         #results h3 {
             font-weight: normal;
-            color: #AA6A21;
+            color: #333;
             font-size: 32px;
             margin: 0;
         }
@@ -87,10 +91,7 @@
             color: #666;
         }
         
-        #scoreboard { 
-            padding-bottom: 2px;
-            border-bottom: 2px solid #eee;
-        }
+        #scoreboard { border-bottom: 2px solid #fff; }
         
         #scoreboard ul {
             display: table;
@@ -108,11 +109,12 @@
             padding: 11px;
             line-height: 1.2;
             border-right: 2px solid #fff;
+            color: #333;
         }
         
         #scoreboard ul li.score { 
             width: 10%;
-            background-color: #ccc;
+            background-color: #ddd;
             font-weight: bold;
             color: #333;
         }
@@ -141,7 +143,8 @@
         }
         
         /* animations */
-        .animated {
+        .animated,
+        .animated div {
           -webkit-animation-duration: .5s;
           animation-duration: .5s;
           -webkit-animation-fill-mode: both;
@@ -156,7 +159,17 @@
           0%, 100% { opacity: 1; }
           50% { opacity: .25; }
         }
+        @-webkit-keyframes flash-bg {
+          50% { background-color: #f1f1f1; }
+        }
+        @keyframes flash-bg {
+          50% { background-color: #f1f1f1; }
+        }
         .flash {
+          -webkit-animation-name: flash-bg;
+          animation-name: flash-bg;
+        }
+        .flash div {
           -webkit-animation-name: flash;
           animation-name: flash;
         }
@@ -187,7 +200,7 @@
         {% for row in COPY.quiz %}
         {% if loop.index != 1 %}
         <div class="question {{ row.category }}">
-            <h3>{{ row.title }}</h3>
+            <h3><b>{{ row.title }}:</b> Which scenario is more likely? {% if row.flag %}<span>{{ row.flag }}</span>{% endif %}</h3>
             <ul>
                 <li class="{{ row.team_1 }}">
                     <strong>{{ row.answer_1 }}</strong>
