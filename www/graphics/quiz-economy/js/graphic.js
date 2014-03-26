@@ -55,7 +55,7 @@ $(document).ready(function() {
         if (num_taken == num_questions) {
             if (total_mattress == total_stocks) {
                 $q.hide();
-                $q.next('.question').fadeIn();
+                $q.next('.question').fadeIn('slow');
                 num_questions++;
             } else if (total_mattress != total_stocks) {
                 var winning_category;
@@ -67,7 +67,7 @@ $(document).ready(function() {
             
                 $q.hide();
                 $results.find('.' + winning_category).addClass('winner').show();
-                $results.fadeIn();
+                $results.fadeIn('slow');
                 
 //                clear_scoreboard_animations();
                 $scoreboard.find('.' + winning_category).addClass('winner').addClass('animated flash').addClass('animated flash').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
