@@ -17,6 +17,14 @@
             font: 14px/1.5 Helvetica, Arial, sans-serif;
             background-color: #F5F5F5;
         }
+
+        #quiz:before,
+        #quiz:after {
+            content: " ";
+            display: table;
+        }
+        #quiz:after { clear: both; }
+
         #quiz ul { 
             margin: 0; 
             padding: 0;
@@ -153,6 +161,11 @@
             font-weight: bold;
         }
         
+        .footer {
+            background-color: #fff;
+            padding-top: 10px;
+        }
+        
         .footer p {
             margin: 2px 0 0 0;
             font-size: 11px;
@@ -252,7 +265,6 @@
             {% endif %}
             {% endfor %}
         </div>
-
     </div>
 
     <div class="footer">
