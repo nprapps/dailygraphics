@@ -35,7 +35,7 @@ $(document).ready(function() {
                     $results.html('You answered <strong>' + num_correct + '</strong> questions correctly. Congratulations! You passed the test!');
                     break;
                 case num_questions:
-                    $results.html('You answered <strong>' + num_correct + '</strong> questions correctly. Amazing! You aced the test!');
+                    $results.html('You answered <strong>' + num_correct + '</strong> questions correctly. Amazing! You aced the test! You must be a cartographer, Texas historian or the one remaining resident of Bug Tussle, Texas.');
                     break;
                 default:
                     $results.html('You answered <strong>' + num_correct + '</strong> questions correctly.');
