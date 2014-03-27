@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Graphic : NPR</title>
+
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="http://media.npr.org/favicon.ico" />
+
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            font: 13px/1.5 Arial, Helvetica, sans-serif;
+        }
+        #quiz h3 { 
+            font-size: 16px;
+            font-weight: normal;
+            color: #333;
+            margin: 0 0 11px 0;
+        }
+        #quiz img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        #quiz ul { 
+            margin: 0; 
+            padding: 0;
+            list-style: none; 
+        }
+        #quiz li strong { 
+            display: block;
+            background: #7598c9;
+            color: #fff;
+            list-style:none; 
+            margin: 0px 0px 2px 0px; 
+            padding: 11px;
+        }
+
+        #quiz li strong:hover {
+            opacity: .7;
+            cursor: pointer;
+        }
+        #quiz .question {
+            border-top: 2px solid #eee;
+            padding-top: 22px;
+            margin-top: 22px;
+        }
+        #quiz .question:first-child {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+        #quiz .answer {
+            display: none;
+            font-weight: normal;
+        }
+        
+        #quiz .answer img {
+            width: 50%;
+            max-width: 100%;
+            height: auto;
+            margin-right: 11px;
+            float: left;
+        }
+        
+        #quiz .answer.wide img {
+            width: auto;
+            margin-right: 0;
+            margin-bottom: 11px;
+            float: none;
+        }
+        
+        #quiz .answer:before,
+        #quiz .answer:after {
+            content: " ";
+            display: table;
+        }
+        #quiz .answer:after { clear: both; }
+        
+        @media (max-width: 480px) {
+            #quiz .answer img {
+                width: auto;
+                margin-right: 0;
+                margin-bottom: 11px;
+                float: none;
+            }
+        }
+
+        #quiz .answered ul {
+            display: table;
+            width: 100%;
+        }
+        #quiz .answered li {
+            display: table-row;
+        }
+        #quiz .answered strong,
+        #quiz .answered .answer {
+            display: block;
+            border-bottom: 2px solid #fff;
+        }
+        #quiz .answered li strong:hover {
+            cursor: default;
+            opacity: 1;
+        }
+        #quiz .answered .answer {
+            padding: 11px;
+            color: #888;
+            background-color: #f7f7f7;
+            margin-top: -2px;
+        }
+        #quiz .answered .correct .answer {
+            color: #333;
+        }
+
+        #quiz .answered .correct b,
+        #quiz .answered .incorrect b {
+            display: inline-block;
+            color: #FFFFFF;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 0 6px;
+            margin-right: 3px;
+            border-radius: 2px;
+        }
+        #quiz .answered .correct b {
+            background-color: #AA6A21;
+        }
+        #quiz .answered .incorrect b {
+            background-color: #777;
+        }
+
+        #quiz .answered .correct strong {
+            background-color: #EAAA61;
+        }
+        #quiz .answered .incorrect strong {
+            background-color: #bbb;
+        }
+        #quiz .img.answered .incorrect img {
+            opacity: .5;
+        }
+
+        #quiz .img.answered ul,
+        #quiz .img.answered li,
+        #quiz .img.answered strong,
+        #quiz .img.answered .answer {
+            display: block;
+        }
+        #quiz .img.answered .answer {
+            background-color: transparent;
+            text-align: center;
+        }
+        #quiz .img.answered .correct strong {
+            background-color: transparent;
+            border: 2px solid #F8E2CA;
+        }
+        #quiz .img.answered .incorrect strong {
+            background-color: transparent;
+            border: 2px solid #eee;   
+        }
+
+        #quiz .caption {
+            font: 13px/1.5 Arial, Helvetica, sans-serif;
+            color: #333;
+            margin: 10px 0px 0px 10px;
+            display: block;
+        }
+
+        #quiz .credits {
+            font: 11px/1.5 Arial, Helvetica, sans-serif;
+            color: #333;
+            margin: 12px 0px 0px 0px;
+            font-style: italic;
+        }
+        
+        #results {
+            margin: 44px 0;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 24px;
+        }
+        
+        #results strong {
+            padding: 6px 11px;
+            font-weight: bold;
+            background-color: #EAAA61;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        .footer p {
+            margin: 2px 0 0 0;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #808080;
+        }
+        
+        .footer a,
+        .footer a:link,
+        .footer a:visited {
+            color: #4774CC;
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="quiz">
+        {% for row in COPY.quiz %}
+        {% if loop.index != 1 %}
+        <div class="question">
+            <h3><strong>{{ row.question }}</strong></h3>
+            <ul>
+                <li class="{{ row.status_1 }}">
+                    <strong>{{ row.option_1 }}</strong>
+                    {% if row.status_1 == 'correct' %}
+                    <span class="answer">{{ row.answer }}</span>
+                    {% endif %}
+                </li>
+                <li class="{{ row.status_2 }}">
+                    <strong>{{ row.option_2 }}</strong>
+                    {% if row.status_2 == 'correct' %}
+                    <span class="answer">{{ row.answer }}</span>
+                    {% endif %}
+                </li>
+                <li class="{{ row.status_3 }}">
+                    <strong>{{ row.option_3 }}</strong>
+                    {% if row.status_3 == 'correct' %}
+                    <span class="answer">{{ row.answer }}</span>
+                    {% endif %}
+                </li>
+                <li class="{{ row.status_4 }}">
+                    <strong>{{ row.option_4 }}</strong>
+                    {% if row.status_4 == 'correct' %}
+                    <span class="answer">{{ row.answer }}</span>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        <p id="results"> </p>
+    </div>
+
+    <div class="footer">
+        <p>Source: {{ COPY.content.source }}</p>
+    </div>
+
+
+    <script src="js/lib/jquery.js" type="text/javascript"></script>
+    <script src="js/lib/child.js" type="text/javascript"></script>
+    <script src="js/graphic.js" type="text/javascript"></script>
+</body>
+</html>
