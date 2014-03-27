@@ -39,7 +39,6 @@ $(document).ready(function() {
         // update the scoreboard
         $scoreboard.find('.mattress').find('i').text(total_mattress);
         $scoreboard.find('.stocks').find('i').text(total_stocks);
-        clear_scoreboard_animations();
         $scoreboard.find('.' + category).addClass('animated flash').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
             $(this).removeClass('animated flash');
         });
@@ -69,9 +68,12 @@ $(document).ready(function() {
                 $results.find('.' + winning_category).addClass('winner').show();
                 $results.fadeIn('slow');
                 
-//                clear_scoreboard_animations();
                 $scoreboard.find('.' + winning_category).addClass('winner').addClass('animated flash').addClass('animated flash').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
                     $(this).removeClass('animated flash');
+                });
+
+                $results.find('.' + winning_category).find('img').load(function() {
+                    sendHeightToParent();
                 });
             }
         } else {
@@ -84,11 +86,7 @@ $(document).ready(function() {
     });
 });
 
-function clear_scoreboard_animations() {
-    $scoreboard.find('.mattress').removeClass('animated flash');
-    $scoreboard.find('.stocks').removeClass('animated flash');
-}
-
 $(window).load(function() {
     setupResponsiveChild();
+    sendHeightToParent();
 });

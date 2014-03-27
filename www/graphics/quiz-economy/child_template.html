@@ -32,6 +32,8 @@
             padding: 11px;
             font-weight: normal;
             letter-spacing: 0.02em;
+            
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;  
         }
 
         #quiz li strong:hover {
@@ -78,17 +80,47 @@
         }
 
         #results .result { display: none; }
+
+        #results .result:before,
+        #results .result:after {
+            content: " ";
+            display: table;
+        }
+        #results .result:after { clear: both; }
         
         #results h3 {
             font-weight: normal;
             color: #333;
-            font-size: 32px;
-            margin: 0;
+            font-size: 28px;
+            margin: 0 0 11px 0;
         }
         
         #results p {
             font-size: 16px;
             color: #666;
+            margin: 0;
+        }
+        
+        @media (max-width: 480px) {
+            #results h3 { 
+                font-size: 20px;
+                margin-bottom: 6px;
+            }
+            #results p { font-size: 14px; }
+        }
+        
+        #results img {
+            width: 100px;
+            height: 100px;
+        }
+        
+        #results .thumb {
+            width: 100px;
+            float: left;
+        }
+        
+        #results .desc {
+            margin-left: 111px;
         }
         
         #scoreboard { border-bottom: 2px solid #fff; }
@@ -217,8 +249,13 @@
             {% for row in COPY.results %}
             {% if loop.index != 1 %}
             <div class="result {{ row.category }}">
-                <h3>{{ row.title }}</h3>
-                <p>{{ row.desc }}
+                <div class="thumb">
+                    <img src="../../assets/quiz-economy/{{ row.img }}" alt="{{ row.title }}" />
+                </div>
+                <div class="desc">
+                    <h3>{{ row.title }}</h3>
+                    <p>{{ row.desc }}
+                </div>
             </div>
             {% endif %}
             {% endfor %}
