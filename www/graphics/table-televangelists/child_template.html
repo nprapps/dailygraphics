@@ -106,298 +106,39 @@
         
         <table>
             <tr>
-                <th>Organization</th>
-                <th>Affiliation</th>
-                <th>Type</th>
-                <th>Regular services</th>
-                <th>Files 990s</th>
-                <th>ECFA<sup>1</sup></th>
-                <th>Income</th>
+                <th>{{ COPY.labels.hdr_organization }}</th>
+                <th>{{ COPY.labels.hdr_affiliation }}</th>
+                <th>{{ COPY.labels.hdr_type }}</th>
+                <th>{{ COPY.labels.hdr_services }}</th>
+                <th>{{ COPY.labels.hdr_990 }}</th>
+                <th>{{ COPY.labels.hdr_accreditation }}</th>
+                <th>{{ COPY.labels.hdr_income }}</th>
             </tr>
+
+            {% for row in COPY.content %}
+            {% if loop.index != 1 %}
             <tr>
-                <td>Andrew Wommack Ministries</td>
-                <td></td>
-                <td>Religious organization</td>
-				<td><i>-</i></td>
-                <td><b>&#10004;</b></td>
-				<td><i>-</i></td>
-                <td>$34 million</td>
+                <td data-title="{{ COPY.labels.hdr_organization }}">{{ row.organization }}</td>
+                <td data-title="{{ COPY.labels.hdr_affiliation }}">{{ row.affiliation }}</td>
+                <td data-title="{{ COPY.labels.hdr_type }}">{{ row.type }}</td>
+                <td data-title="{{ COPY.labels.hdr_services }}">{% if row.services == 'Y' %}<b>&#10004;</b>{% endif %}</td>
+                <td data-title="{{ COPY.labels.hdr_990 }}">{% if row.taxes == 'Y' %}<b>&#10004;</b>{% endif %}</td>
+                <td data-title="{{ COPY.labels.hdr_accreditation }}">{% if row.accreditation == 'Y' %}<b>&#10004;</b>{% endif %}</td>
+                <td data-title="{{ COPY.labels.hdr_income }}">{{ row.income }}</td>
             </tr>
-            <tr>
-                <td>Bill Winston Ministries</td>
-                <td>Living Word Christian Center</td>
-                <td>Religious organization</td>
-				<td><b>&#10004;</b></td>
-                <td><b>&#10004;</b></td>
-				<td><i>-</i></td>
-                <td>$6 million</td>
-            </tr>
-            <tr>
-                <td>Billy Graham Evangelical Association</td>
-                <td></td>
-                <td>Religious organization</td>
-				<td><i>-</i></td>
-                <td><b>&#10004;</b></td>
-				<td><b>&#10004;</b></td>
-                <td>$101 million</td>
-            </tr>
-            <tr>
-                <td>Charles Stanley</td>
-                <td>In Touch Ministries</td>
-                <td>Religious organization</td>
-				<td><i>-</i></td>
-                <td><b>&#10004;</b></td>
-				<td><b>&#10004;</b></td>
-                <td>$74 million</td>
-            </tr>
-            <tr>
-                <td>Christian Broadcasting Network</td>
-                <td>Pat Robertson</td>
-                <td>Religious organization</td>
-				<td><i>-</i></td>
-                <td><b>&#10004;</b></td>
-				<td><b>&#10004;</b></td>
-                <td>$286 million</td>
-            </tr>
-            <tr>
-                <td>Creflo Dollar Ministries</td>
-                <td>World Changers Church International</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Daystar Television</td>
-                <td>Word of God Fellowship Inc.</td>
-                <td>Church</td>
-				<td><i>-</i></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td></td>
-                <td>$233 million<sup>2</sup></td>
-            </tr>
-            <tr>
-                <td>Eagle Mountain International Church</td>
-                <td>Kenneth Copeland Ministries</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Ed Young Ministries</td>
-                <td>Fellowship Church</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Eddie Long</td>
-                <td>New Birth Missionary Baptist Church</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Franklin Graham</td>
-                <td>Samaritan&rsquo;s Purse</td>
-                <td>Religious organization</td>
-				<td><i>-</i></td>
-                <td><b>&#10004;</b></td>
-				<td><b>&#10004;</b></td>
-                <td>$388 million</td>
-            </tr>
-            <tr>
-                <td>Fred Price</td>
-                <td>Ever Increasing Faith Ministries, Crenshaw Christian Center</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>James Robison</td>
-                <td>Life Outreach International Association of Churches Inc.</td>
-                <td>Church</td>
-				<td><i>-</i></td>
-                <td><i>-</i></td>
-				<td><b>&#10004;</b></td>
-                <td>$29 million<sup>3</sup></td>
-            </tr>
-            <tr>
-                <td>Jesse Duplantis Ministries</td>
-                <td>Covenant Church</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>John Hagee Ministries</td>
-                <td>Cornerstone Church</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Joseph Prince Ministries</td>
-                <td></td>
-                <td>Religious organization</td>
-				<td><i>-</i></td>
-                <td><b>&#10004;</b></td>
-				<td><i>-</i></td>
-                <td>$21 million</td>
-            </tr>
-            <tr>
-                <td>Joyce Meyer Ministries</td>
-                <td></td>
-                <td>Church</td>
-				<td><i>-</i></td>
-                <td><i>-</i></td>
-				<td><b>&#10004;</b></td>
-                <td>$59 million<sup>3</sup></td>
-            </tr>
-            <tr>
-                <td>Kenneth W. Hagin</td>
-                <td>Rhema Bible Church</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Lakewood Church</td>
-                <td>Joel Osteen</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Larry Huch Ministries</td>
-                <td></td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Marilyn Hickey/Sarah Bowling</td>
-                <td>Orchard Road Christian Center</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Mike Murdock</td>
-                <td>Wisdom Center Church</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Morris Cerullo World Evangelism</td>
-                <td></td>
-                <td>Church</td>
-				<td><i>-</i></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Paula White Ministries</td>
-                <td>New Destiny Christian Center</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Peter Popoff Ministries</td>
-                <td>People United for Christ</td>
-                <td>Church</td>
-				<td><i>-</i></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Potters House Church</td>
-                <td>TD Jakes Ministries</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Rod Parsley</td>
-                <td>Breakthrough Ministries, World Harvest Church</td>
-                <td>Church</td>
-				<td><b>&#10004;</b></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Todd Coontz</td>
-                <td>Rockwealth International Ministries &amp; Church Online</td>
-                <td>Church</td>
-				<td><i>-</i></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Trinity Christian Center of Santa Ana</td>
-                <td>Trinity Broadcasting Network</td>
-                <td>Religious organization</td>
-				<td><i>-</i></td>
-                <td><b>&#10004;</b></td>
-				<td><i>-</i></td>
-                <td>$177 million </td>
-            </tr>
-            <tr>
-                <td>World Healing Center Church</td>
-                <td>Benny Hinn Ministries</td>
-                <td>Church</td>
-				<td><i>-</i></td>
-                <td><i>-</i></td>
-				<td><i>-</i></td>
-                <td>N/A</td>
-            </tr>
+            {% endif %}
+            {% endfor %}
+
         </table>
     </div>
     
     <div class="footnotes">
         <h4>Notes</h4>
-        <p>
-            1. Accreditation by the Evangelical Council for Financial Accountability<br />
-            2. Assets, from court documents<br />
-            3. Assets
-        </p>
+        <p>{{ COPY.labels.footnotes }}</p>
     </div>
 
     <div class="footer">
-        <p>Sources: Church 990 tax forms, NPR research</p>
+        <p>Sources: {{ COPY.labels.sources }}</p>
     </div>
 
 
