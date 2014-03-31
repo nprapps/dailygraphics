@@ -23,7 +23,7 @@ d3.selection.prototype.moveToFront = function() {
 function render(width) {
 
 
-	    var margin = { top: 0, right: 70, bottom: 50, left: 70 };
+	    var margin = { top: 0, right: 120, bottom: 50, left: 30 };
         var width = width - margin.left - margin.right;
         var height = 700 - margin.top - margin.bottom;
     	
@@ -59,7 +59,7 @@ function render(width) {
         var yAxis = d3.svg.axis()
             .orient("left")
             .scale(y)
-            .ticks(8);
+            .ticks(12);
 
         var y_axis_grid = function() { return yAxis; }
 
@@ -92,8 +92,12 @@ function render(width) {
 
         // Scale the range of the data
         x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.age); }));
+        // y.domain([
+        //     d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
+        //     2.3
+        // ]);
         y.domain([
-            d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
+            0,
             2.3
         ]);
 
@@ -123,8 +127,6 @@ function render(width) {
             })
             .style("opacity", .8)
             .attr("d", function(d) { return line(d.values); })
-            .on("mouseover", mouseover)
-	        .on("mouseout", mouseout)
             .style("stroke", function(d) { 
                             if (d.name.toLowerCase() == 'non durables') {
                                 return colors["blue2"];
@@ -134,7 +136,7 @@ function render(width) {
                         })
             .style("stroke-width", function(d) { 
                             if (d.name.toLowerCase() == 'non durables') {
-                                return "4";
+                                return "3";
                             } else {
                                 return "2";
                             }
@@ -235,87 +237,118 @@ function render(width) {
 
             
         d3.select(".box1").on("click", function() {
-            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","2").style("opacity",".5");
             d3.selectAll(".buttonlabel").style("opacity","0");
-            d3.selectAll(".ylabel").style("fill","#ccc");
+            d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
             d3.selectAll("#all-label").style("opacity","1").style("fill", colors["blue2"]);
-            d3.select(".quint-non-durables").style("stroke",colors["blue2"]).style("stroke-width","4").attr("id","personal").moveToFront();
+            d3.select(".quint-non-durables").style("stroke",colors["blue2"]).style("opacity",".8").style("stroke-width","3").attr("id","personal").moveToFront();
             d3.select(".ylabel.quint-non-durables").style("fill",colors["blue2"]).moveToFront();
 
         });
               	
         d3.select(".box2").on("click", function() {
-            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".5");
             d3.selectAll(".buttonlabel").style("opacity","0");
-            d3.selectAll(".ylabel").style("fill","#ccc");
+            d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
             d3.selectAll("#personal-label").style("opacity","1").style("fill", colors["yellow3"]).moveToFront();
-            d3.select(".quint-clothes").style("stroke",colors["yellow1"]).style("stroke-width","4").attr("id","personal").moveToFront();
-            d3.select(".quint-jewerly").style("stroke",colors["yellow4"]).style("stroke-width","4").attr("id","personal").moveToFront();
-            d3.select(".quint-tailor").style("stroke",colors["yellow3"]).style("stroke-width","4").attr("id","personal").moveToFront();
-            d3.select(".quint-health-and-beauty").style("stroke",colors["yellow2"]).style("stroke-width","4").attr("id","personal").moveToFront();
-            d3.select(".ylabel.quint-clothes").style("fill",colors["yellow1"]).moveToFront();
-            d3.select(".ylabel.quint-jewerly").style("fill",colors["yellow4"]).moveToFront();
-            d3.select(".ylabel.quint-tailor").style("fill",colors["yellow3"]).moveToFront();
-            d3.select(".ylabel.quint-health-and-beauty").style("fill",colors["yellow2"]).moveToFront();
-
+            d3.select(".quint-clothes").style("stroke",colors["yellow1"]).style("opacity",".8").style("stroke-width","3").attr("id","personal").moveToFront();
+            d3.select(".quint-jewerly").style("stroke",colors["yellow4"]).style("opacity",".8").style("stroke-width","3").attr("id","personal").moveToFront();
+            d3.select(".quint-tailor").style("stroke",colors["yellow3"]).style("opacity",".8").style("stroke-width","3").attr("id","personal").moveToFront();
+            d3.select(".quint-health-and-beauty").style("stroke",colors["yellow2"]).style("opacity",".8").style("stroke-width","3").attr("id","personal").moveToFront();
+            d3.select(".ylabel.quint-clothes").style("fill",colors["yellow1"]).style("opacity",".8").moveToFront();
+            d3.select(".ylabel.quint-jewerly").style("fill",colors["yellow4"]).style("opacity",".8").moveToFront();
+            d3.select(".ylabel.quint-tailor").style("fill",colors["yellow3"]).style("opacity",".8").moveToFront();
+            d3.select(".ylabel.quint-health-and-beauty").style("fill",colors["yellow2"]).style("opacity",".8").moveToFront();
+// 
         });
         
         d3.select(".box3").on("click", function() {
-            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".5");
             d3.selectAll(".buttonlabel").style("opacity","0");
-            d3.selectAll(".ylabel").style("fill","#ccc");
+            d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
             d3.selectAll("#rent-label").style("opacity","1").style("fill", colors["red4"]).moveToFront();
-            d3.select(".quint-rent").style("stroke",colors["red4"]).style("stroke-width","4").attr("id","rent").moveToFront();
-            d3.select(".ylabel.quint-rent").style("fill",colors["red4"]).moveToFront();
+            d3.select(".quint-rent").style("stroke",colors["red4"]).style("opacity",".8").style("stroke-width","3").attr("id","rent").moveToFront();
+            d3.select(".quint-utilities").style("stroke",colors["red2"]).style("opacity",".8").style("stroke-width","3").attr("id","rent").moveToFront();
+            d3.select(".ylabel.quint-rent").style("fill",colors["red4"]).style("opacity",".8").moveToFront();
+            d3.select(".ylabel.quint-utilities").style("fill",colors["red2"]).style("opacity",".8").moveToFront();
         });
 
         d3.select(".box4").on("click", function() {
-            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".5");
             d3.selectAll(".buttonlabel").style("opacity","0");
-            d3.selectAll(".ylabel").style("fill","#ccc");
-            d3.selectAll("#food-label").style("opacity","1").style("fill", colors["teal4"]);
-            d3.select(".quint-food-at-home").style("stroke",colors["teal1"]).style("stroke-width", "4").attr("id","food").moveToFront();
-            d3.select(".quint-food-away-from-home").style("stroke",colors["teal3"]).style("stroke-width", "4").attr("id","food").moveToFront();
-            d3.select(".quint-alcohol").style("stroke",colors["teal2"]).style("stroke-width", "4").attr("id","food").moveToFront();
-            d3.select(".quint-tobacco").style("stroke",colors["teal5"]).style("stroke-width", "4").attr("id","food").moveToFront();
-            d3.select(".ylabel.quint-food-at-home").style("fill",colors["teal1"]).moveToFront();
-            d3.select(".ylabel.quint-food-away-from-home").style("fill",colors["teal3"]).moveToFront();
-            d3.select(".ylabel.quint-alcohol").style("fill",colors["teal2"]).moveToFront();
-            d3.select(".ylabel.quint-tobacco").style("fill",colors["teal5"]).moveToFront();
+            d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
+            d3.selectAll("#food-label").style("opacity","1").style("fill", colors["orange4"]);
+            d3.select(".quint-food-at-home").style("stroke",colors["orange1"]).style("stroke-width", "3").style("opacity",".8").attr("id","food").moveToFront();
+            d3.select(".quint-food-away-from-home").style("stroke",colors["orange3"]).style("stroke-width", "3").style("opacity",".8").attr("id","food").moveToFront();
+            d3.select(".quint-alcohol").style("stroke",colors["orange2"]).style("stroke-width", "3").style("opacity",".8").attr("id","food").moveToFront();
+            d3.select(".quint-tobacco").style("stroke",colors["orange5"]).style("stroke-width", "3").style("opacity",".8").attr("id","food").moveToFront();
+            d3.select(".ylabel.quint-food-at-home").style("fill",colors["orange1"]).style("opacity",".8").moveToFront();
+            d3.select(".ylabel.quint-food-away-from-home").style("fill",colors["orange3"]).style("opacity",".8").moveToFront();
+            d3.select(".ylabel.quint-alcohol").style("fill",colors["orange2"]).style("opacity",".8").moveToFront();
+            d3.select(".ylabel.quint-tobacco").style("fill",colors["orange5"]).style("opacity",".8").moveToFront();
         });
 
         d3.select(".box5").on("click", function() {
-            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".5");
             d3.selectAll(".buttonlabel").style("opacity","0");
-            d3.selectAll(".ylabel").style("fill","#ccc");
+            d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
             d3.selectAll("#transport-label").style("opacity","1").style("fill", colors["blue3"]);;
-            d3.select(".quint-gasoline").style("stroke",colors["blue1"]).style("stroke-width", "4").attr("id","travel").moveToFront();
-            d3.select(".quint-mass-transit").style("stroke",colors["blue3"]).style("stroke-width", "4").attr("id","travel").moveToFront();
-            d3.select(".quint-airfare").style("stroke",colors["blue2"]).style("stroke-width", "4").attr("id","travel").moveToFront();
-            d3.select(".quint-auto-insurance").style("stroke",colors["blue4"]).style("stroke-width", "4").attr("id","travel").moveToFront();
-            d3.select(".ylabel.quint-gasoline").style("fill",colors["blue1"]).moveToFront();  
-            d3.select(".ylabel.quint-mass-transit").style("fill",colors["blue3"]).moveToFront();  
-            d3.select(".ylabel.quint-airfare").style("fill",colors["blue2"]).moveToFront();  
-            d3.select(".ylabel.quint-auto-insurance").style("fill",colors["blue4"]).moveToFront();  
+            d3.select(".quint-gasoline").style("stroke",colors["blue1"]).style("stroke-width", "3").style("opacity",".8").attr("id","travel").moveToFront();
+            d3.select(".quint-mass-transit").style("stroke",colors["blue3"]).style("stroke-width", "3").style("opacity",".8").attr("id","travel").moveToFront();
+            d3.select(".quint-airfare").style("stroke",colors["blue2"]).style("stroke-width", "3").style("opacity",".8").attr("id","travel").moveToFront();
+            d3.select(".quint-auto-insurance").style("stroke",colors["blue4"]).style("stroke-width", "3").style("opacity",".8").attr("id","travel").moveToFront();
+            d3.select(".ylabel.quint-gasoline").style("fill",colors["blue1"]).style("opacity",".8").moveToFront();  
+            d3.select(".ylabel.quint-mass-transit").style("fill",colors["blue3"]).style("opacity",".8").moveToFront();  
+            d3.select(".ylabel.quint-airfare").style("fill",colors["blue2"]).style("opacity",".8").moveToFront();  
+            d3.select(".ylabel.quint-auto-insurance").style("fill",colors["blue4"]).style("opacity",".8").moveToFront();  
+        });
+
+        d3.select(".box6").on("click", function() {
+            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".5");
+            d3.selectAll(".buttonlabel").style("opacity","0");
+            d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
+            d3.selectAll("#entertainment-label").style("opacity","1").style("fill", colors["teal3"]);;
+            d3.select(".quint-entertainment-and-gambling").style("stroke",colors["teal1"]).style("stroke-width", "3").style("opacity",".8").attr("id","travel").moveToFront();
+            d3.select(".quint-night-clubs").style("stroke",colors["teal3"]).style("stroke-width", "3").style("opacity",".8").attr("id","travel").moveToFront();
+            d3.select(".ylabel.quint-entertainment-and-gambling").style("fill",colors["teal1"]).style("opacity",".8").moveToFront();  
+            d3.select("#entertainment-and-gambling2").style("fill",colors["teal1"]).style("opacity",".8").moveToFront();  
+            d3.select(".ylabel.quint-night-clubs").style("fill",colors["teal3"]).style("opacity",".8").moveToFront();  
         });
 
         // d3.select(".box6").on("click", function() {
         //     d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
-        //     d3.select(".quint-gasoline").style("stroke",colors["blue3"]).style("stroke-width", "4").attr("id","travel")
+        //     d3.select(".quint-gasoline").style("stroke",colors["blue3"]).style("stroke-width", "3").style("opacity",".8").attr("id","travel")
         //     d3.select(".quint-mass-transit").style("stroke",colors["blue3"]).style("stroke-width", "4").attr("id","travel")
         //     d3.select(".quint-airfare").style("stroke",colors["blue3"]).style("stroke-width", "4").attr("id","travel")
         //     d3.select(".quint-auto-insurance").style("stroke",colors["blue3"]).style("stroke-width", "4").attr("id","travel")
         // });
 
-    d3.select(".ylabel.quint-non-durables").style("fill",colors["blue2"]);
+    d3.select(".ylabel.quint-non-durables").style("fill",colors["blue2"]).text("Overall");
+    d3.select(".ylabel.quint-rent").text("Housing");
+    d3.select(".ylabel.quint-entertainment-and-gambling").text("Sports, Movies");
+    d3.select(".ylabel.quint-food-away-from-home").text("Restaurants");
+    d3.select(".ylabel.quint-health-and-beauty").text("Gym, Hair Salons");
+    d3.select(".ylabel.quint-airfare").text("Plane Tickets");
+    d3.select(".ylabel.quint-alcohol").text("Drinking At Home");
+    d3.select(".ylabel.quint-night-clubs").text("Bars And Clubs");
     
+    d3.select(".ylabel.quint-auto-insurance")
+                .attr("dy", "-.1em");
 
 
+
+    var annotebox = svg.append("text")
+                            .attr("x", x(75.5))
+                            .attr("y", y(.96))
+                            .attr("id","entertainment-and-gambling2")
+                            .attr("class","ylabel")
+                            .text("Travel, etc.")
+                            .style("fill","#ccc");
     var annotebox = svg.append("text")
                             .attr("x", x(54))
                             .attr("y", y(1.9))
                             .attr("class","annote")
-                            .text("This is where total spending"); 
+                            .text("This is where overall spending"); 
 
     var annotebox = svg.append("text")
                             .attr("x", x(54))
@@ -336,7 +369,7 @@ function render(width) {
                             .attr("y", y(2.1))
                             .attr("class","buttonlabel")
                             .attr("id","rent-label")
-                            .text("Rent")
+                            .text("Housing")
                             .style("opacity","0");
 
     var label = svg.append("text")
@@ -352,7 +385,7 @@ function render(width) {
                             .attr("y", y(2.1))
                             .attr("class","buttonlabel")
                             .attr("id","food-label")
-                            .text("Food, Alcohol And Tobacco")
+                            .text("Food And Alcohol")
                             .style("opacity","0");
     var label = svg.append("text")
                             .attr("x", x(27))
@@ -360,6 +393,13 @@ function render(width) {
                             .attr("class","buttonlabel")
                             .attr("id","transport-label")
                             .text("Transportation")
+                            .style("opacity","0");
+    var label = svg.append("text")
+                            .attr("x", x(27))
+                            .attr("y", y(2.1))
+                            .attr("class","buttonlabel")
+                            .attr("id","entertainment-label")
+                            .text("Entertainment")
                             .style("opacity","0");
 
         function rescale() {
@@ -377,8 +417,12 @@ function render(width) {
         }
 
         function rescale2() {
+        // y.domain([
+        //     d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
+        //     2.1
+        // ]);
         y.domain([
-            d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
+            0,
             2.1
         ]);
             d3.select(".y.axis")
