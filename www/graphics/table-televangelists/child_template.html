@@ -40,12 +40,12 @@
         
         table th {
             text-align: left;
-            border-bottom: 2px solid #ccc;
+            border-bottom: 2px solid #eee;
             vertical-align: bottom;
         }
         
         table td {
-            border-bottom: 1px solid #ebebeb;
+            border-bottom: 1px solid #eee;
             vertical-align: top;
         }
         
@@ -61,8 +61,17 @@
             font-weight: bold;
         }
         
+        table tr th:nth-child(4),
+        table tr td:nth-child(4),
         table tr th:nth-child(5),
-        table tr td:nth-child(5) {
+        table tr td:nth-child(5),
+        table tr th:nth-child(6),
+        table tr td:nth-child(6) {
+            text-align: center;
+        }
+
+        table tr th:nth-child(7),
+        table tr td:nth-child(7) {
             text-align: right;
             white-space: nowrap;
         }
@@ -71,6 +80,21 @@
             font-size: 10px;
             color: #999;
             margin-right: -8px;
+        }
+        
+        b {
+            font-weight: normal;
+            color: #fff;
+            background-color: #bababa;
+            display: inline-block;
+            border-radius: 30px;
+            padding: 3px 8px;
+            font-size: 10px;
+        }
+        
+        i {
+            font-style: normal;
+            display: none;
         }
     </style>
 
@@ -83,218 +107,280 @@
                 <th>Organization</th>
                 <th>Affiliation</th>
                 <th>Type</th>
-                <th>Tax / Accreditation</th>
+                <th>Regular services</th>
+                <th>Files 990s</th>
+                <th>ECFA</th>
                 <th>Income</th>
-            </tr>
-            <tr>
-                <td>Christian Broadcasting Network</td>
-                <td>Pat Robertson</td>
-                <td>Religious organization (no regular services)</td>
-                <td>files 990, ECFA accredited</td>
-                <td>$286 million</td>
-            </tr>
-            <tr>
-                <td>Trinity Christian Center of Santa Ana</td>
-                <td>Trinity Broadcasting Network</td>
-                <td>Religious organization (no regular services)</td>
-                <td>files 990, no ECFA</td>
-                <td>$177 million </td>
-            </tr>
-            <tr>
-                <td>Daystar Television</td>
-                <td>Word of God Fellowship Inc.</td>
-                <td>Church (no regular services)</td>
-                <td>no 990, no ECFA</td></td>
-                <td>$233 million<sup>1</sup></td>
-            </tr>
-            <tr>
-                <td>Lakewood Church</td>
-                <td>Joel Osteen</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Potters House Church</td>
-                <td>TD Jakes Ministries</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Eagle Mountain International Church</td>
-                <td>Kenneth Copeland Ministries</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>World Healing Center Church</td>
-                <td>Benny Hinn Ministries</td>
-                <td>Church (no regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Joyce Meyer Ministries</td>
-                <td></td>
-                <td>Church (no regular services)</td>
-                <td>no 990, ECFA accredited</td>
-                <td>$59 million<sup>2</sup></td>
-            </tr>
-            <tr>
-                <td>Billy Graham Evangelical Association</td>
-                <td></td>
-                <td>Religious organization (no regular services)</td>
-                <td>files 990, ECFA accredited</td>
-                <td>$101 million</td>
-            </tr>
-            <tr>
-                <td>Franklin Graham</td>
-                <td>Samaritan&rsquo;s Purse</td>
-                <td>Religious organization (no regular services)</td>
-                <td>files 990, ECFA accredited</td>
-                <td>$388 million</td>
-            </tr>
-            <tr>
-                <td>Creflo Dollar Ministries</td>
-                <td>World Changers Church International</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Eddie Long</td>
-                <td>New Birth Missionary Baptist Church</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Jesse Duplantis Ministries</td>
-                <td>Covenant Church</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>John Hagee Ministries</td>
-                <td>Cornerstone Church</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Marilyn Hickey/Sarah Bowling</td>
-                <td>Orchard Road Christian Center</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>Rod Parsley</td>
-                <td>Breakthrough Ministries, World Harvest Church</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
-            </tr>
-            <tr>
-                <td>James Robison</td>
-                <td>Life Outreach International Association of Churches Inc.</td>
-                <td>Church (no regular services)</td>
-                <td>no 990, ECFA accredited</td>
-                <td>$29 million<sup>2</sup></td>
-            </tr>
-            <tr>
-                <td>Charles Stanley</td>
-                <td>In Touch Ministries</td>
-                <td>Religious organization (no regular services)</td>
-                <td>files 990, ECFA accredited</td>
-                <td>$74 million</td>
-            </tr>
-            <tr>
-                <td>Mike Murdock</td>
-                <td>Wisdom Center Church</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
             </tr>
             <tr>
                 <td>Andrew Wommack Ministries</td>
                 <td></td>
-                <td>Religious organization (no regular services)</td>
-                <td>files 990, no ECFA</td>
+                <td>Religious organization</td>
+				<td><i>-</i></td>
+                <td><b>&#10004;</b></td>
+				<td><i>-</i></td>
                 <td>$34 million</td>
             </tr>
             <tr>
-                <td>Fred Price</td>
-                <td>Ever Increasing Faith Ministries, Crenshaw Christian Center</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
+                <td>Bill Winston Ministries</td>
+                <td>Living Word Christian Center</td>
+                <td>Religious organization</td>
+				<td><b>&#10004;</b></td>
+                <td><b>&#10004;</b></td>
+				<td><i>-</i></td>
+                <td>$6 million</td>
+            </tr>
+            <tr>
+                <td>Billy Graham Evangelical Association</td>
+                <td></td>
+                <td>Religious organization</td>
+				<td><i>-</i></td>
+                <td><b>&#10004;</b></td>
+				<td><b>&#10004;</b></td>
+                <td>$101 million</td>
+            </tr>
+            <tr>
+                <td>Charles Stanley</td>
+                <td>In Touch Ministries</td>
+                <td>Religious organization</td>
+				<td><i>-</i></td>
+                <td><b>&#10004;</b></td>
+				<td><b>&#10004;</b></td>
+                <td>$74 million</td>
+            </tr>
+            <tr>
+                <td>Christian Broadcasting Network</td>
+                <td>Pat Robertson</td>
+                <td>Religious organization</td>
+				<td><i>-</i></td>
+                <td><b>&#10004;</b></td>
+				<td><b>&#10004;</b></td>
+                <td>$286 million</td>
+            </tr>
+            <tr>
+                <td>Creflo Dollar Ministries</td>
+                <td>World Changers Church International</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
                 <td>N/A</td>
             </tr>
             <tr>
-                <td>Todd Coontz</td>
-                <td>Rockwealth International Ministries &amp; Church Online</td>
-                <td>Church (no regular services)</td>
-                <td>no 990, no ECFA</td>
-                <td>N/A</td>
+                <td>Daystar Television</td>
+                <td>Word of God Fellowship Inc.</td>
+                <td>Church</td>
+				<td><i>-</i></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td></td>
+                <td>$233 million<sup>1</sup></td>
             </tr>
             <tr>
-                <td>Peter Popoff Ministries</td>
-                <td>People United for Christ</td>
-                <td>Church (no regular services)</td>
-                <td>no 990, no ECFA</td>
+                <td>Eagle Mountain International Church</td>
+                <td>Kenneth Copeland Ministries</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
                 <td>N/A</td>
             </tr>
             <tr>
                 <td>Ed Young Ministries</td>
                 <td>Fellowship Church</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
                 <td>N/A</td>
             </tr>
             <tr>
-                <td>Kenneth W. Hagin</td>
-                <td>Rhema Bible Church</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
+                <td>Eddie Long</td>
+                <td>New Birth Missionary Baptist Church</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
                 <td>N/A</td>
             </tr>
             <tr>
-                <td>Morris Cerullo World Evangelism</td>
-                <td></td>
-                <td>Church (no regular services)</td>
-                <td>no 990, no ECFA</td>
+                <td>Franklin Graham</td>
+                <td>Samaritan&rsquo;s Purse</td>
+                <td>Religious organization</td>
+				<td><i>-</i></td>
+                <td><b>&#10004;</b></td>
+				<td><b>&#10004;</b></td>
+                <td>$388 million</td>
+            </tr>
+            <tr>
+                <td>Fred Price</td>
+                <td>Ever Increasing Faith Ministries, Crenshaw Christian Center</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
                 <td>N/A</td>
             </tr>
             <tr>
-                <td>Paula White Ministries</td>
-                <td>New Destiny Christian Center</td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
+                <td>James Robison</td>
+                <td>Life Outreach International Association of Churches Inc.</td>
+                <td>Church</td>
+				<td><i>-</i></td>
+                <td><i>-</i></td>
+				<td><b>&#10004;</b></td>
+                <td>$29 million<sup>2</sup></td>
+            </tr>
+            <tr>
+                <td>Jesse Duplantis Ministries</td>
+                <td>Covenant Church</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
                 <td>N/A</td>
             </tr>
             <tr>
-                <td>Bill Winston Ministries</td>
-                <td>Living Word Christian Center</td>
-                <td>Religious organization (regular services)</td>
-                <td>files 990, no ECFA</td>
-                <td>$6 million</td>
-            </tr>
-            <tr>
-                <td>Larry Huch Ministries</td>
-                <td></td>
-                <td>Church (regular services)</td>
-                <td>no 990, no ECFA</td>
+                <td>John Hagee Ministries</td>
+                <td>Cornerstone Church</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
                 <td>N/A</td>
             </tr>
             <tr>
                 <td>Joseph Prince Ministries</td>
                 <td></td>
-                <td>Religious organization (no regular services)</td>
-                <td>files 990, no ECFA</td>
+                <td>Religious organization</td>
+				<td><i>-</i></td>
+                <td><b>&#10004;</b></td>
+				<td><i>-</i></td>
                 <td>$21 million</td>
+            </tr>
+            <tr>
+                <td>Joyce Meyer Ministries</td>
+                <td></td>
+                <td>Church</td>
+				<td><i>-</i></td>
+                <td><i>-</i></td>
+				<td><b>&#10004;</b></td>
+                <td>$59 million<sup>2</sup></td>
+            </tr>
+            <tr>
+                <td>Kenneth W. Hagin</td>
+                <td>Rhema Bible Church</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Lakewood Church</td>
+                <td>Joel Osteen</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Larry Huch Ministries</td>
+                <td></td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Marilyn Hickey/Sarah Bowling</td>
+                <td>Orchard Road Christian Center</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Mike Murdock</td>
+                <td>Wisdom Center Church</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Morris Cerullo World Evangelism</td>
+                <td></td>
+                <td>Church</td>
+				<td><i>-</i></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Paula White Ministries</td>
+                <td>New Destiny Christian Center</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Peter Popoff Ministries</td>
+                <td>People United for Christ</td>
+                <td>Church</td>
+				<td><i>-</i></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Potters House Church</td>
+                <td>TD Jakes Ministries</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Rod Parsley</td>
+                <td>Breakthrough Ministries, World Harvest Church</td>
+                <td>Church</td>
+				<td><b>&#10004;</b></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Todd Coontz</td>
+                <td>Rockwealth International Ministries &amp; Church Online</td>
+                <td>Church</td>
+				<td><i>-</i></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Trinity Christian Center of Santa Ana</td>
+                <td>Trinity Broadcasting Network</td>
+                <td>Religious organization</td>
+				<td><i>-</i></td>
+                <td><b>&#10004;</b></td>
+				<td><i>-</i></td>
+                <td>$177 million </td>
+            </tr>
+            <tr>
+                <td>World Healing Center Church</td>
+                <td>Benny Hinn Ministries</td>
+                <td>Church</td>
+				<td><i>-</i></td>
+                <td><i>-</i></td>
+				<td><i>-</i></td>
+                <td>N/A</td>
             </tr>
         </table>
     </div>
