@@ -13,10 +13,17 @@ var colors = {
 var $graphic = $('#graphic');
     var graphic_data_url = 'biglevel2.csv';
 	var graphic_data;
+d3.selection.prototype.moveToFront = function() {
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
+};
+
 
 function render(width) {
 
-	    var margin = { top: 0, right: 200, bottom: 100, left: 75 };
+
+	    var margin = { top: 0, right: 70, bottom: 50, left: 70 };
         var width = width - margin.left - margin.right;
         var height = 700 - margin.top - margin.bottom;
     	
@@ -87,15 +94,15 @@ function render(width) {
         x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.age); }));
         y.domain([
             d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
-            2.1
+            2.3
         ]);
 
 
         var rectangle = svg.append("rect")
                             .attr("x", x(51))
-                            .attr("y", y(2))
+                            .attr("y", y(2.2))
                             .attr("width", width/30)
-                            .attr("height", height-40)
+                            .attr("height", height-35)
                             .style('fill',colors["yellow6"]);
         var max = svg.append("rect")
                             .attr("x", x(25))
@@ -127,9 +134,9 @@ function render(width) {
                         })
             .style("stroke-width", function(d) { 
                             if (d.name.toLowerCase() == 'non durables') {
-                                return "5";
+                                return "4";
                             } else {
-                                return "3";
+                                return "2";
                             }
                         });
 
@@ -232,8 +239,8 @@ function render(width) {
             d3.selectAll(".buttonlabel").style("opacity","0");
             d3.selectAll(".ylabel").style("fill","#ccc");
             d3.selectAll("#all-label").style("opacity","1").style("fill", colors["blue2"]);
-            d3.select(".quint-non-durables").style("stroke",colors["blue2"]).style("stroke-width","5").attr("id","personal")
-            d3.select(".ylabel.quint-non-durables").style("fill",colors["blue2"]);
+            d3.select(".quint-non-durables").style("stroke",colors["blue2"]).style("stroke-width","4").attr("id","personal").moveToFront();
+            d3.select(".ylabel.quint-non-durables").style("fill",colors["blue2"]).moveToFront();
 
         });
               	
@@ -241,15 +248,15 @@ function render(width) {
             d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
             d3.selectAll(".buttonlabel").style("opacity","0");
             d3.selectAll(".ylabel").style("fill","#ccc");
-            d3.selectAll("#personal-label").style("opacity","1").style("fill", colors["yellow3"]);;
-            d3.select(".quint-clothes").style("stroke",colors["yellow1"]).style("stroke-width","5").attr("id","personal");
-            d3.select(".quint-jewerly").style("stroke",colors["yellow4"]).style("stroke-width","5").attr("id","personal");
-            d3.select(".quint-tailor").style("stroke",colors["yellow3"]).style("stroke-width","5").attr("id","personal");
-            d3.select(".quint-health-and-beauty").style("stroke",colors["yellow2"]).style("stroke-width","5").attr("id","personal");
-            d3.select(".ylabel.quint-clothes").style("fill",colors["yellow1"]);
-            d3.select(".ylabel.quint-jewerly").style("fill",colors["yellow4"]);
-            d3.select(".ylabel.quint-tailor").style("fill",colors["yellow3"]);
-            d3.select(".ylabel.quint-health-and-beauty").style("fill",colors["yellow2"]);
+            d3.selectAll("#personal-label").style("opacity","1").style("fill", colors["yellow3"]).moveToFront();
+            d3.select(".quint-clothes").style("stroke",colors["yellow1"]).style("stroke-width","4").attr("id","personal").moveToFront();
+            d3.select(".quint-jewerly").style("stroke",colors["yellow4"]).style("stroke-width","4").attr("id","personal").moveToFront();
+            d3.select(".quint-tailor").style("stroke",colors["yellow3"]).style("stroke-width","4").attr("id","personal").moveToFront();
+            d3.select(".quint-health-and-beauty").style("stroke",colors["yellow2"]).style("stroke-width","4").attr("id","personal").moveToFront();
+            d3.select(".ylabel.quint-clothes").style("fill",colors["yellow1"]).moveToFront();
+            d3.select(".ylabel.quint-jewerly").style("fill",colors["yellow4"]).moveToFront();
+            d3.select(".ylabel.quint-tailor").style("fill",colors["yellow3"]).moveToFront();
+            d3.select(".ylabel.quint-health-and-beauty").style("fill",colors["yellow2"]).moveToFront();
 
         });
         
@@ -257,24 +264,24 @@ function render(width) {
             d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
             d3.selectAll(".buttonlabel").style("opacity","0");
             d3.selectAll(".ylabel").style("fill","#ccc");
-            d3.selectAll("#rent-label").style("opacity","1").style("fill", colors["red4"]);;
-            d3.select(".quint-rent").style("stroke",colors["red4"]).style("stroke-width","5").attr("id","rent")
-            d3.select(".ylabel.quint-rent").style("fill",colors["red4"]);
+            d3.selectAll("#rent-label").style("opacity","1").style("fill", colors["red4"]).moveToFront();
+            d3.select(".quint-rent").style("stroke",colors["red4"]).style("stroke-width","4").attr("id","rent").moveToFront();
+            d3.select(".ylabel.quint-rent").style("fill",colors["red4"]).moveToFront();
         });
 
         d3.select(".box4").on("click", function() {
             d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
             d3.selectAll(".buttonlabel").style("opacity","0");
             d3.selectAll(".ylabel").style("fill","#ccc");
-            d3.selectAll("#food-label").style("opacity","1").style("fill", colors["teal4"]);;
-            d3.select(".quint-food-at-home").style("stroke",colors["teal1"]).style("stroke-width", "5").attr("id","food")
-            d3.select(".quint-food-away-from-home").style("stroke",colors["teal3"]).style("stroke-width", "5").attr("id","food")
-            d3.select(".quint-alcohol").style("stroke",colors["teal2"]).style("stroke-width", "5").attr("id","food")
-            d3.select(".quint-tobacco").style("stroke",colors["teal5"]).style("stroke-width", "5").attr("id","food")
-            d3.select(".ylabel.quint-food-at-home").style("fill",colors["teal1"]);
-            d3.select(".ylabel.quint-food-away-from-home").style("fill",colors["teal3"]);
-            d3.select(".ylabel.quint-alcohol").style("fill",colors["teal2"]);
-            d3.select(".ylabel.quint-tobacco").style("fill",colors["teal5"]);
+            d3.selectAll("#food-label").style("opacity","1").style("fill", colors["teal4"]);
+            d3.select(".quint-food-at-home").style("stroke",colors["teal1"]).style("stroke-width", "4").attr("id","food").moveToFront();
+            d3.select(".quint-food-away-from-home").style("stroke",colors["teal3"]).style("stroke-width", "4").attr("id","food").moveToFront();
+            d3.select(".quint-alcohol").style("stroke",colors["teal2"]).style("stroke-width", "4").attr("id","food").moveToFront();
+            d3.select(".quint-tobacco").style("stroke",colors["teal5"]).style("stroke-width", "4").attr("id","food").moveToFront();
+            d3.select(".ylabel.quint-food-at-home").style("fill",colors["teal1"]).moveToFront();
+            d3.select(".ylabel.quint-food-away-from-home").style("fill",colors["teal3"]).moveToFront();
+            d3.select(".ylabel.quint-alcohol").style("fill",colors["teal2"]).moveToFront();
+            d3.select(".ylabel.quint-tobacco").style("fill",colors["teal5"]).moveToFront();
         });
 
         d3.select(".box5").on("click", function() {
@@ -282,24 +289,25 @@ function render(width) {
             d3.selectAll(".buttonlabel").style("opacity","0");
             d3.selectAll(".ylabel").style("fill","#ccc");
             d3.selectAll("#transport-label").style("opacity","1").style("fill", colors["blue3"]);;
-            d3.select(".quint-gasoline").style("stroke",colors["blue1"]).style("stroke-width", "5").attr("id","travel")
-            d3.select(".quint-mass-transit").style("stroke",colors["blue3"]).style("stroke-width", "5").attr("id","travel")
-            d3.select(".quint-airfare").style("stroke",colors["blue2"]).style("stroke-width", "5").attr("id","travel")
-            d3.select(".quint-auto-insurance").style("stroke",colors["blue4"]).style("stroke-width", "5").attr("id","travel")
-            d3.select(".ylabel.quint-gasoline").style("fill",colors["blue1"]);
-            d3.select(".ylabel.quint-mass-transit").style("fill",colors["blue3"]);
-            d3.select(".ylabel.quint-airfare").style("fill",colors["blue2"]);
-            d3.select(".ylabel.quint-auto-insurance").style("fill",colors["blue4"]);
+            d3.select(".quint-gasoline").style("stroke",colors["blue1"]).style("stroke-width", "4").attr("id","travel").moveToFront();
+            d3.select(".quint-mass-transit").style("stroke",colors["blue3"]).style("stroke-width", "4").attr("id","travel").moveToFront();
+            d3.select(".quint-airfare").style("stroke",colors["blue2"]).style("stroke-width", "4").attr("id","travel").moveToFront();
+            d3.select(".quint-auto-insurance").style("stroke",colors["blue4"]).style("stroke-width", "4").attr("id","travel").moveToFront();
+            d3.select(".ylabel.quint-gasoline").style("fill",colors["blue1"]).moveToFront();  
+            d3.select(".ylabel.quint-mass-transit").style("fill",colors["blue3"]).moveToFront();  
+            d3.select(".ylabel.quint-airfare").style("fill",colors["blue2"]).moveToFront();  
+            d3.select(".ylabel.quint-auto-insurance").style("fill",colors["blue4"]).moveToFront();  
         });
 
         // d3.select(".box6").on("click", function() {
         //     d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
-        //     d3.select(".quint-gasoline").style("stroke",colors["blue3"]).style("stroke-width", "5").attr("id","travel")
-        //     d3.select(".quint-mass-transit").style("stroke",colors["blue3"]).style("stroke-width", "5").attr("id","travel")
-        //     d3.select(".quint-airfare").style("stroke",colors["blue3"]).style("stroke-width", "5").attr("id","travel")
-        //     d3.select(".quint-auto-insurance").style("stroke",colors["blue3"]).style("stroke-width", "5").attr("id","travel")
+        //     d3.select(".quint-gasoline").style("stroke",colors["blue3"]).style("stroke-width", "4").attr("id","travel")
+        //     d3.select(".quint-mass-transit").style("stroke",colors["blue3"]).style("stroke-width", "4").attr("id","travel")
+        //     d3.select(".quint-airfare").style("stroke",colors["blue3"]).style("stroke-width", "4").attr("id","travel")
+        //     d3.select(".quint-auto-insurance").style("stroke",colors["blue3"]).style("stroke-width", "4").attr("id","travel")
         // });
 
+    d3.select(".ylabel.quint-non-durables").style("fill",colors["blue2"]);
     
 
 
@@ -309,7 +317,7 @@ function render(width) {
                             .attr("class","annote")
                             .text("This is where total spending"); 
 
-var annotebox = svg.append("text")
+    var annotebox = svg.append("text")
                             .attr("x", x(54))
                             .attr("y", y(1.85))
                             .attr("class","annote")
@@ -317,14 +325,15 @@ var annotebox = svg.append("text")
     
     var label = svg.append("text")
                             .attr("x", x(27))
-                            .attr("y", y(1.88))
+                            .attr("y", y(2.1))
                             .attr("class","buttonlabel")
                             .attr("id","all-label")
-                            .text("Non Durables, Excluding Rent")
+                            .text("Overall Spending")
                             .style("fill",colors["blue2"]);
+
     var label = svg.append("text")
                             .attr("x", x(27))
-                            .attr("y", y(1.88))
+                            .attr("y", y(2.1))
                             .attr("class","buttonlabel")
                             .attr("id","rent-label")
                             .text("Rent")
@@ -332,7 +341,7 @@ var annotebox = svg.append("text")
 
     var label = svg.append("text")
                             .attr("x", x(27))
-                            .attr("y", y(1.88))
+                            .attr("y", y(2.1))
                             .attr("class","buttonlabel")
                             .attr("id","personal-label")
                             .text("Personal Spending")
@@ -340,14 +349,14 @@ var annotebox = svg.append("text")
 
     var label = svg.append("text")
                             .attr("x", x(27))
-                            .attr("y", y(1.88))
+                            .attr("y", y(2.1))
                             .attr("class","buttonlabel")
                             .attr("id","food-label")
                             .text("Food, Alcohol And Tobacco")
                             .style("opacity","0");
     var label = svg.append("text")
                             .attr("x", x(27))
-                            .attr("y", y(1.88))
+                            .attr("y", y(2.1))
                             .attr("class","buttonlabel")
                             .attr("id","transport-label")
                             .text("Transportation")
