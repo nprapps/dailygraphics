@@ -16,9 +16,9 @@ var $graphic = $('#graphic');
 
 function render(width) {
 
-	    var margin = { top: 0, right: 100, bottom: 100, left: 75 };
+	    var margin = { top: 0, right: 200, bottom: 100, left: 75 };
         var width = width - margin.left - margin.right;
-        var height = 600 - margin.top - margin.bottom;
+        var height = 700 - margin.top - margin.bottom;
     	
         var num_x_ticks = 16;
         if (width <= 480) {
@@ -52,7 +52,7 @@ function render(width) {
         var yAxis = d3.svg.axis()
             .orient("left")
             .scale(y)
-            .ticks(7);
+            .ticks(8);
 
         var y_axis_grid = function() { return yAxis; }
 
@@ -65,8 +65,7 @@ function render(width) {
             .interpolate("basis")
             .x(function(d) { return x(d.age); })
             .y(function(d) { return y(d.indexed); });
-
-
+ 
 
         // finds the first header that is not 'age' 
         // gives each header a color
@@ -88,9 +87,24 @@ function render(width) {
         x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.age); }));
         y.domain([
             d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
-            d3.max(quintiles, function(c) { return d3.max(c.values, function(v) { return v.indexed; }); })
+            2.1
         ]);
 
+
+        var rectangle = svg.append("rect")
+                            .attr("x", x(51))
+                            .attr("y", y(2))
+                            .attr("width", width/30)
+                            .attr("height", height-40)
+                            .style('fill',colors["yellow6"]);
+        var max = svg.append("rect")
+                            .attr("x", x(25))
+                            .attr("y", y(1))
+                            .attr("width", width)
+                            .attr("height", 1)
+                            .style('fill',"black");
+                    
+                            
         var quint = svg.selectAll(".quint")
             .data(quintiles)
             .enter().append("g")
@@ -100,29 +114,31 @@ function render(width) {
             .attr('class', function(d) { 
                 return 'line quint-' + d.name.replace(/\s+/g, '-').toLowerCase()
             })
-            .style("opacity", .4)
+            .style("opacity", .8)
             .attr("d", function(d) { return line(d.values); })
             .on("mouseover", mouseover)
 	        .on("mouseout", mouseout)
             .style("stroke", function(d) { 
-                            if (d.name.toLowerCase() == 'all industries') {
-                                return '#333';
+                            if (d.name.toLowerCase() == 'non durables') {
+                                return colors["blue2"];
                             } else {
-                                return color(d.name);
+                                return "#CCC";
+                            }
+                        })
+            .style("stroke-width", function(d) { 
+                            if (d.name.toLowerCase() == 'non durables') {
+                                return "5";
+                            } else {
+                                return "3";
                             }
                         });
+
         svg.append("g") // Add the X Axis
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
     
-        // svg.append('g')
-        //     .attr('class', 'x grid')
-        //     .attr('transform', 'translate(0,' + height + ')')
-        //     .call(x_axis_grid()
-        //         .tickSize(-height, 0, 0)
-        //         .tickFormat('')
-        //     );
+
 
         svg.append("g") // Add the Y Axis
             .attr("class", "y axis")
@@ -138,13 +154,31 @@ function render(width) {
         quint.append("text")
             .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
             .attr('class', function(d) { 
-                return 'text quint-' + d.name.replace(/\s+/g, '-').toLowerCase()
+                return 'ylabel quint-' + d.name.replace(/\s+/g, '-').toLowerCase()
             })
             .attr("transform", function(d) { return "translate(" + x(d.value.age) + "," + y(d.value.indexed) + ")"; })
-            .attr("x", 3)
-            .attr("dy", ".15em")
+            .attr("x", 7)
+            .attr("dy", ".3em")
             .text(function(d) { return d.name; })
-            .style("opacity", .7);
+            .style("fill", "#ccc");
+
+
+        // var labels = d3.select('#graphic').append('ul')
+        //     .attr('class', 'labels')
+        //     .attr('style', 'width: ' + margin.left + 'px; top: ' + margin.top + 'px;')
+        //     .selectAll('li')
+        //         .data(quintiles)
+        //     .enter().append('li')
+        //         .attr('style', function(d,i) {
+        //             var s = '';
+        //             s += 'width: ' + (margin.left - 5) + 'px; ';
+        //             s += 'height: ' + 5 + 'px; ';
+        //             s += 'left: ' + 0 + 'px; ';
+        //             return s;
+        //         })
+        //         .attr('class', function(d) { return 'l-' + d.label.replace(/\s+/g, '-').toLowerCase() })
+        //         .append('span')
+        //             .text(function(d) { return d.label });
 
 
       svg.append("text")
@@ -167,13 +201,195 @@ function render(width) {
                     .text("Age")
                     .style("opacity", .7);
 
-        // function to highlight lines: http://bl.ocks.org/AlexanderGraf/5416979#indfundbyregbytime.js
+
+
+        // d3.select(".quint-clothes").style("stroke",colors["yellow1"]).attr("id","personal")
+        // d3.select(".quint-jewelry").style("stroke",colors["yellow1"]).attr("id","personal")
+        // d3.select(".quint-tailor").style("stroke",colors["yellow1"]).attr("id","personal")
+        // d3.select(".quint-health-and-beauty").style("stroke",colors["yellow1"]).attr("id","personal")
+        // d3.select(".quint-rent").style("stroke",colors["red4"]).attr("id","rent")
+        // d3.select(".quint-food-at-home").style("stroke",colors["blue1"]).attr("id","food")
+        // d3.select(".quint-food-away-from-home").style("stroke",colors["blue1"]).attr("id","food")
+        // d3.select(".quint-gasoline").style("stroke",colors["orange1"]).attr("id","travel")
+        // d3.select(".quint-mass-transit").style("stroke",colors["orange3"]).attr("id","travel")
+        // d3.select(".quint-airfare").style("stroke",colors["orange2"]).attr("id","travel")
+        // d3.select(".quint-auto-insurance").style("stroke",colors["orange2"]).attr("id","travel")
+        // d3.select(".quint-alcohol").style("stroke",colors["blue1"]).attr("id","food")
+        // d3.select(".quint-tobacco").style("stroke",colors["blue1"]).attr("id","food")
+        // d3.select(".quint-entertainment-and-gambling").style("stroke",colors["teal3"]).attr("id","fun")
+        // d3.select(".quint-night-clubs").style("stroke",colors["teal3"]).attr("id","fun")
+
+        // d3.select(".quint-non-durables")
+        // 	.style("font-weight","500")
+        // 	.style("opacity",1)
+        // 	.style('stroke-width',6)
+        // 	.style('stroke',"black");
+
+
+            
+        d3.select(".box1").on("click", function() {
+            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+            d3.selectAll(".buttonlabel").style("opacity","0");
+            d3.selectAll(".ylabel").style("fill","#ccc");
+            d3.selectAll("#all-label").style("opacity","1").style("fill", colors["blue2"]);
+            d3.select(".quint-non-durables").style("stroke",colors["blue2"]).style("stroke-width","5").attr("id","personal")
+            d3.select(".ylabel.quint-non-durables").style("fill",colors["blue2"]);
+
+        });
+              	
+        d3.select(".box2").on("click", function() {
+            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+            d3.selectAll(".buttonlabel").style("opacity","0");
+            d3.selectAll(".ylabel").style("fill","#ccc");
+            d3.selectAll("#personal-label").style("opacity","1").style("fill", colors["yellow3"]);;
+            d3.select(".quint-clothes").style("stroke",colors["yellow1"]).style("stroke-width","5").attr("id","personal");
+            d3.select(".quint-jewerly").style("stroke",colors["yellow4"]).style("stroke-width","5").attr("id","personal");
+            d3.select(".quint-tailor").style("stroke",colors["yellow3"]).style("stroke-width","5").attr("id","personal");
+            d3.select(".quint-health-and-beauty").style("stroke",colors["yellow2"]).style("stroke-width","5").attr("id","personal");
+            d3.select(".ylabel.quint-clothes").style("fill",colors["yellow1"]);
+            d3.select(".ylabel.quint-jewerly").style("fill",colors["yellow4"]);
+            d3.select(".ylabel.quint-tailor").style("fill",colors["yellow3"]);
+            d3.select(".ylabel.quint-health-and-beauty").style("fill",colors["yellow2"]);
+
+        });
+        
+        d3.select(".box3").on("click", function() {
+            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+            d3.selectAll(".buttonlabel").style("opacity","0");
+            d3.selectAll(".ylabel").style("fill","#ccc");
+            d3.selectAll("#rent-label").style("opacity","1").style("fill", colors["red4"]);;
+            d3.select(".quint-rent").style("stroke",colors["red4"]).style("stroke-width","5").attr("id","rent")
+            d3.select(".ylabel.quint-rent").style("fill",colors["red4"]);
+        });
+
+        d3.select(".box4").on("click", function() {
+            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+            d3.selectAll(".buttonlabel").style("opacity","0");
+            d3.selectAll(".ylabel").style("fill","#ccc");
+            d3.selectAll("#food-label").style("opacity","1").style("fill", colors["teal4"]);;
+            d3.select(".quint-food-at-home").style("stroke",colors["teal1"]).style("stroke-width", "5").attr("id","food")
+            d3.select(".quint-food-away-from-home").style("stroke",colors["teal3"]).style("stroke-width", "5").attr("id","food")
+            d3.select(".quint-alcohol").style("stroke",colors["teal2"]).style("stroke-width", "5").attr("id","food")
+            d3.select(".quint-tobacco").style("stroke",colors["teal5"]).style("stroke-width", "5").attr("id","food")
+            d3.select(".ylabel.quint-food-at-home").style("fill",colors["teal1"]);
+            d3.select(".ylabel.quint-food-away-from-home").style("fill",colors["teal3"]);
+            d3.select(".ylabel.quint-alcohol").style("fill",colors["teal2"]);
+            d3.select(".ylabel.quint-tobacco").style("fill",colors["teal5"]);
+        });
+
+        d3.select(".box5").on("click", function() {
+            d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+            d3.selectAll(".buttonlabel").style("opacity","0");
+            d3.selectAll(".ylabel").style("fill","#ccc");
+            d3.selectAll("#transport-label").style("opacity","1").style("fill", colors["blue3"]);;
+            d3.select(".quint-gasoline").style("stroke",colors["blue1"]).style("stroke-width", "5").attr("id","travel")
+            d3.select(".quint-mass-transit").style("stroke",colors["blue3"]).style("stroke-width", "5").attr("id","travel")
+            d3.select(".quint-airfare").style("stroke",colors["blue2"]).style("stroke-width", "5").attr("id","travel")
+            d3.select(".quint-auto-insurance").style("stroke",colors["blue4"]).style("stroke-width", "5").attr("id","travel")
+            d3.select(".ylabel.quint-gasoline").style("fill",colors["blue1"]);
+            d3.select(".ylabel.quint-mass-transit").style("fill",colors["blue3"]);
+            d3.select(".ylabel.quint-airfare").style("fill",colors["blue2"]);
+            d3.select(".ylabel.quint-auto-insurance").style("fill",colors["blue4"]);
+        });
+
+        // d3.select(".box6").on("click", function() {
+        //     d3.selectAll(".line").style("stroke","#CCC").style("stroke-width","3");
+        //     d3.select(".quint-gasoline").style("stroke",colors["blue3"]).style("stroke-width", "5").attr("id","travel")
+        //     d3.select(".quint-mass-transit").style("stroke",colors["blue3"]).style("stroke-width", "5").attr("id","travel")
+        //     d3.select(".quint-airfare").style("stroke",colors["blue3"]).style("stroke-width", "5").attr("id","travel")
+        //     d3.select(".quint-auto-insurance").style("stroke",colors["blue3"]).style("stroke-width", "5").attr("id","travel")
+        // });
+
+    
+
+
+    var annotebox = svg.append("text")
+                            .attr("x", x(54))
+                            .attr("y", y(1.9))
+                            .attr("class","annote")
+                            .text("This is where total spending"); 
+
+var annotebox = svg.append("text")
+                            .attr("x", x(54))
+                            .attr("y", y(1.85))
+                            .attr("class","annote")
+                            .text("typically peaks in a lifetime.");
+    
+    var label = svg.append("text")
+                            .attr("x", x(27))
+                            .attr("y", y(1.88))
+                            .attr("class","buttonlabel")
+                            .attr("id","all-label")
+                            .text("Non Durables, Excluding Rent")
+                            .style("fill",colors["blue2"]);
+    var label = svg.append("text")
+                            .attr("x", x(27))
+                            .attr("y", y(1.88))
+                            .attr("class","buttonlabel")
+                            .attr("id","rent-label")
+                            .text("Rent")
+                            .style("opacity","0");
+
+    var label = svg.append("text")
+                            .attr("x", x(27))
+                            .attr("y", y(1.88))
+                            .attr("class","buttonlabel")
+                            .attr("id","personal-label")
+                            .text("Personal Spending")
+                            .style("opacity","0");
+
+    var label = svg.append("text")
+                            .attr("x", x(27))
+                            .attr("y", y(1.88))
+                            .attr("class","buttonlabel")
+                            .attr("id","food-label")
+                            .text("Food, Alcohol And Tobacco")
+                            .style("opacity","0");
+    var label = svg.append("text")
+                            .attr("x", x(27))
+                            .attr("y", y(1.88))
+                            .attr("class","buttonlabel")
+                            .attr("id","transport-label")
+                            .text("Transportation")
+                            .style("opacity","0");
+
+        function rescale() {
+            y.domain([0,3]); 
+            d3.select(".y.axis")
+                    .transition().duration(1500).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
+                    .call(yAxis); 
+            d3.select(".grid")
+                    .transition().duration(1500).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
+                    .call(y_axis_grid()
+                    .tickSize(-width, 0, 0)
+                    .tickFormat("")
+            );    
+ 
+        }
+
+        function rescale2() {
+        y.domain([
+            d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
+            2.1
+        ]);
+            d3.select(".y.axis")
+                    .transition().duration(1500).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
+                    .call(yAxis); 
+            d3.select(".grid")
+                    .transition().duration(1500).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
+                    .call(y_axis_grid()
+                    .tickSize(-width, 0, 0)
+                    .tickFormat("")
+            );    
+ 
+        }
+            
         function mouseover(d, i) {
             d3.select(this).style("opacity", "1");
         };
 
         function mouseout(d, i) {
-            d3.select(this).style("opacity", ".5");
+            d3.select(this).style("opacity", ".8");
         };
 
 }
