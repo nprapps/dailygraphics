@@ -57,9 +57,7 @@
             color: #333;
         }
         
-        table tr td:first-child {
-            font-weight: bold;
-        }
+        table tr td:first-child { font-weight: bold; }
         
         table tr th:nth-child(4),
         table tr td:nth-child(4),
@@ -98,6 +96,81 @@
             font-style: normal;
             display: none;
         }
+
+
+        /* responsive table */
+        @media screen and (max-width: 660px) {
+            table th,
+            table td { 
+                font-size: 12px;
+            }
+        }
+        @media screen and (max-width: 550px) {
+            table,
+            tbody {
+                display: block;
+                width: 100%:
+            }
+            thead { display: none; }
+            table tr,
+            table th,
+            table td {
+                display: block;
+                padding: 0;
+                text-align: left;
+                white-space: normal;
+            }
+            table td { 
+                border: none;
+                margin-bottom: 6px;
+                font-size: 12px;
+                color: #444;
+            }
+            table td:empty { display: none; }
+
+            table tr {
+                border-bottom: 1px solid #eee;
+                padding-bottom: 11px;
+                margin-bottom: 11px;
+            }
+            table th[data-title]:before,
+            table td[data-title]:before {
+                content: attr(data-title) ":\00A0";
+                font-weight: bold;
+            }
+
+            table tr td:first-child { 
+                font-size: 18px;
+                font-weight: normal;
+                margin-bottom: 6px;
+                color: #333;
+            }
+            table tr td:first-child:before {
+                content: '';
+            }
+            
+            table tr th:nth-child(4),
+            table tr td:nth-child(4),
+            table tr th:nth-child(5),
+            table tr td:nth-child(5),
+            table tr th:nth-child(6),
+            table tr td:nth-child(6),
+            table tr th:nth-child(7),
+            table tr td:nth-child(7) {
+                text-align: left;
+            }
+            
+            b {
+                padding: 2px 6px;
+                font-size: 8px;
+                vertical-align: top;
+            }
+            i { display: inline; }
+            
+            sup {
+                margin-right: 0;
+            }
+        }
     </style>
 
 </head>
@@ -105,15 +178,17 @@
     <div id="graphic">
         
         <table>
-            <tr>
-                <th>{{ COPY.labels.hdr_organization }}</th>
-                <th>{{ COPY.labels.hdr_affiliation }}</th>
-                <th>{{ COPY.labels.hdr_type }}</th>
-                <th>{{ COPY.labels.hdr_services }}</th>
-                <th>{{ COPY.labels.hdr_990 }}</th>
-                <th>{{ COPY.labels.hdr_accreditation }}</th>
-                <th>{{ COPY.labels.hdr_income }}</th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>{{ COPY.labels.hdr_organization }}</th>
+                    <th>{{ COPY.labels.hdr_affiliation }}</th>
+                    <th>{{ COPY.labels.hdr_type }}</th>
+                    <th>{{ COPY.labels.hdr_services }}</th>
+                    <th>{{ COPY.labels.hdr_990 }}</th>
+                    <th>{{ COPY.labels.hdr_accreditation }}<sup>1</sup></th>
+                    <th>{{ COPY.labels.hdr_income }}</th>
+                </tr>
+            </thead>
 
             {% for row in COPY.content %}
             {% if loop.index != 1 %}
@@ -121,9 +196,9 @@
                 <td data-title="{{ COPY.labels.hdr_organization }}">{{ row.organization }}</td>
                 <td data-title="{{ COPY.labels.hdr_affiliation }}">{{ row.affiliation }}</td>
                 <td data-title="{{ COPY.labels.hdr_type }}">{{ row.type }}</td>
-                <td data-title="{{ COPY.labels.hdr_services }}">{% if row.services == 'Y' %}<b>&#10004;</b>{% endif %}</td>
-                <td data-title="{{ COPY.labels.hdr_990 }}">{% if row.taxes == 'Y' %}<b>&#10004;</b>{% endif %}</td>
-                <td data-title="{{ COPY.labels.hdr_accreditation }}">{% if row.accreditation == 'Y' %}<b>&#10004;</b>{% endif %}</td>
+                <td data-title="{{ COPY.labels.hdr_services }}">{% if row.services == 'Y' %}<b>&#10004;</b>{% elif row.services == 'N' %}<i>No</i>{% endif %}</td>
+                <td data-title="{{ COPY.labels.hdr_990 }}">{% if row.taxes == 'Y' %}<b>&#10004;</b>{% elif row.taxes == 'N' %}<i>No</i>{% endif %}</td>
+                <td data-title="{{ COPY.labels.hdr_accreditation }}">{% if row.accreditation == 'Y' %}<b>&#10004;</b>{% elif row.accreditation == 'N' %}<i>No</i>{% endif %}</td>
                 <td data-title="{{ COPY.labels.hdr_income }}">{{ row.income }}</td>
             </tr>
             {% endif %}
