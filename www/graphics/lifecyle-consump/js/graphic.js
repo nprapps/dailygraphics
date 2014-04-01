@@ -23,7 +23,7 @@ d3.selection.prototype.moveToFront = function() {
 function render(width) {
 
 
-	    var margin = { top: 0, right: 120, bottom:70, left: 70 };
+	    var margin = { top: 10, right: 120, bottom:70, left: 70 };
         var width = width - margin.left - margin.right;
         var height = 650 - margin.top - margin.bottom;
     	
@@ -351,12 +351,19 @@ function render(width) {
 
 
     var annotebox = svg.append("text")
-                            .attr("x", x(75.5))
+                            .attr("x", x(76))
                             .attr("y", y(.96))
                             .attr("id","entertainment-and-gambling2")
                             .attr("class","ylabel")
                             .text("Travel, etc.")
                             .style("fill","#ccc");
+
+    var annotebox = svg.append("text")
+                            .attr("x", x(30))
+                            .attr("y", y(2.25))
+                            .attr("class","directions")
+                            .text("Click on the different buttons above to highlight how spending breaks down.")
+                            .style("font-size","16px");
     var annotebox = svg.append("text")
                             .attr("x", x(54))
                             .attr("y", y(1.9))
