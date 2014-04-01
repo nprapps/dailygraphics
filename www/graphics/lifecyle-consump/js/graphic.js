@@ -23,9 +23,9 @@ d3.selection.prototype.moveToFront = function() {
 function render(width) {
 
 
-	    var margin = { top: 0, right: 120, bottom: 50, left: 30 };
+	    var margin = { top: 0, right: 120, bottom:70, left: 70 };
         var width = width - margin.left - margin.right;
-        var height = 700 - margin.top - margin.bottom;
+        var height = 650 - margin.top - margin.bottom;
     	
         var num_x_ticks = 16;
         if (width <= 480) {
@@ -51,6 +51,11 @@ function render(width) {
 
         var xAxis = d3.svg.axis().scale(x)
             .orient("bottom")
+            .tickSize(6)
+            .ticks(num_x_ticks);
+        
+        var xAxis2 = d3.svg.axis().scale(x)
+            .orient("top")
             .tickSize(6)
             .ticks(num_x_ticks);
 
@@ -146,11 +151,17 @@ function render(width) {
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
+
+        // svg.append("g") // Add the X Axis
+        //     .attr("class", "x axis")
+        //     .attr("transform", "translate(0," + 10 + ")")
+        //     .call(xAxis2);
     
 
 
         svg.append("g") // Add the Y Axis
             .attr("class", "y axis")
+            .attr("transform", "translate("+-width/50+",0)")
             .call(yAxis);
     
         svg.append("g")         
@@ -197,16 +208,17 @@ function render(width) {
                     .attr("dy", ".75em")
                     .attr("transform", "rotate(-90)")
                     // .attr('transform', 'translate(' + -width/36 + ',' + height/6 + ') rotate(-90)')
-                    .attr('transform', 'translate( -70 ,' + height/3 + ') rotate(-90)')
+                    .attr('transform', 'translate(' +  -70 + ',' + height/2.3 + ') rotate(-90)')
                     .text("Index, Age 25 = 1")
                     .style("opacity", .7);
+      
       svg.append("text")
                     .attr("class", "x label")
                     .attr("text-anchor", "end")
                     .attr("x", 6)
                     .attr("dx", ".75em")
                     // .attr('transform', 'translate(' + -width/36 + ',' + height/6 + ') rotate(-90)')
-                    .attr('transform', 'translate(' + width/2 + ' ,' + (11/10)*height + ')')
+                    .attr('transform', 'translate(' + width/2 + ' ,' + (49/46)*height + ')')
                     .text("Age")
                     .style("opacity", .7);
 
@@ -331,6 +343,7 @@ function render(width) {
     d3.select(".ylabel.quint-airfare").text("Plane Tickets");
     d3.select(".ylabel.quint-alcohol").text("Drinking At Home");
     d3.select(".ylabel.quint-night-clubs").text("Bars And Clubs");
+    d3.select(".ylabel.quint-food-at-home").attr("dy",".5em")
     
     d3.select(".ylabel.quint-auto-insurance")
                 .attr("dy", "-.1em");
