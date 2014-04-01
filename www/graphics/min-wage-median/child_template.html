@@ -312,16 +312,9 @@
 
     </div>
     
-    {% if COPY.content.footnotes|trim|length > 0 %}
-    <div class="footnotes">
-        <h4>Notes</h4>
-        <p>{{ COPY.content.footnotes }}</p>
-    </div>
-    {% endif %}
-
     <div class="footer">
-        <p>Source: {{ COPY.content.source|e }}</p>
-        <p>Credit: {{ COPY.content.credit|e }}</p>
+        <p>{{ COPY.content.source|e }}</p>
+        <p>{{ COPY.content.credit|e }}</p>
     </div>
 
 
