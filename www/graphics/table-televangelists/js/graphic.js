@@ -10,6 +10,7 @@ var colors = {
  * TODO: draw your graphic
  */
 function render(width) {
+    sendHeightToParent();
 }
 
 /*
