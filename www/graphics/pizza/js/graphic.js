@@ -18,7 +18,7 @@
           d3.selection.prototype.moveToFront = function() {
               return this.each(function(){
                 this.parentNode.appendChild(this);
-              });
+               });
             };
 
             var margin = {top: 100, right: 40, bottom: 0, left: 80};
