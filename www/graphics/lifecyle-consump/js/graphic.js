@@ -259,7 +259,7 @@ function render(width) {
         });
               	
         d3.select(".box2").on("click", function() {
-            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".5");
+            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".7");
             d3.selectAll(".buttonlabel").style("opacity","0");
             d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
             d3.selectAll("#personal-label").style("opacity","1").style("fill", colors["yellow3"]).moveToFront();
@@ -275,7 +275,7 @@ function render(width) {
         });
         
         d3.select(".box3").on("click", function() {
-            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".5");
+            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".7");
             d3.selectAll(".buttonlabel").style("opacity","0");
             d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
             d3.selectAll("#rent-label").style("opacity","1").style("fill", colors["red4"]).moveToFront();
@@ -286,7 +286,7 @@ function render(width) {
         });
 
         d3.select(".box4").on("click", function() {
-            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".5");
+            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".7");
             d3.selectAll(".buttonlabel").style("opacity","0");
             d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
             d3.selectAll("#food-label").style("opacity","1").style("fill", colors["orange4"]);
@@ -301,7 +301,7 @@ function render(width) {
         });
 
         d3.select(".box5").on("click", function() {
-            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".5");
+            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".7");
             d3.selectAll(".buttonlabel").style("opacity","0");
             d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
             d3.selectAll("#transport-label").style("opacity","1").style("fill", colors["blue3"]);;
@@ -316,7 +316,7 @@ function render(width) {
         });
 
         d3.select(".box6").on("click", function() {
-            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".5");
+            d3.selectAll(".line").style("stroke-width","2").style("stroke","#ccc").style("opacity",".7");
             d3.selectAll(".buttonlabel").style("opacity","0");
             d3.selectAll(".ylabel").style("fill","#ccc").style("opacity",".8");
             d3.selectAll("#entertainment-label").style("opacity","1").style("fill", colors["teal3"]);;
