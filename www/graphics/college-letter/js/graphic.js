@@ -67,7 +67,9 @@ function goto_item(id) {
 
     $this_item.show().siblings('li').hide();
     $letter.find('.active').removeClass('active');
-    $letter.find('.' + this_class).addClass('active');
+    $letter.find('.' + this_class).addClass('active flash').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+        $(this).removeClass('flash');
+    });
 
     current_item = id;
 

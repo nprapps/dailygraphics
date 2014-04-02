@@ -69,6 +69,23 @@
             font-weight: bold;
             padding: 3px;
         }
+        .flash {
+            -webkit-animation-duration: .5s;
+            animation-duration: .5s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+            -webkit-animation-name: flash;
+            animation-name: flash;
+        }
+
+        @-webkit-keyframes flash {
+            0% { background-color: #f1f1f1; }
+            100% { background-color: #EFC637; }
+        }
+        @keyframes flash {
+            0% { background-color: #f1f1f1; }
+            100% { background-color: #EFC637; }
+        }
         
         .btn {
             line-height: 33px;
@@ -151,7 +168,7 @@
         
         #letter {
             font-family: 'Gotham SSm', Helvetica, Arial, sans-serif;
-            font-size: 12px;
+            font-size: 11px;
             line-height: 1.5;
             margin-bottom: 22px;
             width: 60%;
@@ -160,7 +177,7 @@
         
         #letter .wrap {
             background-color: #f7f7f7;
-            padding: 22px 33px 33px 33px;
+            padding: 22px 33px;
             margin: 10px;
             border: 1px solid #eee;
             box-shadow: 2px 2px 15px 0 #eee;
@@ -169,7 +186,7 @@
         #letter h1 {
             margin: 0 0 22px 0;
             text-align: center;
-            font-size: 16px;
+            font-size: 130%;
             text-transform: uppercase;
             border-bottom: 2px solid #eee;
             padding-bottom: 6px;
@@ -177,7 +194,7 @@
         
         #letter h3 {
             margin: 0 0 11px 0;
-            font-size: 12px;
+            font-size: 100%;
         }
         
         #letter p { margin-bottom: 11px; }
@@ -187,7 +204,7 @@
             margin: 0 0 22px 0;
             padding: 0;
             width: 100%;
-            font-size: 11px;
+            font-size: 100%;
             color: #333;
         }
         #letter table tr { vertical-align: top; }
@@ -215,10 +232,11 @@
         @media screen and (max-width: 600px) {
             #explainer ul li { font-size: 12px; }
             #letter .wrap {
-                padding: 11px 22px 22px 22px;
+                padding: 11px 22px;
                 margin: 0;
                 box-shadow: none;
             }
+            .nav { padding-top: 0; }
         }
         @media screen and (max-width: 500px) {
             #explainer,
