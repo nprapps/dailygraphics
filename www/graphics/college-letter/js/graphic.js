@@ -60,7 +60,12 @@ function goto_prev_item() {
 }
 
 function goto_item(id) {
-    console.log('goto_item ' + id);
-    $explainer_items.find('li:eq(' + id + ')').show().siblings('li').hide();
+    var $this_item = $explainer_items.find('li:eq(' + id + ')');
+    var this_class = $this_item[0].className;
+
+    $this_item.show().siblings('li').hide();
+    $letter.find('.active').removeClass('active');
+    $letter.find('.' + this_class).addClass('active');
+
     current_item = id;
 }
