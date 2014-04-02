@@ -72,12 +72,13 @@
         
         .btn {
             line-height: 33px;
+            width: 33px;
             color: #fff;
             background-color: #7598C9;
-            padding: 0 20px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
+            font-size: 18px;
+            text-align: center;
+            display: table-cell;
+            border-right: 2px solid #e0e0e0;
 
             -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;  
         }
@@ -85,10 +86,31 @@
             opacity: 0.7;
             cursor: pointer;
         }
+        .btn.inactive,
+        .btn.inactive:hover {
+            opacity: 1;
+            background-color: #BCCAE5;
+            cursor: default;
+        }
         
         .nav {
             padding-top: 10px;
             margin-bottom: 22px;
+            display: table;
+            width: 100%;
+        }
+        
+        #nav-counter {
+            color: #777;
+            font-size: 11px;
+            line-height: 33px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 0 11px;
+            background-color: #e0e0e0;
+            display: table-cell;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         #explainer {
@@ -171,13 +193,12 @@
         #letter table tr { vertical-align: top; }
         #letter table th {
             border-bottom: 2px solid #ccc;
-            padding: 11px 10px 6px 10px;
+            padding: 0 10px 6px 10px;
             text-align: right;
             vertical-align: bottom;
         }
         #letter table th:first-child {
             text-align: left;
-            padding-left: 0;
         }
         
         #letter table td {
@@ -188,16 +209,18 @@
         #letter table td:first-child {
             font-weight: bold;
             text-align: left;
-            padding-left: 0;
         }
         #letter table .footer td { font-weight: bold; }
 
-        #letter table th:nth-child(4),
-        #letter table td:nth-child(4) {
-            padding-right: 0;
+        @media screen and (max-width: 600px) {
+            #explainer ul li { font-size: 12px; }
+            #letter .wrap {
+                padding: 11px 22px 22px 22px;
+                margin: 0;
+                box-shadow: none;
+            }
         }
-
-        @media screen and (max-width: 550px) {
+        @media screen and (max-width: 500px) {
             #explainer,
             #letter {
                 width: auto;
@@ -205,12 +228,6 @@
             }
             #explainer { margin-bottom: 11px; }
             #explainer .wrap { margin-left: 0; }
-            #explainer ul li { font-size: 12px; }
-            #letter .wrap {
-                padding: 11px 22px 22px 22px;
-                margin: 0;
-                box-shadow: none;
-            }
         }
     </style>
 
@@ -221,8 +238,9 @@
         <section id="explainer">
             <div class="wrap">
                 <div class="nav">
-                    <span id="btn-back" class="btn">&lt; Back</span>
-                    <span id="btn-next" class="btn">Next &gt;</span>
+                    <span id="btn-back" class="btn" title="Back">&lsaquo;</span>
+                    <span id="btn-next" class="btn" title="Next">&rsaquo;</span>
+                    <span id="nav-counter"></span>
                 </div>
                 <ul>
                     {% for row in COPY.definitions %}
@@ -240,13 +258,14 @@
                 <p>{{ COPY.letter.salutation }}</p>
                 <p>{{ COPY.letter.paragraph_1 }}</p>
                 <p>{{ COPY.letter.paragraph_2 }}</p>
+                <h3>{{ COPY.letter.awards_header }}</h3>
 
                 <table>
                 {% for row in COPY.finaid %}
                 {% if loop.index != 1 %}
                     <tr class="{{ row.class }}">
                         {% if row.class == 'header' %}
-                        <th>{{ row.type }}</th>
+                        <th></th>
                         <th>{{ row.fall }}</th>
                         <th>{{ row.spring }}</th>
                         <th>{{ row.total }}</th>

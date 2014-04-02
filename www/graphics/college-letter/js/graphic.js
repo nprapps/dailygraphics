@@ -1,5 +1,6 @@
 var $btn_back;
 var $btn_next;
+var $counter;
 var $explainer;
 var $explainer_items;
 var $letter;
@@ -28,6 +29,7 @@ function render(width) {
 $(window).load(function() {
     $btn_back = $('#btn-back');
     $btn_next = $('#btn-next');
+    $counter = $('#nav-counter');
     $explainer = $('#explainer');
     $explainer_items = $explainer.find('ul');
     $letter = $('#letter');
@@ -68,6 +70,20 @@ function goto_item(id) {
     $letter.find('.' + this_class).addClass('active');
 
     current_item = id;
+
+    if (current_item == 0) {
+        $btn_back.prop('disabled', true).addClass('inactive');
+    } else {
+        $btn_back.prop('disabled', false).removeClass('inactive');
+    }
+
+    if (current_item == (total_items - 1)) {
+        $btn_next.prop('disabled', true).addClass('inactive');
+    } else {
+        $btn_next.prop('disabled', false).removeClass('inactive');
+    }
+    
+    $counter.text((current_item + 1) + ' of ' + total_items);
 
     sendHeightToParent();
 }
