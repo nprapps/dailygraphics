@@ -60,30 +60,43 @@
             padding-bottom: 5px;
             background-color: #e2eded;
         }
-        .text-col {
+        .img-col {
             margin-bottom: 10px;
+            margin: 0px 5px 5px 0px;
 
         }  
         .text-col {
             margin-bottom: 10px;
+            margin: 0px 5px 5px 0px;
 
         }  
     
         #graphic-table{
             font-family: helvetica;
-            margin: 0px 5px 5px 0px;
-            width: 90%
-            font-size: 12px;
+            font-size: 14px;
 
         }
-        .text {
+
+       .text {
             font-family: helvetica;
-            font-size: 12px;
+            font-size: 14px;
             color: black;
-            opacity: 70%;
             vertical-align:middle;
+            opacity: 70%;
 
         }    
+        .platform {
+            font-family: helvetica;
+            font-size: 9px;
+            font-style: italic;
+            color: black;
+            opacity: 50%;
+            margin: -10px 10px 0px 0px;
+
+
+
+        }      
+
         .name {
             font-family: helvetica;
             font-size: 14px;
@@ -91,22 +104,31 @@
             color: black;
             opacity: 70%;
 
-        }               
+
+        }   
+
+        a:link {
+            text-decoration:none
+        }
+        a:link {color:black;
+                opacity: 30%;}      /* unvisited link */
+        a:visited {color:black;
+                    opacity: 100%;}  /* visited link */
+        a:hover {color:blue;}  /* mouse over link */
+        a:active {color:#0000FF;} 
+            
 
         img {
            border:1px solid #;
             -webkit-border-radius: 10px;
             -moz-border-radius: 10px;
             border-radius: 10px;  
-            height: 305px;
-            width: 305px;
+            height: 250px;
+            width: 250px;
 
         }           
 
-        img:hover {
-            height: 305px;
-            width: 305px;
-        }        
+
     </style>
 
 
@@ -121,7 +143,7 @@
         {% for row in COPY.img %}
             <tr class="post">
                 <td class="text-col">
-                        <ul class="name" id="{{ row.name }}">{{ row.name }}</ul>
+                        <a href="{{row.url}}"  target="_blank"><ul class="name" id="{{ row.name }}">{{ row.name }}</a></ul>
 
                         <ul class="text" id="{{ row.name }}">{{ row.text }}</ul>
                 </td>
@@ -130,6 +152,8 @@
                            <a href="{{row.url}}"  target="_blank"> <img src="{{ row.image }}"/> 
                            </a>
                         </ul>
+                        <ul class="platform" id ="{{row.name}}">
+                            {{row.platform}} </ul>
                 </td>
 
             </tr>
