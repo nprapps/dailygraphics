@@ -92,7 +92,7 @@
         }
 
         #explainer {
-            width: 35%;
+            width: 40%;
             float: right;
         }
         
@@ -132,7 +132,7 @@
             font-size: 12px;
             line-height: 1.5;
             margin-bottom: 22px;
-            width: 65%;
+            width: 60%;
             float: left;
         }
         
@@ -197,14 +197,20 @@
             padding-right: 0;
         }
 
-        @media screen and (max-width: 480px) {
+        @media screen and (max-width: 550px) {
             #explainer,
             #letter {
                 width: auto;
                 float: none;
             }
+            #explainer { margin-bottom: 11px; }
             #explainer .wrap { margin-left: 0; }
             #explainer ul li { font-size: 12px; }
+            #letter .wrap {
+                padding: 11px 22px 22px 22px;
+                margin: 0;
+                box-shadow: none;
+            }
         }
     </style>
 
@@ -262,8 +268,13 @@
         </section>
     </div>
     
+    <div class="footnotes">
+        <h4>Notes</h4>
+        <p>{{ COPY.letter.footnotes }}</p>
+    </div>
+    
     <div class="footer">
-        <p>Credit: April Fehling, Alyson Hurt and Kevin Leahy/NPR</p>
+        <p>{{ COPY.letter.credits }}</p>
     </div>
 
 

@@ -68,4 +68,6 @@ function goto_item(id) {
     $letter.find('.' + this_class).addClass('active');
 
     current_item = id;
+
+    sendHeightToParent();
 }
