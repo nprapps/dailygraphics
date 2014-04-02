@@ -35,6 +35,13 @@
             padding: 0;
             font-family: Arial, Helvetica, sans-serif;
         }
+        
+        a, a:link, a:visited {
+            color: #4774CC;
+            text-decoration: none;
+        }
+        a:hover, a:active { opacity: 0.7; }
+        
         .footnotes { margin-bottom: 20px; }
         .footnotes h4 {
             margin: 2px 0 7px 0;
@@ -64,7 +71,7 @@
         }
         
         .btn {
-            line-height: 44px;
+            line-height: 33px;
             color: #fff;
             background-color: #7598C9;
             padding: 0 20px;
@@ -78,6 +85,11 @@
             opacity: 0.7;
             cursor: pointer;
         }
+        
+        .nav {
+            padding-top: 10px;
+            margin-bottom: 22px;
+        }
 
         #explainer {
             width: 35%;
@@ -87,9 +99,10 @@
         #explainer .wrap { margin-left: 22px; }
         
         #explainer h3 {
-            font-size: 18px;
+            font-size: 12px;
             font-weight: normal;
             margin: 0 0 11px 0;
+            color: #999;
         }
         
         #explainer h4 {
@@ -185,13 +198,13 @@
         }
 
         @media screen and (max-width: 480px) {
-            #letter { font-size: 14px; }
-            #letter .wrap {
-                padding: 22px;
-                margin: 5px;
+            #explainer,
+            #letter {
+                width: auto;
+                float: none;
             }
-            #letter h1 { font-size: 24px; }
-            #letter table { font-size: 12px; }
+            #explainer .wrap { margin-left: 0; }
+            #explainer ul li { font-size: 12px; }
         }
     </style>
 
@@ -201,9 +214,10 @@
     
         <section id="explainer">
             <div class="wrap">
-                <span id="btn-back" class="btn">&lt; Back</span>
-                <span id="btn-next" class="btn">Next &gt;</span>
-
+                <div class="nav">
+                    <span id="btn-back" class="btn">&lt; Back</span>
+                    <span id="btn-next" class="btn">Next &gt;</span>
+                </div>
                 <ul>
                     {% for row in COPY.definitions %}
                     {% if loop.index != 1 %}
