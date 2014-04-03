@@ -4,6 +4,7 @@ var $counter;
 var $explainer;
 var $explainer_items;
 var $letter;
+var $graphic;
 
 var current_item;
 var total_items;
@@ -20,6 +21,8 @@ var colors = {
  * TODO: draw your graphic
  */
 function render(width) {
+    $graphic.width(width + 'px');
+    sendHeightToParent();
 }
 
 /*
@@ -33,6 +36,7 @@ $(window).load(function() {
     $explainer = $('#explainer');
     $explainer_items = $explainer.find('ul');
     $letter = $('#letter');
+    $graphic = $('#graphic');
     
     current_item = 0;
     total_items = $explainer_items.find('li').length;
