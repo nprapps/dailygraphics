@@ -60,24 +60,82 @@
             padding-bottom: 5px;
             background-color: #e2eded;
         }
-        .img-col {
-            margin-bottom: 10px;
-            margin: 0px 5px 5px 0px;
 
-        }  
-        .text-col {
-            margin-bottom: 10px;
-            margin: 0px 5px 5px 0px;
 
-        }  
-    
-        #graphic-table{
-            font-family: helvetica;
-            font-size: 14px;
-
+        a:link {
+            text-decoration:none
         }
+        a:link {color:black;
+                opacity: 30%;}      /* unvisited link */
+        a:visited {color:black;
+                    opacity: 100%;}  /* visited link */
+        a:hover {color:blue;}  /* mouse over link */
+        a:active {color:#0000FF;} 
+            
 
-       .text {
+
+    section {
+        margin-top: 22px;
+        border-top: 2px solid #eee;
+        padding-top: 22px;
+    }
+    section:first-child {
+        margin-top: 0;
+        border-top: none;
+        padding-top: 0;
+    }
+    section:before,
+    section:after {
+        content: ' ';
+        display: table;
+    }
+    section:after { clear: both; }
+    
+    .photo {
+        width: 50%;
+        float: right;
+    }
+    
+    .photo img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-bottom: 3px;
+    }
+    
+    .photo p {
+        font-size: 11px;
+        color: #999;
+        font-style: italic;
+    }
+    
+    .caption {
+        width: 50%;
+        float: left;
+        color: #333;
+    }
+    
+    .caption h3 {
+        font-size: 14px;
+        margin: 0 0 11px 0;
+    }
+    
+    .caption p {
+        font-size: 12px;
+        margin: 0;
+    }
+    
+    @media screen and (max-width: 480px) {
+        .caption, 
+        .photo {
+            width: auto;
+            float: none;
+        }
+        .photo { margin-bottom: 22px; }
+    }
+
+
+        .text {
             font-family: helvetica;
             font-size: 14px;
             color: black;
@@ -91,7 +149,7 @@
             font-style: italic;
             color: black;
             opacity: 50%;
-            margin: -10px 10px 0px 0px;
+            margin: -3px 10px 0px 0px;
 
 
 
@@ -107,56 +165,37 @@
 
         }   
 
-        a:link {
-            text-decoration:none
-        }
-        a:link {color:black;
-                opacity: 30%;}      /* unvisited link */
-        a:visited {color:black;
-                    opacity: 100%;}  /* visited link */
-        a:hover {color:blue;}  /* mouse over link */
-        a:active {color:#0000FF;} 
-            
-
-        img {
-           border:1px solid #;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;  
-            height: 250px;
-            width: 250px;
-
-        }           
-
-
     </style>
+
+
 
 
 
 </head>
 <body>
-<table id="graphic-table" cellspacing="0">
-     <!-- <th class="occ">Text</th> -->
-     <!-- <th class="income">Img</th> -->
 
+<section>
 
         {% for row in COPY.img %}
-            <tr class="post">
-                <td class="text-col">
-                        <a href="{{row.url}}"  target="_blank"><ul class="name" id="{{ row.name }}">{{ row.name }}</a></ul>
+            <section class="post">
+                <div class="photo">
+                    <a href="{{row.url}}"  target="_blank"> <img src="{{ row.image }}"/> </a>
+                    <a href="{{row.url}}"  target="_blank"> 
+                    <p class="platform_item" id ="{{row.name}}"> {{row.platform}} </p></a>
+                </div>
+                <div class = "box">
+                    <div class = "name">
+                        <a href="{{row.url}}"  target="_blank">
+                        <h3 class="name_item" id="{{ row.name }}">{{ row.name }}</h3></a>
+                    </div>
 
-                        <ul class="text" id="{{ row.name }}">{{ row.text }}</ul>
-                </td>
-                <td class="img-col">
-                        <ul class="image" id="{{ row.name }}">
-                           <a href="{{row.url}}"  target="_blank"> <img src="{{ row.image }}"/> 
-                           </a>
-                        </ul>
-                        <ul class="platform" id ="{{row.name}}">
-                            {{row.platform}} </ul>
-                </td>
+                    <div class = "text">
+                        <p class="text_item" id="{{ row.name }}">{{ row.text }}</p>
+                    </div>
+                </div>
 
-            </tr>
+
+            </section>
 
         {% endfor %}
 
