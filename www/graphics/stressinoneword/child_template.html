@@ -177,6 +177,7 @@
 <section>
 
         {% for row in COPY.img %}
+            {% if loop.index != 1 %}
             <section class="post">
                 <div class="photo">
                     <a href="{{row.url}}"  target="_blank"> <img src="{{ row.image }}"/> </a>
@@ -196,7 +197,7 @@
 
 
             </section>
-
+            {% endif %}
         {% endfor %}
 
 </table>    
