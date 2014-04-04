@@ -8,7 +8,7 @@ $(document).ready(function() {
     
     function drawGraphic(width) {
 
-        var margin = {top: 10, right: 15, bottom: 25, left: 50};
+        var margin = {top: 10, right: 15, bottom: 25, left: 35};
         var width = width - margin.left - margin.right;
         var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
         var num_ticks = 13;
@@ -79,13 +79,15 @@ $(document).ready(function() {
             d3.min(d3.entries(lines), function(c) { 
                 return d3.min(c.value, function(v) { 
                     var n = v.amt;
-                    return Math.floor(n/1000) * 1000; // round to next 1000
+                    return Math.floor(n) - 1;
+//                    return Math.floor(n/10) * 10; // round to next 10
                 }); 
             }),
             d3.max(d3.entries(lines), function(c) { 
                 return d3.max(c.value, function(v) { 
                     var n = v.amt;
-                    return Math.ceil(n/1000) * 1000; // round to next 1000
+                    return Math.ceil(n) + 1;
+//                    return Math.ceil(n/10) * 10; // round to next 10
                 }); 
             })
         ]);
@@ -122,6 +124,7 @@ $(document).ready(function() {
                     return 'line line-' + i;
                 })
                 .attr('d', function(d) {
+                    console.log(d.value);
                     return line(d.value);
                 });
         
@@ -149,6 +152,7 @@ $(document).ready(function() {
 
                 graphic_data.forEach(function(d) {
                     d.date = d3.time.format('%Y-%m').parse(d.date);
+                    d.jobs = d.jobs / 1000;
                 });
 
                 setupResponsiveChild({
