@@ -79,14 +79,14 @@ $(document).ready(function() {
             d3.min(d3.entries(lines), function(c) { 
                 return d3.min(c.value, function(v) { 
                     var n = v.amt;
-                    return Math.floor(n) - 1;
+                    return Math.floor(n);
 //                    return Math.floor(n/10) * 10; // round to next 10
                 }); 
             }),
             d3.max(d3.entries(lines), function(c) { 
                 return d3.max(c.value, function(v) { 
                     var n = v.amt;
-                    return Math.ceil(n) + 1;
+                    return Math.ceil(n);
 //                    return Math.ceil(n/10) * 10; // round to next 10
                 }); 
             })
@@ -124,23 +124,8 @@ $(document).ready(function() {
                     return 'line line-' + i;
                 })
                 .attr('d', function(d) {
-                    console.log(d.value);
                     return line(d.value);
                 });
-        
-        /*
-        svg.append('g').selectAll('text')
-            .data(d3.entries(lines))
-            .enter()
-                .append('text')
-                    .attr('x', 5)
-                    .attr('y', 5)
-                    .attr('dx', -6)
-                    .attr('dy', 28)
-                    .attr('text-anchor', 'end')
-                    .attr('class', function(d) { return 'value value-' + d.key.replace(' ', '-').toLowerCase() })
-                    .text(function(d) { console.log(d); return d.value });
-        */
         
         sendHeightToParent();
     }
