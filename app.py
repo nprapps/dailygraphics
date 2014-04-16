@@ -40,7 +40,12 @@ def _graphics_detail(slug):
     context = make_context()
     context['slug'] = slug
 
-    return render_template('parent.html', **context)
+    template = 'parent.html'
+
+    if not os.path.exists('www/graphics/%s/js/lib/pym.js' % slug):
+        template = 'parent_old.html'
+
+    return render_template(template, **context)
 
 @app.route('/graphics/<slug>/child.html')
 def _graphics_child(slug):

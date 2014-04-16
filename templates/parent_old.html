@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graphic Embed : NPR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <style>
+        textarea {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h3>Preview</h3>
+
+    <div id='preview'>
+    </div>
+
+    <h3>Production embed</h3>
+
+<!-- textarea contents -->
+    <textarea readonly="readonly" rows="10" cols="50">
+<div id="responsive-embed-{{ slug }}">
+</div>
+<script src="http://{{ PRODUCTION_S3_BUCKETS[0] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/js/lib/parent.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function() {
+    $('#responsive-embed-{{ slug }}').responsiveIframe({
+        src: 'http://{{ PRODUCTION_S3_BUCKETS[0] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html'
+    });
+});
+</script>
+    </textarea>
+<!-- end textarea contents -->
+
+    <h3>Localhost embed</h3>
+
+<!-- textarea contents -->
+    <textarea readonly="readonly" rows="10" cols="50">
+<div id="responsive-embed-{{ slug }}">
+</div>
+<script src="http://127.0.0.1:8000/graphics/{{ slug }}/js/lib/parent.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function() {
+    $('#responsive-embed-{{ slug }}').responsiveIframe({
+        src: 'http://127.0.0.1:8000/graphics/{{ slug }}/child.html'
+    });
+});
+</script>
+    </textarea>
+<!-- end textarea contents -->
+
+    <script src="js/lib/jquery.js" type="text/javascript"></script>
+    <script src="js/lib/parent.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $('#preview').responsiveIframe({
+            src: 'child.html' 
+        });
+    </script>
+</body>
+</html>
