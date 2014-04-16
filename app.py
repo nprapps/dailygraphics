@@ -24,7 +24,7 @@ def _graphics_list():
     context = make_context()
     context['graphics'] = []
 
-    graphics = glob('www/graphics/*/child.html')
+    graphics = glob('www/graphics/*')
     for graphic in graphics:
         context['graphics'].append(graphic.split('www/graphics/')[1].split('/child.html')[0])
 
