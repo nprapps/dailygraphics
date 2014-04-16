@@ -1,3 +1,5 @@
+var pymChild = null;
+
 var colors = {
     'red1': '#6C2315', 'red2': '#A23520', 'red3': '#D8472B', 'red4': '#E27560', 'red5': '#ECA395', 'red6': '#F5D1CA',
     'orange1': '#714616', 'orange2': '#AA6A21', 'orange3': '#E38D2C', 'orange4': '#EAAA61', 'orange5': '#F1C696', 'orange6': '#F8E2CA',
@@ -7,9 +9,14 @@ var colors = {
 };
 
 /*
- * TODO: draw your graphic
+ * Render the graphic
  */
 function render(width) {
+    // TODO: draw your graphic
+    
+    if (pymChild) {
+        pymChild.sendHeightToParent();
+    }
 }
 
 /*
@@ -17,7 +24,7 @@ function render(width) {
  * to ensure all images have loaded
  */
 $(window).load(function() {
-    setupResponsiveChild({
+    var pymChild = new pym.Child({
         renderCallback: render
     });
 })
