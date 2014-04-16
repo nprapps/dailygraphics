@@ -32,9 +32,15 @@
         /* base styles */
         body {
             margin: 0;
-            padding: 0;
+            padding-left: 0;
             font-family: Arial, Helvetica, sans-serif;
         }
+
+        p {
+            font-family: Georgia;
+            padding-left: 25px;
+        }
+
         .footnotes { margin-bottom: 20px; }
         .footnotes h4 {
             margin: 2px 0 7px 0;
@@ -65,11 +71,11 @@
         a:link {
             text-decoration:none
         }
-        a:link {color:black;
+        a:link {color:#6d8ac4;
                 opacity: 30%;}      /* unvisited link */
-        a:visited {color:black;
+        a:visited {color:#6d8ac4;
                     opacity: 100%;}  /* visited link */
-        a:hover {color:blue;}  /* mouse over link */
+        a:hover {color:#4065a2;}  /* mouse over link */
         a:active {color:#0000FF;} 
             
 
@@ -92,8 +98,8 @@
     section:after { clear: both; }
     
     .photo {
-        width: 70%;
-        float: right;
+        width: 100%;
+        float: none;
     }
     
     .photo img {
@@ -110,19 +116,21 @@
     }
     
     .caption {
-        width: 30%;
-        float: left;
+        width: 25%;
+        float: none;
         color: #333;
     }
     
     .caption h3 {
         font-size: 14px;
-        margin: 0 0 11px 0;
+        margin: 0 0 5px 0;
+        padding-left: 30px;
     }
     
     .caption p {
         font-size: 12px;
         margin: 0;
+        padding-left: 30px;
     }
     
     @media screen and (max-width: 480px) {
@@ -146,12 +154,10 @@
         .platform {
             font-family: helvetica;
             font-size: 9px;
-            font-style: italic;
             color: black;
             opacity: 50%;
-            margin: -3px 10px 0px 0px;
-
-
+            padding-top: 10px;
+            margin: -3px 20px 0px 0px;
 
         }      
 
@@ -161,6 +167,7 @@
             font-weight: bold;
             color: black;
             opacity: 70%;
+            padding-left: 25px;
 
 
         }   
@@ -182,12 +189,12 @@
                 <div class="photo">
                     <a href="{{row.url}}"  target="_blank"> <img src="{{ row.image }}"/> </a>
                     <a href="{{row.url}}"  target="_blank"> 
-                    <p class="platform_item" id ="{{row.name}}"> {{row.platform}} </p></a>
+                    <p class="platform" id ="{{row.name}}"> {{row.platform}} </p></a>
                 </div>
                 <div class = "box">
                     <div class = "name">
                         <a href="{{row.url}}"  target="_blank">
-                        <h3 class="name_item" id="{{ row.name }}">{{ row.name }}</h3></a>
+                        <h3 class="name_item" id="{{ row.name }}">@{{ row.name }}</h3></a>
                     </div>
 
                     <div class = "text">
