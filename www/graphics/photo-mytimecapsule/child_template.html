@@ -32,20 +32,9 @@
         /* base styles */
         body {
             margin: 0;
-            padding-left: 0;
+            padding: 0;
             font-family: Arial, Helvetica, sans-serif;
-        }
-
-        p {
-            font-family: Georgia;
-            padding-left: 25px;
-        }
-
-        .footnotes { margin-bottom: 20px; }
-        .footnotes h4 {
-            margin: 2px 0 7px 0;
-            color: #666;
-            font-size: 11px;
+            line-height: 1.4;
         }
         .footnotes p,
         .footer p {
@@ -54,172 +43,101 @@
             line-height: 1.3;
             color: #808080;
         }
+        a, a:link, a:visited {
+            color: #4774CC;
+            text-decoration: none;
+        }
+        a:hover, a:active { opacity: 0.7; }
+        
+        /* photo call-out */
+        section { 
+            margin-bottom: 22px;
+            background-color: #e0e0e0;
+        }
+        section:before,
+        section:after {
+            content: ' ';
+            display: table;
+        }
+        section:after { clear: both; }
 
-        td {
-            padding: 10px 0;
-            border-bottom:1px dotted #ccc;
+        .photo { 
+            background-color: #000;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .photo img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
         }
 
-        th {
-            height: 70px;
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 5px;
-            background-color: #e2eded;
+        .caption { 
+            padding: 22px 22px;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            font-family: Gotham SSm, Helvetica, Arial, sans-serif;
         }
-
-
-        a:link {
-            text-decoration:none
+        .caption h3 {
+            font-size: 12px;
+            margin: 0 0 11px 0;
         }
-        a:link {color:#6d8ac4;
-                opacity: 30%;}      /* unvisited link */
-        a:visited {color:#6d8ac4;
-                    opacity: 100%;}  /* visited link */
-        a:hover {color:#4065a2;}  /* mouse over link */
-        a:active {color:#0000FF;} 
-            
-
-
-    section {
-        margin-top: 22px;
-        border-top: 2px solid #eee;
-        padding-top: 22px;
-    }
-    section:first-child {
-        margin-top: 0;
-        border-top: none;
-        padding-top: 0;
-    }
-    section:before,
-    section:after {
-        content: ' ';
-        display: table;
-    }
-    section:after { clear: both; }
-    
-    .photo {
-        width: 100%;
-        float: none;
-    }
-    
-    .photo img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin-bottom: 3px;
-    }
-    
-    .photo p {
-        font-size: 11px;
-        color: #999;
-        font-style: italic;
-    }
-    
-    .caption {
-        width: 25%;
-        float: none;
-        color: #333;
-    }
-    
-    .caption h3 {
-        font-size: 14px;
-        margin: 0 0 5px 0;
-        padding-left: 30px;
-    }
-    
-    .caption p {
-        font-size: 12px;
-        margin: 0;
-        padding-left: 30px;
-    }
-    
-    @media screen and (max-width: 480px) {
-        .caption, 
-        .photo {
-            width: auto;
-            float: none;
-        }
-        .photo { margin-bottom: 22px; }
-    }
-
-
-        .text {
-            font-family: helvetica;
+        .caption p {
             font-size: 14px;
-            color: black;
-            vertical-align:middle;
-            opacity: 70%;
-
-        }    
-        .platform {
-            font-family: helvetica;
-            font-size: 9px;
-            color: black;
-            opacity: 50%;
-            padding-top: 10px;
-            margin: -3px 20px 0px 0px;
-
-        }      
-
-        .name {
-            font-family: helvetica;
-            font-size: 14px;
-            font-weight: bold;
-            color: black;
-            opacity: 70%;
-            padding-left: 25px;
-
-
-        }   
-
+            color: #333;
+            margin: 0;
+        }
+        .caption p.platform {
+            font-size: 11px;
+            color: #999;
+            font-style: italic;
+            opacity: 0.5;
+            margin-top: 15px;
+        }
+        
+        @media screen and (min-width: 481px) {
+            /* for when you want photos side-by-side 
+               (not stacked) on larger screens */
+            .side-by-side .photo {
+                width: 67%;
+                float: right;
+            }
+            .side-by-side .caption {
+                width: 33%;
+                float: left;
+            }
+        }
     </style>
-
-
-
-
 
 </head>
 <body>
 
-<section>
-
+    <div id="callout">
         {% for row in COPY.img %}
             {% if loop.index != 1 %}
-            <section class="post">
+            <section id="post-{{ loop.index }}" class="post post-{{ row.name }}">
                 <div class="photo">
-                    <a href="{{row.url}}"  target="_blank"> <img src="{{ row.image }}"/> </a>
-                    <a href="{{row.url}}"  target="_blank"> 
-                    <p class="platform" id ="{{row.name}}"> {{row.platform}} </p></a>
+                    <a href="{{row.url}}"  target="_blank"><img src="{{ row.image }}" alt="Photo" /></a>
                 </div>
-                <div class = "box">
-                    <div class = "name">
-                        <a href="{{row.url}}"  target="_blank">
-                        <h3 class="name_item" id="{{ row.name }}">@{{ row.name }}</h3></a>
-                    </div>
-
-                    <div class = "text">
-                        <p class="text_item" id="{{ row.name }}">{{ row.text }}</p>
-                    </div>
+                <div class="caption">
+                    <h3><a href="{{row.url}}" target="_blank">@{{ row.name }}</a></h3>
+                    <p>{{ row.text }}</p>
+                    <p class="platform"><a href="{{row.url}}" target="_blank">Via {{row.platform}}</a></p>
                 </div>
-
-
             </section>
             {% endif %}
         {% endfor %}
-
-</table>    
-    <!-- <div class="footnotes"> -->
-        <!-- <h4>Notes</h4> -->
-  <!-- </div> -->
+    </div>
 
     <div class="footer">
         <p>Source: Instagram And Twitter</p>
-        <p>Credit: Quoctrung Bui/NPR</p>
+        <p>Credit: Claire O'Neill/NPR</p>
     </div>
 
 
     <script src="js/lib/jquery.js" type="text/javascript"></script>
-    <script src="js/lib/child.js" type="text/javascript"></script>
+    <script src="js/lib/pym.js" type="text/javascript"></script>
     <script src="js/graphic.js" type="text/javascript"></script>
 </body>
 </html>
