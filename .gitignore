@@ -48,4 +48,5 @@ www/assets
 data/gdoc_*.csv
 www/graphics/*/index.html
 data/*.xls
+data/*.xlsx
 www/graphics/*/child.html

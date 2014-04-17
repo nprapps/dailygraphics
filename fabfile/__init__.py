@@ -192,7 +192,7 @@ def deploy(slug=''):
 @task
 def download_copy(slug):
     """
-    Downloads a Google Doc as an .xls file.
+    Downloads a Google Doc as an .xlsx file.
     """
     graphic_config = imp.load_source('graphic_config', 'www/graphics/%s/graphic_config.py' % slug)
 

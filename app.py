@@ -61,7 +61,7 @@ def _graphics_child(slug):
 
     context = make_context()
     context['slug'] = slug
-    context['COPY'] = copytext.Copy(filename='data/%s.xls' % slug)
+    context['COPY'] = copytext.Copy(filename='data/%s.xlsx' % slug)
     
     try:
         graphic_config = imp.load_source('graphic_config', 'www/graphics/%s/graphic_config.py' % slug)
