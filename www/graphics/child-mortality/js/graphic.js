@@ -154,10 +154,10 @@ function render(width) {
                         ypos -= 12;
                     }
                     if (d.key == 'n_africa') {
-                        ypos -= 3;
+                        ypos -= 4;
                     }
                     if (d.key == 'c_asia') {
-                        ypos += 7;
+                        ypos += 6;
                     }
                     if (d.key == 'e_asia') {
                         ypos += 10;
@@ -166,7 +166,7 @@ function render(width) {
                         ypos += 11;
                     }
                     if (d.key == 'w_asia') {
-                        ypos += 2;
+                        ypos += 3;
                     }
                     return ypos;
                 })
