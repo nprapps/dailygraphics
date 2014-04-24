@@ -5,7 +5,7 @@ var IS_MOBILE;
 var mobile_threshold = 480;
 var num_ticks;
 var pymChild = null;
-var min_height = 600;
+var min_height = 610;
 var height_ratio = 3;
 var width_ratio = 4;
 
@@ -38,7 +38,8 @@ var labels = {
  */
 function render(width) {
     if (Modernizr.svg) {
-        var margin = {top: 27, right: 150, bottom: 25, left: 150};
+        var margin = {top: 32, right: 150, bottom: 25, left: 150};
+        var year_fmt = d3.time.format('%Y');
 
         if (width < mobile_threshold) {
             num_ticks = 5;
@@ -53,10 +54,7 @@ function render(width) {
         }
 
         var width = width - margin.left - margin.right;
-//        var height = Math.ceil((width * height_ratio) / width_ratio) - margin.top - margin.bottom;
-//        if (height < min_height) {
-            height = min_height - margin.top - margin.bottom;
-//        }
+        var height = min_height - margin.top - margin.bottom;
 
         // clear out existing graphics
         $graphic.empty();
@@ -67,24 +65,6 @@ function render(width) {
         var y = d3.scale.linear()
             .range([height, 0]);
         
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("top")
-            .tickValues([graphic_data[0].year, graphic_data[1].year])
-            .tickFormat(function(d,i) {
-                var fmt = d3.time.format('%Y');
-                return fmt(d);
-            });
-
-        var xAxis_bottom = d3.svg.axis()
-            .scale(x)
-            .orient("bottom")
-            .tickValues([graphic_data[0].year, graphic_data[1].year])
-            .tickFormat(function(d) {
-                var fmt = d3.time.format('%Y');
-                return fmt(d);
-            });
-            
         var line = d3.svg.line()
             .x(function(d) { return x(d.year); })
             .y(function(d) { return y(d.amt); });
@@ -118,16 +98,6 @@ function render(width) {
                 }); 
             })
         ]);
-        
-        svg.append('g')
-            .attr('class', 'x axis')
-            .attr('transform', 'translate(0,-5)')
-            .call(xAxis);
-
-        svg.append('g')
-            .attr('class', 'x axis bottom')
-            .attr('transform', 'translate(0,' + (height + 5) + ')')
-            .call(xAxis_bottom);
         
         svg.append('g').selectAll('path')
             .data(d3.entries(lines))
@@ -176,9 +146,51 @@ function render(width) {
                 .attr('class', function(d) { return 'l-' + d.key; })
                 .text(function(d) { 
                     if (IS_MOBILE) {
-                        return labels[d.key]['short'] + ' - ' + d['value'][0]['amt'];
+                        return d['value'][0]['amt'];
                     } else {
-                        return labels[d.key]['full'] + ' - ' + d['value'][0]['amt'];
+                        return d['value'][0]['amt'];
+                    }
+                });
+
+        svg.append('g')
+            .attr('class', 'label begin')
+            .selectAll('text')
+                .data(d3.entries(lines))
+            .enter().append('text')
+                .attr('x', function(d, i) { 
+                    return x(d['value'][0]['year']);
+                })
+                .attr('y', function(d) { 
+                    var ypos = y(d['value'][0]['amt']);
+                    if (d.key == 'oceania') {
+                        ypos -= 12;
+                    }
+                    if (d.key == 'n_africa') {
+                        ypos -= 4;
+                    }
+                    if (d.key == 'c_asia') {
+                        ypos += 6;
+                    }
+                    if (d.key == 'e_asia') {
+                        ypos += 10;
+                    }
+                    if (d.key == 'se_asia') {
+                        ypos += 11;
+                    }
+                    if (d.key == 'w_asia') {
+                        ypos += 3;
+                    }
+                    return ypos;
+                })
+                .attr('dx', -35)
+                .attr('dy', 4)
+                .attr('text-anchor', 'end')
+                .attr('class', function(d) { return 'l-' + d.key; })
+                .text(function(d) { 
+                    if (IS_MOBILE) {
+                        return labels[d.key]['short'];
+                    } else {
+                        return labels[d.key]['full'];
                     }
                 });
 
@@ -218,11 +230,90 @@ function render(width) {
                 .attr('class', function(d) { return 'l-' + d.key; })
                 .text(function(d) { 
                     if (IS_MOBILE) {
-                        return d['value'][1]['amt'] + ' - ' + labels[d.key]['short'];
+                        return d['value'][1]['amt'];
                     } else {
-                        return d['value'][1]['amt'] + ' - ' + labels[d.key]['full'];
+                        return d['value'][1]['amt'];
                     }
                 });
+
+        svg.append('g')
+            .attr('class', 'label end')
+            .selectAll('text')
+                .data(d3.entries(lines))
+            .enter().append('text')
+                .attr('x', function(d, i) { 
+                    return x(d['value'][1]['year']);
+                })
+                .attr('y', function(d) { 
+                    var ypos = y(d['value'][1]['amt']);
+                    if (d.key == 's_asia') {
+                        ypos -= 3;
+                    }
+                    if (d.key == 'developing') {
+                        ypos += 7;
+                    }
+                    if (d.key == 'world') {
+                        ypos += 5;
+                    }
+                    if (d.key == 'n_africa') {
+                        ypos += 4;
+                    }
+                    if (d.key == 'lat_america') {
+                        ypos += 8;
+                    }
+                    if (d.key == 'e_asia') {
+                        ypos += 5;
+                    }
+                    return ypos;
+                })
+                .attr('dx', 35)
+                .attr('dy', 4)
+                .attr('text-anchor', 'start')
+                .attr('class', function(d) { return 'l-' + d.key; })
+                .text(function(d) { 
+                    if (IS_MOBILE) {
+                        return labels[d.key]['short'];
+                    } else {
+                        return labels[d.key]['full'];
+                    }
+                });
+        
+        // axis year labels
+        svg.append('text')
+            .attr('class', 'axis label begin')
+            .attr('x', function() {
+                return x(graphic_data[0]['year']) - 6;
+            })
+            .attr('y', -22)
+            .attr('text-anchor', 'end')
+            .text(year_fmt(graphic_data[0]['year']));
+
+        svg.append('text')
+            .attr('class', 'axis label begin')
+            .attr('x', function() {
+                return x(graphic_data[0]['year']) - 6;
+            })
+            .attr('y', height + 11)
+            .attr('text-anchor', 'end')
+            .text(year_fmt(graphic_data[0]['year']));
+
+        svg.append('text')
+            .attr('class', 'axis label end')
+            .attr('x', function() {
+                return x(graphic_data[1]['year']) + 6;
+            })
+            .attr('y', -22)
+            .attr('text-anchor', 'start')
+            .text(year_fmt(graphic_data[1]['year']));
+
+        svg.append('text')
+            .attr('class', 'axis label end')
+            .attr('x', function() {
+                return x(graphic_data[1]['year']) + 6;
+            })
+            .attr('y', height + 11)
+            .attr('text-anchor', 'start')
+            .text(year_fmt(graphic_data[1]['year']));
     }
     
     if (pymChild) {
