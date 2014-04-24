@@ -33,8 +33,8 @@ var graphic_data_age = [
 ];
 
 var labels = {
-    "race": "Murders by race, 2012-13",
-    "age": "Murders by age, 2012-13"
+    "race": "Share Of Murders By Race, 2012-13",
+    "age": "Share Of Murders By Age Group, 2012-13"
 };
 
 /*
@@ -54,7 +54,7 @@ function render_chart(data, id, container_width) {
     var graphic_data = data;
     var is_mobile = false;
     var last_data_point = graphic_data.length - 1;
-    var margin = { top: 10, right: 10, bottom: 35, left: 30 };
+    var margin = { top: 10, right: 10, bottom: 35, left: 40 };
     var num_bars = graphic_data.length;
     var num_ticks = 4;
     var width = container_width;
@@ -83,7 +83,10 @@ function render_chart(data, id, container_width) {
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient('left')
-        .ticks(num_ticks);
+        .ticks(num_ticks)
+        .tickFormat(function(d) {
+            return d + '%';
+        });
 
     var y_axis_grid = function() { return yAxis; }
     
