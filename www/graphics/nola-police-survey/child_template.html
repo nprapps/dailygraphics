@@ -10,24 +10,6 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="http://media.npr.org/favicon.ico" />
 
-    <!-- Fonts -->
-    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.4.10/webfont.js"></script>
-    <script>
-        WebFont.load({
-             custom: {
-                 families: [
-                     'Gotham SSm:n4,n7',
-                     'Gotham:n4,n7'
-                 ],
-                 urls: [
-                     'http://s.npr.org/templates/css/fonts/GothamSSm.css',
-                     'http://s.npr.org/templates/css/fonts/Gotham.css'
-                 ]
-             },
-             timeout: 10000
-         });
-    </script>
-    
     <style type="text/css">
         /* base styles */
         body {
@@ -46,7 +28,7 @@
         h3 {
             font-weight: normal;
             color: #333;
-            font-size: 16px;
+            font-size: 12px;
             margin: 0 0 11px 0;
         }
         
@@ -81,10 +63,7 @@
         }
         #graphic:after { clear: both; }
         
-        #graphic svg {
-            font-family: Arial, Helvetica, sans-serif;
-            margin-bottom: 1em;
-        }
+        #graphic svg { font-family: Arial, Helvetica, sans-serif; }
         #graphic .axis {
             font-size: 12px;
             fill: #666;
@@ -109,17 +88,15 @@
             stroke-width: 3px;
         }
 
-        #graphic .bars rect { fill: #17807E; }
-        #graphic .label text,
-        #graphic .value text {
-            font-weight: normal;
+        #graphic .label text {
             font-size: 12px;
             fill: #333;
             text-align: right;
         }
         #graphic .value text { 
-            fill: #fff;
             font-size: 11px;
+            fill: #999;
+            text-align: left;
         }
         
         #graphic .key {
@@ -127,6 +104,7 @@
             margin: 0 0 1em 0;
             padding: 0;
             list-style-type: none;
+            text-transform: capitalize;
         }
         
         #graphic .key .key-item { 
@@ -150,27 +128,35 @@
             color: #333;
             font-weight: normal;
         }
-
-        .line-0 { stroke: #11605E; }
-        .line-1 { stroke: #8BC0BF; }
         
-        .key-0 b { background-color: #11605E; }
-        .key-1 b { background-color: #8BC0BF; }
+        .line-0 { stroke: #17807E; }
+        .line-1 { stroke: #E38D2C; }
         
-        @media screen and (min-width: 481px) {
-            #graph-satisfaction,
-            #graph-neighborhood,
-            #graph-safety {
-                float: left;
+        .key-0 b { background-color: #17807E; }
+        .key-1 b { background-color: #E38D2C; }
+        
+        @media screen and (max-width: 625px) {
+            .graph { 
+                padding-bottom: 11px;
+                border-bottom: 2px solid #eee;
+                margin-bottom: 22px;
             }
-            #graph-satisfaction,
-            #graph-neighborhood {
+            .graph:before,
+            .graph:after {
+                content: " ";
+                display: table;
+            }
+            .graph:after { clear: both; }
+            .meta { float: left; }
+            svg { float: right; }
+        }
+        @media screen and (min-width: 626px) {
+            .graph { 
+                float: left;
                 margin-right: 22px;
             }
-            h3 {
-                font-size: 13px;
-                height: 70px;
-            }
+            #graph-safety { margin-right: 0; }
+            h3 { height: 70px; }
         }
     </style>
 

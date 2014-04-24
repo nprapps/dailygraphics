@@ -1,8 +1,7 @@
 var $graphic;
 var graphic_aspect_width = 4;
 var graphic_aspect_height = 3;
-var mobile_threshold = 480;
-
+var mobile_threshold = 625;
 var pymChild = null;
 
 var colors = {
@@ -46,7 +45,7 @@ var graphic_data_15 = [
 var labels = {
     "satisfaction": "Would you say that you are satisfied or unsatisfied with the New Orleans Police Department overall?",
     "neighborhood": "Would you say that you are satisfied or unsatisfied with police performance in your neighborhood overall?",
-    "safety": "&ldquo;I feel safe in my own neighborhood.&rdquo;"
+    "safety": "Tell me if you agree or disagree with the following statement: &ldquo;I feel safe in my own neighborhood.&rdquo;"
 };
 
 /*
@@ -61,16 +60,25 @@ function draw_graphic(width) {
     render_chart(graphic_data_5, 'neighborhood', width)
     render_chart(graphic_data_15, 'safety', width)
 }
-function render_chart(data, id, width) {
+function render_chart(data, id, container_width) {
     var graphic_data = data;
-    var num_ticks = 5;
-    var margin = {top: 10, right: 15, bottom: 25, left: 40};
-    if (width > mobile_threshold) {
-        width = Math.floor(((width - 44) / 3) - margin.left - margin.right);
-        num_ticks = 3;
-    } else {
-        width = width - margin.left - margin.right;
+    var is_mobile = false;
+    var last_data_point = graphic_data.length - 1;
+    var margin = { top: 10, right: 30, bottom: 25, left: 40 };
+    var num_ticks = 3;
+    var width = container_width;
+
+    if (width <= mobile_threshold) {
+        is_mobile = true;
     }
+
+    if (is_mobile) {
+        width = Math.floor(((container_width - 11) * 2/3) - margin.left - margin.right);
+//        width = container_width - margin.left - margin.right;
+    } else {
+        width = Math.floor(((container_width - 44) / 3) - margin.left - margin.right);
+    }
+
     var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
 
     var x = d3.time.scale()
@@ -118,11 +126,38 @@ function render_chart(data, id, width) {
     var svg = d3.select('#graphic')
         .append('div')
             .attr('id', 'graph-' + id)
-            .attr('style', 'width: ' + (width + margin.left + margin.right) + 'px')
-        .append('h3')
-            .html(labels[id]);
+            .attr('class', 'graph')
+            .attr('style', function(d) {
+                if (!is_mobile) {
+                    return 'width: ' + (width + margin.left + margin.right) + 'px';
+                }
+            })
+        .append('div')
+            .attr('class', 'meta')
+            .attr('style', function(d) {
+                if (is_mobile) {
+                    return 'width: ' + ((container_width - 11) / 3) + 'px';
+                }
+            })
+            .append('h3')
+                .html(labels[id]);
 
-    var svg = d3.select('#graphic #graph-' + id)
+    var legend = d3.select('#graph-' + id + ' .meta')
+        .append('ul')
+            .attr('class', 'key')
+            .selectAll('g')
+                .data(d3.entries(lines))
+            .enter().append('li')
+                .attr('class', function(d, i) { return 'key-item key-' + i + ' ' + d.key.replace(' ', '-').toLowerCase(); });
+    legend.append('b')
+    legend.append('label')
+//        .text(function(d,i) { return labels[i]; });
+        .text(function(d) {
+            return d.key
+        });
+
+
+    var svg = d3.select('#graph-' + id)
         .append('svg')
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -165,6 +200,23 @@ function render_chart(data, id, width) {
             })
             .attr('d', function(d) {
                 return line(d.value);
+            });
+
+    svg.append('g')
+        .attr('class', 'value')
+        .selectAll('text')
+            .data(d3.entries(lines))
+        .enter()
+        .append('text')
+            .attr('x', function(d) { 
+                return x(d['value'][last_data_point]['date']) + 6;
+            })
+            .attr('y', function(d) { 
+                return y(d['value'][last_data_point]['amt'] - 1);
+            })
+            .attr('text-anchor', 'left')
+            .text(function(d) { 
+                return d['value'][last_data_point]['amt'] + '%' 
             });
 
     if (pymChild) {
