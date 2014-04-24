@@ -84,13 +84,11 @@
             </thead>
 
             {% for row in COPY.data %}
-            {% if loop.index != 1 %}
             <tr>
                 <td data-title="{{ COPY.labels.hdr_type }}">{{ row.type }}</td>
                 <td data-title="{{ COPY.labels.hdr_certified }}">{{ row.certified }}</td>
                 <td data-title="{{ COPY.labels.hdr_earners }}">{{ row.earners }}</td>
             </tr>
-            {% endif %}
             {% endfor %}
         </table>
     </div>
