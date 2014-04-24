@@ -15,26 +15,26 @@ var colors = {
 };
 
 var graphic_data_race = [
-    { "label": "Black", "deaths": 91.1 },
-    { "label": "Hispanic", "deaths": 4.3 },
-    { "label": "White", "deaths": 3.2 },
-    { "label": "Other", "deaths": 1.4 }
+    { "label": "Black", "deaths": 317 },
+    { "label": "Hispanic", "deaths": 15 },
+    { "label": "White", "deaths": 11 },
+    { "label": "Other", "deaths": 5 }
 ];
 
 var graphic_data_age = [
-    { "label": "0-9", "deaths": 2.6 },
-    { "label": "10-19", "deaths": 14.2 },
-    { "label": "20-29", "deaths": 39.3 },
-    { "label": "30-39", "deaths": 24.6 },
-    { "label": "40-49", "deaths": 11.3 },
-    { "label": "50-59", "deaths": 5.8 },
-    { "label": "60-69", "deaths": 1.4 },
-    { "label": "70+", "deaths": 0.9 }
+    { "label": "0-9", "deaths": 9 },
+    { "label": "10-19", "deaths": 49 },
+    { "label": "20-29", "deaths": 136 },
+    { "label": "30-39", "deaths": 85 },
+    { "label": "40-49", "deaths": 39 },
+    { "label": "50-59", "deaths": 20 },
+    { "label": "60-69", "deaths": 5 },
+    { "label": "70+", "deaths": 3 }
 ];
 
 var labels = {
-    "race": "Share Of Murders By Race, 2012-13",
-    "age": "Share Of Murders By Age Group, 2012-13"
+    "race": "Murder Victims By Race, 2012-13",
+    "age": "Murder Victims By Age Group, 2012-13"
 };
 
 /*
@@ -54,7 +54,7 @@ function render_chart(data, id, container_width) {
     var graphic_data = data;
     var is_mobile = false;
     var last_data_point = graphic_data.length - 1;
-    var margin = { top: 10, right: 10, bottom: 35, left: 40 };
+    var margin = { top: 10, right: 10, bottom: 35, left: 30 };
     var num_bars = graphic_data.length;
     var num_ticks = 4;
     var width = container_width;
@@ -74,7 +74,7 @@ function render_chart(data, id, container_width) {
 
     var y = d3.scale.linear()
         .range([height, 0])
-        .domain([0, 100]);
+        .domain([0, 400]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -83,10 +83,7 @@ function render_chart(data, id, container_width) {
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient('left')
-        .ticks(num_ticks)
-        .tickFormat(function(d) {
-            return d + '%';
-        });
+        .ticks(num_ticks);
 
     var y_axis_grid = function() { return yAxis; }
     
@@ -149,7 +146,7 @@ function render_chart(data, id, container_width) {
                 return y(d.deaths) - 6;
             })
             .attr('text-anchor', 'middle')
-            .text(function(d) { return d.deaths + '%' });
+            .text(function(d) { return d.deaths; });
 
     if (pymChild) {
         pymChild.sendHeightToParent();
