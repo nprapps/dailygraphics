@@ -52,13 +52,15 @@ var labels = {
  * Render the graphic
  */
 function draw_graphic(width) {
-    // clear out existing graphics
-    $graphic.empty();
+    if (Modernizr.svg) {
+        // clear out existing graphics
+        $graphic.empty();
     
-    // load in new graphics
-    render_chart(graphic_data_4, 'satisfaction', width)
-    render_chart(graphic_data_5, 'neighborhood', width)
-    render_chart(graphic_data_15, 'safety', width)
+        // load in new graphics
+        render_chart(graphic_data_4, 'satisfaction', width)
+        render_chart(graphic_data_5, 'neighborhood', width)
+        render_chart(graphic_data_15, 'safety', width)
+    }
 }
 function render_chart(data, id, container_width) {
     var graphic_data = data;
@@ -123,7 +125,7 @@ function render_chart(data, id, container_width) {
         });
     }
    
-    var svg = d3.select('#graphic')
+    var container = d3.select('#graphic')
         .append('div')
             .attr('id', 'graph-' + id)
             .attr('class', 'graph')
@@ -131,19 +133,20 @@ function render_chart(data, id, container_width) {
                 if (!is_mobile) {
                     return 'width: ' + (width + margin.left + margin.right) + 'px';
                 }
-            })
-        .append('div')
-            .attr('class', 'meta')
-            .attr('style', function(d) {
-                if (is_mobile) {
-                    return 'width: ' + ((container_width - 11) / 3) + 'px';
-                }
-            })
-            .append('h3')
-                .html(labels[id]);
+            });
+    
+    var meta = container.append('div')
+        .attr('class', 'meta')
+        .attr('style', function(d) {
+            if (is_mobile) {
+                return 'width: ' + ((container_width - 11) / 3) + 'px';
+            }
+        });
+    
+    var headline = meta.append('h3')
+        .html(labels[id]);
 
-    var legend = d3.select('#graph-' + id + ' .meta')
-        .append('ul')
+    var legend = meta.append('ul')
             .attr('class', 'key')
             .selectAll('g')
                 .data(d3.entries(lines))
@@ -151,14 +154,12 @@ function render_chart(data, id, container_width) {
                 .attr('class', function(d, i) { return 'key-item key-' + i + ' ' + d.key.replace(' ', '-').toLowerCase(); });
     legend.append('b')
     legend.append('label')
-//        .text(function(d,i) { return labels[i]; });
         .text(function(d) {
             return d.key
         });
 
 
-    var svg = d3.select('#graph-' + id)
-        .append('svg')
+    var svg = container.append('svg')
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")

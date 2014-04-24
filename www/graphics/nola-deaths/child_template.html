@@ -26,9 +26,9 @@
         }
         
         h3 {
-            font-weight: normal;
+            font-weight: bold;
             color: #333;
-            font-size: 12px;
+            font-size: 14px;
             margin: 0 0 11px 0;
         }
         
@@ -83,57 +83,18 @@
             stroke-width: 1px;
             shape-rendering: crispEdges;
         }
-        #graphic .line {
-            fill: none;
-            stroke-width: 3px;
-        }
-
-        #graphic .label text {
-            font-size: 12px;
-            fill: #333;
-            text-align: right;
-        }
+        
         #graphic .value text { 
             font-size: 11px;
             fill: #999;
-            text-align: left;
+            text-align: center;
         }
         
-        #graphic .key {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0 0 1em 0;
-            padding: 0;
-            list-style-type: none;
-            text-transform: capitalize;
+        #graphic .bar { fill: #8BC0BF; }
+        #graph-race .bar-0,
+        #graph-age .bar-2 { 
+            fill: #17807E;
         }
-        
-        #graphic .key .key-item { 
-            display: inline-block;
-            margin: 0 18px 0 0;
-            padding: 0;
-            line-height: 15px;
-        }
-
-        #graphic .key .key-item b { 
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            margin-right: 6px;
-            float: left;
-        }
-
-        #graphic .key .key-item label { 
-            white-space: nowrap;
-            font-size: 12px;
-            color: #333;
-            font-weight: normal;
-        }
-        
-        .line-0 { stroke: #17807E; }
-        .line-1 { stroke: #EFC637; }
-        
-        .key-0 b { background-color: #17807E; }
-        .key-1 b { background-color: #EFC637; }
         
         @media screen and (max-width: 625px) {
             .graph { 
@@ -147,31 +108,30 @@
                 display: table;
             }
             .graph:after { clear: both; }
-            .meta { float: left; }
-            svg { float: right; }
         }
         @media screen and (min-width: 626px) {
             .graph { 
                 float: left;
                 margin-right: 22px;
             }
-            #graph-safety { margin-right: 0; }
-            h3 { height: 70px; }
+            .graph:nth-child(2) { margin-right: 0; }
+        }
+        @media screen and (min-width: 626px) and (max-width: 750px) {
+            #graph-age .axis.x .tick text {
+                -webkit-transform:rotate(-25deg);
+                -ms-transform:rotate(7deg);
+                transform:rotate(7deg);
+            }
         }
     </style>
 
 </head>
 <body>
-    <div id="graphic"><img src="fallback.png" alt="Graph: Responses to a community study about attitudes toward the police and neighborhood stafety" /></div>
+    <div id="graphic"><img src="fallback.png" alt="Graph: New Orleans murders in 2012-13, by race and age" /></div>
     
-    <div class="footnotes">
-        <h4>Notes</h4>
-        <p>March 2014 figures come from a telephone survey conducted March 18-20, 2014. Margin of error: +/- 4 percent</p>
-    </div>
-
     <div class="footer">
-        <p>Source: <a href="http://www.crimecoalitionnola.com/213" target="_blank">New Orleans Crime Fighting Coalition Citizen Perception Survey</a></p>
-        <p>Credit: Alyson Hurt/NPR</p>
+        <p>Source: New Orleans Police Department</p>
+        <p>Credit: Alyson Hurt and Keith O'Brien/NPR</p>
     </div>
 
     <script src="js/lib/jquery.js" type="text/javascript"></script>
