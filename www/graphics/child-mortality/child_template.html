@@ -47,11 +47,16 @@
         #graphic .line {
             fill: none;
             stroke-width: 1px;
-            stroke: #ccc;
+            stroke: #a9cecd;
         }
         #graphic .line.world { 
             stroke-width: 3px;
-            stroke: #000;
+            stroke: #0a403e;
+        }
+        #graphic .line.developing,
+        #graphic .line.developed { 
+            stroke-width: 2px;
+            stroke: #115f5e;
         }
         #graphic text {
             font-family: Arial, Helvetica, sans-serif;
@@ -60,7 +65,11 @@
             text-align: right;
             fill: #333;
         }
-        #graphic .l-world { font-weight: bold; }
+        #graphic .l-world,
+        #graphic .l-developing,
+        #graphic .l-developed { 
+            font-weight: bold;
+        }
         #graphic .axis.label {
             font-size: 12px;
             font-weight: bold;
