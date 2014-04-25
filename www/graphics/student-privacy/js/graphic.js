@@ -196,6 +196,8 @@ function showItems($el){
 function onShowNextClick(){
     var $this = $(this);
     var $nextGrade = $this.parents('.grade').next();
+
+    $this.addClass('done').text('+');
     showItems($nextGrade);
 }
 

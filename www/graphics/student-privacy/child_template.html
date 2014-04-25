@@ -142,18 +142,36 @@
             position: absolute;
             right: 50%;
             bottom: 0;
-            margin-right: -22px;
+            margin-right: -50px;
             display: block;
-            width: 44px;
+            width: 100px;
             height: 44px;
             line-height: 44px;
             text-align: center;
+            color: #fff;
+            background: #4774CC;
+            font-size: 16px;
+            padding: 0 15px;
+
+            -webkit-transition: all .2s ease-in-out;
+               -moz-transition: all .2s ease-in-out;
+                -ms-transition: all .2s ease-in-out;
+                 -o-transition: all .2s ease-in-out;
+                    transition: all .2s ease-in-out;
+                
+        }
+
+        .show-next.done:link,
+        .show-next.done:visited {
+            width: 44px;
+            font-size:36px;
+            padding: 0;
+            margin-right: -22px;
             -webkit-border-radius: 22px;
                -moz-border-radius: 22px;
                     border-radius: 22px;
-            color: #fff;
-            background: #4774CC;
-            font-size: 36px;
+            color: #111;
+            background: #fff;
         }
 
         a.start,
@@ -185,9 +203,15 @@
 
             .show-next:link,
             .show-next:visited {
-                right: -22px;
+                right: -50px;
                 margin-right: 0;
                 top: 0;
+            }
+
+            .show-next.done:link,
+            .show-next.done:visited {
+                right: -22px;
+                margin-right: 0;
             }
 
         }
@@ -204,7 +228,7 @@
             <a class="start" href="javascript:void(0)">Start</a>
 
             <div class="grade grade-pre-k">
-                <h2>Pre-K  <a class="show-next" href="javascript:void(0)">+</a></h2>
+                <h2>Pre-K  <a class="show-next" href="javascript:void(0)">Next</a></h2>
                 <ul>
                 {% for item in COPY.grade_pre_k %}
                     <li class=""><span>{{ item.value }}</span></li>
@@ -212,7 +236,7 @@
                 </ul>
             </div>
             <div class="grade grade-k-5">
-                <h2>K-5 <a class="show-next" href="javascript:void(0)">+</a></h2>
+                <h2>K-5 <a class="show-next" href="javascript:void(0)">Next</a></h2>
                 <ul>
                 {% for item in COPY.grade_k_5 %}
                     <li><span>{{ item.value }}</span></li>
