@@ -40,7 +40,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Helvetica, Arial, sans-serif;
         }
 
         #graphic {
@@ -48,7 +48,8 @@
             max-width: 660px;
         }
 
-        .footnotes { margin-bottom: 20px; }
+        .footer { margin-bottom: 20px; padding-bottom: 20px; }
+        .credit { padding-bottom: 20px;}
         .footnotes h4 {
             margin: 2px 0 7px 0;
             color: #666;
@@ -188,6 +189,12 @@
             text-align: center;
         }
 
+        .subhead {
+            font-size: 22px;
+            color: rgb(153,153,153);
+            font-weight: normal;
+        }
+
 /*        @media screen and (min-width: 480px){
             .grade {
                 float: left;
@@ -222,6 +229,7 @@
 <body>
     <div id="graphic">
 
+        <h2 class="subhead">{{ COPY.content.header_title }}</h2>
         <p class="intro">{{ COPY.content.intro_text }}</p>
 
         <div class="grades">
