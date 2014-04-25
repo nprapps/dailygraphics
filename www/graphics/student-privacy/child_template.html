@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Graphic : NPR</title>
+
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="http://media.npr.org/favicon.ico" />
+
+    <!-- Fonts -->
+    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.4.10/webfont.js"></script>
+    <script>
+        WebFont.load({
+             custom: {
+                 families: [
+                     'Gotham SSm:n4,n7',
+                     'Gotham:n4,n7'
+                 ],
+                 urls: [
+                     'http://s.npr.org/templates/css/fonts/GothamSSm.css',
+                     'http://s.npr.org/templates/css/fonts/Gotham.css'
+                 ]
+             },
+             timeout: 10000
+         });
+    </script>
+    
+    <style type="text/css">
+        /* base styles */
+
+        * {
+            -webkit-box-sizing: border-box;
+               -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #graphic {
+            position: relative;
+            max-width: 660px;
+        }
+
+        .footnotes { margin-bottom: 20px; }
+        .footnotes h4 {
+            margin: 2px 0 7px 0;
+            color: #666;
+            font-size: 11px;
+        }
+        .footnotes p,
+        .footer p {
+            margin: 2px 0 0 0;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #808080;
+        }
+        a, a:link, a:visited {
+            color: #4774CC;
+            text-decoration: none;
+        }
+        a:hover, a:active { opacity: 0.7; }
+
+        .grades {
+            overflow: hidden;
+            clear: both;
+            min-height: 44px;
+            position: relative;
+        }
+
+
+        .grade {
+            display: none;
+            padding-bottom: 44px;
+            position: relative;
+        }
+
+        .grade:first-child {
+            padding-left: 0;
+        }
+
+        .grade ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+/*        .grade {
+               -moz-column-count: 3;
+               -moz-column-gap: 2px;
+               -webkit-column-count: 3;
+               -webkit-column-gap: 2px;
+        }*/
+
+        .grade li {
+            background: #51AADE;
+            color: #fff;
+            font-size: 12px;
+            line-height: 1;
+            display: none;
+        }
+
+        .grade li span {
+            display: block;
+            opacity: 0;
+            padding: 5px;
+            margin: 0 0 2px;
+            -webkit-transition: opacity .2s ease-in-out;
+               -moz-transition: opacity .2s ease-in-out;
+                -ms-transition: opacity .2s ease-in-out;
+                 -o-transition: opacity .2s ease-in-out;
+                    transition: opacity .2s ease-in-out;
+        }
+
+/*        .grade-pre-k li {
+            background: #A8D5EF;
+        }
+
+        .grade-k-5 li {
+            background: #7DBFE6;
+        }
+
+        .grade-6-12 li {
+            background: #51AADE;
+        }*/
+
+        h2 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .show-next:link,
+        .show-next:visited {
+            position: absolute;
+            right: 50%;
+            bottom: 0;
+            margin-right: -22px;
+            display: block;
+            width: 44px;
+            height: 44px;
+            line-height: 44px;
+            text-align: center;
+            -webkit-border-radius: 22px;
+               -moz-border-radius: 22px;
+                    border-radius: 22px;
+            color: #fff;
+            background: #4774CC;
+            font-size: 36px;
+        }
+
+        a.start,
+        a.start:visited {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            margin-left: -50px;
+            display: block;
+            background: #4774CC;
+            color: #fff;
+            padding: 10px;
+            width: 100px;
+            text-align: center;
+        }
+
+        @media screen and (min-width: 480px){
+            .grade {
+                float: left;
+                padding-left: 2px;
+                width: 33.33333%;
+                padding-bottom: 0;
+            }
+
+            .grade h2 {
+                position: relative;
+                line-height: 44px;
+            }
+
+            .show-next:link,
+            .show-next:visited {
+                right: -22px;
+                margin-right: 0;
+                top: 0;
+            }
+
+        }
+
+    </style>
+
+</head>
+<body>
+    <div id="graphic">
+
+        <p class="intro">{{ COPY.content.intro_text }}</p>
+
+        <div class="grades">
+            <a class="start" href="javascript:void(0)">Start</a>
+
+            <div class="grade grade-pre-k">
+                <h2>Pre-K  <a class="show-next" href="javascript:void(0)">+</a></h2>
+                <ul>
+                {% for item in COPY.grade_pre_k %}
+                    <li class=""><span>{{ item.value }}</span></li>
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="grade grade-k-5">
+                <h2>K-5 <a class="show-next" href="javascript:void(0)">+</a></h2>
+                <ul>
+                {% for item in COPY.grade_k_5 %}
+                    <li><span>{{ item.value }}</span></li>
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="grade grade-6-12">
+                <h2>6-12</h2>
+                <ul>
+                {% for item in COPY.grade_6_12 %}
+                    <li><span>{{ item.value }}</span></li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+<!--     <div class="footnotes">
+        <h4>Notes</h4>
+        <p>{{ COPY.content.lorem_ipsum }}</p>
+    </div> -->
+
+    <div class="footer">
+        <p>Source: {{ COPY.attribution.source }}</p>
+        <p>Credit: {{ COPY.attribution.byline }}/NPR</p>
+    </div>
+
+    <script src="js/lib/jquery.js" type="text/javascript"></script>
+    <script src="js/lib/pym.js" type="text/javascript"></script>
+    <script src="js/graphic.js" type="text/javascript"></script>
+</body>
+</html>
