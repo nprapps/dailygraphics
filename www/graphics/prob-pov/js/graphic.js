@@ -9,9 +9,14 @@ var colors = {
 };
 
 var $graphic = $('#graphic');
-    // var graphic_data_url = 'consec-rank2.csv';
-    var graphic_data_url = 'consec-rank.csv';
+    var graphic_data_url = 'consec-rank2.csv';
+    // var graphic_data_url = 'consec-rank.csv';
     var graphic_data;
+d3.selection.prototype.moveToFront = function() {
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
+};
 
 
 /*
@@ -71,6 +76,11 @@ function render(width) {
             .x(function(d) { return x(d.yr); })
             .y(function(d) { return y(d.indexed); });
 
+        var area = d3.svg.area()
+            .x(function(d) { return x(d.yr); })
+            .y0(height)
+            .y1(function(d) { return y(d.indexed); });            
+
         var xVal = function(d) { return d.yr;};
         var xMap = function(d) { return x(xVal(d));}; 
 
@@ -120,12 +130,19 @@ function render(width) {
                 .tickSize(-width, 0, 0)
                 .tickFormat("")); 
     
+
+        quint.append("path")
+                .attr("class", "area")
+                .attr("d", function(d) { return area(d.values); })
+                .style("opacity",".2");     
+
         quint.append("path")
             .attr('class', function(d) { 
                 return 'line quint-' + d.name.replace(/\s+/g, '-').toLowerCase();
             })
-            .style("opacity", .4)
+            .style("opacity", .2)
             .attr("d", function(d) { return line(d.values); });
+
             // .style("stroke", function(d) { 
             //                 if (d.name.toLowerCase() == 'all industries') {
             //                     return '#333';
@@ -134,13 +151,11 @@ function render(width) {
             //                 }
             //             });
 
-        quint.selectAll(".point")
-              .data(quintiles)
-            .enter().append("circle")
+        quint.append("circle")
               .attr("class", "point")
               .attr("r", 3.5)
-              .attr("cx", xMap)
-              .attr("cy", yMap);
+              .attr("cx", function(d) { return xMap(d.values); })
+              .attr("cy", function(d) { return yMap(d.values); });
               // .style("fill", function(d) { return color(cValue(d));}) 
               // .on("mouseover", function(d) {
               //     tooltip.transition()
@@ -183,6 +198,13 @@ function render(width) {
                     .attr('transform', 'translate( -70 ,' + height/3 + ') rotate(-90)')
                     .text("Index, Age 25 = 1")
                     .style("opacity", ".7");
+
+            d3.selectAll(".line").moveToFront();
+            d3.select(".quint-in-poverty").style("opacity","0");
+            d3.select(".quint-near-poverty-and-below").style("opacity","0");
+            d3.select(".quint-near-poverty-and-below").style("opacity","0");
+            d3.select(".quint-very-close-to-poverty-and-below").style("opacity","0");
+            // d3.select(".quint-jewerly").style("stroke",colors["yellow4"]).style("opacity",".8").style("stroke-width","3").attr("id","personal").moveToFront();
 
         // function to highlight lines: http://bl.ocks.org/AlexanderGraf/5416979#indfundbyregbytime.js
         function mouseover(d, i) {
