@@ -24,7 +24,7 @@ d3.selection.prototype.moveToFront = function() {
  */
 function render(width) {
     // TODO: draw your graphic
-        console.log(graphic_data);
+//        console.log(graphic_data);
 
         var margin = { top: 0, right: 100, bottom: 20, left: 75 };
         var width = width/1.3 - margin.left - margin.right;
@@ -101,7 +101,7 @@ function render(width) {
                 })
             };
         });
-        console.log(quintiles);
+//        console.log(quintiles);
 
         // Scale the range of the data
         x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.yr); }));
@@ -154,8 +154,8 @@ function render(width) {
         quint.append("circle")
               .attr("class", "point")
               .attr("r", 3.5)
-              .attr("cx", function(d) { return xMap(d.values); })
-              .attr("cy", function(d) { return yMap(d.values); });
+              .attr("cx", function(d, i) { if (d.values[i] != undefined) { return xMap(d.values[i]); }})
+              .attr("cy", function(d, i) { if (d.values[i] != undefined) { return yMap(d.values[i]); }});
               // .style("fill", function(d) { return color(cValue(d));}) 
               // .on("mouseover", function(d) {
               //     tooltip.transition()
