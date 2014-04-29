@@ -107,7 +107,7 @@ function render(width) {
         x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.yr); }));
         y.domain([
             d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
-            d3.max(quintiles, function(c) { return d3.max(c.values, function(v) { return v.indexed; }); })
+         100    
         ]);
 
         var quint = svg.selectAll(".quint")
@@ -131,10 +131,10 @@ function render(width) {
                 .tickFormat("")); 
     
 
-        quint.append("path")
-                .attr("class", "area")
-                .attr("d", function(d) { return area(d.values); })
-                .style("opacity",".2");     
+        // quint.append("path")
+        //         .attr("class", "area")
+        //         .attr("d", function(d) { return area(d.values); })
+        //         .style("opacity",".2");     
 
         quint.append("path")
             .attr('class', function(d) { 
@@ -196,7 +196,7 @@ function render(width) {
                     .attr("transform", "rotate(-90)")
                     // .attr('transform', 'translate(' + -width/36 + ',' + height/6 + ') rotate(-90)')
                     .attr('transform', 'translate( -70 ,' + height/3 + ') rotate(-90)')
-                    .text("Index, Age 25 = 1")
+                    .text("Chance You Will Achieve This")
                     .style("opacity", ".7");
 
             d3.selectAll(".line").moveToFront();
