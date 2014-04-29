@@ -1,6 +1,6 @@
 var $graphic;
-var graphic_aspect_width = 4;
-var graphic_aspect_height = 3;
+var graphic_aspect_width = 16;
+var graphic_aspect_height = 9;
 var graphic_data;
 var graphic_data_url = 'data.csv';
 var mobile_threshold = 480;
