@@ -80,10 +80,20 @@ var labels = {
 /*
  * Render the graphic
  */
+<<<<<<< HEAD
 function draw_graphic(width) {
     if (Modernizr.svg) {
         // clear out existing graphics
         $graphic.empty();
+=======
+function render(width) {
+    // TODO: draw your graphic
+//        console.log(graphic_data);
+
+        var margin = { top: 0, right: 100, bottom: 20, left: 75 };
+        var width = width/1.3 - margin.left - margin.right;
+        var height = 400 - margin.top - margin.bottom;
+>>>>>>> 091457ce59f99948d5f9db9a6ba5785e36de9517
     
         // load in new graphics
         render_chart(graphic_data_4, 'top20', width)
@@ -150,6 +160,7 @@ function render_chart(data, id, container_width) {
                 'amt': d[column]
             };
         });
+<<<<<<< HEAD
     }
    
     var container = d3.select('#graphic')
@@ -169,6 +180,36 @@ function render_chart(data, id, container_width) {
                 return 'width: ' + ((container_width - 11) / 3) + 'px';
             }
         });
+=======
+//        console.log(quintiles);
+
+        // Scale the range of the data
+        x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.yr); }));
+        y.domain([
+            d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
+            d3.max(quintiles, function(c) { return d3.max(c.values, function(v) { return v.indexed; }); })
+        ]);
+
+        var quint = svg.selectAll(".quint")
+            .data(quintiles)
+            .enter().append("g")
+            .attr("class", "quint");
+
+        svg.append("g") // Add the X Axis
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        svg.append("g") // Add the Y Axis
+            .attr("class", "y axis")
+            .call(yAxis);           
+            
+        svg.append("g")        
+            .attr("class", "y grid")
+            .call(y_axis_grid()
+                .tickSize(-width, 0, 0)
+                .tickFormat("")); 
+>>>>>>> 091457ce59f99948d5f9db9a6ba5785e36de9517
     
     var headline = meta.append('h3')
         .html(labels[id]);
@@ -186,6 +227,7 @@ function render_chart(data, id, container_width) {
         });
 
 
+<<<<<<< HEAD
     var svg = container.append('svg')
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -225,6 +267,52 @@ function render_chart(data, id, container_width) {
         .append('path')
             .attr('class', function(d, i) {
                 return 'line line-' + i;
+=======
+        quint.append("path")
+            .attr('class', function(d) { 
+                return 'line quint-' + d.name.replace(/\s+/g, '-').toLowerCase();
+            })
+            .style("opacity", .2)
+            .attr("d", function(d) { return line(d.values); });
+
+            // .style("stroke", function(d) { 
+            //                 if (d.name.toLowerCase() == 'all industries') {
+            //                     return '#333';
+            //                 } else {
+            //                     return color(d.name);
+            //                 }
+            //             });
+
+        quint.append("circle")
+              .attr("class", "point")
+              .attr("r", 3.5)
+              .attr("cx", function(d, i) { if (d.values[i] != undefined) { return xMap(d.values[i]); }})
+              .attr("cy", function(d, i) { if (d.values[i] != undefined) { return yMap(d.values[i]); }});
+              // .style("fill", function(d) { return color(cValue(d));}) 
+              // .on("mouseover", function(d) {
+              //     tooltip.transition()
+              //          .duration(200)
+              //          .style("opacity", .9);
+              //     tooltip.html(d["Cereal Name"] + "<br/> (" + xValue(d) 
+              //       + ", " + yValue(d) + ")")
+              //          .style("left", (d3.event.pageX + 5) + "px")
+              //          .style("top", (d3.event.pageY - 28) + "px");
+              // })
+
+
+        // svg.append('g')
+        //     .attr('class', 'x grid')
+        //     .attr('transform', 'translate(0,' + height + ')')
+        //     .call(x_axis_grid()
+        //         .tickSize(-height, 0, 0)
+        //         .tickFormat('')
+        //     );
+
+        quint.append("text")
+            .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+            .attr('class', function(d) {
+                return 'text quint-' + d.name.replace(/\s+/g, '-').toLowerCase();
+>>>>>>> 091457ce59f99948d5f9db9a6ba5785e36de9517
             })
             .attr('d', function(d) {
                 return line(d.value);
