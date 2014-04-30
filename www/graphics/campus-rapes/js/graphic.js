@@ -1,9 +1,9 @@
 var $graphic;
 var bar_gap = 10;
 var bar_height = 25;
-var graphic_aspect_width = 16;
-var graphic_aspect_height = 9;
-var mobile_threshold = 625;
+var graphic_aspect_width = 4;
+var graphic_aspect_height = 3;
+var mobile_threshold = 480;
 var pymChild = null;
 
 var colors = {
