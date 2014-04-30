@@ -62,13 +62,9 @@ function draw_graphic(width) {
     for (var column in graphic_data[0]) {
         if (column == 'year') continue;
         lines[column] = graphic_data.map(function(d) {
-            return { 
-                'year': d.year, 
-                'amt': parseFloat(d[column])
-            };
-            }).filter(function(d) {
-                return d.count.length;
-            });
+            return { 'year': d.year, 'amt': d[column] };
+        }).filter(function(d) {
+            return d.amt.length;
         });
     }
    
@@ -91,7 +87,22 @@ function draw_graphic(width) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
     x.domain(d3.extent(graphic_data, function(d) { return d.year; }));
-    y.domain([0, 100]);
+    y.domain([
+        d3.min(d3.entries(lines), function(c) { 
+            return d3.min(c.value, function(v) { 
+                var n = parseFloat(v.amt);
+                return Math.floor(n/10) * 10; // round to next 10
+                return n; 
+            }); 
+        }),
+        d3.max(d3.entries(lines), function(c) { 
+            return d3.max(c.value, function(v) { 
+                var n = parseFloat(v.amt);
+                return Math.ceil(n/10) * 10; // round to next 10
+                return n; 
+            }); 
+        })
+    ]);
     
     svg.append('g')
         .attr('class', 'x axis')
@@ -128,37 +139,6 @@ function draw_graphic(width) {
                 return line(d.value);
             });
         
-    svg.append('g')
-        .attr('class', 'value')
-        .selectAll('text')
-            .data(d3.entries(lines))
-        .enter()
-        .append('text')
-            .attr('x', function(d) { 
-                return x(d['value'][last_data_point]['year']) + 6;
-            })
-            .attr('y', function(d) { 
-                var ypos = y(d['value'][last_data_point]['amt'] - 1);
-                switch(d.key) {
-                    case 'White':
-                        ypos -= 5;
-                        break;
-                    case 'Hispanic':
-                        ypos += 10;
-                        break;
-                    case 'Other':
-                        ypos += 5;
-                        break;
-                }
-                console.log(ypos);
-                return ypos;
-            })
-            .attr('dy', -4)
-            .attr('text-anchor', 'left')
-            .text(function(d) { 
-                return d['value'][last_data_point]['amt'] + '%' 
-            });
-
     if (pymChild) {
         pymChild.sendHeightToParent();
     }

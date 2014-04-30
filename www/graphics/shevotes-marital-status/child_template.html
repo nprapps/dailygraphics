@@ -94,7 +94,6 @@
             margin: 0 0 1em 0;
             padding: 0;
             list-style-type: none;
-            text-transform: capitalize;
         }
         
         #graphic .key .key-item { 
@@ -119,26 +118,33 @@
             font-weight: normal;
         }
         
-        .line-0 { stroke: #7DBFE6; }
-        .line-1 { stroke: #EAAA61; }
-        .line-2 { stroke: #51A09E; }
-        .line-3 { stroke: #E27560; }
-        .line-4 { stroke: #CCCCCC; }
+        .line-0 { stroke: #EAAA61; }
+        .line-1 { stroke: #7DBFE6; }
+        .line-2 { 
+            stroke: #EAAA61;
+            stroke-dasharray: 3,3;
+        }
+        .line-3 { 
+            stroke: #7DBFE6;
+            stroke-dasharray: 3,3;
+        }
         
-        .key-0 b { background-color: #7DBFE6; }
-        .key-1 b { background-color: #EAAA61; }
-        .key-2 b { background-color: #51A09E; }
-        .key-3 b { background-color: #E27560; }
-        .key-4 b { background-color: #CCCCCC; }
+        .key-0 b { background-color: #EAAA61; }
+        .key-1 b { background-color: #7DBFE6; }
+        
+        #graphic .key .key-2,
+        #graphic .key .key-3 { 
+            display: none;
+        }
     </style>
 
 </head>
 <body>
-    <h1>California Population By Race, 1850-2012</h1>
+    <h1>Voter Turnout Among Women, By Marital Status</h1>
     <div id="graphic"><img src="fallback.png" alt="Chart" /></div>
     
     <div class="footer">
-        <p>Source: Pew Reseach Center tabulations of IPUMS U.S. census data 1850 to 2010 and the 2012 American Community Survey</p>
+        <p>Source: <a href="http://www.census.gov/hhes/www/socdemo/voting/publications/p20/">U.S. Census Bureau</a>, Lake Research</p>
         <p>Credit: Alyson Hurt/NPR</p>
     </div>
 
