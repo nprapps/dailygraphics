@@ -18,8 +18,7 @@ var graphic_data_4 = [
     { "yr": 2, "chance": 60.5 },
     { "yr": 3, "chance": 53   },
     { "yr": 4, "chance": 46.5 },
-    { "yr": 5, "chance": 40.8 },
-    { "yr": 10, "chance": 23  },
+    { "yr": 5, "chance": 40.8 }
 
 ];
 // top 10 percent
@@ -28,8 +27,7 @@ var graphic_data_5 = [
     { "yr": 2, "chance": 39.4},
     { "yr": 3, "chance": 32},
     { "yr": 4, "chance": 27.1},
-    { "yr": 5, "chance": 20.8},
-    { "yr": 10, "chance":9.7},
+    { "yr": 5, "chance": 20.8}
 
 ];
 // top 5 percent
@@ -38,8 +36,7 @@ var graphic_data_6 = [
     { "yr": 2, "chance": 24.8 },
     { "yr": 3, "chance": 17.7 },
     { "yr": 4, "chance": 13.2 },
-    { "yr": 5, "chance": 9.1 },
-    { "yr": 10, "chance":4.5 },
+    { "yr": 5, "chance": 9.1 }
 
 ];
 // top 1 percent
@@ -48,8 +45,64 @@ var graphic_data_7 = [
     { "yr": 2, "chance": 5.3 },
     { "yr": 3, "chance": 3.3 },
     { "yr": 4, "chance": 2.5 },
-    { "yr": 5, "chance":1.6 },
-    { "yr": 10, "chance":0.6 },
+    { "yr": 5, "chance":1.6 }
+
+];
+
+// poverty
+var graphic_data_8 = [
+    { "yr": 1, "chance": 38.9 },
+    { "yr": 2, "chance": 19.9 },
+    { "yr": 3, "chance": 12.9 },
+    { "yr": 4, "chance": 8.7  },
+    { "yr": 5, "chance": 6.1  }
+
+];
+
+// 1.25*poverty
+var graphic_data_9 = [
+    { "yr": 1, "chance": 46.8 },
+    { "yr": 2, "chance": 24.9 },
+    { "yr": 3, "chance": 17.1 },
+    { "yr": 4, "chance": 12.7 },
+    { "yr": 5, "chance": 9.1  }
+
+];
+
+// 1.5*poverty
+var graphic_data_10 = [
+    { "yr": 1, "chance": 54.1 },
+    { "yr": 2, "chance": 32.2 },
+    { "yr": 3, "chance": 22.2 },
+    { "yr": 4, "chance": 16.5 },
+    { "yr": 5, "chance": 12.4 }
+
+];
+// 100k
+var graphic_data_11 = [
+    { "yr": 1, "chance": 76.8 },
+    { "yr": 2, "chance": 62.5 },
+    { "yr": 3, "chance": 53.0 },
+    { "yr": 4, "chance": 46.6 },
+    { "yr": 5, "chance": 41.3 }
+
+];
+// 150k
+var graphic_data_12 = [
+    { "yr": 1, "chance": 50.9 },
+    { "yr": 2, "chance": 35.1 },
+    { "yr": 3, "chance": 23.3 },
+    { "yr": 4, "chance": 19.3 },
+    { "yr": 5, "chance": 15.9 }
+
+];
+// 200k
+var graphic_data_13 = [
+    { "yr": 1, "chance": 32.2 },
+    { "yr": 2, "chance": 19.4 },
+    { "yr": 3, "chance": 13.0 },
+    { "yr": 4, "chance": 9.4 },
+    { "yr": 5, "chance": 6.8 }
 
 ];
 
@@ -72,41 +125,44 @@ var graphic_data_7 = [
 // ];
 
 var labels = {
-    "top20": "What are the chances you break into the top 20 percent?",
-    "top10": "What are the chances you break into the top 10 percent?",
-    "top5": "What are the chances you break into the top 5 percent?",
+    "top20": "...break into the top 20 percent of income?",
+    "top10": "...break into the top 10 percent of income?",
+    "top5": "...break into the top 5 percent of income?",
+    "top1": "...break into the top 1 percent of income?",
+    "p1": "...fall into poverty?",
+    "p125": "...fall into near poverty and below?",
+    "k100": "...make over 100k (in 2009 dollars)?",
+    "k150": "...make over 150k (in 2009 dollars)?",
+    "k200": "...make over 200k (in 2009 dollars)?",
+    // "p15": "...into the top 1 percent of income?",
 };
 
 /*
  * Render the graphic
  */
-<<<<<<< HEAD
 function draw_graphic(width) {
     if (Modernizr.svg) {
         // clear out existing graphics
         $graphic.empty();
-=======
-function render(width) {
-    // TODO: draw your graphic
-//        console.log(graphic_data);
-
-        var margin = { top: 0, right: 100, bottom: 20, left: 75 };
-        var width = width/1.3 - margin.left - margin.right;
-        var height = 400 - margin.top - margin.bottom;
->>>>>>> 091457ce59f99948d5f9db9a6ba5785e36de9517
     
         // load in new graphics
-        render_chart(graphic_data_4, 'top20', width)
-        render_chart(graphic_data_5, 'top10', width)
-        render_chart(graphic_data_6, 'top5', width)
+        render_chart(graphic_data_4, 'top20', width);
+        render_chart(graphic_data_5, 'top10', width);
+        render_chart(graphic_data_6, 'top5', width);
+        render_chart(graphic_data_7, 'top1', width);
+        render_chart(graphic_data_9, 'p125', width);
+        render_chart(graphic_data_8, 'p1', width);
+        render_chart(graphic_data_11, 'k100', width);
+        render_chart(graphic_data_12, 'k150', width);
+        render_chart(graphic_data_13, 'k200', width);
     }
 }
 function render_chart(data, id, container_width) {
     var graphic_data = data;
     var is_mobile = false;
     var last_data_point = graphic_data.length - 1;
-    var margin = { top: 10, right: 30, bottom: 25, left: 40 };
-    var num_ticks = 3;
+    var margin = { top: 10, right: 30, bottom: 35, left: 40 };
+    var num_ticks = 5;
     var width = container_width;
 
     if (width <= mobile_threshold) {
@@ -133,7 +189,7 @@ function render_chart(data, id, container_width) {
         .orient("bottom")
         .ticks(num_ticks);
         
-    var x_axis_grid = function() { return xAxis; }
+    var x_axis_grid = function() { return xAxis; };
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -143,7 +199,7 @@ function render_chart(data, id, container_width) {
             return d + '%';
         });
     
-    var y_axis_grid = function() { return yAxis; }
+    var y_axis_grid = function() { return yAxis; };
     
     var line = d3.svg.line()
         .interpolate('monotone')
@@ -155,12 +211,11 @@ function render_chart(data, id, container_width) {
     for (var column in graphic_data[0]) {
         if (column == 'yr') continue;
         lines[column] = graphic_data.map(function(d) {
-            return { 
-                'yr': d.yr, 
+            return {
+                'yr': d.yr,
                 'amt': d[column]
             };
         });
-<<<<<<< HEAD
     }
    
     var container = d3.select('#graphic')
@@ -180,54 +235,23 @@ function render_chart(data, id, container_width) {
                 return 'width: ' + ((container_width - 11) / 3) + 'px';
             }
         });
-=======
-//        console.log(quintiles);
-
-        // Scale the range of the data
-        x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.yr); }));
-        y.domain([
-            d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
-            d3.max(quintiles, function(c) { return d3.max(c.values, function(v) { return v.indexed; }); })
-        ]);
-
-        var quint = svg.selectAll(".quint")
-            .data(quintiles)
-            .enter().append("g")
-            .attr("class", "quint");
-
-        svg.append("g") // Add the X Axis
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
-
-        svg.append("g") // Add the Y Axis
-            .attr("class", "y axis")
-            .call(yAxis);           
-            
-        svg.append("g")        
-            .attr("class", "y grid")
-            .call(y_axis_grid()
-                .tickSize(-width, 0, 0)
-                .tickFormat("")); 
->>>>>>> 091457ce59f99948d5f9db9a6ba5785e36de9517
     
     var headline = meta.append('h3')
         .html(labels[id]);
 
-    var legend = meta.append('ul')
-            .attr('class', 'key')
-            .selectAll('g')
-                .data(d3.entries(lines))
-            .enter().append('li')
-                .attr('class', function(d, i) { return 'key-item key-' + i + ' ' + d.key.replace(' ', '-').toLowerCase(); });
-    legend.append('b')
-    legend.append('label')
-        .text(function(d) {
-            return d.key
-        });
+    // var legend = meta.append('ul')
+    //         .attr('class', 'key')
+    //         .selectAll('g')
+    //             .data(d3.entries(lines))
+    //         .enter().append('li')
+    //             .attr('class', function(d, i) { return 'key-item key-' + i + ' ' + d.key.replace(' ', '-').toLowerCase(); });
+    // legend.append('b')
+    // legend.append('label')
+    //     .text(function(d) {
+    //         return d.key
+    //     });
 
 
-<<<<<<< HEAD
     var svg = container.append('svg')
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -246,13 +270,13 @@ function render_chart(data, id, container_width) {
         .attr('class', 'y axis')
         .call(yAxis);
 
-    svg.append('g')
-        .attr('class', 'x grid')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(x_axis_grid()
-            .tickSize(-height, 0, 0)
-            .tickFormat('')
-        );
+    // svg.append('g')
+    //     .attr('class', 'x grid')
+    //     .attr('transform', 'translate(0,' + height + ')')
+    //     .call(x_axis_grid()
+    //         .tickSize(-height, 0, 0)
+    //         .tickFormat('')
+    //     );
 
     svg.append('g')
         .attr('class', 'y grid')
@@ -267,73 +291,55 @@ function render_chart(data, id, container_width) {
         .append('path')
             .attr('class', function(d, i) {
                 return 'line line-' + i;
-=======
-        quint.append("path")
-            .attr('class', function(d) { 
-                return 'line quint-' + d.name.replace(/\s+/g, '-').toLowerCase();
-            })
-            .style("opacity", .2)
-            .attr("d", function(d) { return line(d.values); });
-
-            // .style("stroke", function(d) { 
-            //                 if (d.name.toLowerCase() == 'all industries') {
-            //                     return '#333';
-            //                 } else {
-            //                     return color(d.name);
-            //                 }
-            //             });
-
-        quint.append("circle")
-              .attr("class", "point")
-              .attr("r", 3.5)
-              .attr("cx", function(d, i) { if (d.values[i] != undefined) { return xMap(d.values[i]); }})
-              .attr("cy", function(d, i) { if (d.values[i] != undefined) { return yMap(d.values[i]); }});
-              // .style("fill", function(d) { return color(cValue(d));}) 
-              // .on("mouseover", function(d) {
-              //     tooltip.transition()
-              //          .duration(200)
-              //          .style("opacity", .9);
-              //     tooltip.html(d["Cereal Name"] + "<br/> (" + xValue(d) 
-              //       + ", " + yValue(d) + ")")
-              //          .style("left", (d3.event.pageX + 5) + "px")
-              //          .style("top", (d3.event.pageY - 28) + "px");
-              // })
-
-
-        // svg.append('g')
-        //     .attr('class', 'x grid')
-        //     .attr('transform', 'translate(0,' + height + ')')
-        //     .call(x_axis_grid()
-        //         .tickSize(-height, 0, 0)
-        //         .tickFormat('')
-        //     );
-
-        quint.append("text")
-            .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-            .attr('class', function(d) {
-                return 'text quint-' + d.name.replace(/\s+/g, '-').toLowerCase();
->>>>>>> 091457ce59f99948d5f9db9a6ba5785e36de9517
             })
             .attr('d', function(d) {
                 return line(d.value);
             });
 
+// x axis label
+    // svg.append('text')
+    //     .text("Number Of Consecutive Years")
+    //     .attr("x", width/10)
+    //     .attr("y",y(-35));
+
+// last value
     svg.append('g')
-        .attr('class', 'value')
+        .attr('class', 'end-value')
         .selectAll('text')
             .data(d3.entries(lines))
         .enter()
         .append('text')
-            .attr('x', function(d) { 
-                return x(d['value'][last_data_point]['yr']) + 6;
+            .attr('x', function(d) {
+                return x(d['value'][last_data_point]['yr']) - 4;
             })
-            .attr('y', function(d) { 
-                return y(d['value'][last_data_point]['amt'] - 1);
+            .attr('y', function(d) {
+                return y(d['value'][last_data_point]['amt'] + 6);
             })
             .attr('text-anchor', 'left')
-            .text(function(d) { 
-                return d['value'][last_data_point]['amt'] + '%' 
+            .text(function(d) {
+                return d['value'][last_data_point]['amt'] + '%';
             });
+
+// first value
+    svg.append('g')
+        .attr('class', 'start-value')
+        .selectAll('text')
+            .data(d3.entries(lines))
+        .enter()
+        .append('text')
+            .attr('x', function(d) {
+                return x(d['value'][0]['yr']) - 4;
+            })
+            .attr('y', function(d) {
+                return y(d['value'][0]['amt'] + 6);
+            })
+            .attr('text-anchor', 'left')
+            .text(function(d) {
+                return d['value'][0]['amt'] + '%' ;
+            });
+
+var xaxis_label = meta.append('p')
+        .html("Number Of Consecutive Years");
 
     if (pymChild) {
         pymChild.sendHeightToParent();
@@ -350,13 +356,13 @@ $(window).load(function() {
     if (Modernizr.svg) {
         // format datestamps
         graphic_data_4.forEach(function(d) {
-            d.yr = +d.yr
+            d.yr = +d.yr;
         });
         graphic_data_5.forEach(function(d) {
-            d.yr = +d.yr
+            d.yr = +d.yr;
         });
         graphic_data_6.forEach(function(d) {
-            d.yr = +d.yr
+            d.yr = +d.yr;
         });
         
         // setup pym
