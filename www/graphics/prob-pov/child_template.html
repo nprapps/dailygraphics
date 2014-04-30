@@ -36,92 +36,6 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        h3 {
-        font-weight: normal;
-        color: #333;
-        font-size: 14px;
-        margin: 0 0 11px 0;
-        }
-
-        p {
-        font-weight: normal;
-        color: #333;
-        font-size: 10px;
-        margin: 0 0 11px 0;
-        }
-
-        #graph-top20 .line-0{
-            stroke:#51AADE ;
-        }
-        #graph-top20 {
-            float: left;
-            align:center;
-        }
-        #graph-top10 .line-0{
-            stroke:#51AADE ;
-        }
-        #graph-top10 {
-            float: left;
-            align:center;
-        }
-        #graph-top5 .line-0{
-            stroke:#51AADE ;
-        }
-        #graph-top5 {
-            float: left;
-            align:center;
-        }
-        #graph-top1 .line-0{
-            stroke:#51AADE ;
-        }
-        #graph-top1 {
-            float: left;
-            align:center;
-        }
-        #graph-p1 .line-0{
-            stroke:#D8472B ;
-        }        
-        #graph-p1 {
-            float: left;
-            align:center;
-        }
-        #graph-p125 .line-0{
-            stroke:#D8472B ;
-        }      
-        #graph-p125 {
-            float: left;
-            align:center;
-        }
-
-        #graph-p1 {
-            float: left;
-            align:center;
-        }
-        #graph-p125 {
-            float: left;
-            align:center;
-        }
-        #graph-k100 .line-0{
-            stroke:#17807E;
-        }        
-        #graph-k100 {
-            float: left;
-            align:center;
-        }
-        #graph-k150 .line-0{
-            stroke:#17807E;
-        }         
-        #graph-k150 {
-            float: left;
-            align:center;
-        }
-        #graph-k200 .line-0{
-            stroke:#17807E;
-        }         
-        #graph-k200 {
-            float: left;
-            align:center;
-        }
 
 
         .footnotes { margin-bottom: 20px; }
@@ -143,64 +57,6 @@
         }
         a:hover, a:active { opacity: 0.7; }
 
-
-/*temp*/
-
-   #graphic { width: 100%; }
-
-        #graphic svg {
-            font-family: Arial, Helvetica, sans-serif;
-            margin-bottom: 1em;
-            font-size: 11px;
-
-        }
-
-        #graphic path { 
-            stroke: #666;
-            stroke-width: 2;
-            fill: none;
-        }
-
-        #graphic .axis {
-            font-size: 12px;
-            color: #666;
-        }
-        #graphic .axis path,
-        #graphic .axis line {
-            fill: none;
-            stroke: #666;
-            stroke-width: 1;
-            shape-rendering: crispEdges;
-        }
-
-        #graphic .axis.y path { display: none; }
-        #graphic .axis.y .tick line { 
-            stroke: #ccc;
-            stroke-width: 1px;
-            shape-rendering: crispEdges; }
-        #graphic .grid path { display: none; }
-        #graphic .grid .tick {
-            stroke: #ccc;
-            stroke-dasharray: 1px 3px;
-            stroke-width: 1px;
-            shape-rendering: crispEdges;
-        }
-
-        #graphic .quint .line.quint-all-industries {
-            stroke-width: 4;
-            stroke: #ccc;
-
-        }
-
-        #graphic .quint .text.quint-all-industries {
-            font-weight: bold;
-        }
-
-        #graphic .area {
-            fill: lightsteelblue;
-            stroke-width: 0;
-        }
-
         .footer p {
             margin: 2px 0 0 0;
             font-size: 11px;
@@ -208,6 +64,15 @@
             color: #808080;
         }
 
+        #graph-filled {
+            float: left;
+
+        } 
+
+        #graph-nofill {
+            float: left;
+
+        }   
 
 /*temp*/
 
@@ -215,18 +80,20 @@
 
 </head>
 <body>
-    <h4> Within your  lifetime, what are the chances that you... </h4>
+    <h4> 73 out of 100 people will be within the top 20% of income in their lifetime. </h4>
+
+<!--     <img class = "usa" src="us.svg" alt="usa"> -->
 
     <div id="graphic"></div>
-    
+
     <div class="footnotes">
         <h4>Notes</h4>
-        <p>{{ COPY.content.lorem_ipsum }}</p>
-    </div>
-
+<!--         <p>{{ COPY.content.lorem_ipsum }}</p>
+ -->    </div>
+    
     <div class="footer">
-        <p>Source: DATA-SOURCE-HERE</p>
-        <p>Credit: YOUR-NAME/NPR</p>
+        <p>Source: Chasing the American Dream: Understanding What Shapes Our Fortunes</p>
+        <p>Credit: Quoctrung Bui/NPR</p>
     </div>
     <script src="js/lib/jquery.js" type="text/javascript"></script>
     <script src="js/lib/d3.v3.min.js" type="text/javascript"></script>
