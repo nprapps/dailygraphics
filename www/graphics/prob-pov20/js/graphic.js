@@ -1,5 +1,5 @@
 
-// Poverty%
+// Top 20%
 
 var $graphic;
 var graphic_aspect_width = 4;
@@ -7,13 +7,15 @@ var graphic_aspect_height = 3;
 var mobile_threshold = 625;
 var pymChild = null;
 var col = 10;
+var cfill = 72;
+var cnofill = 100-cfill;
 
 
 /*
  * Render the graphic
  */
 function draw_graphic(width) {
-    var cfill = 20;
+    var cfill = 60;
     var cnofill = 100-cfill;
     if (Modernizr.svg) {
         // clear out existing graphics
