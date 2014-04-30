@@ -42,20 +42,25 @@
             color: #333;
         }
         
-        dt {
+        h3 {
             background-color: #ebebeb;
-            margin-bottom: 2px;
             padding: 11px;
             font-weight: bold;
+            margin: 0 0 2px 0;
+            font-size: 12px;
         }
-        dd { 
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        li { 
             background-color: #f7f7f7;
-            margin-left: 0;
-            margin-bottom: 2px;
-            padding: 11px 11px 11px 33px;
-            color: #444;
+            margin: 0 0 2px 0;
+            padding: 11px 11px 11px 22px;
+            color: #666;
         }
-        dd strong {
+        li strong {
             color: #121212;
         }
         
@@ -77,6 +82,27 @@
             text-decoration: none;
         }
         a:hover, a:active { opacity: 0.7; }
+        
+        @media screen and (min-width: 481px) {
+            ul { 
+                display: table;
+                width: 100%;
+            }
+            li {
+                display: table-cell;
+                width: 50%;
+                vertical-align: top;
+                padding: 11px;
+                border-left: 2px solid #fff;
+                border-bottom: 2px solid #fff;
+            }
+            ul li:first-child { border-left: none; }
+            ul.grade9 li { width: 33%; }
+            li strong { 
+                display: block;
+                margin-bottom: 3px;
+            }
+        }
     </style>
 
 </head>
@@ -84,27 +110,37 @@
     <h1>Examples Of Common Core Suggested &lsquo;Exemplar Texts&rsquo;</h1>
 
     <div id="graphic">
-        <dl>
-            <dt>Grades K-1</dt>
-                <dd><strong><em>Green Eggs and Ham</em></strong> by Dr. Seuss</dd>
-                <dd><strong><em>Amazing Whales!</em></strong> by Sarah L. Thomson</dd>
-            <dt>Grades 2-3</dt>
-                <dd><strong><em>Sarah, Plain and Tall</em></strong> by Patricia MacLachlan</dd>
-                <dd><strong>&ldquo;Stopping by Woods on a Snowy Evening&rdquo;</strong> by Robert Frost</dd>
-            <dt>Grades 4–5</dt>
-                <dd><strong>&ldquo;Zlateh the Goat&rdquo;</strong> by Isaac Bashevis Singer</dd>
-                <dd><strong><em>Hurricanes: Earth’s Mightiest Storms</em></strong> by Patricia Lauber</dd>
-            <dt>Grades 6–8</dt>
-                <dd><strong><em>Narrative of the Life of Frederick Douglass, an American Slave, Written by Himself</em></strong> by Frederick Douglass</dd>
-                <dd><strong><em>Little Women</em></strong> by Louisa May Alcott</dd>
-            <dt>Grades 9–10</dt>
-                <dd><strong><em>Things Fall Apart</em></strong> by Chinua Achebe</dd>
-                <dd><strong>&ldquo;Sonnet 73&rdquo;</strong> by William Shakespeare</dd>
-                <dd><strong><em>Recommended Levels of Insulation</em></strong> by U.S. Environmental Protection Agency/U.S. Department of Energy</dd>
-            <dt>Grades 11-12</dt>
-                <dd><strong><em>The Tipping Point: How Little Things Can Make a Big Difference</em></strong> by Malcolm Gladwell</dd>
-                <dd><strong><em>Walden</em></strong> by Henry David Thoreau</dd>
-        </dl>
+        <h3>Grades K-1</h3>
+        <ul>
+            <li><strong><em>Green Eggs and Ham</em></strong> by Dr. Seuss</li>
+            <li><strong><em>Amazing Whales!</em></strong> by Sarah L. Thomson</li>
+        </ul>
+        <h3>Grades 2-3</h3>
+        <ul>
+            <li><strong><em>Sarah, Plain and Tall</em></strong> by Patricia MacLachlan</li>
+            <li><strong>&ldquo;Stopping by Woods on a Snowy Evening&rdquo;</strong> by Robert Frost</li>
+        </ul>
+        <h3>Grades 4–5</h3>
+        <ul>
+            <li><strong>&ldquo;Zlateh the Goat&rdquo;</strong> by Isaac Bashevis Singer</li>
+            <li><strong><em>Hurricanes: Earth’s Mightiest Storms</em></strong> by Patricia Lauber</li>
+        </ul>
+        <h3>Grades 6–8</h3>
+        <ul>
+            <li><strong><em>Narrative of the Life of Frederick Douglass, an American Slave, Written by Himself</em></strong> by Frederick Douglass</li>
+            <li><strong><em>Little Women</em></strong> by Louisa May Alcott</li>
+        </ul>
+        <h3>Grades 9–10</h3>
+        <ul class="grade9">
+            <li><strong><em>Things Fall Apart</em></strong> by Chinua Achebe</li>
+            <li><strong>&ldquo;Sonnet 73&rdquo;</strong> by William Shakespeare</li>
+            <li><strong><em>Recommended Levels of Insulation</em></strong> by U.S. Environmental Protection Agency/U.S. Department of Energy</li>
+        </ul>
+        <h3>Grades 11-12</h3>
+        <ul>
+            <li><strong><em>The Tipping Point: How Little Things Can Make a Big Difference</em></strong> by Malcolm Gladwell</li>
+            <li><strong><em>Walden</em></strong> by Henry David Thoreau</li>
+        </ul>
     </div>
     
     <div class="footer">
