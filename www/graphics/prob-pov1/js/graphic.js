@@ -1,5 +1,5 @@
 
-// Poverty%
+// Top 1%
 
 var $graphic;
 var graphic_aspect_width = 4;
@@ -13,7 +13,7 @@ var col = 10;
  * Render the graphic
  */
 function draw_graphic(width) {
-    var cfill = 20;
+    var cfill = 5;
     var cnofill = 100-cfill;
     if (Modernizr.svg) {
         // clear out existing graphics
