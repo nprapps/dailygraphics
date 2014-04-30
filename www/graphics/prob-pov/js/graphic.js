@@ -145,20 +145,32 @@ function render_chart(id, container_width,col_width) {
     // y.domain([0,100]);
     
 
-    var rect = svg.append("rect")
-    .attr("class", "day")
-    .attr("width", width)
-    .attr("height", width)
-    .style("fill", function(d) {
-        if (id == "filled") {
-            return "dodgerblue";
-            } else {
-            return "#CCC";
-           }
-        });
+    // var rect = svg.append("rect")
+    // .attr("class", "day")
+    // .attr("width", width)
+    // .attr("height", width)
+    // .style("fill", function(d) {
+    //     if (id == "filled") {
+    //         return "dodgerblue";
+    //         } else {
+    //         return "#CCC";
+    //        }
+    //     });
+
+    // var dot = svg.append("circle")
+    // .attr("class", "day")
+    // // .attr("width", width)
+    // .attr("r", width/2)
+    // .style("fill", function(d) {
+    //     if (id == "filled") {
+    //         return "dodgerblue";
+    //         } else {
+    //         return "#CCC";
+    //        }
+    //     });
 
 
-    svg.append("use").attr("xlink:href","#usa");
+    // svg.append("use").attr("xlink:href","#usa");
 
 
 
