@@ -2,7 +2,7 @@
 // Poverty%
 
 var $graphic;
-var graphic_aspect_width = 4;
+var graphic_aspect_width = 3;
 var graphic_aspect_height = 3;
 var mobile_threshold = 625;
 var pymChild = null;
@@ -41,23 +41,25 @@ function draw_graphic(width) {
         // render_chart( "nofill", width, col);
     }
 }
+
+
 function render_chart(id, container_width,col_width) {
     // var graphic_data = data;
     var is_mobile = false;
     // var last_data_point = graphic_data.length - 1;
     var margin = { top: 3, right: 3, bottom: 3, left: 3 };
     var num_ticks = 5;
-    var width = container_width;
+    var width = container_width*3/4;
 
     if (width <= mobile_threshold) {
         is_mobile = true;
     }
 
     if (is_mobile) {
-        width = Math.floor(((container_width - 11) / (col_width*1.5) ) - margin.left - margin.right);
-//        width = container_width - margin.left - margin.right;
+        width = Math.floor(((width - 11) / (col_width*1.5) ) - margin.left - margin.right);
+//        width = width - margin.left - margin.right;
     } else {
-        width = Math.floor(((container_width - 44) / col_width) - margin.left - margin.right);
+        width = Math.floor(((width - 44) / col_width) - margin.left - margin.right);
     }
 
     var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
@@ -116,7 +118,7 @@ function render_chart(id, container_width,col_width) {
         .attr('class', 'meta')
         .attr('style', function(d) {
             if (is_mobile) {
-                return 'width: ' + ((container_width - 11) / (col_width*1.5)  ) + 'px';
+                return 'width: ' + ((width - 11) / (col_width*1.5)  ) + 'px';
             }
         });
     
