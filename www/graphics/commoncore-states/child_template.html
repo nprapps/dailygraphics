@@ -53,11 +53,16 @@
         section:after { clear: both; }
         
         section h4 {
-            margin: 0 2px 2px 0;
+            margin: 0;
             font-size: 12px;
-            padding: 11px;
             background-color: #ebebeb;
             color: #fff;
+        }
+        section h4 span {
+            display: block;
+            padding: 0 11px;
+            line-height: 33px;
+            border-right: 2px solid #fff;
         }
         section ul {
             margin: 0;
@@ -76,7 +81,7 @@
         }
         section ul li span {
             display: block;
-            padding: 11px 0;
+            line-height: 33px;
             border-right: 2px solid #fff;
             text-align: center;
         }
@@ -93,11 +98,14 @@
         section ul li     { background: #f1f1f1; }
         
         @media screen and (min-width: 481px) {
-            section { 
+            section h4 {
+                width: 25%;
                 float: left;
-                width: 50%;
             }
-            section ul li { width: 20%; }
+            section ul {
+                width: 75%;
+                float: right;
+            }
         }
 
 /*
@@ -114,7 +122,7 @@
     <div id="graphic">
     
         <section class="adopted">
-            <h4>{{ COPY.labels.hdr_adopted }}</h4>
+            <h4><span>{{ COPY.labels.hdr_adopted }}</span></h4>
             <ul>
             {% for row in COPY.data|sort(attribute='state') %}
             {% if row.state != 'state' and row.status == 'adopted' %}
@@ -125,7 +133,7 @@
         </section>
         
         <section class="never">
-            <h4>{{ COPY.labels.hdr_never }}</h4>
+            <h4><span>{{ COPY.labels.hdr_never }}</span></h4>
             <ul>
             {% for row in COPY.data|sort(attribute='state') %}
             {% if row.state != 'state' and row.status == 'never' %}
@@ -136,7 +144,7 @@
         </section>
         
         <section class="out">
-            <h4>{{ COPY.labels.hdr_out }}</h4>
+            <h4><span>{{ COPY.labels.hdr_out }}</span></h4>
             <ul>
             {% for row in COPY.data|sort(attribute='state') %}
             {% if row.state != 'state' and row.status == 'out' %}
