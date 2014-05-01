@@ -64,6 +64,7 @@ function draw_graphic(width) {
         lines[column] = graphic_data.map(function(d) {
             return { 'year': d.year, 'amt': d[column] };
         }).filter(function(d) {
+            console.log(d);
             return d.amt.length;
         });
     }
