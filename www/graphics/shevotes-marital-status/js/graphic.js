@@ -17,14 +17,14 @@ var colors = {
 /*
  * Render the graphic
  */
-function draw_graphic(width) {
-    var margin = {top: 10, right: 40, bottom: 25, left: 40};
-    var width = width - margin.left - margin.right;
+function draw_graphic(container_width) {
+    var margin = {top: 10, right: 15, bottom: 25, left: 35};
+    var width = container_width - margin.left - margin.right;
     var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
     var last_data_point = graphic_data.length - 1;
     var num_ticks = 8;
-    if (width < mobile_threshold) {
-        num_ticks = 5;
+    if (container_width < mobile_threshold) {
+        num_ticks = 4;
     }
 
     // clear out existing graphics
@@ -39,7 +39,16 @@ function draw_graphic(width) {
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom")
-        .ticks(num_ticks);
+        .ticks(6)
+        .tickFormat(function(d,i) {
+            if (container_width <= mobile_threshold) {
+                var fmt = d3.time.format('%y');
+                return '\u2019' + fmt(d);
+            } else {
+                var fmt = d3.time.format('%Y');
+                return fmt(d);
+            }
+        });
         
     var x_axis_grid = function() { return xAxis; }
 

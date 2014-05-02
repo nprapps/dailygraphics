@@ -23,7 +23,7 @@ function draw_graphic(container_width) {
     var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
     var last_data_point = graphic_data.length - 1;
     var num_ticks = 8;
-    if (container_width  < mobile_threshold) {
+    if (container_width < mobile_threshold) {
         num_ticks = 4;
     }
 
