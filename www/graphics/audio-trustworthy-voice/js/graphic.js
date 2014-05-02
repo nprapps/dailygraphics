@@ -1,3 +1,4 @@
+var $btn_vote;
 var pymChild = null;
 
 var colors = {
@@ -8,12 +9,14 @@ var colors = {
     'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
 };
 
-/*
- * Render the graphic
- */
-function render(width) {
-    // TODO: draw your graphic
+// "voting"
+function on_vote_button_pressed(evt) {
+    var p = $(this).parents('div.prompt');
     
+    p.addClass('answered');
+    p.find('.answer').show();
+    p.find('.btn-vote').hide();
+
     if (pymChild) {
         pymChild.sendHeightToParent();
     }
@@ -24,7 +27,11 @@ function render(width) {
  * to ensure all images have loaded
  */
 $(window).load(function() {
-    var pymChild = new pym.Child({
-        renderCallback: render
-    });
+    console.log(audio_files);
+
+    $btn_vote = $('.btn-vote');
+
+    $btn_vote.on('click', on_vote_button_pressed);
+
+    pymChild = new pym.Child({ });
 })
