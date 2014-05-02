@@ -31,7 +31,28 @@ $(window).load(function() {
 
     $btn_vote = $('.btn-vote');
 
+	$("#player_1").jPlayer({
+		ready: function (event) {
+			$(this).jPlayer("setMedia", {
+				m4a: audio_files.voice_1_audio_male_mp3,
+				oga: audio_files.voice_1_audio_male_ogg
+			});
+		},
+		swfPath: "../js",
+		supplied: "m4a, oga",
+		wmode: "window",
+		smoothPlayBar: false,
+		keyEnabled: false,
+		remainingDuration: false,
+		toggleDuration: false
+	});
+
+
+
     $btn_vote.on('click', on_vote_button_pressed);
+
+
+
 
     pymChild = new pym.Child({ });
 })

@@ -79,6 +79,9 @@
         }
         .prompt .label {
             float: left;
+            font-weight: bold;
+            color: #666;
+            font-size: 12px;
         }
         .prompt .btn-vote {
             width: 44px;
@@ -139,7 +142,17 @@
         <h3>{{ COPY.content.prompt_male }}</h3>
         <ul>
             <li>
-                <div class="player" id="player_1">[player]</div>
+                <div id="player_1" class="jp-jplayer"></div>
+                <div id="jp_container_1" class="jp-audio player">
+                    <div class="jp-type-single">
+                        <div class="jp-gui jp-interface">
+                            <ul class="jp-controls">
+                                <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+                                <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="label">{{ COPY.content.voice_1_label_male }}</div>
                 <div class="btn-vote">{{ COPY.content.btn_vote_label }}</div>
             </li>
