@@ -17,13 +17,13 @@ var colors = {
 /*
  * Render the graphic
  */
-function draw_graphic(width) {
+function draw_graphic(container_width) {
     var margin = {top: 10, right: 65, bottom: 25, left: 62};
-    var width = width - margin.left - margin.right;
+    var width = container_width - margin.left - margin.right;
     var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
     var last_data_point = graphic_data.length - 1;
     var num_ticks = 8;
-    if (width < mobile_threshold) {
+    if (container_width  < mobile_threshold) {
         num_ticks = 4;
     }
 
@@ -41,7 +41,7 @@ function draw_graphic(width) {
         .orient("bottom")
         .ticks(6)
         .tickFormat(function(d,i) {
-            if (width <= mobile_threshold) {
+            if (container_width <= mobile_threshold) {
                 var fmt = d3.time.format('%y');
                 return '\u2019' + fmt(d);
             } else {
@@ -170,7 +170,6 @@ function draw_graphic(width) {
                         ypos += 6;
                         break;
                 }
-                console.log(d['key']);
                 return ypos;
             })
             .attr('dy', 2)
