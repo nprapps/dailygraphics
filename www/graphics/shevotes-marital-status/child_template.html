@@ -53,57 +53,57 @@
         }
         #graphic:after { clear: both; }
         
-        #graphic svg { font-family: Arial, Helvetica, sans-serif; }
-        #graphic .axis {
+        svg { font-family: Arial, Helvetica, sans-serif; }
+        .axis {
             font-size: 12px;
             fill: #666;
         }
-        #graphic .axis path,
-        #graphic .axis line {
+        .axis path,
+        .axis line {
             fill: none;
             stroke: #666;
             shape-rendering: crispEdges;
         }
-        #graphic .axis.y path { display: none; }
-        #graphic .axis.y .tick line { display: none; }
-        #graphic .grid path { display: none; }
-        #graphic .grid .tick {
+        .axis.y path { display: none; }
+        .axis.y .tick line { display: none; }
+        .grid path { display: none; }
+        .grid .tick {
             stroke: #ccc;
             stroke-dasharray: 1px 3px;
             stroke-width: 1px;
             shape-rendering: crispEdges;
         }
-        #graphic .line {
+        .line {
             fill: none;
             stroke-width: 3px;
         }
 
-        #graphic .label text {
+        .label text {
             font-size: 12px;
             fill: #333;
             text-align: right;
         }
-        #graphic .value text { 
+        .value text { 
             font-size: 11px;
             fill: #999;
             text-align: left;
         }
         
-        #graphic .key {
+        .key {
             font-family: Arial, Helvetica, sans-serif;
             margin: 0 0 1em 0;
             padding: 0;
             list-style-type: none;
         }
         
-        #graphic .key .key-item { 
+        .key .key-item { 
             display: inline-block;
             margin: 0 18px 0 0;
             padding: 0;
             line-height: 15px;
         }
 
-        #graphic .key .key-item b { 
+        .key .key-item b { 
             display: inline-block;
             width: 15px;
             height: 15px;
@@ -111,45 +111,37 @@
             float: left;
         }
 
-        #graphic .key .key-item label { 
+        .key .key-item label { 
             white-space: nowrap;
             font-size: 12px;
             color: #333;
             font-weight: normal;
         }
         
-        #graphic .line-0 { 
-            stroke: #ccc;
-            stroke-width: 2;
-        }
-        .line-1 { stroke: #EAAA61; }
-        .line-2 { stroke: #7DBFE6; }
-        .line-3 { 
-            stroke: #EAAA61;
-            stroke-dasharray: 3,3;
-        }
-        .line-4 { 
-            stroke: #7DBFE6;
-            stroke-dasharray: 3,3;
-        }
+        .line-0 { stroke: #E38D2C; }
+        .line-1 { stroke: #F1C696; }
+        .line-2 { stroke: #3D7FA6; }
+        .line-3 { stroke: #A8D5EF; }
         
-        .key-0 b { background-color: #ccc; }
-        .key-1 b { background-color: #EAAA61; }
-        .key-2 b { background-color: #7DBFE6; }
-        
-        #graphic .key .key-3,
-        #graphic .key .key-4 { 
-            display: none;
-        }
+        .key-0 b { background-color: #E38D2C; }
+        .key-1 b { background-color: #F1C696; }
+        .key-2 b { background-color: #3D7FA6; }
+        .key-3 b { background-color: #A8D5EF; }
     </style>
 
 </head>
 <body>
-    <h1>Voter Turnout Among Women, By Marital Status</h1>
+    <h1>Voter Turnout By Marital Status, 2002-2012</h1>
     <div id="graphic"><img src="fallback.png" alt="Chart" /></div>
     
+    <div class="footnotes">
+        <h4>Notes</h4>
+        <p>- &ldquo;Married&rdquo; includes the following Census categories: &ldquo;married&mdash;spouse present&rdquo; and &ldquo;married&mdash;spouse absent.&rdquo;</p>
+        <p>- &ldquo;Single&rdquo; includes the following Census categories: &ldquo;never married,&rdquo; &ldquo;divorced,&rdquo; &ldquo;separated&rdquo; and &ldquo;widowed.&rdquo;</p>
+    </div>
+
     <div class="footer">
-        <p>Source: <a href="http://www.census.gov/hhes/www/socdemo/voting/publications/p20/">U.S. Census Bureau</a>, Lake Research</p>
+        <p>Source: <a href="http://www.census.gov/hhes/www/socdemo/voting/publications/p20/">U.S. Census Bureau</a></p>
         <p>Credit: Alyson Hurt/NPR</p>
     </div>
 

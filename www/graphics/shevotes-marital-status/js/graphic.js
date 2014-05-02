@@ -64,7 +64,6 @@ function draw_graphic(width) {
         lines[column] = graphic_data.map(function(d) {
             return { 'year': d.year, 'amt': d[column] };
         }).filter(function(d) {
-            console.log(d);
             return d.amt.length;
         });
     }
@@ -92,7 +91,7 @@ function draw_graphic(width) {
         d3.min(d3.entries(lines), function(c) { 
             return d3.min(c.value, function(v) { 
                 var n = parseFloat(v.amt);
-                return Math.floor(n/10) * 10; // round to next 10
+                return Math.floor(n/20) * 20; // round to next 10
                 return n; 
             }); 
         }),
