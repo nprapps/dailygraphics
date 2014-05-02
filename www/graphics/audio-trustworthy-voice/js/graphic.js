@@ -44,7 +44,59 @@ $(window).load(function() {
 		smoothPlayBar: false,
 		keyEnabled: false,
 		remainingDuration: false,
-		toggleDuration: false
+		toggleDuration: false,
+		cssSelectorAncestor: "#jp_container_1"
+	});
+
+	$("#player_2").jPlayer({
+		ready: function (event) {
+			$(this).jPlayer("setMedia", {
+				m4a: audio_files.voice_2_audio_male_mp3,
+				oga: audio_files.voice_2_audio_male_ogg
+			});
+		},
+		swfPath: "../js",
+		supplied: "m4a, oga",
+		wmode: "window",
+		smoothPlayBar: false,
+		keyEnabled: false,
+		remainingDuration: false,
+		toggleDuration: false,
+		cssSelectorAncestor: "#jp_container_2"
+	});
+
+	$("#player_3").jPlayer({
+		ready: function (event) {
+			$(this).jPlayer("setMedia", {
+				m4a: audio_files.voice_1_audio_female_mp3,
+				oga: audio_files.voice_1_audio_female_ogg
+			});
+		},
+		swfPath: "../js",
+		supplied: "m4a, oga",
+		wmode: "window",
+		smoothPlayBar: false,
+		keyEnabled: false,
+		remainingDuration: false,
+		toggleDuration: false,
+		cssSelectorAncestor: "#jp_container_3"
+	});
+
+	$("#player_4").jPlayer({
+		ready: function (event) {
+			$(this).jPlayer("setMedia", {
+				m4a: audio_files.voice_2_audio_female_mp3,
+				oga: audio_files.voice_2_audio_female_ogg
+			});
+		},
+		swfPath: "../js",
+		supplied: "m4a, oga",
+		wmode: "window",
+		smoothPlayBar: false,
+		keyEnabled: false,
+		remainingDuration: false,
+		toggleDuration: false,
+		cssSelectorAncestor: "#jp_container_4"
 	});
 
 
