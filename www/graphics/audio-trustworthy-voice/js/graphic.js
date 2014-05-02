@@ -14,8 +14,6 @@ function on_vote_button_pressed(evt) {
     var p = $(this).parents('div.prompt');
     
     p.addClass('answered');
-    p.find('.answer').show();
-    p.find('.btn-vote').hide();
 
     if (pymChild) {
         pymChild.sendHeightToParent();
@@ -38,13 +36,8 @@ $(window).load(function() {
 				oga: audio_files.voice_1_audio_male_ogg
 			});
 		},
-		swfPath: "../js",
 		supplied: "m4a, oga",
 		wmode: "window",
-		smoothPlayBar: false,
-		keyEnabled: false,
-		remainingDuration: false,
-		toggleDuration: false,
 		cssSelectorAncestor: "#jp_container_1"
 	});
 
@@ -55,13 +48,8 @@ $(window).load(function() {
 				oga: audio_files.voice_2_audio_male_ogg
 			});
 		},
-		swfPath: "../js",
 		supplied: "m4a, oga",
 		wmode: "window",
-		smoothPlayBar: false,
-		keyEnabled: false,
-		remainingDuration: false,
-		toggleDuration: false,
 		cssSelectorAncestor: "#jp_container_2"
 	});
 
@@ -72,13 +60,8 @@ $(window).load(function() {
 				oga: audio_files.voice_1_audio_female_ogg
 			});
 		},
-		swfPath: "../js",
 		supplied: "m4a, oga",
 		wmode: "window",
-		smoothPlayBar: false,
-		keyEnabled: false,
-		remainingDuration: false,
-		toggleDuration: false,
 		cssSelectorAncestor: "#jp_container_3"
 	});
 
@@ -89,13 +72,8 @@ $(window).load(function() {
 				oga: audio_files.voice_2_audio_female_ogg
 			});
 		},
-		swfPath: "../js",
 		supplied: "m4a, oga",
 		wmode: "window",
-		smoothPlayBar: false,
-		keyEnabled: false,
-		remainingDuration: false,
-		toggleDuration: false,
 		cssSelectorAncestor: "#jp_container_4"
 	});
 

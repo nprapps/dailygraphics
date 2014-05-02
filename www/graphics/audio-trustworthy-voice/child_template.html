@@ -33,6 +33,7 @@
         
         .prompt {
             margin-bottom: 22px;
+            position: relative;
         }
         .prompt h3 {
             font-weight: bold;
@@ -49,6 +50,7 @@
             margin: 0 0 2px 0;
             padding: 0;
             background-color: #e0e0e0;
+            color: #666;
         }
         .prompt li:before,
         .prompt li:after {
@@ -57,11 +59,15 @@
         }
         .prompt li:after { clear: both; }
         
+        .prompt.male.answered li,
+        .prompt.female.answered li {
+            color: #999;
+        }
         .prompt.male.answered li:nth-child(1),
         .prompt.female.answered li:nth-child(2) {
-            background-color: #FBF1CD;
+            background-color: #999;
             font-weight: bold;
-            color: #77631B;
+            color: #f7f7f7;
         }
         
         .prompt .player {
@@ -102,7 +108,6 @@
         .prompt .label {
             float: left;
             font-weight: bold;
-            color: #666;
             font-size: 12px;
         }
         .prompt .btn-vote {
@@ -126,15 +131,18 @@
             opacity: 0.7;
             cursor: pointer;
         }
+        .prompt.answered .btn-vote { display: none; }
         
         .answer {
             display: none;
             background-color: #f1f1f1;
             padding: 11px;
         }
+        .prompt.answered .answer { display: block; }
         .answer p {
             margin: 0;
             color: #666;
+            font-size: 12px;
         }
 
         .footnotes { margin-bottom: 20px; }
