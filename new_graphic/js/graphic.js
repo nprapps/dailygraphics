@@ -24,7 +24,7 @@ function render(width) {
  * to ensure all images have loaded
  */
 $(window).load(function() {
-    var pymChild = new pym.Child({
+    pymChild = new pym.Child({
         renderCallback: render
     });
 })
