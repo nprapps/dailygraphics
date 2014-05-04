@@ -1,13 +1,10 @@
-
 // Top 20%
-
 var $graphic;
 var graphic_aspect_width = 3;
 var graphic_aspect_height = 3;
 var mobile_threshold = 625;
 var pymChild = null;
-var col = 10;
-
+var col = 5;
 
 /*
  * Render the graphic

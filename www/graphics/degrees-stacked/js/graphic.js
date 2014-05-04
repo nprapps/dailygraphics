@@ -66,6 +66,7 @@ function render(width) {
         var formatPercent =  d3.format(".0%");
 
 
+
         // var color = d3.scale.category20();
         var color = d3.scale.ordinal()
                      .range(['#6C2315', '#A23520', '#D8472B', '#E27560', '#ECA395', '#F5D1CA',
@@ -84,7 +85,13 @@ function render(width) {
         var xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom")
-            .tickSize(6)
+            .tickSize(5)
+            .ticks(num_x_ticks);     
+
+        var xAxis_top = d3.svg.axis()
+            .scale(x)
+            .orient("top")
+            .tickSize(5)
             .ticks(num_x_ticks);
 
         var x_axis_grid = function() { return xAxis; };
@@ -92,19 +99,27 @@ function render(width) {
         var yAxis = d3.svg.axis()
             .orient("left")
             .scale(y)
+            .tickSize(10)
             .tickFormat(formatPercent);
 
         var area = d3.svg.area()
             .x(function(d) { return x(d.yr); })
             .y0(function(d) { return y(d.y0); })
             .y1(function(d) { return y(d.y0 + d.y); });
-        
+
         var stack = d3.layout.stack()
             .values(function(d) { return d.values; });
 
         var y_axis_grid = function() { return yAxis; };
 
-
+        var tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "remove")
+            .style("position", "absolute")
+            .style("z-index", "20")
+            .style("visibility", "hidden")
+            .style("top", "30px")
+            .style("left", "55px");
         // gives each header a color
         color.domain(d3.keys(graphic_data[0]).filter(function(key) { return key !== "yr"; }));
 
@@ -136,41 +151,28 @@ function render(width) {
         quint.append("path")
             .attr('class','layer')
             .attr('id', function(d) { 
-                return 'area quint-' + d.name.replace(/\s+/g, '-').toLowerCase()})
+                // return  d.indexOf})
+                return  d.name})
             .attr("d", function(d) { return area(d.values); })
             .style("fill", function(d) { return color(d.name); })
-            .style("opacity", ".8");
+            .style("opacity", "1")
+            .on("mouseover",mouseover)
+            .on("mouseout", mouseout);
 
-
-
-            // .style("stroke", function(d) { 
-            //                 if (d.name.toLowerCase() == 'non durables') {
-            //                     return colors["blue2"];
-            //                 } else {
-            //                     return "#CCC";
-            //                 }
-            //             })
-            // .style("stroke-width", function(d) { 
-            //                 if (d.name.toLowerCase() == 'non durables') {
-            //                     return "3";
-            //                 } else {
-            //                     return "2";
-            //                 }
-            //             });
 
         svg.append("g") // Add the X Axis
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
 
-        // svg.append("g") // Add the X Axis
-        //     .attr("class", "x axis")
-        //     .attr("transform", "translate(0," + 10 + ")")
-        //     .call(xAxis2);
+        svg.append("g") // Add the X Axis
+            .attr("class", "x axis")
+            // .attr("transform", "translate(0,0)")
+            .call(xAxis_top);
     
         svg.append("g") // Add the Y Axis
             .attr("class", "y axis")
-            .attr("transform", "translate("+-width/50+",0)")
+            .attr("transform", "translate("+-width/100+",0)")
             .call(yAxis);
     
         svg.append("g")         
@@ -191,9 +193,7 @@ function render(width) {
             .text(function(d) { return d.name; })
             .style("fill", "#ccc");
 
-
-
-      svg.append("text")
+        svg.append("text")
                     .attr("class", "y label")
                     .attr("text-anchor", "end")
                     .attr("y", 6)
@@ -203,147 +203,83 @@ function render(width) {
                     .text("Share")
                     .style("opacity", .7);
 
-      svg.selectAll(".layer")
-        .attr("opacity", 1)
-        .on("mouseover", function(d, i) {
-          svg.selectAll(".layer").transition()
-          .duration(250)
-          .attr("opacity", function(d, j) {
-            return j != i ? 0.6 : 1;
-            })
-         });                    
-          
-      // svg.append("text")
-      //               .attr("class", "x label")
-      //               .attr("text-anchor", "end")
-      //               .attr("x", 6)
-      //               .attr("dx", ".75em")
-      //               // .attr('transform', 'translate(' + -width/36 + ',' + height/6 + ') rotate(-90)')
-      //               .attr('transform', 'translate(' + width/2 + ' ,' + (49/46)*height + ')')
-      //               .text("Age")
-      //               .style("opacity", .7);
 
+        var div = svg.append("div")
+            .attr("class", "tooltip")           
+            .style("opacity", 0);
 
+// console.log(quintiles[1]);
+  quint.selectAll(".layer")
+    .data(quintiles)
+    .on("mousemove", function(d, i) {
+      mousex = d3.mouse(this);
+      mousex = mousex[0];
+      var invertedx = x.invert(mousex);
+      var what = d3.select(this).attr("id");
+      // console.log("this is " + what)
+      var selected = (d);
+      // console.log(quintiles);
+      // console.log(quintiles.name)
+      mousedate = Math.round(invertedx);
+      num = mousedate-1971
+      // console.log("num is :" + num)
+      pro = Math.round(d[name]);
+
+      ////////////////////////////////////////
+      // To Do
+      // ASK Chris how to extract name in attribute from what
+      // var what = d3.select(this).attr("id");
+
+      // console.log(quintiles);
+      // console.log(quintiles[1].name);
+
+      // Also need a tooltip
+
+      ////////////////////////////////////////
+      // console.log(d.values[num].y);
+      shareVal = (d.values[num].y-d.values[num].y0)*100
+
+      d3.select(this)
+      .classed("hover", true)
+      .attr("stroke", "black")
+      .attr("stroke-width", "0.5px"), 
+      tooltip.html( "<p>" + what + "<br> Year: " + mousedate + "<br> Share Of Total Graduates: " + shareVal.toFixed(2) + "%</p>" ).style("visibility", "visible");
       
+    })
 
-
-
-    // var annotebox = svg.append("text")
-    //                         .attr("x", x(76))
-    //                         .attr("y", y(.96))
-    //                         .attr("id","entertainment-and-gambling2")
-    //                         .attr("class","ylabel")
-    //                         .text("Travel, etc.")
-    //                         .style("fill","#ccc");
-
-    // // var annotebox = svg.append("text")
-    // //                         .attr("x", x(25))
-    // //                         .attr("y", y(2.25))
-    // //                         .attr("class","directions")
-    // //                         .text("Click on the different buttons above to highlight how spending breaks down.")
-    // //                         .style("font-size","16px");
-    // var annotebox = svg.append("text")
-    //                         .attr("x", x(54))
-    //                         .attr("y", y(1.9))
-    //                         .attr("class","annote")
-    //                         .text("This is where overall spending"); 
-
-    // var annotebox = svg.append("text")
-    //                         .attr("x", x(54))
-    //                         .attr("y", y(1.85))
-    //                         .attr("class","annote")
-    //                         .text("typically peaks in a lifetime.");
-    
-    // var label = svg.append("text")
-    //                         .attr("x", x(27))
-    //                         .attr("y", y(2.1))
-    //                         .attr("class","buttonlabel")
-    //                         .attr("id","all-label")
-    //                         .text("Overall Spending")
-    //                         .style("fill",colors["blue2"]);
-
-    // var label = svg.append("text")
-    //                         .attr("x", x(27))
-    //                         .attr("y", y(2.1))
-    //                         .attr("class","buttonlabel")
-    //                         .attr("id","rent-label")
-    //                         .text("Housing")
-    //                         .style("opacity","0");
-
-    // var label = svg.append("text")
-    //                         .attr("x", x(27))
-    //                         .attr("y", y(2.1))
-    //                         .attr("class","buttonlabel")
-    //                         .attr("id","personal-label")
-    //                         .text("Personal Spending")
-    //                         .style("opacity","0");
-
-    // var label = svg.append("text")
-    //                         .attr("x", x(27))
-    //                         .attr("y", y(2.1))
-    //                         .attr("class","buttonlabel")
-    //                         .attr("id","food-label")
-    //                         .text("Food And Alcohol")
-    //                         .style("opacity","0");
-    // var label = svg.append("text")
-    //                         .attr("x", x(27))
-    //                         .attr("y", y(2.1))
-    //                         .attr("class","buttonlabel")
-    //                         .attr("id","transport-label")
-    //                         .text("Transportation")
-    //                         .style("opacity","0");
-    // var label = svg.append("text")
-    //                         .attr("x", x(27))
-    //                         .attr("y", y(2.1))
-    //                         .attr("class","buttonlabel")
-    //                         .attr("id","entertainment-label")
-    //                         .text("Entertainment")
-    //                         .style("opacity","0");
-
-
-
-        // function rescale() {
-        //     y.domain([0,3]); 
-        //     d3.select(".y.axis")
-        //             .transition().duration(1500).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
-        //             .call(yAxis); 
-        //     d3.select(".grid")
-        //             .transition().duration(1500).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
-        //             .call(y_axis_grid()
-        //             .tickSize(-width, 0, 0)
-        //             .tickFormat("")
-        //     );    
- 
-        // }
-
-        // function rescale2() {
-        // // y.domain([
-        // //     d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
-        // //     2.1
-        // // ]);
-        // y.domain([
-        //     0,
-        //     2.1
-        // ]);
-        //     d3.select(".y.axis")
-        //             .transition().duration(1500).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
-        //             .call(yAxis); 
-        //     d3.select(".grid")
-        //             .transition().duration(1500).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
-        //             .call(y_axis_grid()
-        //             .tickSize(-width, 0, 0)
-        //             .tickFormat("")
-        //     );    
- 
-        // }
-            
+        
         function mouseover(d, i) {
-            d3.select(this).style("opacity", "1");
-        };
+            d3.selectAll(".layer")
+            .transition()
+            .duration(200)
+            .style("opacity", ".6")
+            d3.select(this)
+            .transition()
+            .duration(200)
+            .style("opacity", "1")
+            .style("stroke", "#3D352A")
+            .style("stroke-width", "1");
+            var testname = d3.select(this).attr("id");
+            testname = String('.quint-' + testname.replace(/\s+/g, '-').toLowerCase());
+            console.log(testname);
+            d3.select(testname)
+            .transition()
+            .duration(200)
+            .style("font-size","16px");
+        }
 
         function mouseout(d, i) {
-            d3.select(this).style("opacity", ".8");
-        };
+            d3.selectAll(".layer")
+            .transition()
+            .duration(200)
+            .style("opacity", ".8")
+            .style("stroke", "null");
+            d3.selectAll(".ylabel")
+            .style("font-size","12px");
+
+
+
+        }
     
     if (pymChild) {
         pymChild.sendHeightToParent();
