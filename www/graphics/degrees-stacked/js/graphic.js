@@ -112,14 +112,29 @@ function render(width) {
 
         var y_axis_grid = function() { return yAxis; };
 
+        var bodyNode = d3.select('body');
+        // var absoluteMousePos = d3.mouse(bodyNode);
+
         var tooltip = d3.select("body")
             .append("div")
-            .attr("class", "remove")
-            .style("position", "absolute")
-            .style("z-index", "20")
-            .style("visibility", "hidden")
-            .style("top", "30px")
-            .style("left", "55px");
+            .attr("class", "tooltip")
+            .style("visibility", "hidden");
+            // .style("top", "30px")
+            // .style("left", "55px");
+
+              // tooltip.style({
+              //           left: (absoluteMousePos[0] + 5)+'px',
+              //           top: (absoluteMousePos[1]) + 'px',
+              //           'background-color': '#d8d5e4',
+              //           width: '65px',
+              //           height: '30px',
+              //           padding: '5px',
+              //           position: 'absolute',
+              //           'z-index': 1001,
+              //           'box-shadow': '0 1px 2px 0 #656565'
+              //       });
+         
+
         // gives each header a color
         color.domain(d3.keys(graphic_data[0]).filter(function(key) { return key !== "yr"; }));
 
@@ -204,26 +219,45 @@ function render(width) {
                     .style("opacity", .7);
 
 
-        var div = svg.append("div")
-            .attr("class", "tooltip")           
-            .style("opacity", 0);
+        // var div = svg.append("div")
+        //     .attr("class", "tooltip")           
+        //     .style("opacity", 0);
 
-// console.log(quintiles[1]);
+// console.log(quintiles);
+
   quint.selectAll(".layer")
     .data(quintiles)
     .on("mousemove", function(d, i) {
       mousex = d3.mouse(this);
       mousex = mousex[0];
       var invertedx = x.invert(mousex);
+      // console.log(mousex);
       var what = d3.select(this).attr("id");
+      // var test = 1;
+        // console.log(quintiles.length);
+        for (var i=0; i<quintiles.length; i++) {
+
+            if(quintiles[i].name==what) {
+                var test = quintiles[i].values;
+            }
+        };
+
+
+
       // console.log("this is " + what)
       var selected = (d);
       // console.log(quintiles);
       // console.log(quintiles.name)
-      mousedate = Math.round(invertedx);
-      num = mousedate-1971
+      date = Math.round(invertedx);
+      num = date-1971
+      // console.log(test);
       // console.log("num is :" + num)
       pro = Math.round(d[name]);
+
+      // console.log(test[num].yr);
+      var shareVal = (test[num].y*100);
+      var mouseDate = test[num].yr;
+
 
       ////////////////////////////////////////
       // To Do
@@ -237,14 +271,22 @@ function render(width) {
 
       ////////////////////////////////////////
       // console.log(d.values[num].y);
-      shareVal = (d.values[num].y-d.values[num].y0)*100
+      // shareVal = (d.values[num].y-d.values[num].y0)*100
+      // console.log(y(shareVal.y0 + shareVal.y / 2))
 
       d3.select(this)
       .classed("hover", true)
       .attr("stroke", "black")
-      .attr("stroke-width", "0.5px"), 
-      tooltip.html( "<p>" + what + "<br> Year: " + mousedate + "<br> Share Of Total Graduates: " + shareVal.toFixed(2) + "%</p>" ).style("visibility", "visible");
-      
+      .attr("stroke-width", "0.5px"); 
+      tooltip
+        .html( "<h5> Year: " + mouseDate + "<br> Share Of Total Graduates: " + shareVal.toFixed(2) + "%<h5>" )
+        // .html( "<h5> " + what + "<br> Year: " + mouseDate + "<br> Share Of Total Graduates: " + shareVal.toFixed(2) + "%<h5>" )
+        .style("top", (d3.event.pageY - 6) + "px")
+        // .style("top", y(test[num].y0 + test[num].y / 1.8) + "px")
+        .style("left", (d3.event.pageX - 6) + "px")
+        .style("visibility", "visible");
+
+
     })
 
         
@@ -261,11 +303,14 @@ function render(width) {
             .style("stroke-width", "1");
             var testname = d3.select(this).attr("id");
             testname = String('.quint-' + testname.replace(/\s+/g, '-').toLowerCase());
-            console.log(testname);
+            // console.log(testname);
             d3.select(testname)
             .transition()
             .duration(200)
-            .style("font-size","16px");
+            .style("font-size","14px")
+            .style("fill","black")
+            .style("opacity",".7");
+
         }
 
         function mouseout(d, i) {
@@ -275,7 +320,12 @@ function render(width) {
             .style("opacity", ".8")
             .style("stroke", "null");
             d3.selectAll(".ylabel")
-            .style("font-size","12px");
+            .style("font-size","12px")
+            .style("fill","#ccc");
+            d3.select(".tooltip")
+            .style("visibility", "hidden");
+
+
 
 
 

@@ -38,7 +38,7 @@
         }
 
         #graphic text {
-            font-size: 12px;
+            font-weight: 12px;
 
         }
 
@@ -46,6 +46,14 @@
             shape-rendering: crispEdges;
         }
 
+        #graphic .tooltip h5 {
+            font-weight: 100px;
+            margin: 5px 5px 5px 5px;
+        }
+/*        #graphic .tooltip p {
+          font-size: 10px
+        }
+*/
 
         #graphic .axis path,
         #graphic .axis line {
@@ -103,14 +111,16 @@
 
         div.tooltip {   
           position: absolute;           
-          text-align: center;           
-          width: 60px;                  
-          height: 28px;                 
-          padding: 2px;             
-          font: 12px sans-serif;        
-          background: lightsteelblue;   
+          text-align: left;
+          margin-top: -5px;         
+          width: 20%;                  
+          height: 10%;                 
+          padding: 3px;             
+          font: 10px;        
+          fill: #ccc;
+          opacity: .5;
+          z-index:20;   
           border: 0px;      
-          border-radius: 8px;           
           pointer-events: none;         
         }
     </style>
@@ -119,17 +129,19 @@
 <body>
     <div id="graphic"></div>
     
-    <div class="footnotes">
+<!--     <div class="footnotes">
         <h4>Notes</h4>
         <p>{{ COPY.content.lorem_ipsum }}</p>
-    </div>
+    </div> -->
 
     <div class="footer">
-        <p>Source: DATA-SOURCE-HERE</p>
-        <p>Credit: YOUR-NAME/NPR</p>
+        <p>Source: Digest Of Educational Statistics</p>
+        <p>Credit: Quoctrung Bui/NPR</p>
     </div>
     
     <script src="js/lib/jquery.js" type="text/javascript"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
     <script src="js/lib/d3.v3.min.js" type="text/javascript"></script>
     <script src="js/lib/modernizr.svg.min.js" type="text/javascript"></script>
     <script src="js/lib/pym.js" type="text/javascript"></script>
