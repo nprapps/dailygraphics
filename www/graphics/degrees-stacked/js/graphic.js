@@ -14,6 +14,7 @@ var pymChild = null;
 // };
 
 var $graphic = $('#graphic');
+var $graphicSmall = $('#graphicSmall');
     var graphic_data_url = 'grad-level2.csv';
     var graphic_data;
 d3.selection.prototype.moveToFront = function() {
@@ -112,9 +113,6 @@ function render(width) {
 
         var y_axis_grid = function() { return yAxis; };
 
-        var bodyNode = d3.select('body');
-        // var absoluteMousePos = d3.mouse(bodyNode);
-
         var tooltip = d3.select("body")
             .append("div")
             .attr("class", "tooltip")
@@ -173,6 +171,7 @@ function render(width) {
             .style("opacity", "1")
             .on("mouseover",mouseover)
             .on("mouseout", mouseout);
+            // .on("click",smallGraph);
 
 
         svg.append("g") // Add the X Axis
@@ -239,15 +238,10 @@ function render(width) {
 
             if(quintiles[i].name==what) {
                 var test = quintiles[i].values;
+                var countryData = quintiles[i];
             }
         };
 
-
-
-      // console.log("this is " + what)
-      var selected = (d);
-      // console.log(quintiles);
-      // console.log(quintiles.name)
       date = Math.round(invertedx);
       num = date-1971
       // console.log(test);
@@ -257,27 +251,16 @@ function render(width) {
       // console.log(test[num].yr);
       var shareVal = (test[num].y*100);
       var mouseDate = test[num].yr;
-      var degree = test[num]
 
-      ////////////////////////////////////////
-      // To Do
-      // ASK Chris how to extract name in attribute from what
-      // var what = d3.select(this).attr("id");
-
-      // console.log(quintiles);
-      // console.log(quintiles[1].name);
-
-      // Also need a tooltip
-
-      ////////////////////////////////////////
-      // console.log(d.values[num].y);
-      // shareVal = (d.values[num].y-d.values[num].y0)*100
-      // console.log(y(shareVal.y0 + shareVal.y / 2))
+      // console.log(countryData);
 
       d3.select(this)
       .classed("hover", true)
       .attr("stroke", "black")
-      .attr("stroke-width", "0.5px"); 
+      .attr("stroke-width", "0.5px")
+      .on('click',smallGraph); 
+
+
       tooltip
         .html( "<h5> Year: " + mouseDate + "<br> Share Of Total Graduates: " + shareVal.toFixed(2) + "%<h5>" )
         // .html( "<h5> " + what + "<br> Year: " + mouseDate + "<br> Share Of Total Graduates: " + shareVal.toFixed(2) + "%<h5>" )
@@ -289,10 +272,149 @@ function render(width) {
 
     })
 
+// // // // // // // // // 
+// // // // // // // // // 
+// // // // // // // // // 
+// smallGraph
+// // // // // // // // // 
+// // // // // // // // // 
+// // // // // // // // // 
 
-    function smallGraph(d,i) {
-        $graphic.empty();
+    function smallGraph(what) {
+    
+    var what = d3.select(this).attr("id");
+    // console.log(what);
 
+    tooltip.style("visibility", "hidden");
+    $graphic.empty();
+
+    for (var i=0; i<quintiles.length; i++) {
+
+        if(quintiles[i].name==what) {
+            var test = quintiles[i].values;
+            var fieldData = quintiles[i];
+        }
+    };
+
+    // console.log(fieldData);
+    // console.log(graphic_data);
+
+
+// Draw new graph
+            var is_mobile = false;
+            var margin = { top: 30, right: 100, bottom: 60, left: 80 };
+            var num_ticks = 5;
+
+// fake data: quintiles[i]
+
+            if (width <= mobile_threshold) {
+                is_mobile = true;
+            }
+
+            if (is_mobile) {
+                width = Math.floor(((width - 11) ) - margin.left - margin.right);
+
+            } else {
+                width = Math.floor((width - 44) - margin.left - margin.right);
+            }
+
+            graphic_aspect_height = 2;
+            graphic_aspect_width = 2;
+            var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
+                
+                var num_x_ticks = 12;
+                if (width <= 480) {
+                    num_x_ticks = 6;
+                }
+                var num_y_ticks = 26;
+                if (width <= 480) {
+                    num_y_ticks = 13;
+                }
+
+                var x = d3.scale.linear().range([0, width]);
+                var y = d3.scale.linear().range([height, 0]);
+                var formatPercent =  d3.format(".0%");
+                
+                var svg = d3.select("#graphic")
+                    .append("svg")
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom")
+                    .tickSize(5)
+                    .ticks(num_x_ticks);     
+
+                var xAxis_top = d3.svg.axis()
+                    .scale(x)
+                    .orient("top")
+                    .tickSize(5)
+                    .ticks(num_x_ticks);
+
+                var x_axis_grid = function() { return xAxis; };
+
+                var yAxis = d3.svg.axis()
+                    .orient("left")
+                    .scale(y)
+                    .tickSize(10)
+                    .tickFormat(formatPercent);
+
+                var line = d3.svg.line()
+                    .interpolate("basis")
+                    .x(function(d) { return x(d.yr); })
+                    .y(function(d) { return y(d.y); });
+
+
+                // var area = d3.svg.area()
+                //     .x(function(d) { return x(d.yr); })
+                //     .y0(function(d) { return y(d.y0); })
+                //     .y1(function(d) { return y(d.y0 + d.y); });
+
+                // var stack = d3.layout.stack()
+                //     .values(function(d) { return d.values; });
+
+                var y_axis_grid = function() { return yAxis; };
+                        // Scale the range of the data
+                x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.yr); }));
+                            
+                var quint = svg.selectAll(".quint")
+                    .data(fieldData)
+                    .enter().append("g")
+                    .attr("class", "quint");
+
+                // console.log(d);
+                // console.log(quintiles);
+
+                quint.append("path")
+                    .attr('class', 'smallLine')
+                    .attr("d", function(d) { return line(d.values); })
+                    .style("opacity", .8);
+            
+
+                svg.append("g") // Add the X Axis
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(xAxis);
+
+                // svg.append("g") // Add the X Axis
+                //     .attr("class", "x axis")
+                //     // .attr("transform", "translate(0,0)")
+                //     .call(xAxis_top);
+            
+                svg.append("g") // Add the Y Axis
+                    .attr("class", "y axis")
+                    .attr("transform", "translate("+-width/100+",0)")
+                    .call(yAxis);
+            
+                svg.append("g")         
+                    .attr("class", "y grid")
+                    .call(y_axis_grid()
+                        .tickSize(-width, 0, 0)
+                        .tickFormat("")
+                    );    
 
     }
 
