@@ -71,62 +71,49 @@
             padding: 0;
             list-style-type: none;
         }
-        li {
+        ul li {
             margin: 0 0 11px 0;
             padding: 0 11px;
             color: #333;
         }
         
-        .category { background-color: #f1f1f1; }
+        .category { 
+            background-color: #f1f1f1;
+            padding-bottom: 11px;
+        }
+        
         .category.lesson { padding-bottom: 11px; }
+
         .category.standard h3 { background-color: rgba(81,160,158,.6); }
         .category.curriculum h3 { background-color: rgba(139,192,191,.6); }
         .category.lesson h3 { background-color: rgba(197,223,223,.6); }
-
-        @media screen and (max-width: 480px) {
-            .category { margin: 0 0 2px 0; }
-            .category.standard:after,
-            .category.curriculum:after {
-                content: "\2304";
-                display: block;
-                font-size: 20px;
-                line-height: 1;
-                text-align: center;
-                width: 8%;
-                margin: 0 auto;
-                color: #121212;
-                background-color: #dadada;
-            }
+        
+        .divider {
+            font-size: 30px;
+            line-height: 30px;
+            text-align: center;
+            margin-top: -6px;
+            margin-bottom: 11px;
+            color: #121212;
         }
+
         @media screen and (min-width: 481px) {
-            #graphic { display: table; }
-            .category {
-                width: 33%;
-                background-color: #f1f1f1;
+            ul {
+                display: table;
+                width: 100%;
+            }
+            ul li {
                 display: table-cell;
-                padding-bottom: 11px;
+                width: 25%;
+                padding: 0 11px;
             }
-            .category.standard,
-            .category.curriculum {
-                border-right: 2px solid #fff;
+            ul li:nth-child(3) {
+                width: 50%;
             }
-            .category.standard h3:after,
-            .category.curriculum h3:after {
-                content: "\203A";
+            ul li strong {
                 display: block;
-                float: right;
-                font-size: 20px;
-                line-height: .7;
-                text-align: center;
-                color: #121212;
-                padding: 5px;
-                margin-top: -6px;
+                margin-bottom: 6px;
             }
-            h3,
-            li {
-                text-align: left;
-            }
-            ul { margin: 0; }
         }
     </style>
 
@@ -142,6 +129,8 @@
                 <li><strong>Example:</strong> &ldquo;Count to 100 by ones and by tens&rdquo;</li>
             </ul>
         </div>
+        
+        <div class="divider">&#8964;</div>
 
         <div class="category curriculum">
             <h3>Curriculum</h3>
@@ -151,6 +140,8 @@
                 <li><strong>Example:</strong> &ldquo;Kindergarteners learn the number names as they count (to 100 by 1s and 10s) and write number names (from 0 to 20).&rdquo; &hellip; &ldquo;Students learn that each successive number name refers to a quantity that is one larger as they count objects and say the corresponding number names.&rdquo;</li>
             </ul>
         </div>
+
+        <div class="divider">&#8964;</div>
 
         <div class="category lesson">
             <h3>Lesson Plan</h3>
