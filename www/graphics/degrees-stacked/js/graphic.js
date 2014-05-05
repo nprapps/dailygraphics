@@ -257,7 +257,7 @@ function render(width) {
       // console.log(test[num].yr);
       var shareVal = (test[num].y*100);
       var mouseDate = test[num].yr;
-
+      var degree = test[num]
 
       ////////////////////////////////////////
       // To Do
@@ -288,6 +288,13 @@ function render(width) {
 
 
     })
+
+
+    function smallGraph(d,i) {
+        $graphic.empty();
+
+
+    }
 
         
         function mouseover(d, i) {
