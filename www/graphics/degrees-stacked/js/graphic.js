@@ -3,6 +3,7 @@ var graphic_aspect_width = 3;
 var graphic_aspect_height = 6;
 var mobile_threshold = 625;
 var pymChild = null;
+var blankDegrees = ["Public Administration", "Theology", "Zoology", "Recreation And Fitness Studies", "Microbiology","Library Science","Legal Studies", "Cultural And Gender Studies", "Geology And Earth Sciences" ]
 
 
 // var colors = {
@@ -15,7 +16,7 @@ var pymChild = null;
 
 var $graphic = $('#graphic');
 var $graphicSmall = $('#graphicSmall');
-    var graphic_data_url = 'grad-level2.csv';
+    var graphic_data_url = 'grad-level3.csv';
     var graphic_data;
 d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
@@ -31,11 +32,12 @@ function render(width) {
   // var graphic_data = data;
     var is_mobile = false;
     // var last_data_point = graphic_data.length - 1;
-    var margin = { top: 30, right: 100, bottom: 60, left: 80 };
+    var margin = { top: 30, right: 120, bottom: 60, left: 80 };
     var num_ticks = 5;
 
     if (width <= mobile_threshold) {
         is_mobile = true;
+
     }
 
     if (is_mobile) {
@@ -43,7 +45,7 @@ function render(width) {
 
 //        width = width - margin.left - margin.right;
     } else {
-        width = Math.floor((width - 44) - margin.left - margin.right);
+        width = Math.floor((width - 10) - margin.left - margin.right);
     }
 
     var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
@@ -52,7 +54,12 @@ function render(width) {
         var num_x_ticks = 12;
         if (width <= 480) {
             num_x_ticks = 6;
+            blankDegrees.push("Economics", "Security Studies", "Agriculture", "Chemistry", "Philosophy And Religion","Architecture","Interdisciplinary Studies","Family And Consumer Science", "Foreign Languages");
+        } else {
+            blankDegrees = ["Public Administration", "Theology", "Zoology", "Recreation And Fitness Studies", "Microbiology","Library Science","Legal Studies", "Cultural And Gender Studies", "Geology And Earth Sciences" ];
         }
+
+
         
         var num_y_ticks = 26;
         if (width <= 480) {
@@ -87,13 +94,21 @@ function render(width) {
             .scale(x)
             .orient("bottom")
             .tickSize(5)
-            .ticks(num_x_ticks);     
+            .ticks(num_x_ticks)
+            .tickFormat(d3.format("d"));
+
+        var yearLine = svg.append("rect") 
+          .attr("class", "yearLine")
+          .attr("height", height)
+          .attr("width", "3")
+          .style("opacity", .5);     
 
         var xAxis_top = d3.svg.axis()
             .scale(x)
             .orient("top")
-            .tickSize(5)
-            .ticks(num_x_ticks);
+            .tickSize(9)
+            .ticks(num_x_ticks)
+            .tickFormat(d3.format("d"));
 
         var x_axis_grid = function() { return xAxis; };
 
@@ -116,7 +131,7 @@ function render(width) {
         var tooltip = d3.select("body")
             .append("div")
             .attr("class", "tooltip")
-            .style("visibility", "hidden");
+            .style("opacity", ".5");
             // .style("top", "30px")
             // .style("left", "55px");
 
@@ -154,7 +169,6 @@ function render(width) {
         //     d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.indexed; }); }),
         //     d3.max(quintiles, function(c) { return d3.max(c.values, function(v) { return v.indexed; }); })
         // ]);
-
                             
         var quint = svg.selectAll(".quint")
             .data(quintiles)
@@ -198,14 +212,23 @@ function render(width) {
 
         quint.append("text")
             .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+            .attr('id', function(d) {
+                var found = $.inArray(d.name, blankDegrees)
+                if (found != -1 ) {
+                    return 'blank-label';
+                } else {
+                    return 'nonblank-label';
+                }
+            })
             .attr('class', function(d) { 
                 return 'ylabel quint-' + d.name.replace(/\s+/g, '-').toLowerCase()
             })
             .attr("transform", function(d) { return "translate(" + x(d.value.yr) + "," + y(d.value.y0 + d.value.y / 2) + ")"; })
-            .attr("x", 7)
+            .attr("x",3)
             .attr("dy", ".3em")
             .text(function(d) { return d.name; })
-            .style("fill", "#ccc");
+            .style("fill", "#ccc")
+            .style("font-size", "12px");
 
         svg.append("text")
                     .attr("class", "y label")
@@ -218,6 +241,11 @@ function render(width) {
                     .style("opacity", .7);
 
 
+// .select(".quint-cultural-and-gender-studies")
+// .select(".quint-geology-and-earth-sciences")
+// .select(".quint-microbiology")
+// .select(".quint-cultural-and-gender-studies-")
+// .select(".quint-library-science-")
         // var div = svg.append("div")
         //     .attr("class", "tooltip")           
         //     .style("opacity", 0);
@@ -258,7 +286,7 @@ function render(width) {
       .classed("hover", true)
       .attr("stroke", "black")
       .attr("stroke-width", "0.5px")
-      .on('click',smallGraph); 
+      // .on('click',smallGraph); 
 
 
       tooltip
@@ -267,7 +295,10 @@ function render(width) {
         .style("top", (d3.event.pageY - 6) + "px")
         // .style("top", y(test[num].y0 + test[num].y / 1.8) + "px")
         .style("left", (d3.event.pageX - 6) + "px")
-        .style("visibility", "visible");
+        .style("opacity",".5");
+       
+       yearLine.attr("x",x(invertedx));
+
 
 
     })
@@ -286,7 +317,7 @@ function render(width) {
     // console.log(what);
 
     tooltip.style("visibility", "hidden");
-    $graphic.empty();
+    // $graphic.empty();
 
     for (var i=0; i<quintiles.length; i++) {
 
@@ -301,9 +332,9 @@ function render(width) {
 
 
 // Draw new graph
-            var is_mobile = false;
-            var margin = { top: 30, right: 100, bottom: 60, left: 80 };
-            var num_ticks = 5;
+            // var is_mobile = false;
+            // var margin = { top: 30, right: 100, bottom: 60, left: 80 };
+            // var num_ticks = 5;
 
 // fake data: quintiles[i]
 
@@ -318,105 +349,93 @@ function render(width) {
                 width = Math.floor((width - 44) - margin.left - margin.right);
             }
 
-            graphic_aspect_height = 2;
-            graphic_aspect_width = 2;
-            var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
-                
-                var num_x_ticks = 12;
-                if (width <= 480) {
-                    num_x_ticks = 6;
-                }
-                var num_y_ticks = 26;
-                if (width <= 480) {
-                    num_y_ticks = 13;
-                }
-
-                var x = d3.scale.linear().range([0, width]);
-                var y = d3.scale.linear().range([height, 0]);
-                var formatPercent =  d3.format(".0%");
-                
-                var svg = d3.select("#graphic")
-                    .append("svg")
-                        .attr("width", width + margin.left + margin.right)
-                        .attr("height", height + margin.top + margin.bottom)
-                    .append("g")
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-                var xAxis = d3.svg.axis()
-                    .scale(x)
-                    .orient("bottom")
-                    .tickSize(5)
-                    .ticks(num_x_ticks);     
-
-                var xAxis_top = d3.svg.axis()
-                    .scale(x)
-                    .orient("top")
-                    .tickSize(5)
-                    .ticks(num_x_ticks);
-
-                var x_axis_grid = function() { return xAxis; };
-
-                var yAxis = d3.svg.axis()
-                    .orient("left")
-                    .scale(y)
-                    .tickSize(10)
-                    .tickFormat(formatPercent);
-
-                var line = d3.svg.line()
-                    .interpolate("basis")
-                    .x(function(d) { return x(d.yr); })
-                    .y(function(d) { return y(d.y); });
-
-
-                // var area = d3.svg.area()
-                //     .x(function(d) { return x(d.yr); })
-                //     .y0(function(d) { return y(d.y0); })
-                //     .y1(function(d) { return y(d.y0 + d.y); });
-
-                // var stack = d3.layout.stack()
-                //     .values(function(d) { return d.values; });
-
-                var y_axis_grid = function() { return yAxis; };
-                        // Scale the range of the data
-                x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.yr); }));
-                            
-                var quint = svg.selectAll(".quint")
-                    .data(fieldData)
-                    .enter().append("g")
-                    .attr("class", "quint");
-
-                // console.log(d);
-                // console.log(quintiles);
-
-                quint.append("path")
-                    .attr('class', 'smallLine')
-                    .attr("d", function(d) { return line(d.values); })
-                    .style("opacity", .8);
+            graphic_aspect_height = 1;
+            graphic_aspect_width = 3;
             
+            var height2 = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
 
-                svg.append("g") // Add the X Axis
-                    .attr("class", "x axis")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(xAxis);
+            svg.attr("width", "300").attr("height", "600");
+
+
+}
+
+
+
+                // var xAxis = d3.svg.axis()
+                //     .scale(x)
+                //     .orient("bottom")
+                //     .tickSize(5)
+                //     .ticks(num_x_ticks);     
+
+                // var xAxis_top = d3.svg.axis()
+                //     .scale(x)
+                //     .orient("top")
+                //     .tickSize(5)
+                //     .ticks(num_x_ticks);
+
+                // var x_axis_grid = function() { return xAxis; };
+
+                // var yAxis = d3.svg.axis()
+                //     .orient("left")
+                //     .scale(y)
+                //     .tickSize(10)
+                //     .tickFormat(formatPercent);
+
+                // var line = d3.svg.line()
+                //     .interpolate("basis")
+                //     .x(function(d) { return x(d.yr); })
+                //     .y(function(d) { return y(d.y); });
+
+
+                // // var area = d3.svg.area()
+                // //     .x(function(d) { return x(d.yr); })
+                // //     .y0(function(d) { return y(d.y0); })
+                // //     .y1(function(d) { return y(d.y0 + d.y); });
+
+                // // var stack = d3.layout.stack()
+                // //     .values(function(d) { return d.values; });
+
+                // var y_axis_grid = function() { return yAxis; };
+                //         // Scale the range of the data
+                // x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.yr); }));
+                            
+                // var quint = svg.selectAll(".quint")
+                //     .data(fieldData)
+                //     .enter().append("g")
+                //     .attr("class", "quint");
+
+                // // console.log(d);
+                // // console.log(quintiles);
+
+                // quint.append("path")
+                //     .attr('class', 'smallLine')
+                //     .attr("d", function(d) { return line(d.values); })
+                //     .style("opacity", .8);
+            
 
                 // svg.append("g") // Add the X Axis
                 //     .attr("class", "x axis")
-                //     // .attr("transform", "translate(0,0)")
-                //     .call(xAxis_top);
-            
-                svg.append("g") // Add the Y Axis
-                    .attr("class", "y axis")
-                    .attr("transform", "translate("+-width/100+",0)")
-                    .call(yAxis);
-            
-                svg.append("g")         
-                    .attr("class", "y grid")
-                    .call(y_axis_grid()
-                        .tickSize(-width, 0, 0)
-                        .tickFormat("")
-                    );    
+                //     .attr("transform", "translate(0," + height + ")")
+                //     .call(xAxis);
 
-    }
+                // // svg.append("g") // Add the X Axis
+                // //     .attr("class", "x axis")
+                // //     // .attr("transform", "translate(0,0)")
+                // //     .call(xAxis_top);
+            
+                // svg.append("g") // Add the Y Axis
+                //     .attr("class", "y axis")
+                //     .attr("transform", "translate("+-width/100+",0)")
+                //     .call(yAxis);
+            
+                // svg.append("g")         
+                //     .attr("class", "y grid")
+                //     .call(y_axis_grid()
+                //         .tickSize(-width, 0, 0)
+                //         .tickFormat("")
+                //     );    
+
+    // }
 
         
         function mouseover(d, i) {
@@ -432,31 +451,37 @@ function render(width) {
             .style("stroke-width", "1");
             var testname = d3.select(this).attr("id");
             testname = String('.quint-' + testname.replace(/\s+/g, '-').toLowerCase());
-            // console.log(testname);
+
+            // d3.selectAll("#blank-label")
+            // .style("opacity",".2");
+            d3.selectAll("#nonblank-label")
+            .style("opacity",".2");
+
             d3.select(testname)
             .transition()
             .duration(200)
             .style("font-size","14px")
             .style("fill","black")
             .style("opacity",".7");
+            // .style("background-color","white");
 
         }
 
         function mouseout(d, i) {
+            d3.selectAll("#blank-label")
+            .style("opacity","0");
+            d3.selectAll("#nonblank-label")
+            .style("font-size","12px")
+            .style("fill","#ccc")
+            .style("opacity","1");
             d3.selectAll(".layer")
             .transition()
             .duration(200)
             .style("opacity", ".8")
             .style("stroke", "null");
-            d3.selectAll(".ylabel")
-            .style("font-size","12px")
-            .style("fill","#ccc");
             d3.select(".tooltip")
-            .style("visibility", "hidden");
-
-
-
-
+            .style("opacity","0");
+            // .style("visibility", "hidden");
 
         }
     
