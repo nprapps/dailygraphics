@@ -42,9 +42,15 @@
 
         }
 
-        #graphic .layer path {
-            shape-rendering: crispEdges;
+        #graphic .small-line path {
+            stroke: #666;
+            stroke-width: 1;
+            fill: none;
         }
+
+        #graphic .layer path {
+/*            shape-rendering: crispEdges;
+*/        }
 
         #graphic .tooltip h5 {
             font-weight: 100px;
@@ -109,22 +115,208 @@
         }
         a:hover, a:active { opacity: 0.7; }
 
+
+      
         div.tooltip {   
           position: absolute;           
           text-align: left;
           margin-top: -5px;         
-          width: 150px;                  
-          height: 70px;                 
-          padding: 3px;   
-          background-color: white;          
+          width: 175px;                  
+          height: 90px;                 
+          padding: 3px;
           font: 10px;        
           fill: #ccc;
-          opacity: .5;
           z-index:18;   
           border: 0px;      
-          pointer-events: none;         
+          pointer-events: none;
+          border-radius: 5px;
+          background: #FFFFFF;
+          /*background: rgba(0,0,0,.8);*/
+          border-width: 6px 6px 0 6px;
+          bottom: 20px;
+
         }
+      
+        div.tooltip2 {   
+          position: absolute;           
+          text-align: left;
+          margin-top: -5px;         
+          width: 175px;                  
+          height: 90px;                 
+          padding: 3px;
+          font: 10px;        
+          fill: #ccc;
+          z-index:18;   
+          border: 0px;      
+          pointer-events: none;
+          border-radius: 5px;
+          background: #FFFFFF;
+          /*background: rgba(0,0,0,.8);*/
+          border-width: 6px 6px 0 6px;
+          bottom: 20px;
+
+        }
+
+        div.tooltip:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #FFFFFF transparent transparent transparent;
+            top: 95px;
+            left: 120px;
+      }
+        div.tooltip2:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #FFFFFF transparent transparent transparent;
+            top: 95px;
+            left: 10px;
+      }
+        div.tooltip3 {   
+          position: absolute;           
+          text-align: left;
+          margin-top: -5px;         
+          width: 175px;                  
+          height: 80px;                 
+          padding: 3px;
+          font: 10px;        
+          fill: #ccc;
+          z-index:18;   
+          border: 0px;      
+          pointer-events: none;
+          border-radius: 5px;
+          background: #FFFFFF;
+          /*background: rgba(0,0,0,.8);*/
+          border-width: 6px 6px 0 6px;
+          bottom: 20px;
+
+        }
+      
+        div.tooltip4 {   
+          position: absolute;           
+          text-align: left;
+          margin-top: -5px;         
+          width: 175px;                  
+          height: 80px;                 
+          padding: 3px;
+          font: 10px;        
+          fill: #ccc;
+          z-index:18;   
+          border: 0px;      
+          pointer-events: none;
+          border-radius: 5px;
+          background: #FFFFFF;
+          /*background: rgba(0,0,0,.8);*/
+          border-width: 6px 6px 0 6px;
+          bottom: 20px;
+
+        }
+
+        div.tooltip3:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-width: 10px;
+            border-style: solid;
+            border-color: transparent transparent #FFFFFF transparent;
+            top: -20px;
+            left: 10px;
+      }
+        div.tooltip4:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-width: 10px;
+            border-style: solid;
+            border-color: transparent transparent #FFFFFF transparent;
+            top: -20px;
+            left: 120px;
+      }
    
+        .tooltip h4 {
+          margin-top: 3px;
+          margin-left: 6px;
+          font-weight: 100;
+          font-size: 14px;
+          vertical-align: middle;
+          color: black;
+        }
+        .tooltip2 h4 {
+          /*text-align: right;*/
+          margin-top: 3px;
+          margin-left: 6px;
+          font-weight: 100;
+          font-size: 14px;
+          vertical-align: middle;
+          color: black;
+        }      
+        .tooltip3 h4 {
+          margin-top: 3px;
+          margin-left: 6px;
+          font-weight: 100;
+          font-size: 14px;
+          vertical-align: middle;
+          color: black;
+        }
+        .tooltip4 h4 {
+          /*text-align: right;*/
+          margin-top: 3px;
+          margin-left: 6px;
+          font-weight: 100;
+          font-size: 14px;
+          vertical-align: middle;
+          color: black;
+        }   
+        .tooltip h3 {
+          margin-top: 3px;
+          margin-left: 6px;
+          margin-bottom: -16px;
+          font-weight: 100;
+          font-size: 16px;
+          vertical-align: middle;
+          color: black;
+        }
+        .tooltip2 h3 {
+          /*text-align: right;*/
+          margin-top: 3px;
+          margin-left: 6px;
+          margin-bottom: -16px;
+          font-weight: 100;
+          font-size: 16px;
+          vertical-align: middle;
+          color: black;
+        }
+        .tooltip3 h3 {
+          margin-top: 3px;
+          margin-left: 6px;
+          margin-bottom: -16px;
+          font-weight: 100;
+          font-size: 16px;
+          vertical-align: middle;
+          color: black;
+        }
+        .tooltip4 h3 {
+          /*text-align: right;*/
+          margin-top: 3px;
+          margin-left: 6px;
+          margin-bottom: -16px;
+          font-weight: 100;
+          font-size: 16px;
+          vertical-align: middle;
+          color: black;
+        }
+        .layer {
+          z-index:10;             
+        }
 
         .yearLine {
           z-index:21;   
@@ -134,6 +326,20 @@
           opacity: 0;
           /*visibility: hidden;*/
         }
+
+        #ylabel-on {
+            font-size:14px;
+            fill:black;
+            opacity:.7;
+         }
+
+        #ylabel-off {
+            font-size:12px;
+            fill:#ccc;
+            opacity:0;
+         }
+
+
     </style>
 
 </head>
