@@ -193,7 +193,7 @@
                 </tr>
                 <tr>
                     <th>{{ COPY.labels.hdr_house }}</th>
-                    <th>{{ COPY.labels.hdr_senate }}</th>
+                    <th>{{ COPY.labels.hdr_senate }}*</th>
                 </tr>
             </thead>
 
@@ -202,14 +202,31 @@
             <tr class="{{ row.country|lower|replace(' ', '-') }}">
                 <td data-title="{{ COPY.labels.hdr_rank }}" class="rank">{{ row.rank|int }}</td>
                 <td data-title="{{ row.rank|int }}." class="country">{{ row.country }}</td>
-                <td data-title="{{ COPY.labels.hdr_house }}">{{ (row.house_women_pct|float * 100)|int }}%</td>
-                <td data-title="{{ COPY.labels.hdr_senate }}">{{ (row.senate_women_pct|float * 100)|int }}%</td>
+                <td data-title="{{ COPY.labels.hdr_house }}">
+                    {% if row.house_women_pct != '---' %}
+                        {{ (row.house_women_pct|float * 100)|int }}%
+                    {% else %}
+                        &mdash;
+                    {% endif %}
+                </td>
+                <td data-title="{{ COPY.labels.hdr_senate }}">
+                    {% if row.senate_women_pct != '---' %}
+                        {{ (row.senate_women_pct|float * 100)|int }}%
+                    {% else %}
+                        &mdash;
+                    {% endif %}
+                </td>
             </tr>
             {% endif %}
             {% endfor %}
         </table>
     </div>
     
+    <div class="footnotes">
+        <h4>Note</h4>
+        <p>{{ COPY.labels.footnote }}</p>
+    </div>
+
     <div class="footer">
         <p>Source: {{ COPY.labels.source }}</p>
     </div>
