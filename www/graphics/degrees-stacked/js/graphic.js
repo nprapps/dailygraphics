@@ -628,7 +628,7 @@ quint.selectAll(".layer")
             .style("stroke-width", "1")
 
 
-
+            console.log(y(20))
 
             small.append("text")
             .attr('class',"small-graph-degree")
@@ -643,6 +643,96 @@ quint.selectAll(".layer")
             // .style("stroke", "#a0a0a0")
             .style("font-size", "18px")
             .style("font-weight", "thin");
+
+
+            var lastNum = 41;
+            var firstNum = 0;
+
+            small.append("text")
+            .attr('class',"last-val")
+            // .attr('x',x(2011))
+            .attr('x', function(d) { 
+                if(d.name==smallWhat) {
+                    console.log(d.values[lastNum]['yr'])
+                       if (is_mobile) {
+                        return x(d.values[lastNum]['yr']) - 16;
+                        } else {
+                        return x(d.values[lastNum]['yr']) - 6;
+                        }
+                    }
+            })
+            .attr('y', function(d) { 
+                if(d.name==smallWhat) {
+                    console.log(d.values[lastNum]['y']*100)
+                    return y(d.values[lastNum]['y']) - 7;
+                    // return y(d.values[lastNum]['y']*100);
+                }
+            })
+            .text(function(d) { 
+                if(d.name==smallWhat) {
+                    var smallval = d.values[lastNum]['y']*100;
+                    console.log(d.values[lastNum]['y'])
+                    console.log(d3.round(smallval))
+
+                    return d3.round(smallval) + '%' 
+                }
+
+            })
+            .style("fill", "black")
+            .style("font-weight", "bold")
+            .style('opacity',"1")
+            .style("font-size", function(d) {
+            if (is_mobile) {
+                return "10px";
+                } else {
+                return "12px";                
+                }
+            });
+
+          small.append("text")
+            .attr('class',"first-val")
+            // .attr('x',x(2011))
+            .attr('x', function(d) { 
+                if(d.name==smallWhat) {
+                    console.log(d.values[firstNum]['yr'])
+                       if (is_mobile) {
+                        return x(d.values[firstNum]['yr']) - 6;
+                        } else {
+                        return x(d.values[firstNum]['yr']) - 4;
+                        }
+                    }
+            })
+            .attr('y', function(d) { 
+                if(d.name==smallWhat) {
+                    console.log(d.values[firstNum]['y']*100)
+                    return y(d.values[firstNum]['y']) - 7;
+                    // return y(d.values[firstNum]['y']*100);
+                }
+            })
+            .text(function(d) { 
+                if(d.name==smallWhat) {
+                    var smallval = d.values[firstNum]['y']*100;
+                    console.log(d.values[firstNum]['y'])
+                    console.log(d3.round(smallval))
+
+                    return d3.round(smallval) + '%' 
+                }
+
+            })
+            .style("fill", "black")
+            .style('opacity',"1")
+            .style('font-weight',"bold")
+            .style("font-size", function(d) {
+            if (is_mobile) {
+                return "10px";
+                } else {
+                return "12px";                
+                }
+            });
+
+
+
+
 
 
             if (is_mobile) {
