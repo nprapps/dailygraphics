@@ -60,6 +60,7 @@
             padding: 0;
             margin: 0 0 11px 0;
             width: 100%;
+            font-size: 14px;
         }
         
         table th {
@@ -71,6 +72,7 @@
         table th.share {
             border-bottom: 0;
             text-align: center;
+            padding: 0;
         }
         
         table td {
@@ -90,9 +92,25 @@
             text-align: left;
         }
 
+        table th.rank,
+        table td.rank {
+            text-align: center;
+        }
+        
+        table tr.san-marino td {
+            background-color: #f1f1f1;
+            border-color: #ccc;
+            border-top: 2px solid #ccc;
+        }
+        table tr.united-states-of-america td {
+            background-color: #f1f1f1;
+            border-color: #ccc;
+            border-bottom: 2px solid #ccc;
+        }
+
 
         /* responsive table */
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: 480px) {
             table,
             tbody {
                 display: block;
@@ -110,7 +128,8 @@
             table td { 
                 border: none;
                 margin-bottom: 6px;
-                color: #444;
+                color: #666;
+                font-size: 12px;
             }
             table td:empty { display: none; }
 
@@ -125,15 +144,40 @@
                 font-weight: bold;
             }
 
-            table tr td:first-child { 
+            table tr td:nth-child(2) { 
                 font-size: 14px;
                 font-weight: bold;
                 margin-bottom: 6px;
                 color: #333;
             }
-            table tr td:first-child:before {
-                content: '';
+            table tr td:nth-child(2):before {
+                content: attr(data-title) "\00A0";
             }
+
+            table th.rank,
+            table td.rank {
+                display: none;
+            }
+
+            table tr.san-marino,
+            table tr.united-states-of-america {
+                background-color: #f1f1f1;
+                padding: 11px;
+                margin-bottom: 0;
+                border-bottom: 2px solid #ccc;
+            }
+
+            table tr.san-marino {
+                border-top: 2px solid #ccc;
+                margin-top: -12px;
+            }
+
+            table tr.san-marino td,
+            table tr.united-states-of-america td {
+                background: transparent;
+                border: none;
+            }
+
         }
     </style>
 
@@ -143,7 +187,7 @@
         <table>
             <thead>
                 <tr>
-                    <th rowspan="2">{{ COPY.labels.hdr_rank }}</th>
+                    <th rowspan="2" class="rank">{{ COPY.labels.hdr_rank }}</th>
                     <th rowspan="2" class="country">{{ COPY.labels.hdr_country }}</th>
                     <th colspan="2" class="share">{{ COPY.labels.hdr_share }}</th>
                 </tr>
@@ -154,23 +198,18 @@
             </thead>
 
             {% for row in COPY.data %}
-            {% if row.rank <= '10.0' %}
-            <tr>
-                <td data-title="{{ COPY.labels.hdr_rank }}">{{ row.rank }}</td>
-                <td data-title="{{ COPY.labels.hdr_country }}" class="country">{{ row.country }}</td>
-                <td data-title="{{ COPY.labels.hdr_house }}">{{ row.house_women_pct }}</td>
-                <td data-title="{{ COPY.labels.hdr_senate }}">{{ row.senate_women_pct }}</td>
+            {% if row.rank|int <= 10 or row.rank|int == 99 %}
+            <tr class="{{ row.country|lower|replace(' ', '-') }}">
+                <td data-title="{{ COPY.labels.hdr_rank }}" class="rank">{{ row.rank|int }}</td>
+                <td data-title="{{ row.rank|int }}." class="country">{{ row.country }}</td>
+                <td data-title="{{ COPY.labels.hdr_house }}">{{ (row.house_women_pct|float * 100)|int }}%</td>
+                <td data-title="{{ COPY.labels.hdr_senate }}">{{ (row.senate_women_pct|float * 100)|int }}%</td>
             </tr>
             {% endif %}
             {% endfor %}
         </table>
     </div>
     
-    <div class="footnotes">
-        <h4>Notes</h4>
-        <p>{{ COPY.labels.footnote2 }}</p>
-    </div>
-
     <div class="footer">
         <p>Source: {{ COPY.labels.source }}</p>
     </div>
