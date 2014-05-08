@@ -137,14 +137,19 @@
             {% for row in COPY.data %}
             <tr class="{{ row.state|lower|replace(' ', '-') }}">
                 <td data-title="{{ COPY.labels.hdr_state }}" class="state">{{ row.state }}</td>
-                <td data-title="{{ COPY.labels.hdr_obama }}" class="obama">{{ (row.obama|float * 100)|int }}%</td>
-                <td data-title="{{ COPY.labels.hdr_romney }}" class="romney">{{ (row.romney|float * 100)|int }}%</td>
-                <td data-title="{{ COPY.labels.hdr_margin }}" class="margin">{{ (row.margin|float * 100)|int }}%</td>
+                <td data-title="{{ COPY.labels.hdr_obama }}" class="obama">{{ (row.obama|float * 100)|round|int }}%</td>
+                <td data-title="{{ COPY.labels.hdr_romney }}" class="romney">{{ (row.romney|float * 100)|round|int }}%</td>
+                <td data-title="{{ COPY.labels.hdr_margin }}" class="margin">{{ (row.margin|float * 100)|round|int }}%</td>
             </tr>
             {% endfor %}
         </table>
     </div>
     
+    <div class="footnotes">
+        <h4>Note</h4>
+        <p>{{ COPY.labels.footnote }}</p>
+    </div>
+
     <div class="footer">
         <p>Source: {{ COPY.labels.source }}</p>
     </div>
