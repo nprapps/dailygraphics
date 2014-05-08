@@ -55,8 +55,31 @@
         }
         a:hover, a:active { opacity: 0.7; }
         
+        .key ul {
+            margin: 0 0 22px 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        .key li {
+            margin: 0 18px 0 0;
+            padding: 0;
+            display: inline-block;
+            color: #333;
+            font-size: 12px;
+        }
+        .key b {
+            display: block;
+            float: left;
+            width: 15px;
+            height: 15px;
+            background-color: #000;
+        }
+        .key li b:nth-child(2) {
+            margin-right: 6px;
+        }
+        
         .person {
-            margin-bottom: 33px;
+            margin-bottom: 22px;
         }
         .person h3 {
             font-size: 12px;
@@ -73,8 +96,8 @@
             width: 100%;
             position: relative;
             height: 22px;
-            margin-bottom: 15px;
-            background-color: #f1f1f1;
+            margin-bottom: 1px;
+            background-color: #ebebeb;
         }
         .term b,
         .term i,
@@ -85,23 +108,83 @@
             top: 0;
             height: 22px;
         }
-        .term.party-d b { background-color: #3D7FA6; }
-        .term.party-r b { background-color: #A23520; }
-        .term.party-d i { background-color: #D3EAF7; }
-        .term.party-r i { background-color: #F5D1CA; }
+        .term.party-d b,
+        .key .year b.party-d { 
+            background-color: #A8D5EF;
+        }
+        .term.party-r b,
+        .key .year b.party-r { 
+            background-color: #ECA395;
+        }
+        .term.party-d i,
+        .key .birth b.party-d { 
+            background-color: #3D7FA6;
+        }
+        .term.party-r i,
+        .key .birth b.party-r { 
+            background-color: #A23520;
+        }
         .term span {
             width: 1px;
             background-color: #fff;
             opacity: 0.5;
+        }
+        
+        .year-labels {
+            width: 100%;
+            position: relative;
+            height: 13px;
+        }
+        .year-labels span {
+            font-size: 10px;
+            color: #999;
+            display: block;
+            position: absolute;
+            top: 0;
+            border-left: 1px solid #ddd;
+            padding-left: 2px;
+            height: 13px;
+        }
+        .year-labels b,
+        .year-labels i { 
+            font-weight: normal; 
+            font-style: normal; 
+            display: block;
+        }
+        .year-labels i { display: none; }
+
+        .desc {
+            background-color: #f7f7f7;
+            padding: 11px;
+        }
+
+        @media screen and (max-width: 480px) {
+            .year-labels i { display: block; }
+            .year-labels b { display: none; }
         }
     </style>
 
 </head>
 <body>
     <div id="graphic">
+    
+        <div class="key">
+            <ul>
+                <li class="year">
+                    <b class="party-d"></b>
+                    <b class="party-r"></b>
+                    Year in Congress
+                </li>
+                <li class="birth">
+                    <b class="party-d"></b>
+                    <b class="party-r"></b>
+                    Gave birth
+                </li>
+            </ul>
+        </div>
 
         {% for row in COPY.data %}
-        {% set first_year = 1973 %}
+        {% set first_year = 1970 %}
         {% set last_year = 2014 %}
         {% set total_years = last_year - first_year + 1 %}
         {% set term_years = row.year_end|int - row.year_start|int + 1 %}
@@ -109,6 +192,13 @@
         {% set term_width = term_years * year_width %}
         {% set term_left = (row.year_start|int - first_year) * year_width %}
         <div class="person">
+            <div class="year-labels">
+                <span style="left: 0%"><b>1970</b><i>&rsquo;70</i></span>
+                <span style="left: {{ (1980 - first_year) * year_width }}%"><b>1980</b><i>&rsquo;80</i></span>
+                <span style="left: {{ (1990 - first_year) * year_width }}%"><b>1990</b><i>&rsquo;90</i></span>
+                <span style="left: {{ (2000 - first_year) * year_width }}%"><b>2000</b><i>&rsquo;00</i></span>
+                <span style="left: {{ (2010 - first_year) * year_width }}%"><b>2010</b><i>&rsquo;10</i></span>
+            </div>
             <div class="term party-{{ row.party|lower }}">
                 <b style="width: {{ term_width }}%; left: {{ term_left }}%"></b>
                 <i style="width: {{ year_width }}%; left: {{ (row.birth1|int - first_year) * year_width }}%"></i>
@@ -120,9 +210,11 @@
                     {% endfor %}
                 </div>
             </div>
-            <h3>{{ row.name }} ({{ row.party }}-{{ row.state }})</h3>
-            <p>Served: {{ row.served }}</p>
-            <p>Gave birth in: {{ row.birth1|int }}{% if row.birth2|int != 0 %}, {{ row.birth2|int }}{% endif %}{% if row.birth3|int != 0 %}, {{ row.birth3|int }}{% endif %}</p>
+            <div class="desc">
+                <h3>{{ row.name }} ({{ row.party }}-{{ row.state }})</h3>
+                <p>Served: {{ row.served }}</p>
+                <p>Gave birth in: {{ row.birth1|int }}{% if row.birth2|int != 0 %}, {{ row.birth2|int }}{% endif %}{% if row.birth3|int != 0 %}, {{ row.birth3|int }}{% endif %}</p>
+            </div>
         </div>
         {% endfor %}
 
