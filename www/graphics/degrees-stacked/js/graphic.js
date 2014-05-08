@@ -638,10 +638,16 @@ quint.selectAll(".layer")
                 }
             })            
             .attr("x",width*.01)
-            .attr("y","40")
-            .style("fill", "#a0a0a0")
-            // .style("stroke", "#a0a0a0")
-            .style("font-size", "18px")
+            .attr("y","-6")
+            .style("fill", "#black")
+            .style("background", "white")
+            .style("font-size", function(d) {
+               if (is_mobile) {
+                return "12px";
+                } else {
+                return "18px";
+                }
+            })
             .style("font-weight", "thin");
 
 
@@ -655,16 +661,16 @@ quint.selectAll(".layer")
                 if(d.name==smallWhat) {
                     console.log(d.values[lastNum]['yr'])
                        if (is_mobile) {
-                        return x(d.values[lastNum]['yr']) - 16;
+                        return x(d.values[lastNum]['yr']) ;
                         } else {
-                        return x(d.values[lastNum]['yr']) - 6;
+                        return x(d.values[lastNum]['yr']) ;
                         }
                     }
             })
             .attr('y', function(d) { 
                 if(d.name==smallWhat) {
                     console.log(d.values[lastNum]['y']*100)
-                    return y(d.values[lastNum]['y']) - 7;
+                    return y(d.values[lastNum]['y']) - 9;
                     // return y(d.values[lastNum]['y']*100);
                 }
             })
@@ -680,6 +686,7 @@ quint.selectAll(".layer")
             })
             .style("fill", "black")
             .style("font-weight", "bold")
+            .style('text-anchor',"end")
             .style('opacity',"1")
             .style("font-size", function(d) {
             if (is_mobile) {
@@ -696,16 +703,16 @@ quint.selectAll(".layer")
                 if(d.name==smallWhat) {
                     console.log(d.values[firstNum]['yr'])
                        if (is_mobile) {
-                        return x(d.values[firstNum]['yr']) - 6;
+                        return x(d.values[firstNum]['yr']) ;
                         } else {
-                        return x(d.values[firstNum]['yr']) - 4;
+                        return x(d.values[firstNum]['yr']) ;
                         }
                     }
             })
             .attr('y', function(d) { 
                 if(d.name==smallWhat) {
                     console.log(d.values[firstNum]['y']*100)
-                    return y(d.values[firstNum]['y']) - 7;
+                    return y(d.values[firstNum]['y']) - 9;
                     // return y(d.values[firstNum]['y']*100);
                 }
             })
@@ -722,6 +729,7 @@ quint.selectAll(".layer")
             .style("fill", "black")
             .style('opacity',"1")
             .style('font-weight',"bold")
+            .style('text-anchor',"start")
             .style("font-size", function(d) {
             if (is_mobile) {
                 return "10px";
@@ -739,15 +747,14 @@ quint.selectAll(".layer")
             small.append("rect")
             .attr('class',"bb")
             .attr('width','30px')
-            .attr('height', '20px')
+            .attr('height', '15px')
             .text("Back")  
             .attr("x",width*1.2)
-            .attr("y","-15")
-            .style("fill", "black")
+            .attr("y","-18")
             .style('opacity',".2")
             .style("fill", "white")
             .style("stroke-width", "1px")
-            .style("stroke", "#a0a0a0")
+            .style("stroke", "black")
             .style("opacity", ".8")
             .on("mouseover",backMouseover)
             .on("mouseout",backMouseout);
@@ -757,9 +764,9 @@ quint.selectAll(".layer")
             .attr('class',"bb")
             .text("Back")  
             .attr("x",width*1.22)
-            .attr("y","0")
+            .attr("y","-7")
             .style("fill", "black")
-            .style('opacity',".5")
+            .style('opacity',"1")
             .style("font-size", "10px")
             .style("text-align", "center")
             .style("font-weight", "thin")
@@ -774,13 +781,13 @@ quint.selectAll(".layer")
             small.append("rect")
             .attr('class',"bb")
             .attr('width','65px')
-            .attr('height', '40px')
+            .attr('height', '20px')
             .text("Back")  
             .attr("x",width)
-            .attr("y","-15")
+            .attr("y","-24")
             .style("fill", "white")
-            .style("stroke-width", "2px")
-            .style("stroke", "#a0a0a0")
+            .style("stroke-width", "1px")
+            .style("stroke", "black")
             .style("opacity", ".5")
             .on("mouseover",backMouseover)
             .on("mouseout",backMouseout);
@@ -790,9 +797,9 @@ quint.selectAll(".layer")
             .attr('class',"bb")
             .text("Back")  
             .attr("x",width*1.02)
-            .attr("y","10")
+            .attr("y","-8")
             .style("fill", "black")
-            .style('opacity',".5")
+            .style('opacity',"1")
             .style("font-size", "16px")
             .style("text-align", "center")
             .style("font-weight", "thin")
