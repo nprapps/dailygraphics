@@ -401,6 +401,10 @@ quint.selectAll(".layer")
         d3.select(".quint-geology-and-earth-sciences").style("fill","#EFC637");
 
         function smallGraph(d,i) {
+            console.log(d,i);
+
+            var countryData;
+
             // y.range([height/1.5, 0]);
             // y.domain([
             //     d3.min(quintiles, function(c) { return d3.min(c.values, function(v) { return v.y; }); }),
@@ -415,7 +419,7 @@ quint.selectAll(".layer")
 
                     if(quintiles[i].name==smallWhat) {
                         var test = quintiles[i].values;
-                        var countryData = quintiles[i];
+                        countryData = quintiles[i];
                     }
                 };
 
@@ -443,24 +447,31 @@ quint.selectAll(".layer")
             //     .call(y_axis_grid()
             //     .tickSize(-width, 0, 0)
             //     .tickFormat(""));    
-console.log(countryData)
+
+            console.log('countryData', countryData)
 // multiple lines
             var small = svg.selectAll(".small-line")
-            .data(quintiles)
-            .enter().append("g")
-            .attr('class',"small-line")
+                .data(quintiles)
+                .enter().append("g")
+                    .attr('class',"small-line")
             
             small.append("path")
-            .attr('class', function(d) { 
-                return 'line quint-' + d.name.replace(/\s+/g, '-').toLowerCase()
-            })
-            .attr("d", function(d) { return line(d.values); });
+                .attr('class', function(d) { 
+                    return 'line quint-' + d.name.replace(/\s+/g, '-').toLowerCase()
+                })
+                .transition()
+                .duration(1000)
+                .attr("d", function(d) { 
+                    if (d.name == countryData['name']) {
+                        return line(d.values); 
+                    }
+                });
 // 
 
-
 // // one line
-//             console.log(quintiles)
-//             console.log(countryData.value)
+             console.log(quintiles)
+             
+             console.log(countryData)
 //             // console.log(countryData.value.yr)
 //             var small = svg.append("path")
 //             .data(countryData)
