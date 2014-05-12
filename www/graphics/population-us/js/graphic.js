@@ -18,7 +18,7 @@ var colors = {
  * Render the graphic
  */
 function draw_graphic(container_width) {
-    var margin = {top: 10, right: 55, bottom: 25, left: 65};
+    var margin = {top: 10, right: 55, bottom: 25, left: 70};
     var width = container_width - margin.left - margin.right;
     var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
     var last_data_point = graphic_data.length - 1;
@@ -60,7 +60,7 @@ function draw_graphic(container_width) {
             if (d == 0) {
                 return d;
             } else {
-                return d.toFixed(1) + ' million';
+                return d + ' million';
             }
         });
     
@@ -92,7 +92,7 @@ function draw_graphic(container_width) {
         d3.max(d3.entries(lines), function(c) { 
             return d3.max(c.value, function(v) { 
                 var n = parseFloat(v.amt);
-                return Math.ceil(n/.40) * .40; // round to next 10
+                return Math.ceil(n/100) * 100; // round to next 100
                 return n; 
             }); 
         })
@@ -143,12 +143,12 @@ function draw_graphic(container_width) {
                 return x(d['value'][last_data_point]['year']) + 6;
             })
             .attr('y', function(d) { 
-                return y(d['value'][last_data_point]['amt']);
+                return ypos = y(d['value'][last_data_point]['amt']);
             })
             .attr('dy', 2)
             .attr('text-anchor', 'left')
             .text(function(d) { 
-                return d3.round(d['value'][last_data_point]['amt'], 1) + ' million';
+                return d3.round(d['value'][last_data_point]['amt'], 0) + ' million';
             });
 
     if (pymChild) {
@@ -170,7 +170,8 @@ $(window).load(function() {
 
             // format datestamps
             graphic_data.forEach(function(d) {
-                d.year = d3.time.format('%Y').parse(d.year);
+                d.year = d3.time.format('%Y-%m-%d').parse(d.year);
+                console.log(d.year);
             });
         
             // setup pym
