@@ -47,6 +47,7 @@
             font-size: 12px;
             margin: 0 0 22px 0;
         }
+        #graphic { margin-bottom: 11px; }
         .footnotes { margin-bottom: 20px; }
         .footnotes h4 {
             margin: 2px 0 7px 0;
@@ -68,7 +69,7 @@
         
         h3 {
             margin: 0 0 2px 0;
-            background-color: #ccc;
+            background-color: #dadada;
             font-size: 14px;
             padding: 5px 11px;
         }
@@ -93,6 +94,7 @@
             h3 { 
                 width: 120px;
                 display: table-cell;
+                border-right: 2px solid #fff;
             }
             ul { display: table-cell; }
             li:last-child { margin-bottom: 0; }
@@ -101,8 +103,8 @@
 
 </head>
 <body>
-    <h1>Headline</h1>
-    <h2>Subhed (optional)</h2>
+    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline }}</h1>{% endif %}
+    {% if COPY.labels.subhed %}<h2>{{ COPY.labels.subhed }}</h2>{% endif %}
 
     <div id="graphic">
         <section>
@@ -161,7 +163,7 @@
         </section>
     </div>
     
-    {% if COPY.labels.footnote != 'None' %}
+    {% if COPY.labels.footnote %}
     <div class="footnotes">
         <h4>Notes</h4>
         <p>{{ COPY.labels.footnote }}</p>
