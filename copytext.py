@@ -27,6 +27,9 @@ class Error(object):
     def __repr__(self):
         return self._error
 
+    def __nonzero__(self):
+        return False
+
 class Row(object):
     """
     Wraps a row of copy for error handling.
@@ -65,9 +68,22 @@ class Row(object):
 
     def __repr__(self):
         if 'value' in self._columns:
-            return Markup(self._row[self._columns.index('value')])
+            val = self._row[self._columns.index('value')]
+
+            return Markup(val)
 
         return Error('COPY.%s.%s [no value column in sheet]' % (self._sheet.name, self._row[self._columns.index('key')])) 
+
+    def __nonzero__(self):
+        if 'value' in self._columns:
+            val = self._row[self._columns.index('value')]
+
+            if not val:
+                return False 
+
+            return len(val)
+    
+        return True
 
 class Sheet(object):
     """
