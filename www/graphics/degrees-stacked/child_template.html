@@ -45,12 +45,6 @@
             font-weight: 12px;
 
         }
-/*
-        #graphic .small-line path {
-            stroke: #666;
-            stroke-width: 1;
-            fill: none;
-        }*/
 
         #graphic .layer path {
         cursor: pointer;
@@ -124,10 +118,9 @@
           z-index:18;   
           border: 0px;      
           pointer-events: none;
-
-
         }
-            div.tooltip {   
+
+          div.tooltip {   
           position: absolute;           
           text-align: left;
           margin-top: -5px;         
@@ -141,11 +134,9 @@
           pointer-events: none;
           border-radius: 5px;
           background: #FFFFFF;
-          /*background: rgba(0,0,0,.8);*/
           border-width: 6px 6px 0 6px;
           bottom: 20px;
           box-shadow: 1px 1px 5px rgba(0, 0, 0, 1);
-
         }
       
         div.tooltip2 {   
@@ -162,7 +153,6 @@
           pointer-events: none;
           border-radius: 5px;
           background: #FFFFFF;
-          /*background: rgba(0,0,0,.8);*/
           border-width: 6px 6px 0 6px;
           bottom: 20px;
 
@@ -213,7 +203,6 @@
           pointer-events: none;
           border-radius: 5px;
           background: #FFFFFF;
-          /*background: rgba(0,0,0,.8);*/
           border-width: 6px 6px 0 6px;
           bottom: 20px;
 
@@ -233,7 +222,6 @@
           pointer-events: none;
           border-radius: 5px;
           background: #FFFFFF;
-          /*background: rgba(0,0,0,.8);*/
           border-width: 6px 6px 0 6px;
           bottom: 20px;
 
@@ -279,7 +267,6 @@
           color: black;
         }
         .tooltip2 h4 {
-          /*text-align: right;*/
           margin-top: 3px;
           margin-left: 6px;
           font-weight: 100;
@@ -296,7 +283,6 @@
           color: black;
         }
         .tooltip4 h4 {
-          /*text-align: right;*/
           margin-top: 3px;
           margin-left: 6px;
           font-weight: 300;
@@ -394,37 +380,6 @@
           float: left;
         }
 
-        #backButton {
-          margin-top: 2%;
-          margin-right: 6%;
-          margin-left: 12%;
-          width: 75px;
-          height: 50px;
-
-          background: #ccc;
-          text-align: center;
-          border: black
-          border-width: 1px;
-          font-weight: 100;
-          visibility: hidden;
-          cursor: pointer;
-          float: left;
-        }
-
-        #backButton {
-         font-family: Arial, Helvetica, sans-serif;
-          vertical-align: middle;
-          font-size: 16px;
-          color: #FFFFFF;
-
-        }
-          .small-graph-degree {
-          font-size: 16px;
-          color: #ccc;
-          font-weight: 100;
-          float:left;
-        }
-
         #backButton:hover{
             cursor: pointer;
         }
@@ -433,16 +388,16 @@
           cursor: pointer;
         }
 
- /*       .layer.tooltip3.tooltip3.tooltip3.tooltip4:hover {
-              cursor: pointer;
-        }*/
+
     </style>
 
 </head>
 <body>
     <div id = "graphic-head">
-      <h2 id = "graphic-title">What Are College Students Graduating In?</h2>
-      <p id = "graphic-deck">Bachelors Degrees Conferred, By Field Of Study: 1970-2011</p>
+      <h2 id = "graphic-title">
+        College Majors, 1970-2011
+      </h2>
+      <p id = "graphic-deck">Share Of All Bachelor's Degrees Awarded By Field </p>
     </div>
     <!-- <div id = "backButton"> -->
       <!-- <p>Back</p> -->
@@ -451,12 +406,12 @@
       
 
     </div>
-    
-<!--     <div class="footnotes">
+<!--     
+    <div class="footnotes">
         <h4>Notes</h4>
-        <p>{{ COPY.content.lorem_ipsum }}</p>
-    </div> -->
-
+        <p>Number of Graduates  </p>
+    </div>
+ -->
     <div class="footer">
         <p>Source: Digest Of Educational Statistics</p>
         <p>Credit: Quoctrung Bui/NPR</p>
