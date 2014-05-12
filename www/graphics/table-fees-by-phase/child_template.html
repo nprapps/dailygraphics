@@ -34,7 +34,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
+            font: 14px/1.4 Arial, Helvetica, sans-serif;
         }
         h1 {
             margin: 0 0 6px 0;
@@ -65,6 +65,38 @@
             text-decoration: none;
         }
         a:hover, a:active { opacity: 0.7; }
+        
+        h3 {
+            margin: 0 0 2px 0;
+            background-color: #ccc;
+            font-size: 14px;
+            padding: 5px 11px;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        li {
+            margin: 0 0 2px 0;
+            padding: 5px 11px;
+            font-size: 14px;
+            background-color: #f1f1f1;
+        }
+
+        @media screen and (min-width: 481px) {
+            section { 
+                display: table;
+                width: 100%;
+                margin-bottom: 2px;
+            }
+            h3 { 
+                width: 120px;
+                display: table-cell;
+            }
+            ul { display: table-cell; }
+            li:last-child { margin-bottom: 0; }
+        }
     </style>
 
 </head>
@@ -73,41 +105,63 @@
     <h2>Subhed (optional)</h2>
 
     <div id="graphic">
-        <dl>
-            <dt>{{ COPY.labels.hed_preconviction }}</dt>
+        <section>
+            <h3>{{ COPY.labels.hed_preconviction }}</h3>
+            <ul>
                 {% for row in COPY.data %}
                 {% if row.type == 'preconviction' %}
-                <dd>{{ row.fine }}{% if row.description != 'None' %} &mdash; {{ row.description }}{% endif %}</dd>
+                <li>{{ row.fine }}{% if row.description != 'None' %} &mdash; {{ row.description }}{% endif %}</li>
                 {% endif %}
                 {% endfor %}
-            <dt>{{ COPY.labels.hed_sentencing }}</dt>
+            </ul>
+        </section>
+
+        <section>
+            <h3>{{ COPY.labels.hed_sentencing }}</h3>
+            <ul>
                 {% for row in COPY.data %}
                 {% if row.type == 'sentencing' %}
-                <dd>{{ row.fine }}{% if row.description != 'None' %} &mdash; {{ row.description }}{% endif %}</dd>
+                <li>{{ row.fine }}{% if row.description != 'None' %} &mdash; {{ row.description }}{% endif %}</li>
                 {% endif %}
                 {% endfor %}
-            <dt>{{ COPY.labels.hed_incarceration != 'None' }}</dt>
+            </ul>
+        </section>
+
+        <section>
+            <h3>{{ COPY.labels.hed_incarceration }}</h3>
+            <ul>
                 {% for row in COPY.data %}
                 {% if row.type == 'incarceration' %}
-                <dd>{{ row.fine }}{% if row.description != 'None' %} &mdash; {{ row.description }}{% endif %}</dd>
+                <li>{{ row.fine }}{% if row.description != 'None' %} &mdash; {{ row.description }}{% endif %}</li>
                 {% endif %}
                 {% endfor %}
-            <dt>{{ COPY.labels.hed_probabion }}</dt>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>{{ COPY.labels.hed_probation }}</h3>
+            <ul>
                 {% for row in COPY.data %}
                 {% if row.type == 'probation' %}
-                <dd>{{ row.fine }}{% if row.description != 'None' %} &mdash; {{ row.description }}{% endif %}</dd>
+                <li>{{ row.fine }}{% if row.description != 'None' %} &mdash; {{ row.description }}{% endif %}</li>
                 {% endif %}
                 {% endfor %}
-            <dt>{{ COPY.labels.hed_poverty }}</dt>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>{{ COPY.labels.hed_poverty }}</h3>
+            <ul>
                 {% for row in COPY.data %}
                 {% if row.type == 'poverty' %}
-                <dd>{{ row.fine }}{% if row.description != 'None' %} &mdash; {{ row.description }}{% endif %}</dd>
+                <li>{{ row.fine }}{% if row.description != 'None' %} &mdash; {{ row.description }}{% endif %}</li>
                 {% endif %}
                 {% endfor %}
-        </dl>
+            </ul>
+        </section>
     </div>
     
-    {% if COPY.labels.footnote %}
+    {% if COPY.labels.footnote != 'None' %}
     <div class="footnotes">
         <h4>Notes</h4>
         <p>{{ COPY.labels.footnote }}</p>
@@ -115,8 +169,7 @@
     {% endif %}
 
     <div class="footer">
-        <p>Source: DATA-SOURCE-HERE</p>
-        <p>Credit: YOUR-NAME/NPR</p>
+        <p>Source: {{ COPY.labels.source }}</p>
     </div>
 
     <script src="js/lib/jquery.js" type="text/javascript"></script>
