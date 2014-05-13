@@ -35,26 +35,8 @@
             margin: 0;
             padding: 0;
             font: 14px/1.4 Arial, Helvetica, sans-serif;
-            color: #333;
+            color: #555;
         }
-        h1 {
-            margin: 0 0 6px 0;
-            font-size: 14px;
-            color: #333;
-        }
-        h2 {
-            font-weight: normal;
-            color: #666;
-            font-size: 12px;
-            margin: 0 0 22px 0;
-        }
-        .footnotes { margin-bottom: 20px; }
-        .footnotes h4 {
-            margin: 2px 0 7px 0;
-            color: #666;
-            font-size: 11px;
-        }
-        .footnotes p,
         .footer p {
             margin: 2px 0 0 0;
             font-size: 11px;
@@ -67,14 +49,28 @@
         }
         a:hover, a:active { opacity: 0.7; }
         
-        h3 {
-            margin: 0 0 3px 0;
-            clear: both;
+        #graphic {
+            font-family: 'Gotham SSm', Helvetica, Arial, sans-serif;
         }
-        h4 {
+        
+        h3 {
+            margin: 0 0 2px 0;
+            clear: both;
+            font-size: 20px;
+            color: #121212;
+            background-color: #ebebeb;
+            padding: 11px;
+        }
+        h3 span {
             font-weight: normal;
-            margin: 0 0 22px 0;
-            font-style: italic;
+            color: #999;
+        }
+        
+        h4 {
+            font-size: 14px;
+            margin: 0 0 11px 0;
+            padding: 0 11px;
+            color: #121212;
         }
         
         img { 
@@ -90,26 +86,72 @@
         }
         
         blockquote {
-            font: 24px/1.6 'Gotham SSm', Helvetica, Arial, sans-serif;
-            margin: 0 0 22px 40px;
+            font-size: 22px;
+            line-height: 1.6;
+/*            font: 24px/1.6 Georgia, serif; */
+            margin: 0 11px 0 35px;
+            color: #999;
         }
         blockquote:before {
             content: "\201C";
-            font-size: 72px;
+            font-size: 64px;
             display: block;
             float: left;
             line-height: 48px;
-            margin-left: -40px;
+            margin-left: -35px;
         }
         
         section {
             margin: 0 0 22px 0;
-            padding-bottom: 22px;
-            border-bottom: 2px solid #e2e2e2;
         }
-        section:last-child {
-            padding-bottom: 0;
-            border-bottom: none;
+        
+        .intro {
+            margin-bottom: 22px;
+            background-color: #f7f7f7;
+            padding: 16px 11px;
+        }
+        
+        ul {
+            margin: 0 0 22px 0;
+            padding: 0 11px;
+            list-style-type: none;
+        }
+        li {
+            margin: 0 0 11px 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        li strong {
+            color: #121212;
+        }
+        
+        
+        section:before,
+        section:after,
+        .intro:before,
+        .intro:after {
+            content: " ";
+            display: table;
+        }
+        section:after,
+        .intro:after {
+            clear: both;
+        }
+
+        @media screen and (max-width: 480px) {
+            h3 { font-size: 16px; }
+            h4 { font-size: 12px; }
+            blockquote { 
+                font-size: 16px;
+                margin-left: 30px;
+            }
+            blockquote:before { 
+                font-size: 48px;
+                line-height: 32px;
+                margin-left: -30px;
+            }
+            img { margin-top: -3px; }
+            li { font-size: 12px; }
         }
     </style>
 
@@ -118,8 +160,7 @@
     <div id="graphic">
         {% for row in COPY.data %}
         <section>
-            <h3>{{ row.name }}</h3>
-            {% if row.location != 'None' %}<h4>{{ row.location }}</h4>{% endif %}
+            <h3>{{ row.name }}{% if row.location != 'None' %}<span>, {{ row.location }}</span>{% endif %}</h3>
 
             <div class="intro">
                 <img src="{{ row.photo }}" alt="Photo of {{ row.name }}" />
@@ -128,18 +169,17 @@
                 </div>
             </div>
 
-
-            {% if row.audio_prompt != 'None' %}
-            <h5>{{ row.audio_prompt }}</h5>
-            <p>[player]</p>
-            {% endif %}
-
             <ul>
                 {% if row.crime != 'None' %}<li><strong>{{ COPY.labels.hdr_crime}}:</strong> {{ row.crime }}</li>{% endif %}
                 {% if row.punishment != 'None' %}<li><strong>{{ COPY.labels.hdr_punishment}}:</strong> {{ row.punishment }}</li>{% endif %}
                 {% if row.description != 'None' %}<li><strong>{{ COPY.labels.hdr_description}}:</strong> {{ row.description }}</li>{% endif %}
                 {% if row.fines != 'None' %}<li><strong>{{ COPY.labels.hdr_fines}}:</strong> {{ row.fines }}</li>{% endif %}
             </ul>
+
+            {% if row.audio_prompt != 'None' %}
+            <h4>{{ row.audio_prompt }}</h4>
+            <p>[player]</p>
+            {% endif %}
         </section>
         {% endfor %}
     </div>
