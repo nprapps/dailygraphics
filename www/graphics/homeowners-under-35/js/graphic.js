@@ -18,7 +18,7 @@ var colors = {
  * Render the graphic
  */
 function draw_graphic(container_width) {
-    var margin = {top: 10, right: 40, bottom: 25, left: 35};
+    var margin = {top: 10, right: 15, bottom: 25, left: 35};
     var width = container_width - margin.left - margin.right;
     var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
     var last_data_point = graphic_data.length - 1;
@@ -155,12 +155,31 @@ function draw_graphic(container_width) {
         .enter()
         .append('text')
             .attr('x', function(d) { 
-                return x(d['value'][last_data_point]['date']) + 6;
+                return x(d['value'][0]['date']);
+            })
+            .attr('y', function(d) { 
+                return y(d['value'][0]['amt']);
+            })
+            .attr('dy', -10)
+            .attr('text-anchor', 'left')
+            .text(function(d) { 
+                return d3.round(d['value'][0]['amt'], 1) + '%';
+            });
+
+
+    svg.append('g')
+        .attr('class', 'value')
+        .selectAll('text')
+            .data(d3.entries(lines))
+        .enter()
+        .append('text')
+            .attr('x', function(d) { 
+                return x(d['value'][last_data_point]['date']) - 28;
             })
             .attr('y', function(d) { 
                 return y(d['value'][last_data_point]['amt']);
             })
-            .attr('dy', 2)
+            .attr('dy', -10)
             .attr('text-anchor', 'left')
             .text(function(d) { 
                 return d3.round(d['value'][last_data_point]['amt'], 1) + '%';
