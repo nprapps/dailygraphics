@@ -89,19 +89,85 @@
         
         table td {
             border-bottom: 1px solid #eee;
-            vertical-align: top;
+            border-right: 1px solid #fff;
+            vertical-align: middle;
+            width: 15%;
+            color: #fff;
         }
         
         table th:first-child,
         table td:first-child {
             text-align: left;
+            width: 25%;
+            color: #333;
+            background-color: #fff;
         }
         
-        table td.yes {
-            background-color: #f1f1f1;
+        table td,
+        .key-2 b {
+            background-color: #ebebeb;
+        }
+        table td.yes,
+        .key-0 b {
+            background-color: #E38D2C;
+        }
+        table td.fee,
+        table td.county,
+        table td.employed,
+        table td.utilities,
+        table td.haircut,
+        .key-1 b {
+            background-color: #F1C696;
         }
         
+        sup {
+            font-weight: normal;
+            color: #999;
+            line-height: 1;
+            font-size: 10px;
+            margin-left: 3px;
+        }
+        
+        .key {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0 0 1em 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        
+        .key .key-item { 
+            display: inline-block;
+            margin: 0 18px 0 0;
+            padding: 0;
+            line-height: 15px;
+        }
+
+        .key .key-item b { 
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 6px;
+            float: left;
+        }
+
+        .key .key-item label { 
+            white-space: nowrap;
+            font-size: 12px;
+            color: #333;
+            font-weight: normal;
+        }
+        
+        @media screen and (min-width: 481px) and (max-width: 650px) {
+            table { font-size: 12px; }
+        }
         @media screen and (max-width: 480px) {
+            table th,
+            table td,
+            table th:first-child,
+            table td:first-child {
+                width: auto;
+                text-align: left;
+            }
         }
     </style>
 
@@ -110,35 +176,48 @@
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ COPY.labels.subhed }}</h2>{% endif %}
 
+    <ul class="key">
+        <li class="key-item key-0"><b></b><label>Yes</label></li>
+        <li class="key-item key-1"><b></b><label>Yes, with caveats</label></li>
+        <li class="key-item key-2"><b></b><label>No</label></li>
+    </ul>
+
     <div id="graphic">
         <table>
             <tr>
                 <th>{{ COPY.labels.hed_state }}</th>
-                <th>{{ COPY.labels.hed_monitoring }}</th>
+                <th>{{ COPY.labels.hed_monitoring }}<sup>1</sup></th>
                 <th>{{ COPY.labels.hed_probation }}</th>
                 <th>{{ COPY.labels.hed_public }}</th>
-                <th>{{ COPY.labels.hed_costofcare }}</th>
+                <th>{{ COPY.labels.hed_costofcare }}<sup>2</sup></th>
                 <th>{{ COPY.labels.hed_increased }}</th>
             </tr>
             {% for row in COPY.data %}
             <tr id="state-{{ row.state_abbr|lower }}">
                 <td data-title="{{ COPY.labels.hed_state }}">{{ row.state }}</td>
-                <td data-title="{{ COPY.labels.hed_monitoring }}" class="{{ row.monitoring|lower }}">{% if row.monitoring != 'None' %}{{ row.monitoring }}{% endif %}</td>
-                <td data-title="{{ COPY.labels.hed_probation }}" class="{{ row.probation|lower }}">{% if row.probation != 'None' %}{{ row.probation }}{% endif %}</td>
-                <td data-title="{{ COPY.labels.hed_public }}" class="{{ row.public|lower }}">{% if row.public != 'None' %}{{ row.public }}{% endif %}</td>
-                <td data-title="{{ COPY.labels.hed_costofcare }}" class="{{ row.costofcare|lower }}">{% if row.costofcare != 'None' %}{{ row.costofcare }}{% endif %}</td>
-                <td data-title="{{ COPY.labels.hed_increased }}" class="{{ row.increased|lower }}">{% if row.increased != 'None' %}{{ row.increased }}{% endif %}</td>
+                <td data-title="{{ COPY.labels.hed_monitoring }}" class="{{ row.monitoring|lower }}">{% if row.monitoring != 'None' %}&#10004;{% endif %}</td>
+                <td data-title="{{ COPY.labels.hed_probation }}" class="{{ row.probation|lower }}">{% if row.probation != 'None' %}&#10004;{% endif %}</td>
+                <td data-title="{{ COPY.labels.hed_public }}" class="{{ row.public|lower }}">{% if row.public != 'None' %}&#10004;{% endif %}</td>
+                <td data-title="{{ COPY.labels.hed_costofcare }}" class="{{ row.costofcare|lower }}">{% if row.costofcare != 'None' %}&#10004;{% endif %}</td>
+                <td data-title="{{ COPY.labels.hed_increased }}" class="{{ row.increased|lower }}">{% if row.increased != 'None' %}&#10004;{% endif %}</td>
             </tr>
             {% endfor %}
         </table>
     </div>
     
-    {% if COPY.labels.footnote %}
     <div class="footnotes">
         <h4>Notes</h4>
-        <p>{{ COPY.labels.footnote }}</p>
+        <p>1. <strong>{{ COPY.labels.hed_monitoring }}:</strong> 
+            {{ COPY.labels.key_monitoring_fee }}
+            {{ COPY.labels.key_monitoring_county }}
+        </p>
+        <p>2. <strong>{{ COPY.labels.hed_costofcare }}:</strong> 
+            {{ COPY.labels.key_costofcare_yes }}
+            {{ COPY.labels.key_costofcare_employed }}
+            {{ COPY.labels.key_costofcare_utilities }}
+            {{ COPY.labels.key_costofcare_haircut }}
+        </p>
     </div>
-    {% endif %}
 
     <div class="footer">
         <p>Source: {{ COPY.labels.source }}</p>
