@@ -161,8 +161,6 @@
             font-weight: normal;
         }
         
-        .state-jump { display: none; }
-        
         @media screen and (min-width: 481px) and (max-width: 650px) {
             table { font-size: 12px; }
         }
@@ -259,16 +257,6 @@
                 color: #787878;
                 margin-top: 3px;
             }
-            
-            .state-jump { 
-                display: block;
-                margin-bottom: 22px;
-                background-color: #ebebeb;
-                padding: 11px;
-                font-size: 12px;
-                color: #444;
-            }
-            .state-jump select { width: 80%; }
         }
     </style>
 
@@ -283,15 +271,6 @@
         <li class="key-item key-2"><b></b><label>No</label></li>
     </ul>
     
-    <div class="state-jump">
-        <select id="state-list">
-            <option selected>Jump to a state...</option>
-            {% for row in COPY.data %}
-            <option value="#state-{{ row.state_abbr|lower }}">{{ row.state }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
     <div id="graphic">
         <table>
             <thead>
