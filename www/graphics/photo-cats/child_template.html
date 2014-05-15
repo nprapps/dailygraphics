@@ -116,14 +116,13 @@
     <div id="callout">
         {% for row in COPY.instagram %}
             {% if row.approved == 'y' %}
-            <section id="post-{{ loop.index }}" class="post post-{{ row.name }}">
+            <section id="post-{{ loop.index }}" class="post post-{{ row.username }}">
                 <div class="photo">
                     <a href="{{row.instagram_url}}"  target="_blank"><img src="{{ row.image_url }}" alt="Photo" /></a>
                 </div>
                 <div class="caption">
                     <h3><a href="{{row.instagram_url}}" target="_blank">@{{ row.username }}</a></h3>
                     <p>{{ row.caption }}</p>
-                
                 </div>
             </section>
            {% endif %}
@@ -131,7 +130,6 @@
     </div>
 
     <div class="footer">
-        <p>Source: Instagram</p>
         <p>Credit: NPR</p>
     </div>
 
