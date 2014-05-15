@@ -59,7 +59,7 @@
             font-size: 18px;
             color: #121212;
             background-color: #ebebeb;
-            padding: 11px;
+            padding: 22px 11px;
         }
         h3 span {
             font-weight: normal;
@@ -87,16 +87,9 @@
         blockquote {
             font-size: 18px;
             line-height: 1.6;
-            margin: 0 11px 0 32px;
+            margin: 0 11px;
             color: #999;
-        }
-        blockquote:before {
-            content: "\201C";
-            font-size: 56px;
-            display: block;
-            float: left;
-            line-height: 36px;
-            margin-left: -32px;
+            text-indent: -.5em;
         }
         
         section {
@@ -137,20 +130,21 @@
         }
 
         @media screen and (max-width: 480px) {
-            h3 { font-size: 14px; }
-            h4 { font-size: 12px; }
-            blockquote { 
-                font-size: 16px;
-                margin-left: 30px;
+            h3 { 
+                font-size: 14px;
+                padding: 11px;
             }
+            h4 { font-size: 12px; }
+            blockquote { font-size: 16px; }
+            /*
             blockquote:before { 
                 font-size: 48px;
                 line-height: 32px;
                 margin-left: -30px;
             }
-            img { margin-top: -3px; }
+            */
             li { font-size: 12px; }
-            .intro { padding-right: 11px; }
+            .intro { padding: 16px 11px; }
         }
     </style>
 
@@ -164,7 +158,7 @@
             <div class="intro">
                 <img src="{{ row.photo }}" alt="Photo of {{ row.name }}" />
                 <div class="quote">
-                    {% if row.pullquote != 'None' %}<blockquote>{{ row.pullquote }}</blockquote>{% endif %}
+                    {% if row.pullquote != 'None' %}<blockquote>&ldquo;{{ row.pullquote }}&rdquo;</blockquote>{% endif %}
                 </div>
             </div>
 
