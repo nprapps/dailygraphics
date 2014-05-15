@@ -19,6 +19,17 @@ function render(width) {
     }
 }
 
+function on_select_state(e) {
+    console.log(e.target.value);
+    location.hash = e.target.value;
+//    console.log(e.target.value);
+//    $(document).scrollTop(e.target.value);
+//    return false;
+
+// onchange="window.location.href=this.options[this.selectedIndex].value;return false;"
+
+}
+
 /*
  * NB: Use window.load instead of document.ready
  * to ensure all images have loaded
@@ -27,4 +38,6 @@ $(window).load(function() {
     pymChild = new pym.Child({
         renderCallback: render
     });
+    
+    $('#state-list').on('change', on_select_state);
 })

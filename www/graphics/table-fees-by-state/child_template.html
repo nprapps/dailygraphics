@@ -109,7 +109,7 @@
         }
         table td.yes,
         .key-0 b {
-            background-color: #E38D2C;
+            background-color: #51A09E;
         }
         table td.fee,
         table td.county,
@@ -117,7 +117,7 @@
         table td.utilities,
         table td.haircut,
         .key-1 b {
-            background-color: #F1C696;
+            background-color: #F3D469;
         }
         
         table i {
@@ -161,10 +161,14 @@
             font-weight: normal;
         }
         
+        .state-jump { display: none; }
+        
         @media screen and (min-width: 481px) and (max-width: 650px) {
             table { font-size: 12px; }
         }
         @media screen and (max-width: 480px) {
+            .key { display: none; }
+
             table,
             tbody {
                 display: block;
@@ -183,7 +187,7 @@
                 border: none;
                 margin-bottom: 6px;
                 font-size: 12px;
-                color: #444;
+                color: #333;
             }
             table td:empty,
             table td.none { 
@@ -217,24 +221,25 @@
             }
             table th[data-title]:before,
             table td[data-title]:before {
-                content: '- 'attr(data-title);
+                content: '\2022\0020'attr(data-title);
             }
 
             table tr td:first-child { 
                 font-size: 18px;
                 margin-bottom: 8px;
-                color: #333;
+                color: #121212;
             }
             table tr td:first-child:before {
                 content: '';
             }
+            /*
             table tr td:first-child:after {
                 content: 'Charges for: ';
                 display: block;
                 font-size: 12px;
                 font-weight: bold;
                 margin-top: 6px;
-            }
+            }*/
             
             table tr th:nth-child(4),
             table tr td:nth-child(4),
@@ -249,13 +254,21 @@
             
             table td b { display: none; }
             table td i {
-                display: block;
+                display: inline;
                 font-style: normal;
-                color: #777;
+                color: #787878;
                 margin-top: 3px;
             }
             
-            .key { display: none; }
+            .state-jump { 
+                display: block;
+                margin-bottom: 22px;
+                background-color: #ebebeb;
+                padding: 11px;
+                font-size: 12px;
+                color: #444;
+            }
+            .state-jump select { width: 80%; }
         }
     </style>
 
@@ -269,6 +282,15 @@
         <li class="key-item key-1"><b></b><label>Yes, with caveats</label></li>
         <li class="key-item key-2"><b></b><label>No</label></li>
     </ul>
+    
+    <div class="state-jump">
+        <select id="state-list">
+            <option selected>Jump to a state...</option>
+            {% for row in COPY.data %}
+            <option value="#state-{{ row.state_abbr|lower }}">{{ row.state }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
     <div id="graphic">
         <table>
@@ -288,31 +310,31 @@
                 <td data-title="{{ COPY.labels.hed_monitoring }}" class="{{ row.monitoring|lower }}">
                     {% if row.monitoring != 'None' %}
                         <b>&#10004;</b>
-                        {% if row.monitoring != 'yes' and row.notes != 'None' %}<i>{{ row.notes }}</i>{% endif %}
+                        {% if row.monitoring != 'yes' and row.notes != 'None' %}<i> ({{ row.notes }})</i>{% endif %}
                     {% endif %}
                 </td>
                 <td data-title="{{ COPY.labels.hed_probation }}" class="{{ row.probation|lower }}">
                     {% if row.probation != 'None' %}
                         <b>&#10004;</b>
-                        {% if row.probation != 'yes' and row.notes != 'None' %}<i>{{ row.notes }}</i>{% endif %}
+                        {% if row.probation != 'yes' and row.notes != 'None' %}<i> ({{ row.notes }})</i>{% endif %}
                     {% endif %}
                 </td>
                 <td data-title="{{ COPY.labels.hed_public }}" class="{{ row.public|lower }}">
                     {% if row.public != 'None' %}
                         <b>&#10004;</b>
-                        {% if row.public != 'yes' and row.notes != 'None' %}<i>{{ row.notes }}</i>{% endif %}
+                        {% if row.public != 'yes' and row.notes != 'None' %}<i> ({{ row.notes }})</i>{% endif %}
                     {% endif %}
                 </td>
                 <td data-title="{{ COPY.labels.hed_costofcare }}" class="{{ row.costofcare|lower }}">
                     {% if row.costofcare != 'None' %}
                         <b>&#10004;</b>
-                        {% if row.costofcare != 'yes' and row.notes != 'None' %}<i>{{ row.notes }}</i>{% endif %}
+                        {% if row.costofcare != 'yes' and row.notes != 'None' %}<i> ({{ row.notes }})</i>{% endif %}
                     {% endif %}
                 </td>
                 <td data-title="{{ COPY.labels.hed_increased }}" class="{{ row.increased|lower }}">
                     {% if row.increased != 'None' %}
                         <b>&#10004;</b>
-                        {% if row.increased != 'yes' and row.notes != 'None' %}<i>{{ row.notes }}</i>{% endif %}
+                        {% if row.increased != 'yes' and row.notes != 'None' %}<i> ({{ row.notes }})</i>{% endif %}
                     {% endif %}
                 </td>
             </tr>
