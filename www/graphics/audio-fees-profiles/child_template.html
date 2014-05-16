@@ -132,7 +132,6 @@
             line-height: 44px;
             margin: 0 11px;
             padding: 0;
-            background-color: #e0e0e0;
             color: #666;
         }
         .audio-quote:before,
@@ -142,12 +141,10 @@
         }
         .audio-quote:after { clear: both; }
 
-        .jp-audio {
+        .jp-controls { 
             width: 44px;
-            height: 44px;
+            border-right: 2px solid #fff;
             float: left;
-            margin-right: 11px;
-            text-indent: -9999px;
         }
         .jp-audio .jp-play {
             width: 44px;
@@ -176,12 +173,42 @@
             background-position: 0 -510px;
         }
 
-        .label {
-            float: left;
-            font-weight: bold;
-            font-size: 12px;
+        .jp-progress-container {
+            margin-left: 46px;
+            position: relative;
+        }
+        .jp-play-bar { 
+            background: #bccae8;
+            width: 0;
+            height: 44px;
+        }
+        .jp-progress { 
+            width: 100%;
+            height: 44px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 200;
+            background-color: #ebebeb;
         }
 
+        .audio-info {
+            padding: 0 11px;
+            z-index: 201;
+            position: relative;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: default;
+            font-weight: bold;
+            font-size: 12px;
+            color: #555;
+        }
+        .audio-info .duration {
+            color: #777;
+            font-weight: normal;
+        }
 
         @media screen and (max-width: 480px) {
             h3 { 
@@ -238,10 +265,23 @@
                                 <a href="javascript:;" class="jp-pause" tabindex="1" style="display: none;"><i>pause</i></a>
                             </div>
 
+                            <div class="jp-progress-container">
+                                <div class="jp-progress-wrap">
+                                    <div class="jp-progress">
+                                        <div class="jp-seek-bar">
+                                            <div class="jp-play-bar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="audio-info">
+                                    {{ row.audio_prompt }} <span class="duration">{{ row.audio_length }}</span>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-                <div class="label">{{ row.audio_prompt }}</div>
+                
             </div>
             {% endif %}
         </section>
