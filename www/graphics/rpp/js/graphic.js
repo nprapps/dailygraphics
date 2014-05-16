@@ -46,41 +46,47 @@ console.log(testt);
 var msaKeepdesk = [
 "Baltimore-Towson, MD",
 "Bloomington, IN",
-"Boston Metro Area, MA-NH",
-"Chicago Metro Area, IL-IN-WI",
+"Boston, MA-NH",
+"Chicago, IL-IN-WI",
 "Corvallis, OR",
 "Danville, IL",
 "Honolulu, HI",
 "Lebanon, PA",
-"Los Angeles Metro Area, CA",
-"New York City-New Jersey, NY-NJ-PA",
+"Los Angeles, CA",
+"New York City, NY-NJ-PA",
 "Rochester, MN",
 "Salinas, CA",
-"San Francisco Metro Area, CA",
-"Seattle-Tacoma-Bellevue, WA",
+"San Francisco, CA",
+"Seattle, WA",
 "Washington, DC-VA-MD",
 "Muncie, IN",
 "Cincinnati-Middletown, OH-KY-IN",
 "Hot Springs, AR",
 "Florence, SC",
+"San Jose-Santa Clara, CA"
 ]
 
 msaKeepmobile = [
 "Baltimore-Towson, MD",
-"Chicago Metro Area, IL-IN-WI",
+"Bloomington, IN",
+"Boston, MA-NH",
+"Chicago, IL-IN-WI",
+"Corvallis, OR",
 "Danville, IL",
 "Honolulu, HI",
 "Lebanon, PA",
-"Los Angeles Metro Area, CA",
-"New York City-New Jersey, NY-NJ-PA",
+"Los Angeles, CA",
+"New York City, NY-NJ-PA",
 "Rochester, MN",
 "Salinas, CA",
-"San Francisco Metro Area, CA",
+"San Francisco, CA",
+"Seattle, WA",
 "Washington, DC-VA-MD",
 "Muncie, IN",
+"Cincinnati-Middletown, OH-KY-IN",
 "Hot Springs, AR",
 "Florence, SC",
-
+"San Jose-Santa Clara, CA"
 ]
 
 var colors = {
@@ -159,6 +165,8 @@ console.log(is_mobile)
                     '#0B403F',  '#11605E',  '#17807E',  '#51A09E',  '#8BC0BF',  '#C5DFDF',
                     '#28556F',  '#3D7FA6',  '#51AADE',  '#7DBFE6',  '#A8D5EF',  '#D3EAF7']); // colors
 
+var test = $("input").val()    
+console.log(test)
 
       // color.domain(d3.keys(graphic_data[0]).filter(function(key) { return key !== "msa"; }));
 
@@ -288,7 +296,7 @@ console.log(is_mobile)
                 return   d.key.replace(/\W+/g, '-').toLowerCase();
             })
             .attr("x",function(d) {
-                return x(d['value'][0]['msa'])-10;
+                return x(d['value'][0]['msa'])-3;
                 })
             .attr("y",function(d) {
                 return y(d['value'][0]['amt']);
@@ -299,7 +307,8 @@ console.log(is_mobile)
             .text(function(d) {
                 if (is_mobile) {
                     // return  d.key.replace(/(\w.*),/,"$1") + "\u00A0" + "      " + "$" + thousandFormat(d['value'][0]['amt']);
-                    return  d.key.replace(/(\w+).*/,"$1") + "\u00A0" + "      " + "$" + thousandFormat(d['value'][0]['amt']);
+                    return  d.key + "\u00A0" + "      " + "$" + thousandFormat(d['value'][0]['amt']);
+                    // return  d.key.replace(/(\w+).*/,"$1") + "\u00A0" + "      " + "$" + thousandFormat(d['value'][0]['amt']);
                     } else {
                     return  d.key + "\u00A0" + "      " + "$" + thousandFormat(d['value'][0]['amt']);
                     }
@@ -373,7 +382,7 @@ console.log(is_mobile)
                 return d.key.replace(/\W+/g, '-').toLowerCase();
             })
             .attr("x",function(d) {
-                return x(d['value'][1]['msa']) + 10 ;
+                return x(d['value'][1]['msa']) + 3 ;
                 })
             .attr("y",function(d) {
                 return y(d['value'][1]['amt']);
@@ -397,7 +406,13 @@ console.log(is_mobile)
             .attr("x", x(1))
             .attr("y", y(45450))
             .attr("dy", ".3em")
-            .attr("dx", "-1em")
+            .attr("dx", function(d) {
+            if (is_mobile) {
+                    return "1.5em";
+                } else {
+                    return "-.75em";
+                }
+            })            
             .attr("text-anchor", "end")
             .style('font-size', function(d) {
                 if (is_mobile) {
@@ -406,7 +421,7 @@ console.log(is_mobile)
                     return "14px";
                 }
             })            
-            .text("How Much You're Making")
+            .text("Median Income")
   
 
             // // .st
@@ -522,6 +537,16 @@ function mouseover(d, i) {
     // var test = this
     // console.log(test)
 
+console.log(this.getAttribute('id'))
+
+    // if (this.getAttribute('id') ==  '#text-highlight'){
+      // d3.selectAll("#text-highlight").attr('id','blank-label');
+    //   }
+
+    // if (this.getAttribute('id') == '#line-highlight'){      
+      // d3.selectAll("#line-highlight").attr('id','blank-path');
+    // }
+
     d3.selectAll("#blank-label")
     .transition()
     .duration(50)
@@ -635,6 +660,40 @@ $('#msa-field .typeahead').typeahead({
   displayKey: 'value',
   source: substringMatcher(msas)
 });
+$('.typeahead.input-sm').siblings('input.tt-hint').addClass('hint-small');
+
+
+$('input.typeahead').on('typeahead:selected', function(event, selection) {
+              
+            //   .attr('class', function(d) { 
+            //     return   d.key.replace(/\W+/g, '-').toLowerCase();
+            // })
+  console.log(selection.value)
+  var testtt = selection.value;
+  var test3 = testtt.replace(/\W+/g, '-').toLowerCase();
+  console.log(test3)              
+  var selectHighlight = selection.value.replace(/\W+/g, '-').toLowerCase();              
+  console.log(".line." + selectHighlight)
+
+  
+  d3.selectAll("." + selectHighlight )
+  .attr('id','text-highlight').moveToFront();
+
+
+  d3.selectAll(".line." + selectHighlight )
+  .attr('id','line-highlight').moveToFront();
+
+  
+  // .style('stroke',"firebrick")
+  // .style('opacity',"1")
+  // .style('stroke-width',"2px");
+
+  alert(selection.value);
+
+});
+
+// $('input.typeahead').typeahead('setQuery', '');
+
 
     if (pymChild) {
         pymChild.sendHeightToParent();
