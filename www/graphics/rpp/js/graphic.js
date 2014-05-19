@@ -12,53 +12,40 @@ var pymChild = null;
 var thousandFormat = d3.format(',')
 var typeahead_init = false;
 
-
-// RegExp
-// ^(\w.*),+\s+(\w.*)
-// for MSA
-
-
-function test(d) {
-var testt = $('ul.typeahead li.active').data('value');
-console.log(testt);
-}
 var msaKeepdesk = [
-"Baltimore-Towson, MD",
-"Bloomington, IN",
-"Chicago, IL-IN-WI",
-"Corvallis, OR",
-"Danville, IL",
-"Honolulu, HI",
-"Los Angeles, CA",
-"New York City, NY",
-"Rochester, MN",
-"San Francisco",
-"Washington, DC",
-"Muncie, IN",
-"Hot Springs, AR",
-"Washington, DC",
-"Houston, TX",
-"Dallas-Fort Worth, TX"
-
-]
-
-msaKeepmobile = [
-"Baltimore-Towson, MD",
-"Bloomington, IN",
-"Chicago, IL-IN-WI",
-"Corvallis, OR",
-"Danville, IL",
-"Honolulu, HI",
-"Los Angeles, CA",
-"New York City, NY",
-"Rochester, MN",
-"San Francisco",
-"Washington, DC",
-"Muncie, IN",
-"Hot Springs, AR",
-"Washington, DC",
-
-]
+    "Baltimore-Towson, MD",
+    "Bloomington, IN",
+    "Chicago, IL-IN-WI",
+    "Corvallis, OR",
+    "Danville, IL",
+    "Honolulu, HI",
+    "Los Angeles, CA",
+    "New York City, NY",
+    "Rochester, MN",
+    "San Francisco",
+    "Washington, DC",
+    "Muncie, IN",
+    "Hot Springs, AR",
+    "Washington, DC",
+    "Houston, TX",
+    "Dallas-Fort Worth, TX"
+];
+var msaKeepmobile = [
+    "Baltimore-Towson, MD",
+    "Bloomington, IN",
+    "Chicago, IL-IN-WI",
+    "Corvallis, OR",
+    "Danville, IL",
+    "Honolulu, HI",
+    "Los Angeles, CA",
+    "New York City, NY",
+    "Rochester, MN",
+    "San Francisco",
+    "Washington, DC",
+    "Muncie, IN",
+    "Hot Springs, AR",
+    "Washington, DC"
+];
 
 var colors = {
     'red1': '#6C2315', 'red2': '#A23520', 'red3': '#D8472B', 'red4': '#E27560', 'red5': '#ECA395', 'red6': '#F5D1CA',
@@ -67,6 +54,13 @@ var colors = {
     'teal1': '#0B403F', 'teal2': '#11605E', 'teal3': '#17807E', 'teal4': '#51A09E', 'teal5': '#8BC0BF', 'teal6': '#C5DFDF',
     'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
 };
+
+
+function test(d) {
+    var testt = $('ul.typeahead li.active').data('value');
+    console.log(testt);
+}
+
 
 d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
@@ -78,6 +72,9 @@ d3.selection.prototype.moveToFront = function() {
 /*
  * Typeahead
  */
+// RegExp
+// ^(\w.*),+\s+(\w.*)
+// for MSA
 function substringMatcher(strs) {
     return function findMatches(q, cb) {
         var matches, substringRegex;
@@ -100,6 +97,7 @@ function substringMatcher(strs) {
         cb(matches);
     };
 }
+
 function on_typeahead_selected(event, selection) {
     //   .attr('class', function(d) { 
     //     return   d.key.replace(/\W+/g, '-').toLowerCase();
@@ -143,6 +141,72 @@ function on_typeahead_selected(event, selection) {
         .style('stroke-width','0')
         .style('stroke',"#4F4F4F")
         .style('fill',"#4F4F4F");
+}
+
+/*
+ * Mouseover/mouseout
+ */
+function on_mouseover(d, i) {
+    if (this.getAttribute('id') == 'nonblank-label') {
+        d3.selectAll('#nonblank-label')
+            .style('font-size', function(d) {
+                if (is_mobile) {
+                    return '10px';
+                } else {
+                    return '11px';
+                }
+            })
+            .style('opacity','.5')
+            .attr('dx', '0em')
+            .style('stroke-width', '0')
+            .style('stroke', '#4F4F4F')
+            .style('fill', '#4F4F4F');
+
+        d3.selectAll('#nonblank-path')
+            .style('opacity', '.5')
+            .style('stroke-width', '1px')
+            .style('stroke', '#4F4F4F');
+
+        // var test = this.getAttribute('id');
+        // console.log(test)
+
+        d3.selectAll('.line.' + this.getAttribute('class'))
+            .style('stroke-width', '2px')
+            .style('stroke', '#3D7FA6');
+
+        d3.selectAll('.' + this.getAttribute('class'))
+            .style('font-size', function(d) {
+                if (is_mobile) {
+                    return '12px';
+                } else {
+                    return '14px';
+                }
+            })
+            .style('opacity', '1')
+            .style('fill', '#3D7FA6')
+            .moveToFront();
+    }
+}
+
+function on_mouseout(d,i) {
+    if (this.getAttribute('id') == 'nonblank-label') {
+        d3.selectAll('#nonblank-label')
+            .style('font-size', function(d) {
+                if (is_mobile) {
+                    return '10px';
+                } else {
+                    return '11px';
+                }
+            })
+            .attr('dx', '0em')
+            .style('fill', '#4F4F4F')
+            .style('opacity', '1');
+
+        d3.selectAll('#nonblank-path')
+            .style('opacity', '1')
+            .style('stroke-width', '1px')
+            .style('stroke', '#4F4F4F');
+    }
 }
 
 
@@ -215,8 +279,8 @@ console.log(is_mobile)
                     '#0B403F',  '#11605E',  '#17807E',  '#51A09E',  '#8BC0BF',  '#C5DFDF',
                     '#28556F',  '#3D7FA6',  '#51AADE',  '#7DBFE6',  '#A8D5EF',  '#D3EAF7']); // colors
 
-var test = $("input").val()    
-console.log(test)
+        var test = $("input").val()    
+        console.log(test)
 
 
         var lines = {};
@@ -266,8 +330,8 @@ console.log(test)
         //     .data(voronoi(d3.entries(lines)))
         //     .enter().append("path")
         //       .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
-        //       .on("mouseover", mouseover)
-        //       .on("mouseout", mouseout);
+        //       .on("mouseover", on_mouseover)
+        //       .on("mouseout", on_mouseout);
 
         svg.append('g').selectAll('path')
             .data(d3.entries(lines))
@@ -282,7 +346,7 @@ console.log(test)
                 })
 
 
-// left white boxes
+        // left white boxes
         svg.append('g').selectAll('rect')
             .data(d3.entries(lines))
             .enter()
@@ -305,7 +369,7 @@ console.log(test)
             // .attr("dx", "10px");
 
 
-// left side labels
+        // left side labels
         svg.append('g').selectAll('text')
             .data(d3.entries(lines))
             .enter()
@@ -347,13 +411,10 @@ console.log(test)
                     return "12px";
                 }
             })
-            .on('mouseover', mouseover)
-            .on('mouseout',mouseoutSVG);
+            .on('mouseover', on_mouseover)
+            .on('mouseout', on_mouseout);
 
-            // RegExp
-// ^(\w.*),+\s+(\w.*)
-// for MSA
-// right white boxes
+        // right white boxes
         svg.append('g').selectAll('rect')
             .data(d3.entries(lines))
             .enter()
@@ -376,7 +437,7 @@ console.log(test)
             // .attr("dx", "10px");   
 
 
-//right text
+        //right text
         svg.append('g').selectAll('text')
             .data(d3.entries(lines))
             .enter()
@@ -409,11 +470,8 @@ console.log(test)
                     return "12px";
                 }
             })            
-            .on('mouseover', mouseover)
-            .on('mouseout',mouseoutSVG);
-
-
-         
+            .on('mouseover', on_mouseover)
+            .on('mouseout', on_mouseout);
 
             svg.append('text')
             .attr('id', 'x-label')
@@ -455,109 +513,37 @@ console.log(test)
             })             
             .text("What It Feels Like");
 
-console.log(d3.keys(lines))
-            d3.selectAll(".boston-ma")
-            .attr('dy','.5em');    
-d3.selectAll(".danville-il")
-            .attr('dy','-.3em');    
-d3.selectAll(".lebanon-pa")
-            .attr('dy','1em');    
-d3.selectAll(".rochester-mn")
-            .attr('dy','-.3em');    
-d3.selectAll(".dallas-fort-worth-tx")
-            .attr('dy','-.15em');    
-d3.selectAll(".houston-tx")
-            .attr('dy','-.15em');      
-d3.selectAll("#nonblank-label")
-            .moveToFront();    
 
+    // finesse label placement
+    console.log(d3.keys(lines))
+    d3.selectAll('.boston-ma')
+        .attr('dy', '.5em');    
+    d3.selectAll('.danville-il')
+        .attr('dy', '-.3em');    
+    d3.selectAll('.lebanon-pa')
+        .attr('dy', '1em');    
+    d3.selectAll('.rochester-mn')
+        .attr('dy', '-.3em');    
+    d3.selectAll('.dallas-fort-worth-tx')
+        .attr('dy', '-.15em');    
+    d3.selectAll('.houston-tx')
+        .attr('dy', '-.15em');      
+    d3.selectAll('#nonblank-label')
+        .moveToFront();    
 
-function mouseover(d, i) {
-
-    if (this.getAttribute('id') == "nonblank-label") {
-
-
-    d3.selectAll("#nonblank-label")
-    .style('font-size', function(d) {
-        if (is_mobile) {
-            return "10px";
-        } else {
-            return "11px";
-        }
-    })
-    .style('opacity','.5')
-    .attr('dx',"0em")
-    .style('stroke-width','0')
-    .style('stroke',"#4F4F4F")
-    .style('fill',"#4F4F4F");
-
-
-    d3.selectAll("#nonblank-path")
-    .style('opacity','.5')
-    .style('stroke-width','1px')
-    .style('stroke',"#4F4F4F");
-
-    // var test = this.getAttribute('id');
-    // console.log(test)
-
-    svg.selectAll(".line." + this.getAttribute('class'))
-    .style('stroke-width','2px')
-    .style('stroke','#3D7FA6');
-
-    svg.selectAll("."+ this.getAttribute('class'))
-    .style('font-size', function(d) {
-        if (is_mobile) {
-            return "12px";
-        } else {
-            return "14px";
-        }
-    })
-    .style('opacity','1')
-    .style('fill','#3D7FA6')
-    .moveToFront();
-    }
-
-
-
-
-}
-
-
-function mouseoutSVG(d,i) {
-
-if (this.getAttribute('id') == "nonblank-label") {
-
-    d3.selectAll("#nonblank-label")
-    .style('font-size', function(d) {
-        if (is_mobile) {
-            return "10px";
-        } else {
-            return "11px";
-        }
-    })
-    .attr('dx',"0em")
-    .style('fill',"#4F4F4F")
-    .style('opacity','1');
-
-    d3.selectAll("#nonblank-path")
-    .style('opacity','1')
-    .style('stroke-width','1px')
-    .style('stroke',"#4F4F4F");
-    }
-}
 
     // typeahead
-    if (!typeahead_init ) {
+    if (!typeahead_init ) { // only run this once
         var msas = d3.keys(lines);
         $('#msa-field .typeahead').typeahead({
-          hint: true,
-          highlight: true,
-          minLength: 1
+            hint: true,
+            highlight: true,
+            minLength: 1
         },
         {
-          name: 'msas',
-          displayKey: 'value',
-          source: substringMatcher(msas)
+            name: 'msas',
+            displayKey: 'value',
+            source: substringMatcher(msas)
         });
         // $('.typeahead.input-sm').siblings('input.tt-hint').addClass('hint-small');
 
