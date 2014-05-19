@@ -48,7 +48,7 @@
             margin: 0 0 22px 0;
             font-size: 12px;
             color: #333;
-            margin: 0px 0px 0px 0px;            
+            margin: 0px 0px 6px 0px;            
         }
         .footer p {
             margin: 2px 0 0 0;
@@ -105,8 +105,8 @@
 
         #graphic #nonblank-path {
             opacity: 1;
-            stroke: #a0a0a0;
-            stroke-width: 1.5;
+            stroke: #4F4F4F;
+            stroke-width: .75;
             z-index: 20;
 
 
@@ -122,37 +122,25 @@
             font-weight: normal;
             font-size: 14px;
             font-weight: bold;
+            fill: #3B3B3B;
 
         }
 
         #graphic #blank-label {
-            visibility: hidden;
+            opacity: 0;
+            fill: #4F4F4F;
             font-size: 11px;
-
-        }
+/*            cursor: pointer;
+*/        
+}
  
         #graphic #nonblank-label {
             opacity: 1;
-            fill: #a0a0a0;
+            fill: #4F4F4F;
             font-size: 11px;
             cursor: pointer;
         }
 
-        #graphic #line-highlight {
-            stroke-width: 3;
-            stroke: firebrick;
-            opacity: 1;
-            /*fill: firebrick;*/
-
-        }
-
-        #graphic #text-highlight {
-            font-size: 14px;            
-            fill: firebrick;
-            opacity: 1;
-            visibility: visible;
-
-        }
         #graphic .l-developing,
         #graphic .l-developed { 
             font-weight: bold;
@@ -163,12 +151,9 @@
             color: #000;
         }
         #graphic #msa-field {
+                
             margin: 0px 0px 0px 0px;
-            float: left;
-
-            }
-        #graphic #heading {
-            float: left;
+            margin-top: 20px;
 
             }
 
@@ -185,54 +170,42 @@
             line-height: 1.3;
             color: #808080;
         }
+        .msa-field {
+            margin-bottom: 0px;
+            margin: 0px 0px 0px -2px;            
 
-/*.dropdown-menu .active > a,
-.dropdown-menu .active > a:hover {
-color: #333333;
-text-decoration: none;
-background-color: #0081c2;
-}*/
+        }
 
-/*.typeahead .hint {
-    display: block;
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 12px;
-    line-height: 1.428571429;
-    border: 1px solid transparent;
-    border-radius:4px;
-    color: white;
-}
 
-.typeahead .hint-small {
-    height: 30px;
-    padding: 5px 10px;
-    font-size: 12px;
-    border-radius: 3px;
-    line-height: 1.5;
-}
-.typeahead .hint-large {
-    height: 45px;
-    padding: 10px 16px;
-    font-size: 18px;
-    border-radius: 6px;
-    line-height: 1.33;
-}*/
+        #graphic #line-highlight {
+            stroke-width: 2;
+            stroke: #D8472B;
+            opacity: 1 !important;
+            /*fill: firebrick;*/
+
+        }
+
+        #graphic #text-highlight {
+            font-size: 12px !important;
+            fill: #D8472B !important;
+            opacity: 1 !important;
+/*            visibility: visible;
+*/
+        }        
     </style>
 
 
 
 </head>
+<link rel="stylesheet" type="text/css" href="dropdown.css">
 
 
 <body>
-    <div id = "heading">
         <h1>How Much Are You Really Making?</h1>
         <h2>Income By Metro Area, 2012</h2>
         <div id="msa-field">
           <input class="typeahead" type="text" placeholder="Metro Area" >
         </div>
-    </div>
     <div id="graphic"></div>
     
     <div class="footnotes">

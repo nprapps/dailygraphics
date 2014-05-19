@@ -15,29 +15,6 @@ var thousandFormat = d3.format(',')
 // ^(\w.*),+\s+(\w.*)
 // for MSA
 
-function wrap(text, width) {
-  text.each(function() {
-    var text = d3.select(this),
-        words = text.text().split(/\s+/).reverse(),
-        word,
-        line = [],
-        lineNumber = 0,
-        lineHeight = 1.1, // ems
-        y = text.attr("y"),
-        dy = parseFloat(text.attr("dy")),
-        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-    while (word = words.pop()) {
-      line.push(word);
-      tspan.text(line.join(" "));
-      if (tspan.node().getComputedTextLength() > width) {
-        line.pop();
-        tspan.text(line.join(" "));
-        line = [word];
-        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-      }
-    }
-  });
-}
 
 function test(d) {
 var testt = $('ul.typeahead li.active').data('value');
@@ -46,47 +23,43 @@ console.log(testt);
 var msaKeepdesk = [
 "Baltimore-Towson, MD",
 "Bloomington, IN",
-"Boston, MA-NH",
+"Boston, MA",
 "Chicago, IL-IN-WI",
 "Corvallis, OR",
 "Danville, IL",
 "Honolulu, HI",
 "Lebanon, PA",
 "Los Angeles, CA",
-"New York City, NY-NJ-PA",
+"New York City, NY",
 "Rochester, MN",
-"Salinas, CA",
-"San Francisco, CA",
+"San Francisco",
 "Seattle, WA",
-"Washington, DC-VA-MD",
+"Washington, DC",
 "Muncie, IN",
-"Cincinnati-Middletown, OH-KY-IN",
 "Hot Springs, AR",
-"Florence, SC",
-"San Jose-Santa Clara, CA"
+"Washington, DC",
+"Houston, TX",
+"Dallas-Fort Worth, TX"
+
 ]
 
 msaKeepmobile = [
 "Baltimore-Towson, MD",
 "Bloomington, IN",
-"Boston, MA-NH",
 "Chicago, IL-IN-WI",
 "Corvallis, OR",
 "Danville, IL",
 "Honolulu, HI",
 "Lebanon, PA",
 "Los Angeles, CA",
-"New York City, NY-NJ-PA",
+"New York City, NY",
 "Rochester, MN",
-"Salinas, CA",
-"San Francisco, CA",
-"Seattle, WA",
-"Washington, DC-VA-MD",
+"San Francisco",
+"Washington, DC",
 "Muncie, IN",
-"Cincinnati-Middletown, OH-KY-IN",
 "Hot Springs, AR",
-"Florence, SC",
-"San Jose-Santa Clara, CA"
+"Washington, DC",
+
 ]
 
 var colors = {
@@ -109,7 +82,7 @@ d3.selection.prototype.moveToFront = function() {
 function render(width) {
     // console.log(graphic_data)
     // if (Modernizr.svg) {
-        var margin = {top: 50, right: 350, bottom: 25, left: 350};
+        var margin = {top: 75, right: 350, bottom: 25, left: 350};
         
         if (width < mobile_threshold){
             is_mobile = true;
@@ -153,6 +126,13 @@ console.log(is_mobile)
             .x(function(d) { return x(d.msa); })
             .y(function(d) { return y(d.amt); });
 
+
+        var voronoi = d3.geom.voronoi()
+            .x(function(d) { return x(d.msa); })
+            .y(function(d) { return y(d.amt); });
+            // .clipExtent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]]);
+
+
         var xMap = function(d) { return d.msa;}; 
         var yMap = function(d) { return d.amt;}; 
 
@@ -168,18 +148,6 @@ console.log(is_mobile)
 var test = $("input").val()    
 console.log(test)
 
-      // color.domain(d3.keys(graphic_data[0]).filter(function(key) { return key !== "msa"; }));
-
-        // mapping data from csv file
-        // maps into color domain
-        // var lines = color.domain().map(function(name) {
-        //     return {
-        //         name: name,
-        //         values: graphic_data.map(function(d) {
-        //             return {msa: d.msa, indexed: +d[name]};
-        //         })
-        //     };
-        // });
 
         var lines = {};
         for (var column in graphic_data[0]) {
@@ -191,39 +159,17 @@ console.log(test)
                 };
             });
         }
-
-// var entry = d3.entries(lines);
-// var values2 =  d3.values(lines);
-// var keys =  d3.keys(lines);
-// var numberFormat = d3.format("d")
-
-
-
-// console.log(msaValue)
-// console.log(values2[0][0])
-// console.log(values2[0][0]["msa"])
        
         var svg = d3.select('#graphic').append('svg')
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-            .on('mouseout',mouseoutSVG);
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         
         x.domain(d3.extent(graphic_data, function(d) { return d.msa; }));
 
         y.domain([17500,45000])
 
-        // y.domain([0,
-        //     d3.max(d3.entries(lines), function(c) { 
-        //         return d3.max(c.value, function(v) { 
-        //             var n = v.amt;
-        //             return Math.ceil(n);
-        //             return Math.ceil(n/10) * 10; // round to next 10
-        //         }); 
-        //     })
-        // ]);
-        
         svg.append('g').selectAll('path')
             .data(d3.entries(lines))
             .enter()
@@ -243,6 +189,15 @@ console.log(test)
                     return line(d.value);
                 });
 
+        // var voronoiGroup = svg.append("g")
+        // .attr("class", "voronoi");
+
+        // voronoiGroup.selectAll("path")
+        //     .data(voronoi(d3.entries(lines)))
+        //     .enter().append("path")
+        //       .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
+        //       .on("mouseover", mouseover)
+        //       .on("mouseout", mouseout);
 
         svg.append('g').selectAll('path')
             .data(d3.entries(lines))
@@ -255,27 +210,6 @@ console.log(test)
             .attr('d', function(d) {
                     return line(d.value);
                 })
-
-// var toggleColor = (function(){
-//    var currentColor = "#a0a0a0";
-    
-//     return function(){
-//         currentColor = currentColor == "#a0a0a0" ? "#3D7FA6" : "#a0a0a0";
-//         d3.select(".line." + this.getAttribute('class')).style("stroke", currentColor);
-//     }
-// })();
-
-        // d3.selectAll("#hidden-path")
-        // .on("click", toggleColor);
-
-
-// console.log(lines)
-
-// console.log(entry)
-// console.log(entry[0]["key"])
-// console.log(entry[0][key][0])
-
-// console.log(keys[0])
 
 
 // left side labels
@@ -312,9 +246,7 @@ console.log(test)
                     } else {
                     return  d.key + "\u00A0" + "      " + "$" + thousandFormat(d['value'][0]['amt']);
                     }
-                })    
-                
-                
+                })                    
             .style('font-size', function(d) {
                 if (is_mobile) {
                     return "10px";
@@ -322,48 +254,12 @@ console.log(test)
                     return "12px";
                 }
             })
-            .on('mouseover', mouseover);
+            .on('mouseover', mouseover)
+            .on('mouseout',mouseoutSVG);
 
             // RegExp
 // ^(\w.*),+\s+(\w.*)
 // for MSA
-            // .call(wrap, "200");
-
-            // .on('mouseout', mouseout);
-
-            // .text(values2[0][0]["msa"])
-            // .style('font-size',"9px");
-
-// left side values
-        // svg.append('g').selectAll('text')
-        //     .data(d3.entries(lines))
-        //     .enter()
-        //     .append('text')
-        //     // console.log(d.key)
-        //     .attr('id', function(d) {
-        //         var found = $.inArray(d.key, msaKeep)
-        //         if (found == -1 ) {
-        //             return 'blank-label';
-        //         } else {
-        //             return 'nonblank-label';
-        //         }
-        //     })
-        //     .attr('class', function(d) { 
-        //         return 'left-val ' + d.key.replace(/\W+/g, '-').toLowerCase()
-        //     })
-
-        //     .attr("x",function(d) {
-        //         return x(d['value'][0]['msa']);
-        //         })
-        //     .attr("y",function(d) {
-        //         return y(d['value'][0]['amt']);
-        //         })
-        //     .attr("dy", ".3em")
-        //     .attr("dx", "-.5em")
-        //     .attr("text-anchor", "end")
-        //     .text(function(d) {return "$" + d['value'][0]['amt'];});
-        //     // .text(values2[0][0]["msa"])
-        //     // .style('font-size',"9px");
 
 
         svg.append('g').selectAll('text')
@@ -398,8 +294,8 @@ console.log(test)
                     return "12px";
                 }
             })            
-            .on('mouseover', mouseover);
-            // .on('mouseout', mouseout);
+            .on('mouseover', mouseover)
+            .on('mouseout',mouseoutSVG);
 
             svg.append('text')
             .attr('id', 'x-label')
@@ -408,7 +304,7 @@ console.log(test)
             .attr("dy", ".3em")
             .attr("dx", function(d) {
             if (is_mobile) {
-                    return "1.5em";
+                    return "-1em";
                 } else {
                     return "-.75em";
                 }
@@ -441,125 +337,27 @@ console.log(test)
             })             
             .text("What It Feels Like");
 
-            // svg.append('text')
-            // .attr('id', 'x-label')
-            // .attr("x", x(2))
-            // .attr("y", y(45200))
-            // .attr("dx", "1em")
-            // .attr("dy", ".8em")
-            // // .attr('dy', function(d) {
-            // //     if (is_mobile) {
-            // //         return "1em";
-            // //     } else {
-            // //         return ".5em";
-            // //     }
-            // // })                
-            // .attr("text-anchor", "start")
-            // .style('font-size', function(d) {
-            //     if (is_mobile) {
-            //         return "12px";
-            //     } else {
-            //         return "14px";
-            //     }
-            // })             
-            // .text("Feels Like")
-
 console.log(d3.keys(lines))
-    
-
-
-// d3.selectAll("#nonblank-path").moveToFront();
-// d3.select("#nonblank-label")
-// .select(".new-york-city-new-jersey-ny-nj-pa")
-// .attr('dy',"3em");
-
-
-// function mouseoverpath(d, i) {
-//     var test = this
-//     console.log(test)
-
-//     d3.selectAll("#blank-label")
-//     .transition()
-//     .duration(50)
-//     .style('font-size', function(d) {
-//         if (is_mobile) {
-//             return "10px";
-//         } else {
-//             return "11px";
-//         }
-//     })               // .style("fill","#ccc")
-//     .style("opacity","0")
-//     .style('stroke-width','1px')
-//     .style('fill','#a0a0a0');
-
-//     d3.selectAll("#nonblank-label")
-//     .style('font-size', function(d) {
-//         if (is_mobile) {
-//             return "10px";
-//         } else {
-//             return "11px";
-//         }
-//     })
-//     .style('opacity','.5')
-//     .attr('dx',"0em")
-//     .style('stroke-width','0')
-//     .style('stroke','#a0a0a0')
-//     .style('fill','#a0a0a0');
-
-
-//     d3.selectAll("#nonblank-path")
-//     .style('opacity','.5')
-//     .style('stroke-width','1px')
-//     .style('stroke','#a0a0a0');
-
-//     svg.select("." + this.getAttribute('class'))
-//     .style('stroke-width','2px')
-//     .style('stroke','#3D7FA6')
-//     .style('opacity','1');
-
-//     svg.selectAll("."+ this.getAttribute('class'))
-//     .style('font-size', function(d) {
-//         if (is_mobile) {
-//             return "12px";
-//         } else {
-//             return "14px";
-//         }
-//     })
-//     .moveToFront()
-//     .style('opacity','1')
-//     .style('fill','#3D7FA6');
-
-// }
-
+            d3.selectAll(".boston-ma")
+            .attr('dy','-1em');    
+d3.selectAll(".danville-il")
+            .attr('dy','-.3em');    
+d3.selectAll(".lebanon-pa")
+            .attr('dy','1em');    
+d3.selectAll(".rochester-mn")
+            .attr('dy','-.3em');    
+d3.selectAll(".dallas-fort-worth-tx")
+            .attr('dy','-.15em');    
+d3.selectAll(".houston-tx")
+            .attr('dy','-.15em');    
+d3.selectAll("#nonblank-label")
+            .moveToFront();    
 
 
 function mouseover(d, i) {
-    // var test = this
-    // console.log(test)
 
-console.log(this.getAttribute('id'))
+    if (this.getAttribute('id') == "nonblank-label") {
 
-    // if (this.getAttribute('id') ==  '#text-highlight'){
-      // d3.selectAll("#text-highlight").attr('id','blank-label');
-    //   }
-
-    // if (this.getAttribute('id') == '#line-highlight'){      
-      // d3.selectAll("#line-highlight").attr('id','blank-path');
-    // }
-
-    d3.selectAll("#blank-label")
-    .transition()
-    .duration(50)
-    .style('font-size', function(d) {
-        if (is_mobile) {
-            return "10px";
-        } else {
-            return "11px";
-        }
-    })               // .style("fill","#ccc")
-    .style("opacity","0")
-    .style('stroke-width','1px')
-    .style('fill','#a0a0a0');
 
     d3.selectAll("#nonblank-label")
     .style('font-size', function(d) {
@@ -572,14 +370,17 @@ console.log(this.getAttribute('id'))
     .style('opacity','.5')
     .attr('dx',"0em")
     .style('stroke-width','0')
-    .style('stroke','#a0a0a0')
-    .style('fill','#a0a0a0');
+    .style('stroke',"#4F4F4F")
+    .style('fill',"#4F4F4F");
 
 
     d3.selectAll("#nonblank-path")
     .style('opacity','.5')
     .style('stroke-width','1px')
-    .style('stroke','#a0a0a0');
+    .style('stroke',"#4F4F4F");
+
+    // var test = this.getAttribute('id');
+    // console.log(test)
 
     svg.selectAll(".line." + this.getAttribute('class'))
     .style('stroke-width','2px')
@@ -593,17 +394,21 @@ console.log(this.getAttribute('id'))
             return "14px";
         }
     })
-    .moveToFront()
     .style('opacity','1')
-    .style('fill','#3D7FA6');
+    .style('fill','#3D7FA6')
+    .moveToFront();
+    }
+
 
 
 
 }
 
 
-
 function mouseoutSVG(d,i) {
+
+if (this.getAttribute('id') == "nonblank-label") {
+
     d3.selectAll("#nonblank-label")
     .style('font-size', function(d) {
         if (is_mobile) {
@@ -613,15 +418,17 @@ function mouseoutSVG(d,i) {
         }
     })
     .attr('dx',"0em")
-    .style('opacity','1')
+    .style('fill',"#4F4F4F")
+    .style('opacity','1');
 
     d3.selectAll("#nonblank-path")
     .style('opacity','1')
     .style('stroke-width','1px')
-    .style('stroke','#a0a0a0');
-
-
+    .style('stroke',"#4F4F4F");
+    }
 }
+
+// typeahead
 
 var substringMatcher = function(strs) {
   return function findMatches(q, cb) {
@@ -660,7 +467,7 @@ $('#msa-field .typeahead').typeahead({
   displayKey: 'value',
   source: substringMatcher(msas)
 });
-$('.typeahead.input-sm').siblings('input.tt-hint').addClass('hint-small');
+// $('.typeahead.input-sm').siblings('input.tt-hint').addClass('hint-small');
 
 
 $('input.typeahead').on('typeahead:selected', function(event, selection) {
@@ -674,25 +481,31 @@ $('input.typeahead').on('typeahead:selected', function(event, selection) {
   console.log(test3)              
   var selectHighlight = selection.value.replace(/\W+/g, '-').toLowerCase();              
   console.log(".line." + selectHighlight)
+  console.log("." + selectHighlight + "")
 
-  
   d3.selectAll("." + selectHighlight )
   .attr('id','text-highlight').moveToFront();
 
-
   d3.selectAll(".line." + selectHighlight )
   .attr('id','line-highlight').moveToFront();
-
   
-  // .style('stroke',"firebrick")
-  // .style('opacity',"1")
-  // .style('stroke-width',"2px");
 
-  alert(selection.value);
+    d3.selectAll("#nonblank-label")
+    .style('font-size', function(d) {
+        if (is_mobile) {
+            return "10px";
+        } else {
+            return "11px";
+        }
+    })
+    .style('opacity','.5')
+    .attr('dx',"0em")
+    .style('stroke-width','0')
+    .style('stroke',"#4F4F4F")
+    .style('fill',"#4F4F4F");
 
 });
 
-// $('input.typeahead').typeahead('setQuery', '');
 
 
     if (pymChild) {
