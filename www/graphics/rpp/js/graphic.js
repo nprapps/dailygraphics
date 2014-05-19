@@ -204,11 +204,11 @@ function on_mouseover(d, i) {
         .style('stroke-width','1px')
         .style('stroke','#a0a0a0');
 
-    svg.selectAll(".line." + this.getAttribute('class'))
+    d3.selectAll(".line." + this.getAttribute('class'))
         .style('stroke-width','2px')
         .style('stroke','#3D7FA6');
 
-    svg.selectAll("."+ this.getAttribute('class'))
+    d3.selectAll("."+ this.getAttribute('class'))
         .style('font-size', function(d) {
             if (is_mobile) {
                 return "12px";
@@ -257,20 +257,22 @@ function render(container_width) {
         console.log(is_mobile)
 
         if (container_width < mobile_threshold) {
-            var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;        
+            var height = Math.ceil((container_width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;        
             num_ticks = 5;
             margin.left = 125;
             margin.right = 125;
             is_mobile = true;
             var msaKeep = msaKeepmobile;
         } else {
-            var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;        
+            var height = Math.ceil((container_width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;        
             num_ticks = 10;
             margin.left = 200;
             margin.right = 200;
             is_mobile = false;
             var msaKeep = msaKeepdesk;
         }
+        
+        console.log(height);
 
         var width = container_width - margin.left - margin.right;
 
