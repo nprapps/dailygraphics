@@ -1,14 +1,16 @@
 var $graphic;
+
+var graphic_aspect_width = 1;
+var graphic_aspect_height = 2;
 var graphic_data;
 var graphic_data_url = 'rpp3.csv';
 var is_mobile;
+var min_height = 610;
 var mobile_threshold = 480;
 var num_ticks;
 var pymChild = null;
-var min_height = 610;
-var graphic_aspect_width = 1;
-var graphic_aspect_height = 2;
 var thousandFormat = d3.format(',')
+var typeahead_init = false;
 
 
 // RegExp
@@ -71,6 +73,78 @@ d3.selection.prototype.moveToFront = function() {
     this.parentNode.appendChild(this);
    });
 };
+
+
+/*
+ * Typeahead
+ */
+function substringMatcher(strs) {
+    return function findMatches(q, cb) {
+        var matches, substringRegex;
+
+        // an array that will be populated with substring matches
+        matches = [];
+
+        // regex used to determine if a string contains the substring `q`
+        substrRegex = new RegExp(q, 'i');
+
+        // iterate through the pool of strings and for any string that
+        // contains the substring `q`, add it to the `matches` array
+        $.each(strs, function(i, str) {
+            if (substrRegex.test(str)) {
+                // the typeahead jQuery plugin expects suggestions to a
+                // JavaScript object, refer to typeahead docs for more info
+                matches.push({ value: str });
+            }
+        });
+        cb(matches);
+    };
+}
+function on_typeahead_selected(event, selection) {
+    //   .attr('class', function(d) { 
+    //     return   d.key.replace(/\W+/g, '-').toLowerCase();
+    // })
+    // console.log(selection)
+
+    d3.selectAll("#text-highlight").attr('id','blank-label');
+    d3.selectAll("#line-highlight").attr('id','blank-path');
+
+    console.log(selection.value)
+
+    var testtt = selection.value;
+    var test3 = testtt.replace(/\W+/g, '-').toLowerCase();
+
+    console.log(test3)              
+
+    var selectHighlight = selection.value.replace(/\W+/g, '-').toLowerCase();              
+
+    console.log(".line." + selectHighlight)
+    console.log("." + selectHighlight + "")
+
+    d3.selectAll("." + selectHighlight )
+        .attr('id','text-highlight').moveToFront();
+
+    d3.selectAll(".box" + selectHighlight )
+        .attr('id','whitebox-revealed').moveToFront();
+
+    d3.selectAll(".line." + selectHighlight )
+        .attr('id','line-highlight').moveToFront();
+
+    d3.selectAll("#nonblank-label")
+        .style('font-size', function(d) {
+            if (is_mobile) {
+                return "10px";
+            } else {
+                return "11px";
+            }
+        })
+        .style('opacity','.5')
+        .attr('dx',"0em")
+        .style('stroke-width','0')
+        .style('stroke',"#4F4F4F")
+        .style('fill',"#4F4F4F");
+}
+
 
 /*
  * Render the graphic
@@ -472,95 +546,24 @@ if (this.getAttribute('id') == "nonblank-label") {
     }
 }
 
-// typeahead
+    // typeahead
+    if (!typeahead_init ) {
+        var msas = d3.keys(lines);
+        $('#msa-field .typeahead').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        },
+        {
+          name: 'msas',
+          displayKey: 'value',
+          source: substringMatcher(msas)
+        });
+        // $('.typeahead.input-sm').siblings('input.tt-hint').addClass('hint-small');
 
-var substringMatcher = function(strs) {
-  return function findMatches(q, cb) {
-    var matches, substringRegex;
- 
-    // an array that will be populated with substring matches
-    matches = [];
- 
-    // regex used to determine if a string contains the substring `q`
-    substrRegex = new RegExp(q, 'i');
- 
-    // iterate through the pool of strings and for any string that
-    // contains the substring `q`, add it to the `matches` array
-    $.each(strs, function(i, str) {
-      if (substrRegex.test(str)) {
-        // the typeahead jQuery plugin expects suggestions to a
-        // JavaScript object, refer to typeahead docs for more info
-        matches.push({ value: str });
-      }
-    });
- 
-    cb(matches);
-  };
-};
- 
-var msas = d3.keys(lines);
-
- 
-$('#msa-field .typeahead').typeahead({
-  hint: true,
-  highlight: true,
-  minLength: 1
-},
-{
-  name: 'msas',
-  displayKey: 'value',
-  source: substringMatcher(msas)
-});
-// $('.typeahead.input-sm').siblings('input.tt-hint').addClass('hint-small');
-
-
-$('input.typeahead').on('typeahead:selected', function(event, selection) {
-              
-            //   .attr('class', function(d) { 
-            //     return   d.key.replace(/\W+/g, '-').toLowerCase();
-            // })
-// console.log(selection)
-
-  d3.selectAll("#text-highlight").attr('id','blank-label');
-  d3.selectAll("#line-highlight").attr('id','blank-path');
-
-
-  console.log(selection.value)
-  var testtt = selection.value;
-  var test3 = testtt.replace(/\W+/g, '-').toLowerCase();
-  console.log(test3)              
-  var selectHighlight = selection.value.replace(/\W+/g, '-').toLowerCase();              
-  console.log(".line." + selectHighlight)
-  console.log("." + selectHighlight + "")
-
-  d3.selectAll("." + selectHighlight )
-  .attr('id','text-highlight').moveToFront();
-
- 
-
-  d3.selectAll(".box" + selectHighlight )
-  .attr('id','whitebox-revealed').moveToFront();
-   
-   d3.selectAll(".line." + selectHighlight )
-  .attr('id','line-highlight').moveToFront();
-
-    d3.selectAll("#nonblank-label")
-    .style('font-size', function(d) {
-        if (is_mobile) {
-            return "10px";
-        } else {
-            return "11px";
-        }
-    })
-    .style('opacity','.5')
-    .attr('dx',"0em")
-    .style('stroke-width','0')
-    .style('stroke',"#4F4F4F")
-    .style('fill',"#4F4F4F");
-
-});
-
-
+        $('input.typeahead').on('typeahead:selected', on_typeahead_selected);
+        typeahead_init = true;
+    }
 
     if (pymChild) {
         pymChild.sendHeightToParent();
