@@ -279,6 +279,27 @@ console.log(test)
             // RegExp
 // ^(\w.*),+\s+(\w.*)
 // for MSA
+// right white boxes
+        svg.append('g').selectAll('rect')
+            .data(d3.entries(lines))
+            .enter()
+            .append('rect')
+            // console.log(d.key)
+            .attr('id', "whitebox")
+            .attr('class', function(d) { 
+                return   "box" + d.key.replace(/\W+/g, '-').toLowerCase();
+            })
+            // .attr("x","-19%")
+            .attr("x",function(d) {
+                return x(d['value'][1]['msa']);
+                })
+            .attr("y",function(d) {
+                return y(d['value'][1]['amt'])-9;
+                })
+            .attr("width", "12em")
+            .attr("height", "1em")
+            .attr("dy", ".3em");
+            // .attr("dx", "10px");   
 
 
 //right text
@@ -316,6 +337,9 @@ console.log(test)
             })            
             .on('mouseover', mouseover)
             .on('mouseout',mouseoutSVG);
+
+
+         
 
             svg.append('text')
             .attr('id', 'x-label')
@@ -495,8 +519,10 @@ $('input.typeahead').on('typeahead:selected', function(event, selection) {
             //   .attr('class', function(d) { 
             //     return   d.key.replace(/\W+/g, '-').toLowerCase();
             // })
+// console.log(selection)
 
   d3.selectAll("#text-highlight").attr('id','blank-label');
+  d3.selectAll("#line-highlight").attr('id','blank-path');
 
 
   console.log(selection.value)
@@ -510,12 +536,13 @@ $('input.typeahead').on('typeahead:selected', function(event, selection) {
   d3.selectAll("." + selectHighlight )
   .attr('id','text-highlight').moveToFront();
 
-  d3.selectAll(".line." + selectHighlight )
-  .attr('id','line-highlight').moveToFront();
+ 
 
   d3.selectAll(".box" + selectHighlight )
   .attr('id','whitebox-revealed').moveToFront();
-  
+   
+   d3.selectAll(".line." + selectHighlight )
+  .attr('id','line-highlight').moveToFront();
 
     d3.selectAll("#nonblank-label")
     .style('font-size', function(d) {

@@ -130,6 +130,8 @@
             opacity: 0;
             fill: #4F4F4F;
             font-size: 11px;
+            z-index: 0;
+
 
 /*            cursor: pointer;
 */        
@@ -140,6 +142,7 @@
             fill: #4F4F4F;
             font-size: 11px;
             cursor: pointer;
+            z-index: -1;
         }
 
         #graphic .l-developing,
@@ -190,6 +193,7 @@
             stroke-width: 2;
             stroke: #D8472B;
             opacity: 1 !important;
+            z-index: 15;
             /*fill: firebrick;*/
 
         }
@@ -198,22 +202,25 @@
             font-size: 12px !important;
             fill: #D8472B !important;
             opacity: 1 !important;
+            /*z-index: 20;*/
 /*            visibility: visible;
 */
         }
 
         #graphic #whitebox {
-            fill: blue;
-            z-index: 10;
-            opacity: 1;
-            fill-opacity: 1;
+            fill: dodgerblue;
+            /*fill: #FFFFFF;*/
+            z-index: 0;
+            opacity: 1 !important;
+            fill-opacity: 1 !important;
             visibility: hidden !important;
         }
         #graphic #whitebox-revealed {
-            fill: blue;
-            fill-opacity: 1;
+            fill: dodgerblue;
+            /*fill: #FFFFFF;*/
             z-index: 10;
-            opacity: 1;
+            opacity: 1 !important;
+            fill-opacity: 1 !important;
             visibility: visible !important;
         }
 
