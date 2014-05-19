@@ -130,9 +130,10 @@
             opacity: 0;
             fill: #4F4F4F;
             font-size: 11px;
+
 /*            cursor: pointer;
 */        
-}
+        }
  
         #graphic #nonblank-label {
             opacity: 1;
@@ -199,7 +200,23 @@
             opacity: 1 !important;
 /*            visibility: visible;
 */
-        }        
+        }
+
+        #graphic #whitebox {
+            fill: blue;
+            z-index: 10;
+            opacity: 1;
+            fill-opacity: 1;
+            visibility: hidden !important;
+        }
+        #graphic #whitebox-revealed {
+            fill: blue;
+            fill-opacity: 1;
+            z-index: 10;
+            opacity: 1;
+            visibility: visible !important;
+        }
+
     </style>
 
 

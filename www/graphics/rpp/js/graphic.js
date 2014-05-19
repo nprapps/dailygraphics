@@ -23,17 +23,14 @@ console.log(testt);
 var msaKeepdesk = [
 "Baltimore-Towson, MD",
 "Bloomington, IN",
-"Boston, MA",
 "Chicago, IL-IN-WI",
 "Corvallis, OR",
 "Danville, IL",
 "Honolulu, HI",
-"Lebanon, PA",
 "Los Angeles, CA",
 "New York City, NY",
 "Rochester, MN",
 "San Francisco",
-"Seattle, WA",
 "Washington, DC",
 "Muncie, IN",
 "Hot Springs, AR",
@@ -50,7 +47,6 @@ msaKeepmobile = [
 "Corvallis, OR",
 "Danville, IL",
 "Honolulu, HI",
-"Lebanon, PA",
 "Los Angeles, CA",
 "New York City, NY",
 "Rochester, MN",
@@ -212,6 +208,29 @@ console.log(test)
                 })
 
 
+// left white boxes
+        svg.append('g').selectAll('rect')
+            .data(d3.entries(lines))
+            .enter()
+            .append('rect')
+            // console.log(d.key)
+            .attr('id', "whitebox")
+            .attr('class', function(d) { 
+                return   "box" + d.key.replace(/\W+/g, '-').toLowerCase();
+            })
+            // .attr("x","-19%")
+            .attr("x",function(d) {
+                return x(d['value'][0]['msa'])-195;
+                })
+            .attr("y",function(d) {
+                return y(d['value'][0]['amt'])-9;
+                })
+            .attr("width", "12em")
+            .attr("height", "1em")
+            .attr("dy", ".3em");
+            // .attr("dx", "10px");
+
+
 // left side labels
         svg.append('g').selectAll('text')
             .data(d3.entries(lines))
@@ -262,6 +281,7 @@ console.log(test)
 // for MSA
 
 
+//right text
         svg.append('g').selectAll('text')
             .data(d3.entries(lines))
             .enter()
@@ -339,7 +359,7 @@ console.log(test)
 
 console.log(d3.keys(lines))
             d3.selectAll(".boston-ma")
-            .attr('dy','-1em');    
+            .attr('dy','.5em');    
 d3.selectAll(".danville-il")
             .attr('dy','-.3em');    
 d3.selectAll(".lebanon-pa")
@@ -349,7 +369,7 @@ d3.selectAll(".rochester-mn")
 d3.selectAll(".dallas-fort-worth-tx")
             .attr('dy','-.15em');    
 d3.selectAll(".houston-tx")
-            .attr('dy','-.15em');    
+            .attr('dy','-.15em');      
 d3.selectAll("#nonblank-label")
             .moveToFront();    
 
@@ -475,6 +495,10 @@ $('input.typeahead').on('typeahead:selected', function(event, selection) {
             //   .attr('class', function(d) { 
             //     return   d.key.replace(/\W+/g, '-').toLowerCase();
             // })
+
+  d3.selectAll("#text-highlight").attr('id','blank-label');
+
+
   console.log(selection.value)
   var testtt = selection.value;
   var test3 = testtt.replace(/\W+/g, '-').toLowerCase();
@@ -488,6 +512,9 @@ $('input.typeahead').on('typeahead:selected', function(event, selection) {
 
   d3.selectAll(".line." + selectHighlight )
   .attr('id','line-highlight').moveToFront();
+
+  d3.selectAll(".box" + selectHighlight )
+  .attr('id','whitebox-revealed').moveToFront();
   
 
     d3.selectAll("#nonblank-label")
