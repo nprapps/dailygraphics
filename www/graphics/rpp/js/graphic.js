@@ -8,86 +8,53 @@ var pymChild = null;
 var min_height = 610;
 var graphic_aspect_width = 1;
 var graphic_aspect_height = 2;
-var thousandFormat = d3.format(',')
+var thousandFormat = d3.format(',');
+var typeahead_init = false;
 
-
-// RegExp
-// ^(\w.*),+\s+(\w.*)
-// for MSA
-
-function wrap(text, width) {
-  text.each(function() {
-    var text = d3.select(this),
-        words = text.text().split(/\s+/).reverse(),
-        word,
-        line = [],
-        lineNumber = 0,
-        lineHeight = 1.1, // ems
-        y = text.attr("y"),
-        dy = parseFloat(text.attr("dy")),
-        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-    while (word = words.pop()) {
-      line.push(word);
-      tspan.text(line.join(" "));
-      if (tspan.node().getComputedTextLength() > width) {
-        line.pop();
-        tspan.text(line.join(" "));
-        line = [word];
-        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-      }
-    }
-  });
-}
-
-function test(d) {
-var testt = $('ul.typeahead li.active').data('value');
-console.log(testt);
-}
 var msaKeepdesk = [
-"Baltimore-Towson, MD",
-"Bloomington, IN",
-"Boston, MA-NH",
-"Chicago, IL-IN-WI",
-"Corvallis, OR",
-"Danville, IL",
-"Honolulu, HI",
-"Lebanon, PA",
-"Los Angeles, CA",
-"New York City, NY-NJ-PA",
-"Rochester, MN",
-"Salinas, CA",
-"San Francisco, CA",
-"Seattle, WA",
-"Washington, DC-VA-MD",
-"Muncie, IN",
-"Cincinnati-Middletown, OH-KY-IN",
-"Hot Springs, AR",
-"Florence, SC",
-"San Jose-Santa Clara, CA"
-]
-
-msaKeepmobile = [
-"Baltimore-Towson, MD",
-"Bloomington, IN",
-"Boston, MA-NH",
-"Chicago, IL-IN-WI",
-"Corvallis, OR",
-"Danville, IL",
-"Honolulu, HI",
-"Lebanon, PA",
-"Los Angeles, CA",
-"New York City, NY-NJ-PA",
-"Rochester, MN",
-"Salinas, CA",
-"San Francisco, CA",
-"Seattle, WA",
-"Washington, DC-VA-MD",
-"Muncie, IN",
-"Cincinnati-Middletown, OH-KY-IN",
-"Hot Springs, AR",
-"Florence, SC",
-"San Jose-Santa Clara, CA"
-]
+    "Baltimore-Towson, MD",
+    "Bloomington, IN",
+    "Boston, MA-NH",
+    "Chicago, IL-IN-WI",
+    "Corvallis, OR",
+    "Danville, IL",
+    "Honolulu, HI",
+    "Lebanon, PA",
+    "Los Angeles, CA",
+    "New York City, NY-NJ-PA",
+    "Rochester, MN",
+    "Salinas, CA",
+    "San Francisco, CA",
+    "Seattle, WA",
+    "Washington, DC-VA-MD",
+    "Muncie, IN",
+    "Cincinnati-Middletown, OH-KY-IN",
+    "Hot Springs, AR",
+    "Florence, SC",
+    "San Jose-Santa Clara, CA"
+];
+var msaKeepmobile = [
+    "Baltimore-Towson, MD",
+    "Bloomington, IN",
+    "Boston, MA-NH",
+    "Chicago, IL-IN-WI",
+    "Corvallis, OR",
+    "Danville, IL",
+    "Honolulu, HI",
+    "Lebanon, PA",
+    "Los Angeles, CA",
+    "New York City, NY-NJ-PA",
+    "Rochester, MN",
+    "Salinas, CA",
+    "San Francisco, CA",
+    "Seattle, WA",
+    "Washington, DC-VA-MD",
+    "Muncie, IN",
+    "Cincinnati-Middletown, OH-KY-IN",
+    "Hot Springs, AR",
+    "Florence, SC",
+    "San Jose-Santa Clara, CA"
+];
 
 var colors = {
     'red1': '#6C2315', 'red2': '#A23520', 'red3': '#D8472B', 'red4': '#E27560', 'red5': '#ECA395', 'red6': '#F5D1CA',
@@ -97,38 +64,205 @@ var colors = {
     'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
 };
 
+
+// RegExp
+// ^(\w.*),+\s+(\w.*)
+// for MSA
+function wrap(text, width) {
+    text.each(function() {
+        var text = d3.select(this),
+            words = text.text().split(/\s+/).reverse(),
+            word,
+            line = [],
+            lineNumber = 0,
+            lineHeight = 1.1, // ems
+            y = text.attr("y"),
+            dy = parseFloat(text.attr("dy")),
+            tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+            }
+        }
+    });
+}
+
+
+function substringMatcher(strs) {
+    return function findMatches(q, cb) {
+        var matches, substringRegex;
+
+        // an array that will be populated with substring matches
+        matches = [];
+
+        // regex used to determine if a string contains the substring `q`
+        substrRegex = new RegExp(q, 'i');
+
+        // iterate through the pool of strings and for any string that
+        // contains the substring `q`, add it to the `matches` array
+        $.each(strs, function(i, str) {
+            if (substrRegex.test(str)) {
+                // the typeahead jQuery plugin expects suggestions to a
+                // JavaScript object, refer to typeahead docs for more info
+                matches.push({ value: str });
+            }
+        });
+
+        cb(matches);
+    };
+};
+
+
+function on_typeahead_selected(event, selection) {
+    //   .attr('class', function(d) { 
+    //     return   d.key.replace(/\W+/g, '-').toLowerCase();
+    // })
+    console.log(selection.value)
+    var testtt = selection.value;
+    var test3 = testtt.replace(/\W+/g, '-').toLowerCase();
+    console.log(test3)              
+    var selectHighlight = selection.value.replace(/\W+/g, '-').toLowerCase();              
+    console.log(".line." + selectHighlight)
+
+    d3.selectAll('.' + selectHighlight)
+        .attr('id','text-highlight').moveToFront();
+
+    d3.selectAll('.line.' + selectHighlight)
+        .attr('id','line-highlight').moveToFront();
+
+    // .style('stroke',"firebrick")
+    // .style('opacity',"1")
+    // .style('stroke-width',"2px");
+
+    alert(selection.value);
+}
+
+
+function test(d) {
+    var testt = $('ul.typeahead li.active').data('value');
+    console.log(testt);
+}
+
+
 d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
     this.parentNode.appendChild(this);
    });
 };
 
+
+// graphic mouseover
+function on_mouseover(d, i) {
+    // var test = this
+    // console.log(test)
+
+    console.log(this.getAttribute('id'))
+
+    // if (this.getAttribute('id') ==  '#text-highlight'){
+      // d3.selectAll("#text-highlight").attr('id','blank-label');
+    //   }
+
+    // if (this.getAttribute('id') == '#line-highlight'){      
+      // d3.selectAll("#line-highlight").attr('id','blank-path');
+    // }
+
+    d3.selectAll("#blank-label")
+        .transition()
+        .duration(50)
+        .style('font-size', function(d) {
+            if (is_mobile) {
+                return "10px";
+            } else {
+                return "11px";
+            }
+        })               // .style("fill","#ccc")
+        .style("opacity","0")
+        .style('stroke-width','1px')
+        .style('fill','#a0a0a0');
+
+    d3.selectAll("#nonblank-label")
+        .style('font-size', function(d) {
+            if (is_mobile) {
+                return "10px";
+            } else {
+                return "11px";
+            }
+        })
+        .style('opacity','.5')
+        .attr('dx',"0em")
+        .style('stroke-width','0')
+        .style('stroke','#a0a0a0')
+        .style('fill','#a0a0a0');
+
+    d3.selectAll("#nonblank-path")
+        .style('opacity','.5')
+        .style('stroke-width','1px')
+        .style('stroke','#a0a0a0');
+
+    svg.selectAll(".line." + this.getAttribute('class'))
+        .style('stroke-width','2px')
+        .style('stroke','#3D7FA6');
+
+    svg.selectAll("."+ this.getAttribute('class'))
+        .style('font-size', function(d) {
+            if (is_mobile) {
+                return "12px";
+            } else {
+                return "14px";
+            }
+        })
+        .moveToFront()
+        .style('opacity','1')
+        .style('fill','#3D7FA6');
+}
+
+// graphic mouseout
+function on_mouseout(d,i) {
+    d3.selectAll("#nonblank-label")
+        .style('font-size', function(d) {
+            if (is_mobile) {
+                return "10px";
+            } else {
+                return "11px";
+            }
+        })
+        .attr('dx',"0em")
+        .style('opacity','1')
+
+    d3.selectAll("#nonblank-path")
+        .style('opacity','1')
+        .style('stroke-width','1px')
+        .style('stroke','#a0a0a0');
+}
+
+
 /*
  * Render the graphic
  */
-function render(width) {
+function render(container_width) {
     // console.log(graphic_data)
     // if (Modernizr.svg) {
         var margin = {top: 50, right: 350, bottom: 25, left: 350};
         
-        if (width < mobile_threshold){
+        if (container_width < mobile_threshold){
             is_mobile = true;
         } else {
             is_mobile = false;
         }
+        console.log(is_mobile)
 
-console.log(is_mobile)
-
-        if (width < mobile_threshold) {
+        if (container_width < mobile_threshold) {
             var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;        
             num_ticks = 5;
             margin.left = 125;
             margin.right = 125;
             is_mobile = true;
             var msaKeep = msaKeepmobile;
-
-
-
         } else {
             var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;        
             num_ticks = 10;
@@ -138,7 +272,7 @@ console.log(is_mobile)
             var msaKeep = msaKeepdesk;
         }
 
-        var width = width - margin.left - margin.right;
+        var width = container_width - margin.left - margin.right;
 
         // clear out existing graphics
         $graphic.empty();
@@ -165,10 +299,10 @@ console.log(is_mobile)
                     '#0B403F',  '#11605E',  '#17807E',  '#51A09E',  '#8BC0BF',  '#C5DFDF',
                     '#28556F',  '#3D7FA6',  '#51AADE',  '#7DBFE6',  '#A8D5EF',  '#D3EAF7']); // colors
 
-var test = $("input").val()    
-console.log(test)
+        // color.domain(d3.keys(graphic_data[0]).filter(function(key) { return key !== "msa"; }));
 
-      // color.domain(d3.keys(graphic_data[0]).filter(function(key) { return key !== "msa"; }));
+        var test = $("input").val();
+        console.log(test)
 
         // mapping data from csv file
         // maps into color domain
@@ -192,23 +326,21 @@ console.log(test)
             });
         }
 
-// var entry = d3.entries(lines);
-// var values2 =  d3.values(lines);
-// var keys =  d3.keys(lines);
-// var numberFormat = d3.format("d")
+        // var entry = d3.entries(lines);
+        // var values2 =  d3.values(lines);
+        // var keys =  d3.keys(lines);
+        // var numberFormat = d3.format("d")
 
-
-
-// console.log(msaValue)
-// console.log(values2[0][0])
-// console.log(values2[0][0]["msa"])
+        // console.log(msaValue)
+        // console.log(values2[0][0])
+        // console.log(values2[0][0]["msa"])
        
         var svg = d3.select('#graphic').append('svg')
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-            .on('mouseout',mouseoutSVG);
+            .on('mouseout', on_mouseout);
         
         x.domain(d3.extent(graphic_data, function(d) { return d.msa; }));
 
@@ -243,7 +375,6 @@ console.log(test)
                     return line(d.value);
                 });
 
-
         svg.append('g').selectAll('path')
             .data(d3.entries(lines))
             .enter()
@@ -256,29 +387,25 @@ console.log(test)
                     return line(d.value);
                 })
 
-// var toggleColor = (function(){
-//    var currentColor = "#a0a0a0";
+        // var toggleColor = (function(){
+        //    var currentColor = "#a0a0a0";
     
-//     return function(){
-//         currentColor = currentColor == "#a0a0a0" ? "#3D7FA6" : "#a0a0a0";
-//         d3.select(".line." + this.getAttribute('class')).style("stroke", currentColor);
-//     }
-// })();
+        //     return function(){
+        //         currentColor = currentColor == "#a0a0a0" ? "#3D7FA6" : "#a0a0a0";
+        //         d3.select(".line." + this.getAttribute('class')).style("stroke", currentColor);
+        //     }
+        // })();
 
         // d3.selectAll("#hidden-path")
         // .on("click", toggleColor);
 
+        // console.log(lines)
+        // console.log(entry)
+        // console.log(entry[0]["key"])
+        // console.log(entry[0][key][0])
+        // console.log(keys[0])
 
-// console.log(lines)
-
-// console.log(entry)
-// console.log(entry[0]["key"])
-// console.log(entry[0][key][0])
-
-// console.log(keys[0])
-
-
-// left side labels
+        // left side labels
         svg.append('g').selectAll('text')
             .data(d3.entries(lines))
             .enter()
@@ -313,8 +440,6 @@ console.log(test)
                     return  d.key + "\u00A0" + "      " + "$" + thousandFormat(d['value'][0]['amt']);
                     }
                 })    
-                
-                
             .style('font-size', function(d) {
                 if (is_mobile) {
                     return "10px";
@@ -322,19 +447,19 @@ console.log(test)
                     return "12px";
                 }
             })
-            .on('mouseover', mouseover);
+            .on('mouseover', on_mouseover);
 
-            // RegExp
-// ^(\w.*),+\s+(\w.*)
-// for MSA
-            // .call(wrap, "200");
+        // RegExp
+        // ^(\w.*),+\s+(\w.*)
+        // for MSA
+        // .call(wrap, "200");
 
-            // .on('mouseout', mouseout);
+        // .on('mouseout', mouseout);
 
-            // .text(values2[0][0]["msa"])
-            // .style('font-size',"9px");
+        // .text(values2[0][0]["msa"])
+        // .style('font-size',"9px");
 
-// left side values
+        // left side values
         // svg.append('g').selectAll('text')
         //     .data(d3.entries(lines))
         //     .enter()
@@ -351,7 +476,6 @@ console.log(test)
         //     .attr('class', function(d) { 
         //         return 'left-val ' + d.key.replace(/\W+/g, '-').toLowerCase()
         //     })
-
         //     .attr("x",function(d) {
         //         return x(d['value'][0]['msa']);
         //         })
@@ -364,7 +488,6 @@ console.log(test)
         //     .text(function(d) {return "$" + d['value'][0]['amt'];});
         //     // .text(values2[0][0]["msa"])
         //     // .style('font-size',"9px");
-
 
         svg.append('g').selectAll('text')
             .data(d3.entries(lines))
@@ -398,10 +521,10 @@ console.log(test)
                     return "12px";
                 }
             })            
-            .on('mouseover', mouseover);
+            .on('mouseover', on_mouseover);
             // .on('mouseout', mouseout);
 
-            svg.append('text')
+        svg.append('text')
             .attr('id', 'x-label')
             .attr("x", x(1))
             .attr("y", y(45450))
@@ -422,10 +545,9 @@ console.log(test)
                 }
             })            
             .text("Median Income")
-  
 
-            // // .st
-            svg.append('text')
+        // // .st
+        svg.append('text')
             .attr('id', 'x-label')
             .attr("x", x(2))
             .attr("y", y(45450))
@@ -441,260 +563,113 @@ console.log(test)
             })             
             .text("What It Feels Like");
 
-            // svg.append('text')
-            // .attr('id', 'x-label')
-            // .attr("x", x(2))
-            // .attr("y", y(45200))
-            // .attr("dx", "1em")
-            // .attr("dy", ".8em")
-            // // .attr('dy', function(d) {
-            // //     if (is_mobile) {
-            // //         return "1em";
-            // //     } else {
-            // //         return ".5em";
-            // //     }
-            // // })                
-            // .attr("text-anchor", "start")
-            // .style('font-size', function(d) {
-            //     if (is_mobile) {
-            //         return "12px";
-            //     } else {
-            //         return "14px";
-            //     }
-            // })             
-            // .text("Feels Like")
+        // svg.append('text')
+        // .attr('id', 'x-label')
+        // .attr("x", x(2))
+        // .attr("y", y(45200))
+        // .attr("dx", "1em")
+        // .attr("dy", ".8em")
+        // // .attr('dy', function(d) {
+        // //     if (is_mobile) {
+        // //         return "1em";
+        // //     } else {
+        // //         return ".5em";
+        // //     }
+        // // })                
+        // .attr("text-anchor", "start")
+        // .style('font-size', function(d) {
+        //     if (is_mobile) {
+        //         return "12px";
+        //     } else {
+        //         return "14px";
+        //     }
+        // })             
+        // .text("Feels Like")
 
-console.log(d3.keys(lines))
-    
+        console.log(d3.keys(lines))
 
+        // d3.selectAll("#nonblank-path").moveToFront();
+        // d3.select("#nonblank-label")
+        // .select(".new-york-city-new-jersey-ny-nj-pa")
+        // .attr('dy',"3em");
 
-// d3.selectAll("#nonblank-path").moveToFront();
-// d3.select("#nonblank-label")
-// .select(".new-york-city-new-jersey-ny-nj-pa")
-// .attr('dy',"3em");
+        // function mouseoverpath(d, i) {
+        //     var test = this
+        //     console.log(test)
 
+        //     d3.selectAll("#blank-label")
+        //     .transition()
+        //     .duration(50)
+        //     .style('font-size', function(d) {
+        //         if (is_mobile) {
+        //             return "10px";
+        //         } else {
+        //             return "11px";
+        //         }
+        //     })               // .style("fill","#ccc")
+        //     .style("opacity","0")
+        //     .style('stroke-width','1px')
+        //     .style('fill','#a0a0a0');
 
-// function mouseoverpath(d, i) {
-//     var test = this
-//     console.log(test)
+        //     d3.selectAll("#nonblank-label")
+        //     .style('font-size', function(d) {
+        //         if (is_mobile) {
+        //             return "10px";
+        //         } else {
+        //             return "11px";
+        //         }
+        //     })
+        //     .style('opacity','.5')
+        //     .attr('dx',"0em")
+        //     .style('stroke-width','0')
+        //     .style('stroke','#a0a0a0')
+        //     .style('fill','#a0a0a0');
 
-//     d3.selectAll("#blank-label")
-//     .transition()
-//     .duration(50)
-//     .style('font-size', function(d) {
-//         if (is_mobile) {
-//             return "10px";
-//         } else {
-//             return "11px";
-//         }
-//     })               // .style("fill","#ccc")
-//     .style("opacity","0")
-//     .style('stroke-width','1px')
-//     .style('fill','#a0a0a0');
+        //     d3.selectAll("#nonblank-path")
+        //     .style('opacity','.5')
+        //     .style('stroke-width','1px')
+        //     .style('stroke','#a0a0a0');
 
-//     d3.selectAll("#nonblank-label")
-//     .style('font-size', function(d) {
-//         if (is_mobile) {
-//             return "10px";
-//         } else {
-//             return "11px";
-//         }
-//     })
-//     .style('opacity','.5')
-//     .attr('dx',"0em")
-//     .style('stroke-width','0')
-//     .style('stroke','#a0a0a0')
-//     .style('fill','#a0a0a0');
+        //     svg.select("." + this.getAttribute('class'))
+        //     .style('stroke-width','2px')
+        //     .style('stroke','#3D7FA6')
+        //     .style('opacity','1');
 
+        //     svg.selectAll("."+ this.getAttribute('class'))
+        //     .style('font-size', function(d) {
+        //         if (is_mobile) {
+        //             return "12px";
+        //         } else {
+        //             return "14px";
+        //         }
+        //     })
+        //     .moveToFront()
+        //     .style('opacity','1')
+        //     .style('fill','#3D7FA6');
 
-//     d3.selectAll("#nonblank-path")
-//     .style('opacity','.5')
-//     .style('stroke-width','1px')
-//     .style('stroke','#a0a0a0');
+        // }
 
-//     svg.select("." + this.getAttribute('class'))
-//     .style('stroke-width','2px')
-//     .style('stroke','#3D7FA6')
-//     .style('opacity','1');
-
-//     svg.selectAll("."+ this.getAttribute('class'))
-//     .style('font-size', function(d) {
-//         if (is_mobile) {
-//             return "12px";
-//         } else {
-//             return "14px";
-//         }
-//     })
-//     .moveToFront()
-//     .style('opacity','1')
-//     .style('fill','#3D7FA6');
-
-// }
-
-
-
-function mouseover(d, i) {
-    // var test = this
-    // console.log(test)
-
-console.log(this.getAttribute('id'))
-
-    // if (this.getAttribute('id') ==  '#text-highlight'){
-      // d3.selectAll("#text-highlight").attr('id','blank-label');
-    //   }
-
-    // if (this.getAttribute('id') == '#line-highlight'){      
-      // d3.selectAll("#line-highlight").attr('id','blank-path');
-    // }
-
-    d3.selectAll("#blank-label")
-    .transition()
-    .duration(50)
-    .style('font-size', function(d) {
-        if (is_mobile) {
-            return "10px";
-        } else {
-            return "11px";
-        }
-    })               // .style("fill","#ccc")
-    .style("opacity","0")
-    .style('stroke-width','1px')
-    .style('fill','#a0a0a0');
-
-    d3.selectAll("#nonblank-label")
-    .style('font-size', function(d) {
-        if (is_mobile) {
-            return "10px";
-        } else {
-            return "11px";
-        }
-    })
-    .style('opacity','.5')
-    .attr('dx',"0em")
-    .style('stroke-width','0')
-    .style('stroke','#a0a0a0')
-    .style('fill','#a0a0a0');
-
-
-    d3.selectAll("#nonblank-path")
-    .style('opacity','.5')
-    .style('stroke-width','1px')
-    .style('stroke','#a0a0a0');
-
-    svg.selectAll(".line." + this.getAttribute('class'))
-    .style('stroke-width','2px')
-    .style('stroke','#3D7FA6');
-
-    svg.selectAll("."+ this.getAttribute('class'))
-    .style('font-size', function(d) {
-        if (is_mobile) {
-            return "12px";
-        } else {
-            return "14px";
-        }
-    })
-    .moveToFront()
-    .style('opacity','1')
-    .style('fill','#3D7FA6');
-
-
-
-}
-
-
-
-function mouseoutSVG(d,i) {
-    d3.selectAll("#nonblank-label")
-    .style('font-size', function(d) {
-        if (is_mobile) {
-            return "10px";
-        } else {
-            return "11px";
-        }
-    })
-    .attr('dx',"0em")
-    .style('opacity','1')
-
-    d3.selectAll("#nonblank-path")
-    .style('opacity','1')
-    .style('stroke-width','1px')
-    .style('stroke','#a0a0a0');
-
-
-}
-
-var substringMatcher = function(strs) {
-  return function findMatches(q, cb) {
-    var matches, substringRegex;
+    // only initialize typeahead once
+    if (!typeahead_init) {
+        var msas = d3.keys(lines);
+        // setup typeahead
+        $('#msa-field .typeahead').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'msas',
+            displayKey: 'value',
+            source: substringMatcher(msas)
+        });
+        $('.typeahead.input-sm').siblings('input.tt-hint').addClass('hint-small');
+        $('input.typeahead').on('typeahead:selected', on_typeahead_selected);
+        // $('input.typeahead').typeahead('setQuery', '');
+        
+        typeahead_init = true;
+    }
  
-    // an array that will be populated with substring matches
-    matches = [];
- 
-    // regex used to determine if a string contains the substring `q`
-    substrRegex = new RegExp(q, 'i');
- 
-    // iterate through the pool of strings and for any string that
-    // contains the substring `q`, add it to the `matches` array
-    $.each(strs, function(i, str) {
-      if (substrRegex.test(str)) {
-        // the typeahead jQuery plugin expects suggestions to a
-        // JavaScript object, refer to typeahead docs for more info
-        matches.push({ value: str });
-      }
-    });
- 
-    cb(matches);
-  };
-};
- 
-var msas = d3.keys(lines);
-
- 
-$('#msa-field .typeahead').typeahead({
-  hint: true,
-  highlight: true,
-  minLength: 1
-},
-{
-  name: 'msas',
-  displayKey: 'value',
-  source: substringMatcher(msas)
-});
-$('.typeahead.input-sm').siblings('input.tt-hint').addClass('hint-small');
-
-
-$('input.typeahead').on('typeahead:selected', function(event, selection) {
-              
-            //   .attr('class', function(d) { 
-            //     return   d.key.replace(/\W+/g, '-').toLowerCase();
-            // })
-  console.log(selection.value)
-  var testtt = selection.value;
-  var test3 = testtt.replace(/\W+/g, '-').toLowerCase();
-  console.log(test3)              
-  var selectHighlight = selection.value.replace(/\W+/g, '-').toLowerCase();              
-  console.log(".line." + selectHighlight)
-
-  
-  d3.selectAll("." + selectHighlight )
-  .attr('id','text-highlight').moveToFront();
-
-
-  d3.selectAll(".line." + selectHighlight )
-  .attr('id','line-highlight').moveToFront();
-
-  
-  // .style('stroke',"firebrick")
-  // .style('opacity',"1")
-  // .style('stroke-width',"2px");
-
-  alert(selection.value);
-
-});
-
-// $('input.typeahead').typeahead('setQuery', '');
-
-
     if (pymChild) {
         pymChild.sendHeightToParent();
     }
@@ -706,12 +681,13 @@ $('input.typeahead').on('typeahead:selected', function(event, selection) {
  */
 $(window).load(function() {
     $graphic = $('#graphic');
+
     if (Modernizr.svg) {
         d3.csv(graphic_data_url, function(error, data) {
             graphic_data = data;
 
             graphic_data.forEach(function(d) {
-                d.msa = d.msa
+                d.msa = d.msa;
             });
 
             pymChild = new pym.Child({
