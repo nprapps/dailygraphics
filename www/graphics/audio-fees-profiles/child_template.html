@@ -234,7 +234,7 @@
     <div id="graphic">
         {% for row in COPY.data %}
         <section id="profile-{{ row.media }}">
-            <h3>{{ row.name }}{% if row.location != 'None' %}<span>, {{ row.location }}</span>{% endif %}</h3>
+            <h3>{{ row.name }}{% if row.location != 'None' %},<span> {{ row.location }}</span>{% endif %}</h3>
 
             <div class="intro">
                 <img src="../../assets/audio-fees-profiles/{{ row.media }}.jpg" alt="Photo of {{ row.name }}" />
