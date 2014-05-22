@@ -205,11 +205,22 @@ def download_copy(slug):
     g.get_document()
 
 @task
-def update_copy(slug):
+def update_copy(slug=None):
     """
     Fetches the latest Google Doc and updates local JSON.
     """
-    download_copy(slug)
+    if slug:
+        download_copy(slug)
+        return
+
+    slugs = os.listdir('www/graphics')
+
+    for slug in slugs:
+        if not os.path.exists('www/graphics/%s/graphic_config.py' % slug):
+            continue
+
+        print slug
+        download_copy(slug)
 
 """
 App-specific commands
