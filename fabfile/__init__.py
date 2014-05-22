@@ -44,32 +44,6 @@ def staging():
     app_config.configure_targets(env.settings)
 
 """
-Branches
-
-Changing branches requires deploying that branch to a host.
-"""
-@task
-def stable():
-    """
-    Work on stable branch.
-    """
-    env.branch = 'stable'
-
-@task
-def master():
-    """
-    Work on development branch.
-    """
-    env.branch = 'master'
-
-@task
-def branch(branch_name):
-    """
-    Work on any specified branch.
-    """
-    env.branch = branch_name
-
-"""
 Template-specific functions
 
 Changing the template functions should produce output
@@ -181,9 +155,6 @@ def deploy(slug=''):
     Deploy the latest app to S3 and, if configured, to our servers.
     """
     require('settings', provided_by=[production, staging])
-
-    if (app_config.DEPLOYMENT_TARGET == 'production' and env.branch != 'stable'):
-        utils.confirm("You are trying to deploy the '%s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env.branch)
 
     render(slug)
     _gzip('www', '.gzip')

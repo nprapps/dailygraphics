@@ -48,7 +48,6 @@ The project contains the following folders and important files:
 * ``www/graphics`` -- Individual graphics projects.
 * ``app.py`` -- A [Flask](http://flask.pocoo.org/) app for rendering the project locally.
 * ``app_config.py`` -- Global project configuration for scripts, deployment, etc.
-* ``copytext.py`` -- Backbone of our COPY rig.
 * ``render_utils.py`` -- Code supporting template rendering.
 * ``requirements.txt`` -- Python requirements.
 * ``static.py`` -- Static Flask views used in both ``app.py`` and ``public_app.py``.
@@ -148,19 +147,19 @@ When it's time to publish your graphic, it's better to deploy a single graphic r
 To deploy a specific graphic:
 
 ```
-fab staging master deploy:NAME_OF_GRAPHIC
+fab staging deploy:NAME_OF_GRAPHIC
 ```
 ```
-fab production master deploy:NAME_OF_GRAPHIC
+fab production deploy:NAME_OF_GRAPHIC
 ```
 
 To deploy all graphics:
 
 ```
-fab staging master deploy
+fab staging deploy
 ```
 ```
-fab production master deploy
+fab production deploy
 ```
 
 Embedding on NPR
