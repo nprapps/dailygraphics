@@ -189,7 +189,6 @@ def deploy(slug=''):
     _gzip('www', '.gzip')
     _deploy_to_s3('.gzip/graphics/%s' % slug)
 
-@task
 def download_copy(slug):
     """
     Downloads a Google Doc as an .xlsx file.
