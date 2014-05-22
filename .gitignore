@@ -50,3 +50,4 @@ www/graphics/*/index.html
 data/*.xls
 data/*.xlsx
 www/graphics/*/child.html
+dailygraphics.sublime-*
