@@ -150,13 +150,19 @@ When it's time to publish your graphic, it's better to deploy a single graphic r
 To deploy a specific graphic:
 
 ```
-fab deploy:NAME_OF_GRAPHIC
+fab staging deploy:NAME_OF_GRAPHIC
+```
+```
+fab production deploy:NAME_OF_GRAPHIC
 ```
 
-To deploy all graphics (**but don't do this unless you're absolutely sure** &mdash; you may deploy something that's not ready to be deployed yet):
+To deploy all graphics, leave off the graphic slug (**but don't do this unless you're absolutely sure** &mdash; you may deploy something that's not ready to be deployed yet):
 
 ```
-fab deploy
+fab production deploy
+```
+```
+fab staging deploy
 ```
 
 Embedding on NPR
