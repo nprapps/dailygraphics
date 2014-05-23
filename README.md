@@ -94,7 +94,7 @@ python app.py
 
 Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo. Click on the graphic you are working on to view it.
 
-Alternatively, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
+Alternately, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
 
 Adding a new graphic to the project
 -------------------------
@@ -109,14 +109,11 @@ Create your graphic in the template file, and add any of the CSS/JS that you nee
 
 Here are some examples:
 
-* Good: my-project-name
-* Bad: My-Project-NAME
+* Good: my-project-name<br>Bad: My-Project-NAME
 
-* Good: my-project-name
-* Bad: my project name
+* Good: my-project-name<br>Bad: my project name
 
-* Good: my-wonderful-project
-* Bad: my wonderful project!
+* Good: my-wonderful-project<br>Bad: my wonderful project!
 
 Connecting to a Google Spreadsheet
 ----------------------------------
@@ -135,6 +132,12 @@ Run this command to pull down the latest copy of the spreadsheet:
 fab update_copy:NAME_OF_GRAPHIC
 ```
 
+To pull down **all** spreadsheets in the dailygraphics repo, run:
+
+```
+fab update_copy
+```
+
 The deploy process also will automatically pull down the latest spreadsheet and render the contents to your page.
 
 Note: Your graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
@@ -147,19 +150,13 @@ When it's time to publish your graphic, it's better to deploy a single graphic r
 To deploy a specific graphic:
 
 ```
-fab staging deploy:NAME_OF_GRAPHIC
-```
-```
-fab production deploy:NAME_OF_GRAPHIC
+fab deploy:NAME_OF_GRAPHIC
 ```
 
-To deploy all graphics:
+To deploy all graphics (**but don't do this unless you're absolutely sure** &mdash; you may deploy something that's not ready to be deployed yet):
 
 ```
-fab staging deploy
-```
-```
-fab production deploy
+fab deploy
 ```
 
 Embedding on NPR
