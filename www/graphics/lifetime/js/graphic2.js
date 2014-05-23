@@ -3,26 +3,21 @@
 
 var $graphic;
 var graphic_aspect_width = 1;
-var graphic_aspect_height = 5;
+var graphic_aspect_height = 1;
 var mobile_threshold = 625;
 var pymChild = null;
 var col = 12;
-var container_width = 600;
-var col_width = 10
 
 
-function getRand(min, max) {
-  return Math.random() * (max - min) + min;
-}
 /*
  * Render the graphic
  */
 function draw_graphic(width) {
     
-render_chart();
+render_chart(d);
 }
 
-function render_chart() {
+function render_chart(d) {
     // var graphic_data = data;
     var is_mobile = false;
     // var last_data_point = graphic_data.length - 1;
@@ -43,22 +38,22 @@ function render_chart() {
 
     var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;
 var boxViewTemplate = d3.select(".box-view").remove().node(),
-    boxView = d3.select("#graphic").selectAll(".box-view"),
+    boxView = d3.select("#grid").selectAll(".box-view"),
     box = boxView.select(".box");
 
 var output = d3.select("output"),
     input = d3.select("input").on("change", changed).each(changed),
     count = 0;
 
-// d3.timer(function() {
-//   ++count;
+d3.timer(function() {
+  ++count;
 
-//   box
-//       .style("top", Math.sin(count / 10) * 10 + "px")
-//       .style("left", Math.cos(count / 10) * 10 + "px")
-//       .style("background-color", "rgb(0,0," + count % 255 + ")")
-//       .text(count % 100);
-// });
+  box
+      .style("top", Math.sin(count / 10) * 10 + "px")
+      .style("left", Math.cos(count / 10) * 10 + "px")
+      .style("background-color", "rgb(0,0," + count % 255 + ")")
+      .text(count % 100);
+});
 
 function changed() {
   var n = +this.value;
