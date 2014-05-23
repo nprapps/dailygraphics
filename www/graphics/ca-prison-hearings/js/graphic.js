@@ -43,7 +43,7 @@ var graphic_data = [
  * Render the graphic
  */
 function render(container_width) {
-    var margin = { top: 10, right: 1, bottom: 35, left: 35 };
+    var margin = { top: 10, right: 1, bottom: 35, left: 40 };
     var height = (container_width * height_ratio) / width_ratio;
     var width = container_width - margin.left - margin.right;
     
@@ -59,10 +59,7 @@ function render(container_width) {
 
     var y = d3.scale.linear()
         .range([height, 0])
-        .domain([0, d3.max(graphic_data, function(d) { 
-            var n = parseInt(d.amt);
-            return Math.ceil(n/10) * 10; // round to next 10
-        })]);
+        .domain([0, 100]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
