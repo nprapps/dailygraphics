@@ -2,10 +2,6 @@
 
 """
 Project-wide application configuration.
-
-DO NOT STORE SECRETS, PASSWORDS, ETC. IN THIS FILE.
-They will be exposed to users. Use environment variables instead.
-See get_secrets() below for a fast way to access them.
 """
 
 import os
@@ -22,9 +18,6 @@ REPOSITORY_NAME = 'dailygraphics'
 REPOSITORY_URL = 'git@github.com:nprapps/%s.git' % REPOSITORY_NAME
 REPOSITORY_ALT_URL = None # 'git@bitbucket.org:nprapps/%s.git' % REPOSITORY_NAME'
 
-# The name to be used in paths on the server
-PROJECT_FILENAME = 'dailygraphics'
-
 # Path to the folder containing the graphics
 GRAPHICS_PATH = os.path.abspath('../graphics')
 
@@ -39,25 +32,6 @@ ASSETS_S3_BUCKET = 'assets.apps.npr.org'
 S3_BUCKETS = []
 S3_BASE_URL = ''
 DEBUG = True
-
-"""
-Utilities
-"""
-def get_secrets():
-    """
-    A method for accessing our secrets.
-    """
-    secrets = [
-        'EXAMPLE_SECRET'
-    ]
-
-    secrets_dict = {}
-
-    for secret in secrets:
-        name = '%s_%s' % (PROJECT_FILENAME, secret)
-        secrets_dict[secret] = os.environ.get(name, None)
-
-    return secrets_dict
 
 def configure_targets(deployment_target):
     """
