@@ -44,8 +44,7 @@ The project contains the following folders and important files:
 * ``fabfile`` -- [Fabric](http://docs.fabfile.org/en/latest/) commands for automating setup and deployment.
 * ``new_graphic`` -- This directory is copied for each new graphic.
 * ``templates`` -- HTML ([Jinja2](http://jinja.pocoo.org/docs/)) templates, to be compiled locally.
-* ``www`` -- Static and compiled assets to be deployed. (a.k.a. "the output")
-* ``www/graphics`` -- Individual graphics projects.
+* ``www`` -- Static assets to be deployed.
 * ``app.py`` -- A [Flask](http://flask.pocoo.org/) app for rendering the project locally.
 * ``app_config.py`` -- Global project configuration for scripts, deployment, etc.
 * ``render_utils.py`` -- Code supporting template rendering.
@@ -60,6 +59,8 @@ cd dailygraphics
 mkvirtualenv --no-site-packages dailygraphics
 pip install -r requirements.txt
 ```
+
+You'll now need to create a folder to hold the graphics created and deployed by this rig. This is configured in `app_config.GRAPHICS_PATH` and defaults to `../graphics`. By keeping the graphics in a separate repository they can be easily version controlled separately.
 
 Hide project secrets
 --------------------
