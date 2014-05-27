@@ -13,9 +13,6 @@ import os
 """
 NAMES
 """
-# Project name used for display
-PROJECT_NAME = 'Daily Graphics'
-
 # Project name in urls
 # Use dashes, not underscores!
 PROJECT_SLUG = 'dailygraphics'

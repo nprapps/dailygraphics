@@ -12,7 +12,7 @@ import copytext
 from render_utils import make_context, urlencode_filter
 import static
 
-app = Flask(app_config.PROJECT_NAME)
+app = Flask(app_config.PROJECT_SLUG)
 
 app.jinja_env.filters['urlencode'] = urlencode_filter
 
