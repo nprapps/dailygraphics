@@ -38,39 +38,6 @@ S3_BASE_URL = ''
 DEBUG = True
 
 """
-SHARING
-"""
-PROJECT_DESCRIPTION = 'An opinionated project template for (mostly) server-less apps.'
-SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
-
-# Will be resized to 120x120, can't be larger than 1MB
-TWITTER_IMAGE_URL = ''
-
-# 16:9 ("wide") image. FB uses 16:9 in the newsfeed and crops to square in timelines.
-# No documented restrictions on size
-FACEBOOK_IMAGE_URL = ''
-FACEBOOK_APP_ID = '138837436154588'
-
-# Thumbnail image for Google News / Search.
-# No documented restrictions on resolution or size
-GOOGLE_IMAGE_URL = TWITTER_IMAGE_URL
-
-NPR_DFP = {
-    'STORY_ID': '1002',
-    'TARGET': 'homepage',
-    'ENVIRONMENT': 'NPRTEST',
-    'TESTSERVER': 'false'
-}
-
-"""
-SERVICES
-"""
-GOOGLE_ANALYTICS = {
-    'ACCOUNT_ID': 'UA-5828686-4',
-    'DOMAIN': PRODUCTION_S3_BUCKETS[0]
-}
-
-"""
 Utilities
 """
 def get_secrets():
