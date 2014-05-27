@@ -1,26 +1,52 @@
 #!/usr/bin/env python
 
+"""
+Commands related to the syncing assets.
+"""
+
 from glob import glob
 import os
 
 import boto
 from fabric.api import prompt, task
 import app_config
+from fnmatch import fnmatch
 import utils
+
+ASSETS_ROOT = 'www/assets'
 
 @task
 def sync():
     """
     Intelligently synchronize assets between S3 and local folder.
     """
+    ignore_globs = []
+
+    with open('%s/.assetsignore' % ASSETS_ROOT, 'r') as f:
+        ignore_globs = [l.strip() for l in f]
+
     local_paths = []
 
-    for local_path, subdirs, filenames in os.walk('www/assets'):
+    for local_path, subdirs, filenames in os.walk(ASSETS_ROOT):
         for name in filenames:
-            local_paths.append(os.path.join(local_path, name))
+            full_path = os.path.join(local_path, name)
+            glob_path = full_path.split(ASSETS_ROOT)[1].strip('/')
+
+            ignore = False
+
+            for ignore_glob in ignore_globs:
+                if fnmatch(glob_path, ignore_glob):
+                    ignore = True
+                    break
+
+            if ignore:
+                print 'Ignoring: %s' % full_path
+                continue
+
+            local_paths.append(full_path)
 
     bucket = _assets_get_bucket()
-    keys = bucket.list(app_config.PROJECT_SLUG)
+    keys = bucket.list(app_config.ASSETS_SLUG)
 
     which = None
     always = False
@@ -29,7 +55,11 @@ def sync():
         download = False
         upload = False
 
-        local_path = key.name.replace(app_config.PROJECT_SLUG, 'www/assets', 1)
+        local_path = key.name.replace(app_config.ASSETS_SLUG, ASSETS_ROOT, 1)
+
+        # Skip root key
+        if local_path == '%s/' % ASSETS_ROOT:
+            continue
 
         print local_path
 
@@ -74,7 +104,7 @@ def sync():
 
     # Iterate over files that didn't exist on S3
     for local_path in local_paths:
-        key_name = local_path.replace('www/assets', app_config.PROJECT_SLUG, 1)
+        key_name = local_path.replace(ASSETS_ROOT, app_config.ASSETS_SLUG, 1)
         key = bucket.get_key(key_name, validate=False)
 
         print local_path
@@ -93,7 +123,7 @@ def sync():
             _assets_delete(local_path, key)
 
 @task
-def assets_rm(path):
+def rm(path):
     """
     Remove an asset from s3 and locally
     """
@@ -101,11 +131,33 @@ def assets_rm(path):
 
     file_list = glob(path)
 
+    found_folder = True
+
+    # Add files in folders, instead of folders themselves (S3 doesn't have folders)
+    while found_folder:
+        found_folder = False
+
+        for local_path in file_list:
+            if os.path.isdir(local_path):
+                found_folder = True
+
+                file_list.remove(local_path)
+
+                for path in os.listdir(local_path):
+                    file_list.append(os.path.join(local_path, path))
+
     if len(file_list) > 0:
         utils.confirm("You are about to destroy %i files. Are you sure?" % len(file_list))
 
         for local_path in file_list:
-            key_name = local_path.replace('www/assets', app_config.PROJECT_SLUG, 1)
+            print local_path
+
+            if os.path.isdir(local_path):
+                file_list.extend(os.listdir(local_path))
+
+                continue
+
+            key_name = local_path.replace(ASSETS_ROOT, app_config.ASSETS_SLUG, 1)
             key = bucket.get_key(key_name)
             
             _assets_delete(local_path, key)
@@ -147,7 +199,7 @@ def _assets_upload_confirm():
     elif answer == 'ua':
         return ('upload', True)
     elif answer == 'da':
-        return ('download', True)
+        return ('delete', True)
 
     return (None, False) 
 

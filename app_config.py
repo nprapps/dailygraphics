@@ -13,6 +13,9 @@ NAMES
 # Use dashes, not underscores!
 PROJECT_SLUG = 'dailygraphics'
 
+# Slug for assets dir on S3
+ASSETS_SLUG = PROJECT_SLUG
+
 # The name of the repository containing the source
 REPOSITORY_NAME = 'dailygraphics'
 REPOSITORY_URL = 'git@github.com:nprapps/%s.git' % REPOSITORY_NAME
