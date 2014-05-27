@@ -16,7 +16,7 @@ dailygraphics
 What is this?
 -------------
 
-dailygraphics is a framework for creating and deploying graphics suitable for publishing inside a CMS with [responsive iframe embeds](https://github.com/nprapps/responsiveiframe).
+dailygraphics is a framework for creating and deploying responsive graphics suitable for publishing inside a CMS with [pym.js](https://github.com/nprapps/pym.js).
 
 Assumptions
 -----------
