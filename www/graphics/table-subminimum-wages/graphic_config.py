@@ -1,3 +1,0 @@
-#!/usr/bin/env python
-
-COPY_GOOGLE_DOC_KEY = '1DTjU8IM4rryCHOKXHAzz06egQV7jVVCJgpKoCXJyB18'
