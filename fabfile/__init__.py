@@ -151,6 +151,9 @@ def deploy(slug=''):
     """
     require('settings', provided_by=[production, staging])
 
+    if not slug:
+        utils.confirm('You are about about to deploy ALL graphics. Are you sure you want to do this? (Deploy a single graphic with "deploy:SLUG".)')
+
     render(slug)
     _gzip('www', '.gzip')
     _gzip(app_config.GRAPHICS_PATH, '.gzip/graphics')
