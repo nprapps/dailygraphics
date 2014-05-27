@@ -1,9 +1,5 @@
-Copyright 2014 NPR.  All rights reserved.  No part of these materials may be reproduced, modified, stored in a retrieval system, or retransmitted, in any form or by any means, electronic, mechanical or otherwise, without prior written permission from NPR.
-
-(Want to use this code? Send an email to nprapps@npr.org!)
-
-Daily Graphics
-========================
+dailygraphics
+=============
 
 * [What is this?](#what-is-this)
 * [Assumptions](#assumptions)
@@ -15,12 +11,12 @@ Daily Graphics
 * [Adding a new graphic to the project](#adding-a-new-graphic-to-the-project)
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Deploy to S3](#deploy-to-s3)
-* [Embedding on NPR](#embedding-on-npr)
+* [Embedding](#embedding)
 
 What is this?
 -------------
 
-Daily Graphics is a rig for creating simple Daily Graphics for publishing on NPR.org with [responsive iframe embeds](https://github.com/nprapps/responsiveiframe).
+Daily Graphics is a rig for creating simple graphics for publishing on NPR.org with [responsive iframe embeds](https://github.com/nprapps/responsiveiframe).
 
 Assumptions
 -----------
@@ -32,7 +28,7 @@ The following things are assumed to be true in this documentation.
 * You have [virtualenv](https://pypi.python.org/pypi/virtualenv) and [virtualenvwrapper](https://pypi.python.org/pypi/virtualenvwrapper) installed and working.
 * You have NPR's AWS credentials stored as environment variables locally.
 
-For more details on the technology stack used with the app-template, see our [development environment blog post](http://blog.apps.npr.org/2013/06/06/how-to-setup-a-developers-environment.html).
+For more details on the technology stack used with this project, see our [development environment blog post](http://blog.apps.npr.org/2013/06/06/how-to-setup-a-developers-environment.html).
 
 What's in here?
 ---------------
@@ -166,7 +162,7 @@ fab production deploy
 fab staging deploy
 ```
 
-Embedding on NPR
-----------------
+Embedding
+---------
 
-Deploy the project to production. Visit ```http://apps.npr.org/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Use the embed code in Seamus to make the graphic work on an NPR story page.
+Deploy the project to production. Visit ```http://apps.npr.org/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into an HTML assets in your CMS.
