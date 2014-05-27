@@ -16,7 +16,7 @@ dailygraphics
 What is this?
 -------------
 
-Daily Graphics is a rig for creating simple graphics for publishing on NPR.org with [responsive iframe embeds](https://github.com/nprapps/responsiveiframe).
+Daily Graphics is a rig for creating simple graphics for publishing inside a CMS with [responsive iframe embeds](https://github.com/nprapps/responsiveiframe).
 
 Assumptions
 -----------
@@ -26,7 +26,7 @@ The following things are assumed to be true in this documentation.
 * You are running OSX.
 * You are using Python 2.7. (Probably the version that came OSX.)
 * You have [virtualenv](https://pypi.python.org/pypi/virtualenv) and [virtualenvwrapper](https://pypi.python.org/pypi/virtualenvwrapper) installed and working.
-* You have NPR's AWS credentials stored as environment variables locally.
+* You have AWS credentials stored as environment variables locally.
 
 For more details on the technology stack used with this project, see our [development environment blog post](http://blog.apps.npr.org/2013/06/06/how-to-setup-a-developers-environment.html).
 
@@ -96,9 +96,9 @@ Alternately, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your 
 Adding a new graphic to the project
 -------------------------
 
-All of the daily graphics to be put on NPR.org will live in this repo. To add a new graphic, run ```fab add_graphic:name-of-graphic```.
+To add a new graphic, run ```fab add_graphic:name-of-graphic```.
 
-This will create the folder ```www/graphics/name-of-graphic```. Within that folder will be a ```child_template.html``` file along with boilerplate Javascript files. That Jinja template will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
+This will create the folder ```name-of-graphic``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file along with boilerplate Javascript files. That Jinja template will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
 
 Create your graphic in the template file, and add any of the CSS/JS that you need within that folder.
 
@@ -115,7 +115,7 @@ Here are some examples:
 Connecting to a Google Spreadsheet
 ----------------------------------
 
-New graphics by default point to the main [app-template](https://github.com/nprapps/app-template)'s copy spreadsheet template. If you want to use this spreadsheet template as the basis for your project, make a copy and save it to the shared NPR folder in Google Drive.
+New graphics by default point to the main [app-template](https://github.com/nprapps/app-template)'s copy spreadsheet template. If you want to use this spreadsheet template as the basis for your project, make a copy of it first.
 
 To connect this spreadsheet (or any spreadsheet) to your graphic, update the ```graphic_config.py``` file in your graphic's folder with the ID of your spreadsheet:
 
