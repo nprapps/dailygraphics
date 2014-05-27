@@ -12,7 +12,19 @@ var pymChild = null;
 var thousandFormat = d3.format(',')
 var typeahead_init = false;
 
+<<<<<<< HEAD
 
+// RegExp
+// ^(\w.*),+\s+(\w.*)
+// for MSA
+
+
+// function test(d) {
+// var testt = $('ul.typeahead li.active').data('value');
+// console.log(testt);
+// }
+=======
+>>>>>>> 0b4550f8e5eb794892b10ff089507eb8a3a311f0
 var msaKeepdesk = [
     "Baltimore-Towson, MD",
     "Bloomington, IN",
@@ -382,9 +394,11 @@ console.log(is_mobile)
                     return  d.key + "\u00A0" + "      " + "$" + thousandFormat(d['value'][0]['amt']);
                     }
                 })                    
+=======
 function on_mouseover(d, i) {
     if (this.getAttribute('id') == 'nonblank-label') {
         d3.selectAll('#nonblank-label')
+>>>>>>> 0b4550f8e5eb794892b10ff089507eb8a3a311f0
             .style('font-size', function(d) {
                 if (is_mobile) {
                     return '10px';
@@ -398,6 +412,7 @@ function on_mouseover(d, i) {
             .style('stroke', '#4F4F4F')
             .style('fill', '#4F4F4F');
 
+<<<<<<< HEAD
 
             // RegExp
 // ^(\w.*),+\s+(\w.*)
@@ -497,21 +512,24 @@ function on_mouseover(d, i) {
             })            
             .on('mouseover', mouseover)
             .on('mouseout',mouseoutSVG);
-
+=======
         d3.selectAll('#nonblank-path')
             .style('opacity', '.5')
             .style('stroke-width', '1px')
             .style('stroke', '#4F4F4F');
+>>>>>>> 0b4550f8e5eb794892b10ff089507eb8a3a311f0
 
         // var test = this.getAttribute('id');
         // console.log(test)
 
+<<<<<<< HEAD
 d3.selectAll("#dead").remove();            
          
-
+=======
         d3.selectAll('.line.' + this.getAttribute('class'))
             .style('stroke-width', '2px')
             .style('stroke', '#3D7FA6');
+>>>>>>> 0b4550f8e5eb794892b10ff089507eb8a3a311f0
 
         d3.selectAll('.' + this.getAttribute('class'))
             .style('font-size', function(d) {
@@ -861,11 +879,13 @@ function render(container_width) {
         .moveToFront();    
 
 
+<<<<<<< HEAD
     // tyeahead
     if (!typeahead_init ) {
+=======
     // typeahead
     if (!typeahead_init ) { // only run this once
->>>>>>> 24949b0d9de7d7941e446764890ce8649ba834c2
+>>>>>>> 0b4550f8e5eb794892b10ff089507eb8a3a311f0
         var msas = d3.keys(lines);
         var msas_temp = msaKeepdesk;
         var msaval = [];
@@ -887,12 +907,15 @@ function render(container_width) {
             minLength: 1
         },
         {
+<<<<<<< HEAD
           name: 'msaval',
           displayKey: 'value',
           source: substringMatcher(msaval)
+=======
             name: 'msas',
             displayKey: 'value',
             source: substringMatcher(msas)
+>>>>>>> 0b4550f8e5eb794892b10ff089507eb8a3a311f0
         });
         // $('.typeahead.input-sm').siblings('input.tt-hint').addClass('hint-small');
 
