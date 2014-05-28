@@ -18,6 +18,8 @@ What is this?
 
 dailygraphics is a framework for creating and deploying responsive graphics suitable for publishing inside a CMS with [pym.js](https://github.com/nprapps/pym.js).
 
+[Blog Post: Read more about how NPR Visuals uses dailygraphics](http://blog.apps.npr.org/2014/05/27/dailygraphics.html)
+
 Assumptions
 -----------
 
