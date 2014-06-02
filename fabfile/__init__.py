@@ -56,26 +56,19 @@ def render(slug=''):
     Render HTML templates and compile assets.
     """
     if slug:
-        _render_graphics(['www/graphics/%s' % slug])
+        _render_graphics(['%s/%s' % (app_config.GRAPHICS_PATH, slug)])
     else:
-        _render_graphics(glob('www/graphics/*'))
+        _render_graphics(glob('%s/*' % app_config.GRAPHICS_PATH))
 
 def _render_graphics(paths):
     """
-    For rendering routes with an iterable.
-    E.g., /blogs/<blog-id>/ would be a route.
-    And [1,2,3] would be an iterable.
-    And this would render:
-        /blogs/1/
-        /blogs/2/
-        /blogs/3/
-    Get it?
+    Render a set of graphics
     """
     # Fake out deployment target
     app_config.configure_targets(env.get('settings', None))
 
     for path in paths:
-        slug = path.split('www/graphics/')[1].split('/')[0]
+        slug = path.split('%s/' % app_config.GRAPHICS_PATH)[1].split('/')[0]
 
         with app.app.test_request_context(path='graphics/%s/' % slug):
             view = app.__dict__['_graphics_detail']
@@ -133,11 +126,13 @@ def _deploy_to_s3(path='.gzip'):
             app_config.PROJECT_SLUG,
             path.split('.gzip/')[1]
         )))
+
         local(sync_gzip % (path, 's3://%s/%s/%s' % (
             bucket,
             app_config.PROJECT_SLUG,
             path.split('.gzip/')[1]
         )))
+
         local(sync_assets % ('www/assets/', 's3://%s/%s/assets/' % (
             bucket,
             app_config.PROJECT_SLUG
@@ -156,15 +151,20 @@ def deploy(slug=''):
     """
     require('settings', provided_by=[production, staging])
 
+    if not slug:
+        utils.confirm('You are about about to deploy ALL graphics. Are you sure you want to do this? (Deploy a single graphic with "deploy:SLUG".)')
+
     render(slug)
     _gzip('www', '.gzip')
+    _gzip(app_config.GRAPHICS_PATH, '.gzip/graphics')
     _deploy_to_s3('.gzip/graphics/%s' % slug)
 
 def download_copy(slug):
     """
     Downloads a Google Doc as an .xlsx file.
     """
-    graphic_config = imp.load_source('graphic_config', 'www/graphics/%s/graphic_config.py' % slug)
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
 
     doc = {}
     doc['key'] = graphic_config.COPY_GOOGLE_DOC_KEY
@@ -183,10 +183,12 @@ def update_copy(slug=None):
         download_copy(slug)
         return
 
-    slugs = os.listdir('www/graphics')
+    slugs = os.listdir(app_config.GRAPHICS_PATH)
 
     for slug in slugs:
-        if not os.path.exists('www/graphics/%s/graphic_config.py' % slug):
+        graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+
+        if not os.path.exists('%s/graphic_config.py' % graphic_path):
             continue
 
         print slug
@@ -197,7 +199,8 @@ App-specific commands
 """
 @task
 def add_graphic(slug):
-    local('cp -r new_graphic www/graphics/%s' % slug)
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    local('cp -r new_graphic %s' % graphic_path)
     download_copy(slug)
 
 """

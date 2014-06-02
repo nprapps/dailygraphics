@@ -12,7 +12,7 @@ import copytext
 from render_utils import make_context, urlencode_filter
 import static
 
-app = Flask(app_config.PROJECT_NAME)
+app = Flask(app_config.PROJECT_SLUG)
 
 app.jinja_env.filters['urlencode'] = urlencode_filter
 
@@ -24,9 +24,10 @@ def _graphics_list():
     context = make_context()
     context['graphics'] = []
 
-    graphics = glob('www/graphics/*')
+    graphics = glob('%s/*' % app_config.GRAPHICS_PATH)
     for graphic in graphics:
-        context['graphics'].append(graphic.split('www/graphics/')[1].split('/child.html')[0])
+        name = graphic.split('%s/' % app_config.GRAPHICS_PATH)[1].split('/child.html')[0]
+        context['graphics'].append(name)
 
     context['graphics_count'] = len(context['graphics'])
 
@@ -42,7 +43,7 @@ def _graphics_detail(slug):
 
     template = 'parent.html'
 
-    if not os.path.exists('www/graphics/%s/js/lib/pym.js' % slug):
+    if not os.path.exists('%s/%s/js/lib/pym.js' % (app_config.GRAPHICS_PATH, slug)):
         template = 'parent_old.html'
 
     return render_template(template, **context)
@@ -52,9 +53,11 @@ def _graphics_child(slug):
     """
     Renders a child.html for embedding.
     """
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+
     # Fallback for legacy projects w/o child templates
-    if not os.path.exists('www/graphics/%s/child_template.html' % slug):
-        with open('www/graphics/%s/child.html' % slug) as f:
+    if not os.path.exists('%s/child_template.html' % graphic_path):
+        with open('%s/child.html' % graphic_path) as f:
             contents = f.read()
 
         return contents
@@ -64,12 +67,12 @@ def _graphics_child(slug):
     context['COPY'] = copytext.Copy(filename='data/%s.xlsx' % slug)
     
     try:
-        graphic_config = imp.load_source('graphic_config', 'www/graphics/%s/graphic_config.py' % slug)
+        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
         context.update(graphic_config.__dict__)
     except IOError:
         pass
 
-    with open('www/graphics/%s/child_template.html' % slug) as f:
+    with open('%s/child_template.html' % graphic_path) as f:
         template = f.read().decode('utf-8')
 
     return render_template_string(template, **context)
