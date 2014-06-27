@@ -18,7 +18,28 @@ What is this?
 
 dailygraphics is a framework for creating and deploying responsive graphics suitable for publishing inside a CMS with [pym.js](https://github.com/nprapps/pym.js).
 
-[Blog Post: Read more about how NPR Visuals uses dailygraphics](http://blog.apps.npr.org/2014/05/27/dailygraphics.html)
+#### How This Works
+
+In addition to big, long-term projects, the NPR Visuals team also produces short-turnaround charts and tables for daily stories. Our dailygraphics rig offers a workflow and some automated machinery for creating, deploying and embedding these mini-projects, including:
+
+* Version control (with GitHub)
+* One command to deploy to Amazon S3
+* A mini-CMS for each project (with Google Spreadsheets)
+* Management of binary assets (like photos or audio files) outside of GitHub
+
+**Full Blog Post:** [Creating And Deploying Small-Scale Projects](http://blog.apps.npr.org/2014/05/27/dailygraphics.html)
+
+#### Related Blog Posts
+* [Responsive Charts With D3 And Pym.js](http://blog.apps.npr.org/2014/05/19/responsive-charts.html)
+* [Making Data Tables Responsive](http://blog.apps.npr.org/2014/05/09/responsive-data-tables.html)
+* [Managing Instagram Photo Call-Outs](http://blog.apps.npr.org/2014/05/29/photo-callouts.html)
+
+#### Things We've Built Using Dailygraphics
+* [Responsive charts](http://www.npr.org/blogs/codeswitch/2014/05/14/298726161/new-orleans-police-hope-to-win-the-city-back-one-kid-at-a-time)
+* [Data table](http://www.npr.org/2014/05/19/312455680/state-by-state-court-fees)
+* [Before/after slider](http://www.npr.org/blogs/parallels/2014/01/30/268924183/report-syrian-government-has-demolished-entire-neighborhoods#con268946930)
+* [Small audio interactive](http://www.npr.org/blogs/health/2014/05/05/308349318/you-had-me-at-hello-the-science-behind-first-impressions#con309025607)
+
 
 Assumptions
 -----------
