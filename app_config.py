@@ -27,9 +27,9 @@ GRAPHICS_PATH = os.path.abspath('../graphics')
 """
 DEPLOYMENT
 """
-PRODUCTION_S3_BUCKETS = ['stlpr-prod.s3-website-us-east-1.amazonaws.com']
-STAGING_S3_BUCKETS = ['stlpr-stg.s3-website-us-east-1.amazonaws.com']
-ASSETS_S3_BUCKET = 'stlpr-assets.s3-website-us-east-1.amazonaws.com'
+PRODUCTION_S3_BUCKETS = ['stlpr-prod']
+STAGING_S3_BUCKETS = ['stlpr-stg']
+ASSETS_S3_BUCKET = 'stlpr-assets'
 
 # These variables will be set at runtime. See configure_targets() below
 S3_BUCKETS = []
