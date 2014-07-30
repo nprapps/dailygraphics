@@ -86,7 +86,9 @@ Configuration
 
 The dailygraphics project configuration defaults are specific to NPR. If you want to use it in your newsroom you should fork this repository and update ``app_config.py`` with your own configuration. 
 
-At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS`` and ``STAGING_S3_BUCKETS``.
+At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS``, ``STAGING_S3_BUCKETS`` and ``ASSETS_S3_BUCKET``. (``ASSETS_S3_BUCKET`` *must* be different from the other buckets.)
+
+See also: [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 
 Run the project
 ---------------
@@ -152,9 +154,9 @@ Deploy the project to production. Visit ```http://apps.npr.org/graphics/NAME_OF_
 Connecting to a Google Spreadsheet
 ----------------------------------
 
-(Note: this section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet. This is optional and you don't need to use it in order to use dailygraphics.)
+This section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet.
 
-I order to use the Google Spreadsheet syncing you will need to have environment variables set for ``APPS_GOOGLE_EMAIL`` and ``APPS_GOOGLE_PASS``. If you use bash you might add these to ``~/.bash_profile``.
+In order to use the Google Spreadsheet syncing you will need to have environment variables set for ``APPS_GOOGLE_EMAIL`` and ``APPS_GOOGLE_PASS``. If you use bash you might add these to ``~/.bash_profile``.
 
 New graphics by default point to the main [app-template](https://github.com/nprapps/app-template)'s copy spreadsheet template. If you want to use this spreadsheet template as the basis for your project, make a copy of it first.
 
