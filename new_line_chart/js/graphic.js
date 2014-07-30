@@ -1,14 +1,13 @@
 var $graphic = $('#graphic');
 
-var  graphic_aspect_width = 3;
-var graphic_aspect_height = 3.4;
-var graphic_data_url = 'data.csv';
+var fmt_year_abbr = d3.time.format('%y');
+var fmt_year_full = d3.time.format('%Y');
 var graphic_data;
+var graphic_data_url = 'data.csv';
+var graphic_default_width = 600;
+var is_mobile;
 var mobile_threshold = 540;
 var pymChild = null;
-var is_mobile = false;
-
-
 
 var colors = {
     'red1': '#6C2315', 'red2': '#A23520', 'red3': '#D8472B', 'red4': '#E27560', 'red5': '#ECA395', 'red6': '#F5D1CA',
@@ -22,106 +21,151 @@ var colors = {
 /*
  * Render the graphic
  */
-function render(width) {
+function render(container_width) {
     var graphic_width;
-    var margin = { top: 30, right: 20, bottom: 30, left: 30 };
 
-    if (width <= mobile_threshold) {
+    if (!container_width) {
+        container_width = graphic_default_width;
+    }
+
+    if (container_width <= mobile_threshold) {
         is_mobile = true;
+    } else {
+        is_mobile = false;
     }
+    
+    // clear out existing graphics
+    $graphic.empty();
 
-    if (is_mobile) {
-             graphic_aspect_width = 3;
-             graphic_aspect_height = 4;
-             margin = { top: 30, right: 35, bottom: 30, left: 30 };
-             
-            graphic_width = Math.floor(((width - 11) ) - margin.left - margin.right);
-        } else {
-            graphic_width = Math.floor((width - 10) - margin.left - margin.right);
-    }
-
-    drawGraph(graphic_width, is_mobile);
+    draw_graph(container_width);
 
     if (pymChild) {
         pymChild.sendHeightToParent();
     }
 }
 
-
-function drawGraph(width, is_mobile) {
- var color = d3.scale.ordinal()
-                 .range(['#6C2315', '#A23520', '#D8472B', '#E27560', '#ECA395', '#F5D1CA',
-                '#714616', '#AA6A21', '#E38D2C', '#EAAA61', '#F1C696', '#F8E2CA',
-                '#77631B',  '#B39429',  '#EFC637',  '#F3D469',  '#F7E39B',  '#FBF1CD',
-                '#0B403F',  '#11605E',  '#17807E',  '#51A09E',  '#8BC0BF',  '#C5DFDF',
-                '#28556F',  '#3D7FA6',  '#51AADE',  '#7DBFE6',  '#A8D5EF',  '#D3EAF7']); // colors
-
+function draw_graph(width) {
+    var color = d3.scale.ordinal()
+        .range([ colors['red1'], colors['red2'], colors['red3'], colors['red4'], colors['red5'], colors['red6'],
+                 colors['orange1'], colors['orange2'], colors['orange3'], colors['orange4'], colors['orange5'], colors['orange6'],
+                 colors['yellow1'], colors['yellow2'], colors['yellow3'], colors['yellow4'], colors['yellow5'], colors['yellow6'],
+                 colors['teal1'], colors['teal2'], colors['teal3'], colors['teal4'], colors['teal5'], colors['teal6'],
+                 colors['blue1'], colors['blue2'], colors['blue3'], colors['blue4'], colors['blue5'], colors['blue6'] ]); // colors
+    var graphic_aspect_height;
+    var graphic_aspect_width;
+    var height;
+    var margin = { top: 5, right: 15, bottom: 30, left: 30 };
+    var num_x_ticks;
+    var num_y_ticks;
 
     if (is_mobile) {
-        var margin = { top: -30, right: 130, bottom: 30, left: 40 };
-        var num_x_ticks = 5;
-        var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width*1.7) - margin.top - margin.bottom;        
+        graphic_aspect_width = 4;
+        graphic_aspect_height = 3;
+        num_x_ticks = 5;
+        num_y_ticks = 5;
     } else {
-        var margin = { top: -30, right: 40, bottom: 30, left: 40 };            
-        var height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin.top - margin.bottom;        
-        // var num_ticks = 5;
-        var num_x_ticks = 10;
+        graphic_aspect_width = 16;
+        graphic_aspect_height = 9;
+        num_x_ticks = 10;
+        num_y_ticks = 10;
     }
 
-    // clear out existing graphics
-    $graphic.empty();
+    width = width - margin['left'] - margin['right'];
+    height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin['top'] - margin['bottom'];
 
-    x = d3.time.scale().range([0, width]);
-    y = d3.scale.linear().range([height, 0]);
-    // // var formatPercent =  d3.format("d");
-    // var fmt = d3.time.format('%m/%Y');
+    var x = d3.time.scale()
+        .range([0, width])
 
-    svg = d3.select('#graphic')
-        .append('svg')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    var y = d3.scale.linear()
+        .range([ height, 0 ]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient('bottom')
-        .ticks(num_x_ticks)            
-        .tickSize(5);
+        .ticks(num_x_ticks)
+        .tickFormat(function(d,i) {
+            if (is_mobile) {
+                return '\u2019' + fmt_year_abbr(d);
+            } else {
+                return fmt_year_full(d);
+            }
+        });
 
     var x_axis_grid = function() { return xAxis; };
 
     var yAxis = d3.svg.axis()
         .orient('left')
         .scale(y)
-        .tickSize(3);
-        // .tickFormat(formatPercent);
+        .ticks(num_y_ticks);
+
     var y_axis_grid = function() { return yAxis; };
 
     var line = d3.svg.line()
         .interpolate('basis')
-        .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.indexed); });
-    color.domain(d3.keys(graphic_data[0]).filter(function(key) { return key !== 'date'; }));
+        .x(function(d) { 
+            return x(d['date']);
+        })
+        .y(function(d) { 
+            return y(d['amt']);
+        });
+        
+    color.domain(d3.keys(graphic_data[0]).filter(function(key) { 
+        return key !== 'date';
+    }));
 
-    var formatted_data = color.domain().map(function(name) {
-        return {
-            name: name,
-            values: graphic_data.map(function(d) {
-                return {date: d.date, indexed: +d[name]};
-            })
-        };
-    });
+    // parse data into columns
+    var formatted_data = {};
+    for (var column in graphic_data[0]) {
+        if (column == 'date') continue;
+        formatted_data[column] = graphic_data.map(function(d) {
+            return { 'date': d['date'], 'amt': d[column] };
+        }).filter(function(d) {
+            return d['amt'].length > 0;
+        });
+    }
+    
+    
+    // set the data domain
+    x.domain(d3.extent(graphic_data, function(d) { 
+        return d['date'];
+    }));
 
-    // Scale the range of the data
-    x.domain(d3.extent(graphic_data, function(d) { return d3.round(d.date); }));
-    y.domain([0,7]);
+    y.domain([ 0, d3.max(d3.entries(formatted_data), function(c) { 
+            return d3.max(c['value'], function(v) { 
+                var n = v['amt'];
+                return Math.ceil(n/5) * 5; // round to next 5
+            }); 
+        })
+    ]);
 
-    var lines = svg.selectAll('path')
-        .data(formatted_data)
-        .enter().append('path')
-        .attr('class', "lines")      
-        .attr("d", function(d) { return line(d.values); });
+
+    // draw the legend
+    var legend = d3.select('#graphic')
+        .append('ul')
+            .attr('class', 'key')
+            .selectAll('g')
+                .data(d3.entries(formatted_data))
+            .enter().append('li')
+                .attr('class', function(d, i) { 
+                    return 'key-item key-' + i + ' ' + classify(d['key']);
+                });
+    legend.append('b')
+        .style('background-color', function(d) {
+            return color(d['key']);
+        });
+    legend.append('label')
+        .text(function(d) {
+            return d['key'];
+        });
+
+
+    // draw the chart
+    var svg = d3.select('#graphic')
+        .append('svg')
+            .attr('width', width + margin['left'] + margin['right'])
+            .attr('height', height + margin['top'] + margin['bottom'])
+        .append('g')
+            .attr('transform', 'translate(' + margin['left'] + ',' + margin['top'] + ')');
 
     var xBottom = svg.append('g') // Add the X Axis
         .attr('class', 'x axis')
@@ -139,15 +183,37 @@ function drawGraph(width, is_mobile) {
             .tickSize(-width, 0, 0)
             .tickFormat('')
         );
-  
 
-
+    var lines = svg.append('g')
+        .attr('class', 'lines')
+        .selectAll('path')
+        .data(d3.entries(formatted_data))
+        .enter()
+        .append('path')
+            .attr('class', function(d, i) {
+                return 'line line-' + i + ' ' + classify(d['key']);
+            })
+            .attr('stroke', function(d) {
+                return color(d['key']);
+            })
+            .attr('d', function(d) {
+                return line(d['value']);
+            });
 }
 
 
 /*
- * NB: Use window.load instead of document.ready
- * to ensure all images have loaded
+ * Helper functions
+ */
+function classify(str) { // clean up strings to use as CSS classes
+    return str.replace(/\s+/g, '-').toLowerCase();
+}
+
+
+/*
+ * Initially load the graphic
+ * (NB: Use window.load instead of document.ready
+ * to ensure all images have loaded)
  */
 $(window).load(function() {
     if (Modernizr.svg) {
@@ -157,11 +223,10 @@ $(window).load(function() {
             graphic_data = data;
 
             graphic_data.forEach(function(d) {
-                // d.date = +d.date;
-                d.date = d3.time.format('%m/%d/%y').parse(d.date);
+                d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
             });
-
-           var pymChild = new pym.Child({
+            
+            var pymChild = new pym.Child({
                 renderCallback: render
             });
         });
