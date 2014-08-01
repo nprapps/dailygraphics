@@ -203,9 +203,6 @@ def add_graphic(slug):
     local('cp -r new_graphic %s' % graphic_path)
     download_copy(slug)
 
-"""
-
-"""
 @task
 def add_line_chart(slug):
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
@@ -213,8 +210,6 @@ def add_line_chart(slug):
     download_copy(slug)
 
 """
-
-
 Destruction
 
 Changes to destruction require setup/deploy to a test host in order to test.
