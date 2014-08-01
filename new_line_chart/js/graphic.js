@@ -46,11 +46,7 @@ function render(container_width) {
 
 function draw_graph(width) {
     var color = d3.scale.ordinal()
-        .range([ colors['red1'], colors['red2'], colors['red3'], colors['red4'], colors['red5'], colors['red6'],
-                 colors['orange1'], colors['orange2'], colors['orange3'], colors['orange4'], colors['orange5'], colors['orange6'],
-                 colors['yellow1'], colors['yellow2'], colors['yellow3'], colors['yellow4'], colors['yellow5'], colors['yellow6'],
-                 colors['teal1'], colors['teal2'], colors['teal3'], colors['teal4'], colors['teal5'], colors['teal6'],
-                 colors['blue1'], colors['blue2'], colors['blue3'], colors['blue4'], colors['blue5'], colors['blue6'] ]); // colors
+        .range([ colors['red3'], colors['yellow3'], colors['blue3'], colors['orange3'], colors['teal3'] ]);
     var graphic_aspect_height;
     var graphic_aspect_width;
     var height;
