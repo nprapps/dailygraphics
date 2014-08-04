@@ -71,7 +71,7 @@ var pym = (function() {
 
             // Append the iframe to our element.
             this.el.appendChild(node);
-            
+
             // Add an event listener that will handle redrawing the child on resize.
             var that = this;
             window.addEventListener('resize', function(e) {
