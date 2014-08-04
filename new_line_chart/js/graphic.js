@@ -170,8 +170,15 @@ function draw_graph(width) {
 
     var yTop = svg.append('g') // Add the Y Axis
         .attr('class', 'y axis')
-        .attr('transform', 'translate(' + -width/100 + ',0)')
         .call(yAxis);
+
+    var xGrid = svg.append('g')
+        .attr('class', 'x grid')
+        .attr('transform', 'translate(0,' + height + ')')
+        .call(x_axis_grid()
+            .tickSize(-height, 0, 0)
+            .tickFormat('')
+        );
 
     var yGrid = svg.append('g')         
         .attr('class', 'y grid')
