@@ -209,6 +209,12 @@ def add_line_chart(slug):
     local('cp -r new_line_chart %s' % graphic_path)
     download_copy(slug)
 
+@task
+def add_table(slug):
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    local('cp -r new_table %s' % graphic_path)
+    download_copy(slug)
+
 """
 Destruction
 
