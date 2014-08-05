@@ -107,20 +107,22 @@ Alternately, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your 
 Adding a new graphic
 --------------------
 
-To add a new graphic, run ```fab add_graphic:name-of-graphic```.
+dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go):
 
-This will create the folder ```name-of-graphic``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
+* For a very basic new graphic, run ```fab add_graphic:name-of-graphic```
+* For a line chart, run ```fab add_line_chart:name-of-graphic```
+* For a responsive HTML table, run ```fab add_table:name-of-graphic```
 
-Create your graphic in the template file, and add any of the CSS/JS that you need within that folder.
+Running any of these commands will create the folder ```name-of-graphic``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
+
+Build out your graphic in ```child_template.html```, and put your javascript in ```js/graphic.js```.
 
 **Note**: `name-of-graphic` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
 Here are some examples:
 
 * Good: my-project-name<br>Bad: My-Project-NAME
-
 * Good: my-project-name<br>Bad: my project name
-
 * Good: my-wonderful-project<br>Bad: my wonderful project!
 
 Deploy to S3
