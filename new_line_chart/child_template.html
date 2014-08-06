@@ -51,6 +51,10 @@
 
         /* graphic */
         #graphic { margin: 0 0 11px 0; }
+        #graphic img.fallback {
+            max-width: 100%;
+            height: auto;
+        }
 
         .key {
             margin: 0 0 22px 0;
@@ -111,7 +115,7 @@
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ COPY.labels.subhed }}</h2>{% endif %}
 
-    <div id="graphic"><img src="fallback.png" alt="[Chart]" /></div>
+    <div id="graphic"><img src="fallback.png" alt="[Chart]" class="fallback" /></div>
     
     {% if COPY.labels.footnote %}
     <div class="footnotes">
