@@ -7,7 +7,7 @@ dailygraphics
 * [Bootstrap the project](#bootstrap-the-project)
 * [Configuration](#configuration)
 * [Run the project](#run-the-project)
-* [Adding a new graphic to the project](#adding-a-new-graphic-to-the-project)
+* [Add a new graphic](#add-a-new-graphic)
 * [Deploy to S3](#deploy-to-s3)
 * [Embedding](#embedding)
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
@@ -104,8 +104,8 @@ Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo
 
 Alternately, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
 
-Adding a new graphic
---------------------
+Add a new graphic
+-----------------
 
 dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go):
 
