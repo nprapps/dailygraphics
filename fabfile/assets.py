@@ -22,11 +22,8 @@ def sync(slug):
 
     assets_root = '%s/%s/assets' % (app_config.GRAPHICS_PATH, slug)
     s3_root = '%s/%s' % (app_config.ASSETS_SLUG, slug)
-    try:
-        with open('%s/assetsignore' % assets_root, 'r') as f:
-            ignore_globs = [l.strip() for l in f]
-    except:
-        pass
+    with open('%s/assetsignore' % assets_root, 'r') as f:
+        ignore_globs = [l.strip() for l in f]
 
     local_paths = []
     not_lowercase = []
