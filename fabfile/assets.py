@@ -13,24 +13,28 @@ import app_config
 from fnmatch import fnmatch
 import utils
 
-ASSETS_ROOT = 'www/assets'
-
 @task
-def sync():
+def sync(slug):
     """
     Intelligently synchronize assets between S3 and local folder.
     """
     ignore_globs = []
 
-    with open('%s/.assetsignore' % ASSETS_ROOT, 'r') as f:
-        ignore_globs = [l.strip() for l in f]
+    assets_root = '%s/%s/assets' % (app_config.GRAPHICS_PATH, slug)
+    s3_root = '%s/%s' % (app_config.ASSETS_SLUG, slug)
+    try:
+        with open('%s/assetsignore' % assets_root, 'r') as f:
+            ignore_globs = [l.strip() for l in f]
+    except:
+        pass
 
     local_paths = []
+    not_lowercase = []
 
-    for local_path, subdirs, filenames in os.walk(ASSETS_ROOT):
+    for local_path, subdirs, filenames in os.walk(assets_root):
         for name in filenames:
             full_path = os.path.join(local_path, name)
-            glob_path = full_path.split(ASSETS_ROOT)[1].strip('/')
+            glob_path = full_path.split(assets_root)[1].strip('/')
 
             ignore = False
 
@@ -43,10 +47,20 @@ def sync():
                 print 'Ignoring: %s' % full_path
                 continue
 
+            if name.lower() != name:
+                not_lowercase.append(full_path)
+
             local_paths.append(full_path)
 
+    if not_lowercase:
+        print 'The following filenames are not lowercase, please change them before running `assets.sync`:'
+        for name in not_lowercase:
+            print ' %s' % name
+
+        return
+
     bucket = _assets_get_bucket()
-    keys = bucket.list(app_config.ASSETS_SLUG)
+    keys = bucket.list(s3_root)
 
     which = None
     always = False
@@ -55,10 +69,10 @@ def sync():
         download = False
         upload = False
 
-        local_path = key.name.replace(app_config.ASSETS_SLUG, ASSETS_ROOT, 1)
+        local_path = key.name.replace(s3_root, assets_root, 1)
 
         # Skip root key
-        if local_path == '%s/' % ASSETS_ROOT:
+        if local_path == '%s/' % assets_root:
             continue
 
         print local_path
@@ -92,7 +106,7 @@ def sync():
                     upload = True
         else:
             download = True
-            
+
         if download:
             _assets_download(key, local_path)
 
@@ -104,7 +118,7 @@ def sync():
 
     # Iterate over files that didn't exist on S3
     for local_path in local_paths:
-        key_name = local_path.replace(ASSETS_ROOT, app_config.ASSETS_SLUG, 1)
+        key_name = local_path.replace(assets_root, s3_root, 1)
         key = bucket.get_key(key_name, validate=False)
 
         print local_path
@@ -128,6 +142,7 @@ def rm(path):
     Remove an asset from s3 and locally
     """
     bucket = _assets_get_bucket()
+    assets_root = '%s/%s/assets' % (app_config.GRAPHICS_PATH, slug)
 
     file_list = glob(path)
 
@@ -157,9 +172,9 @@ def rm(path):
 
                 continue
 
-            key_name = local_path.replace(ASSETS_ROOT, app_config.ASSETS_SLUG, 1)
+            key_name = local_path.replace(assets_root, app_config.ASSETS_SLUG, 1)
             key = bucket.get_key(key_name)
-            
+
             _assets_delete(local_path, key)
 
 def _assets_get_bucket():
@@ -167,7 +182,7 @@ def _assets_get_bucket():
     Get a reference to the assets bucket.
     """
     s3 = boto.connect_s3()
-    
+
     return s3.get_bucket(app_config.ASSETS_S3_BUCKET)
 
 def _assets_confirm(local_path):
@@ -185,7 +200,7 @@ def _assets_confirm(local_path):
         return ('remote', True)
     elif answer == 'la':
         return ('local', True)
-        
+
     return (None, False)
 
 def _assets_upload_confirm():
@@ -201,19 +216,19 @@ def _assets_upload_confirm():
     elif answer == 'da':
         return ('delete', True)
 
-    return (None, False) 
+    return (None, False)
 
 def _assets_download(s3_key, local_path):
     """
     Utility method to download a single asset from S3.
     """
-    print '--> Downloading!' 
+    print '--> Downloading!'
 
     dirname = os.path.dirname(local_path)
 
     if not (os.path.exists(dirname)):
         os.makedirs(dirname)
-    
+
     s3_key.get_contents_to_filename(local_path)
 
 def _assets_upload(local_path, s3_key):
@@ -221,7 +236,7 @@ def _assets_upload(local_path, s3_key):
     Utility method to upload a single asset to S3.
     """
     print '--> Uploading!'
-    
+
     with open(local_path, 'rb') as f:
         local_md5 = s3_key.compute_md5(f)[0]
 
