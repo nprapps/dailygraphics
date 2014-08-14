@@ -139,9 +139,13 @@ def rm(path):
     Remove an asset from s3 and locally
     """
     bucket = _assets_get_bucket()
-    assets_root = '%s/%s/assets' % (app_config.GRAPHICS_PATH, slug)
 
-    file_list = glob(path)
+    slug = path.split('/assets')[0]
+    static_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    assets_root = '%s/assets' % static_path
+    real_path = '%s/%s' % (app_config.GRAPHICS_PATH, path)
+
+    file_list = glob(real_path)
 
     found_folder = True
 
@@ -168,8 +172,9 @@ def rm(path):
                 file_list.extend(os.listdir(local_path))
 
                 continue
+            assets_slug = '%s/%s' % (app_config.ASSETS_SLUG, slug)
 
-            key_name = local_path.replace(assets_root, app_config.ASSETS_SLUG, 1)
+            key_name = local_path.replace(assets_root, assets_slug, 1)
             key = bucket.get_key(key_name)
 
             _assets_delete(local_path, key)
