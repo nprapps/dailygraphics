@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Graphic : NPR</title>
+
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="http://media.npr.org/favicon.ico" />
+
+    <style type="text/css">
+        /* base styles */
+        html { -webkit-text-size-adjust: none; }
+        body {
+            margin: 0;
+            padding: 0;
+            font: 14px/1.4 Arial, Helvetica, sans-serif;
+            color: #333;
+        }
+        h1 {
+            margin: 0 0 6px 0;
+            font-size: 14px;
+            color: #333;
+        }
+        h2 {
+            font-weight: normal;
+            color: #666;
+            font-size: 12px;
+            margin: 0 0 22px 0;
+        }
+        .footnotes { margin-bottom: 20px; }
+        .footnotes h4 {
+            margin: 2px 0 7px 0;
+            color: #666;
+            font-size: 11px;
+        }
+        .footnotes p,
+        .footer p {
+            margin: 2px 0 0 0;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #808080;
+        }
+        a, a:link, a:visited {
+            color: #4774CC;
+            text-decoration: none;
+        }
+        a:hover, a:active { opacity: 0.7; }
+        
+        /* table */
+        table {
+            border-collapse: collapse;
+            padding: 0;
+            margin: 0 0 22px 0;
+            width: 100%;
+            font-size: 12px;
+        }
+        table th {
+            text-align: left;
+            border-bottom: 2px solid #eee;
+            vertical-align: bottom;
+        }
+        table td {
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        table th,
+        table td {
+            padding: 10px;
+            color: #333;
+            text-align: right;
+        }
+        table th:nth-child(1),
+        table td:nth-child(1) {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        /* responsive table */
+        @media screen and (max-width: 480px) {
+            table,
+            tbody {
+                display: block;
+                width: 100%;
+            }
+            thead { display: none; }
+            table tr,
+            table th,
+            table td {
+                display: block;
+                padding: 0;
+                text-align: left;
+                white-space: normal;
+            }
+            table td { 
+                border: none;
+                margin-bottom: 6px;
+                color: #444;
+            }
+            table td:empty { display: none; }
+
+            table tr {
+                border-bottom: 1px solid #eee;
+                padding-bottom: 11px;
+                margin-bottom: 11px;
+            }
+            table th[data-title]:before,
+            table td[data-title]:before {
+                content: attr(data-title) ":\00A0";
+                font-weight: bold;
+            }
+
+            table tr td:first-child { 
+                font-size: 14px;
+                font-weight: bold;
+                margin-bottom: 6px;
+                color: #333;
+            }
+            table tr td:first-child:before {
+                content: '';
+            }
+        }
+    </style>
+
+</head>
+<body>
+    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline }}</h1>{% endif %}
+    {% if COPY.labels.subhed %}<h2>{{ COPY.labels.subhed }}</h2>{% endif %}
+
+    <div id="graphic">
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ COPY.labels.hdr_state }}</th>
+                    <th>{{ COPY.labels.hdr_something }}</th>
+                    <th>{{ COPY.labels.hdr_another_thing }}</th>
+                </tr>
+            </thead>
+
+            {% for row in COPY.data %}
+            <tr class="{{ row.state|lower|replace(' ', '-') }}">
+                <td data-title="{{ COPY.labels.hdr_state }}">{{ row.state }}</td>
+                <td data-title="{{ COPY.labels.hdr_something }}">{{ row.something }}</td>
+                <td data-title="{{ COPY.labels.hdr_another_thing }}">{{ row.another_thing }}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+    
+    {% if COPY.labels.footnote %}
+    <div class="footnotes">
+        <h4>Notes</h4>
+        <p>{{ COPY.labels.footnote }}</p>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source }}</p>{% endif %}
+        {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit }}</p>{% endif %}
+    </div>
+
+
+    <script src="js/lib/jquery.js" type="text/javascript"></script>
+    <script src="js/lib/pym.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(window).load(function() {
+        var pymChild = new pym.Child({ });
+    })
+    </script>
+
+</body>
+</html>

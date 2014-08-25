@@ -7,7 +7,7 @@ dailygraphics
 * [Bootstrap the project](#bootstrap-the-project)
 * [Configuration](#configuration)
 * [Run the project](#run-the-project)
-* [Adding a new graphic to the project](#adding-a-new-graphic-to-the-project)
+* [Add a new graphic](#add-a-new-graphic)
 * [Deploy to S3](#deploy-to-s3)
 * [Embedding](#embedding)
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
@@ -86,7 +86,9 @@ Configuration
 
 The dailygraphics project configuration defaults are specific to NPR. If you want to use it in your newsroom you should fork this repository and update ``app_config.py`` with your own configuration. 
 
-At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS`` and ``STAGING_S3_BUCKETS``.
+At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS``, ``STAGING_S3_BUCKETS`` and ``ASSETS_S3_BUCKET``. (``ASSETS_S3_BUCKET`` *must* be different from the other buckets.)
+
+See also: [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 
 Run the project
 ---------------
@@ -102,23 +104,25 @@ Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo
 
 Alternately, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
 
-Adding a new graphic
---------------------
+Add a new graphic
+-----------------
 
-To add a new graphic, run ```fab add_graphic:name-of-graphic```.
+dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go):
 
-This will create the folder ```name-of-graphic``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
+* For a very basic new graphic, run ```fab add_graphic:name-of-graphic```
+* For a line chart, run ```fab add_line_chart:name-of-graphic```
+* For a responsive HTML table, run ```fab add_table:name-of-graphic```
 
-Create your graphic in the template file, and add any of the CSS/JS that you need within that folder.
+Running any of these commands will create the folder ```name-of-graphic``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
+
+Build out your graphic in ```child_template.html```, and put your javascript in ```js/graphic.js```.
 
 **Note**: `name-of-graphic` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
 Here are some examples:
 
 * Good: my-project-name<br>Bad: My-Project-NAME
-
 * Good: my-project-name<br>Bad: my project name
-
 * Good: my-wonderful-project<br>Bad: my wonderful project!
 
 Deploy to S3
@@ -152,9 +156,9 @@ Deploy the project to production. Visit ```http://apps.npr.org/graphics/NAME_OF_
 Connecting to a Google Spreadsheet
 ----------------------------------
 
-(Note: this section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet. This is optional and you don't need to use it in order to use dailygraphics.)
+This section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet.
 
-I order to use the Google Spreadsheet syncing you will need to have environment variables set for ``APPS_GOOGLE_EMAIL`` and ``APPS_GOOGLE_PASS``. If you use bash you might add these to ``~/.bash_profile``.
+In order to use the Google Spreadsheet syncing you will need to have environment variables set for ``APPS_GOOGLE_EMAIL`` and ``APPS_GOOGLE_PASS``. If you use bash you might add these to ``~/.bash_profile``.
 
 New graphics by default point to the main [app-template](https://github.com/nprapps/app-template)'s copy spreadsheet template. If you want to use this spreadsheet template as the basis for your project, make a copy of it first.
 
@@ -187,7 +191,7 @@ Storing media assets
 
 Large media assets (images, videos, audio) are synced with an Amazon S3 bucket configured in ```app_config.ASSETS_S3_BUCKET``` in a folder with the name of the project. This allows everyone who works on the project to access these assets without storing them in the graphics repository, giving us faster clone times and the ability to open source our work.
 
-Syncing these assets requires running a couple different commands at the right times. When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets.sync```. This will do a few things:
+Syncing these assets requires running a couple different commands at the right times. When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets.sync:$SLUG```. This will do a few things:
 
 * If there is an asset on S3 that does not exist on your local filesystem it will be downloaded.
 * If there is an asset on that exists on your local filesystem but not on S3, you will be prompted to either upload (type "u") OR delete (type "d") your local copy.
@@ -196,5 +200,5 @@ Syncing these assets requires running a couple different commands at the right t
 * If both you and the server have an asset and they are different, you will be prompted to take either the remote version (type "r") or the local version (type "l").
 * You can also take all remote versions (type "ra") or all local versions (type "la"). Type "c" to cancel if you aren't sure what to do.
 
-Unfortunantely, there is no automatic way to know when a file has been intentionally deleted from the server or your local directory. When you want to simultaneously remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets.rm:"www/assets/file_name_here.jpg"```
+Unfortunantely, there is no automatic way to know when a file has been intentionally deleted from the server or your local directory. When you want to simultaneously remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets.rm:"$SLUG/assets/file_name_here.jpg"```
 

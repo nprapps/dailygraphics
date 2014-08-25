@@ -5,6 +5,8 @@ import os
 
 import requests
 
+import app_config
+
 class GoogleDoc(object):
     """
     A class for accessing a Google document as an object.
@@ -82,7 +84,7 @@ class GoogleDoc(object):
             headers['Authorization'] = "GoogleLogin auth=%s" % self.auth
 
             url_params = { 'key': self.key, 'format': self.file_format }
-            url = self.spreadsheet_url % url_params 
+            url = self.spreadsheet_url % url_params
 
             r = requests.get(url, headers=headers)
 
@@ -92,7 +94,7 @@ class GoogleDoc(object):
 
             if r.status_code != 200:
                 raise KeyError("Error! Your Google Doc does not exist.")
-                
-            with open('data/%s.%s' % (self.file_name, self.file_format), 'wb') as writefile:
+
+            with open('%s/%s/%s.%s' % (app_config.GRAPHICS_PATH, self.file_name, self.file_name, self.file_format), 'wb') as writefile:
                 writefile.write(r.content)
 

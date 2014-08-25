@@ -4,7 +4,7 @@ from glob import glob
 import imp
 import os
 
-from fabric.api import local, require, settings, task 
+from fabric.api import local, require, settings, task
 from fabric.state import env
 
 import app
@@ -77,7 +77,7 @@ def _render_graphics(paths):
         with open('%s/index.html' % path, 'w') as writefile:
             writefile.write(content.encode('utf-8'))
 
-        # Fallback for legacy projects w/o child templates 
+        # Fallback for legacy projects w/o child templates
         if not os.path.exists('%s/child_template.html' % path):
             continue
 
@@ -155,8 +155,7 @@ def deploy(slug=''):
         utils.confirm('You are about about to deploy ALL graphics. Are you sure you want to do this? (Deploy a single graphic with "deploy:SLUG".)')
 
     render(slug)
-    _gzip('www', '.gzip')
-    _gzip(app_config.GRAPHICS_PATH, '.gzip/graphics')
+    _gzip('%s/%s' % (app_config.GRAPHICS_PATH, slug), '.gzip/graphics/%s' % slug)
     _deploy_to_s3('.gzip/graphics/%s' % slug)
 
 def download_copy(slug):
@@ -201,6 +200,18 @@ App-specific commands
 def add_graphic(slug):
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r new_graphic %s' % graphic_path)
+    download_copy(slug)
+
+@task
+def add_line_chart(slug):
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    local('cp -r new_line_chart %s' % graphic_path)
+    download_copy(slug)
+
+@task
+def add_table(slug):
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    local('cp -r new_table %s' % graphic_path)
     download_copy(slug)
 
 """

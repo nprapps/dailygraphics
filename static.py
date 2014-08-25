@@ -22,9 +22,9 @@ def _app_config_js():
 @static.route('/<path:path>')
 def _static(path):
     if path.startswith('graphics'):
-        real_path = '%s/%s' % (app_config.GRAPHICS_PATH, path.split('graphics/')[1])
+        real_path = '%s/%s' % (app_config.GRAPHICS_PATH, path[9:])
     else:
-        real_path = 'www/%s' % path 
+        real_path = 'www/%s' % path
 
     print real_path
 
