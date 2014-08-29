@@ -151,7 +151,8 @@ fab staging deploy
 Embedding
 ---------
 
-Deploy the project to production. Visit ```http://apps.npr.org/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into an HTML assets in your CMS.
+Deploy the project to production. Visit ```http://apps.npr.org/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into your page. (Some CMSes treat code snippets like this as a separate "HTML asset.")
+
 
 Connecting to a Google Spreadsheet
 ----------------------------------
@@ -184,12 +185,15 @@ The deploy process will always pull down the latest spreadsheet and render the c
 
 Note: Your graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
 
+
 Storing media assets
 --------------------
 
 (Note: this section describes usage of NPR's assets rig. This is optional and you don't need to use it in order to use dailygraphics.)
 
 Large media assets (images, videos, audio) are synced with an Amazon S3 bucket configured in ```app_config.ASSETS_S3_BUCKET``` in a folder with the name of the project. This allows everyone who works on the project to access these assets without storing them in the graphics repository, giving us faster clone times and the ability to open source our work.
+
+When you use one of the supported fab commands to create a new graphic (e.g., ```fab add_graphic:NAME-OF-GRAPHIC```), your graphic folder will include an ```assets``` folder. Files stored here will not go up to GitHub, but will sync with S3.
 
 Syncing these assets requires running a couple different commands at the right times. When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets.sync:$SLUG```. This will do a few things:
 
@@ -201,4 +205,3 @@ Syncing these assets requires running a couple different commands at the right t
 * You can also take all remote versions (type "ra") or all local versions (type "la"). Type "c" to cancel if you aren't sure what to do.
 
 Unfortunantely, there is no automatic way to know when a file has been intentionally deleted from the server or your local directory. When you want to simultaneously remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets.rm:"$SLUG/assets/file_name_here.jpg"```
-
