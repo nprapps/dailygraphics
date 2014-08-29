@@ -109,15 +109,15 @@ Add a new graphic
 
 dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go):
 
-* For a very basic new graphic, run ```fab add_graphic:name-of-graphic```
-* For a line chart, run ```fab add_line_chart:name-of-graphic```
-* For a responsive HTML table, run ```fab add_table:name-of-graphic```
+* For a very basic new graphic, run ```fab add_graphic:$SLUG```
+* For a line chart, run ```fab add_line_chart:$SLUG```
+* For a responsive HTML table, run ```fab add_table:$SLUG```
 
-Running any of these commands will create the folder ```name-of-graphic``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
+Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
 
 Build out your graphic in ```child_template.html```, and put your javascript in ```js/graphic.js```.
 
-**Note**: `name-of-graphic` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
+**Note**: `$SLUG` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
 Here are some examples:
 
@@ -193,7 +193,7 @@ Storing media assets
 
 Large media assets (images, videos, audio) are synced with an Amazon S3 bucket configured in ```app_config.ASSETS_S3_BUCKET``` in a folder with the name of the project. This allows everyone who works on the project to access these assets without storing them in the graphics repository, giving us faster clone times and the ability to open source our work.
 
-When you use one of the supported fab commands to create a new graphic (e.g., ```fab add_graphic:NAME-OF-GRAPHIC```), your graphic folder will include an ```assets``` folder. Files stored here will not go up to GitHub, but will sync with S3.
+When you use one of the supported fab commands to create a new graphic (e.g., ```fab add_graphic:$SLUG```), your graphic folder will include an ```assets``` folder. Files stored here will not go up to GitHub, but will sync with S3.
 
 Syncing these assets requires running a couple different commands at the right times. When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets.sync:$SLUG```. This will do a few things:
 
