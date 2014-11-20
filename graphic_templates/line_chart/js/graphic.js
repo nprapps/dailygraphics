@@ -229,7 +229,7 @@ $(window).load(function() {
                 d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
             });
             
-            var pymChild = new pym.Child({
+            pymChild = new pym.Child({
                 renderCallback: render
             });
         });

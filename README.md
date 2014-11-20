@@ -110,6 +110,7 @@ Add a new graphic
 dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go):
 
 * For a very basic new graphic, run ```fab add_graphic:$SLUG```
+* For a bar chart, run ```fab add_bar_chart:$SLUG```
 * For a line chart, run ```fab add_line_chart:$SLUG```
 * For a responsive HTML table, run ```fab add_table:$SLUG```
 
@@ -151,7 +152,7 @@ fab staging deploy
 Embedding
 ---------
 
-Deploy the project to production. Visit ```http://apps.npr.org/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into your page. (Some CMSes treat code snippets like this as a separate "HTML asset.")
+Deploy the project to production. Visit ```http://apps.npr.org/dailygraphics/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into your page. (Some CMSes treat code snippets like this as a separate "HTML asset.")
 
 
 Connecting to a Google Spreadsheet
