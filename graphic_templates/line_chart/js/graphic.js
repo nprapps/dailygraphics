@@ -23,7 +23,7 @@ var fmtYearFull = d3.time.format('%Y');
 
 
 /*
- * Initialize
+ * INITIALIZE
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
@@ -46,7 +46,7 @@ var onWindowLoaded = function() {
 
 
 /*
- * Render the graphic
+ * RENDER THE GRAPHIC
  */
 var render = function(containerWidth) {
     // fallback if page is loaded outside of an iframe
@@ -83,7 +83,13 @@ var drawGraph = function(graphicWidth) {
     var aspectWidth;
     var color = d3.scale.ordinal()
         .range([ colors['red3'], colors['yellow3'], colors['blue3'], colors['orange3'], colors['teal3'] ]);
-    var margin = { top: 5, right: 15, bottom: 30, left: 22 };
+    var graph = d3.select('#graphic');
+    var margin = { 
+    	top: 5, 
+    	right: 15, 
+    	bottom: 30, 
+    	left: 22
+    };
     var ticksX;
     var ticksY;
 
@@ -105,7 +111,7 @@ var drawGraph = function(graphicWidth) {
     var height = Math.ceil((graphicWidth * aspectHeight) / aspectWidth) - margin['top'] - margin['bottom'];
 
     var x = d3.time.scale()
-        .range([0, width])
+        .range([ 0, width ])
 
     var y = d3.scale.linear()
         .range([ height, 0 ]);
@@ -177,15 +183,14 @@ var drawGraph = function(graphicWidth) {
     ]);
 
     // draw the legend
-    var legend = d3.select('#graphic')
-        .append('ul')
-            .attr('class', 'key')
-            .selectAll('g')
-                .data(d3.entries(formattedData))
-            .enter().append('li')
-                .attr('class', function(d, i) { 
-                    return 'key-item key-' + i + ' ' + classify(d['key']);
-                });
+    var legend = graph.append('ul')
+		.attr('class', 'key')
+		.selectAll('g')
+			.data(d3.entries(formattedData))
+		.enter().append('li')
+			.attr('class', function(d, i) { 
+				return 'key-item key-' + i + ' ' + classify(d['key']);
+			});
     legend.append('b')
         .style('background-color', function(d) {
             return color(d['key']);
@@ -196,10 +201,9 @@ var drawGraph = function(graphicWidth) {
         });
 
     // draw the chart
-    var svg = d3.select('#graphic')
-        .append('svg')
-            .attr('width', width + margin['left'] + margin['right'])
-            .attr('height', height + margin['top'] + margin['bottom'])
+    var svg = graph.append('svg')
+		.attr('width', width + margin['left'] + margin['right'])
+		.attr('height', height + margin['top'] + margin['bottom'])
         .append('g')
             .attr('transform', 'translate(' + margin['left'] + ',' + margin['top'] + ')');
             
@@ -251,9 +255,9 @@ var drawGraph = function(graphicWidth) {
 
 
 /*
- * Helper functions
+ * HELPER FUNCTIONS
  */
- var classify = function(str) { // clean up strings to use as CSS classes
+var classify = function(str) { // clean up strings to use as CSS classes
     return str.replace(/\s+/g, '-').toLowerCase();
 }
 
