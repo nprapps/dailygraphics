@@ -1,13 +1,12 @@
-var $graphic = $('#graphic');
-
-var fmt_year_abbr = d3.time.format('%y');
-var fmt_year_full = d3.time.format('%Y');
-var graphic_data;
-var graphic_data_url = 'data.csv';
-var graphic_default_width = 600;
-var is_mobile;
-var mobile_threshold = 540;
+// global vars
+var $graphic = null;
 var pymChild = null;
+
+var GRAPHIC_DATA;
+var GRAPHIC_DATA_URL = 'data.csv';
+var GRAPHIC_DEFAULT_WIDTH = 600;
+var IS_MOBILE = false;
+var MOBILE_THRESHOLD = 540;
 
 var colors = {
     'red1': '#6C2315', 'red2': '#A23520', 'red3': '#D8472B', 'red4': '#E27560', 'red5': '#ECA395', 'red6': '#F5D1CA',
@@ -17,57 +16,94 @@ var colors = {
     'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
 };
 
+// D3 formatters
+var fmtComma = d3.format(',');
+var fmtYearAbbrev = d3.time.format('%y');
+var fmtYearFull = d3.time.format('%Y');
+
+
+/*
+ * Initialize
+ */
+var onWindowLoaded = function() {
+	if (Modernizr.svg) {
+		$graphic = $('#graphic');
+
+		d3.csv(GRAPHIC_DATA_URL, function(error, data) {
+			GRAPHIC_DATA = data;
+
+			GRAPHIC_DATA.forEach(function(d) {
+				d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
+			});
+		
+			pymChild = new pym.Child({
+				renderCallback: render
+			});
+		});
+	} else {
+		pymChild = new pym.Child({ });
+	}
+}
+
 
 /*
  * Render the graphic
  */
-function render(container_width) {
-    var graphic_width;
-
-    if (!container_width) {
-        container_width = graphic_default_width;
+var render = function(containerWidth) {
+	// fallback if page is loaded outside of an iframe
+    if (!containerWidth) {
+        containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
-
-    if (container_width <= mobile_threshold) {
-        is_mobile = true;
+    
+    // check the container width; set mobile flag if applicable
+    if (containerWidth <= MOBILE_THRESHOLD) {
+        IS_MOBILE = true;
     } else {
-        is_mobile = false;
+        IS_MOBILE = false;
     }
     
     // clear out existing graphics
     $graphic.empty();
 
-    draw_graph(container_width);
+    // draw the new graphic
+    // (this is a separate function in case I want to be able to draw multiple charts later.)
+    drawGraph(containerWidth);
 
+	// update iframe
     if (pymChild) {
         pymChild.sendHeightToParent();
     }
 }
 
-function draw_graph(width) {
+
+/*
+ * DRAW THE GRAPH
+ */
+var drawGraph = function(graphicWidth) {
+    var aspectHeight;
+    var aspectWidth;
     var color = d3.scale.ordinal()
         .range([ colors['red3'], colors['yellow3'], colors['blue3'], colors['orange3'], colors['teal3'] ]);
-    var graphic_aspect_height;
-    var graphic_aspect_width;
-    var height;
-    var margin = { top: 5, right: 15, bottom: 30, left: 30 };
-    var num_x_ticks;
-    var num_y_ticks;
+    var margin = { top: 5, right: 15, bottom: 30, left: 22 };
+    var ticksX;
+    var ticksY;
 
-    if (is_mobile) {
-        graphic_aspect_width = 4;
-        graphic_aspect_height = 3;
-        num_x_ticks = 5;
-        num_y_ticks = 5;
+	// params that depend on the container width 
+    if (IS_MOBILE) {
+        aspectWidth = 4;
+        aspectHeight = 3;
+        ticksX = 5;
+        ticksY = 5;
     } else {
-        graphic_aspect_width = 16;
-        graphic_aspect_height = 9;
-        num_x_ticks = 10;
-        num_y_ticks = 10;
+        aspectWidth = 16;
+        aspectHeight = 9;
+        ticksX = 10;
+        ticksY = 10;
     }
 
-    width = width - margin['left'] - margin['right'];
-    height = Math.ceil((width * graphic_aspect_height) / graphic_aspect_width) - margin['top'] - margin['bottom'];
+	// define chart dimensions
+    var width = graphicWidth - margin['left'] - margin['right'];
+    var height = Math.ceil((graphicWidth * aspectHeight) / aspectWidth) - margin['top'] - margin['bottom'];
 
     var x = d3.time.scale()
         .range([0, width])
@@ -75,27 +111,33 @@ function draw_graph(width) {
     var y = d3.scale.linear()
         .range([ height, 0 ]);
 
+	// define axis and grid
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient('bottom')
-        .ticks(num_x_ticks)
+        .ticks(ticksX)
         .tickFormat(function(d,i) {
-            if (is_mobile) {
-                return '\u2019' + fmt_year_abbr(d);
+            if (IS_MOBILE) {
+                return '\u2019' + fmtYearAbbrev(d);
             } else {
-                return fmt_year_full(d);
+                return fmtYearFull(d);
             }
         });
 
-    var x_axis_grid = function() { return xAxis; };
+    var xAxisGrid = function() {
+    	return xAxis;
+    }
 
     var yAxis = d3.svg.axis()
         .orient('left')
         .scale(y)
-        .ticks(num_y_ticks);
+        .ticks(ticksY);
 
-    var y_axis_grid = function() { return yAxis; };
+    var yAxisGrid = function() {
+    	return yAxis;
+    }
 
+	// define the line(s)
     var line = d3.svg.line()
         .interpolate('basis')
         .x(function(d) { 
@@ -104,29 +146,30 @@ function draw_graph(width) {
         .y(function(d) { 
             return y(d['amt']);
         });
-        
-    color.domain(d3.keys(graphic_data[0]).filter(function(key) { 
+
+    // assign a color to each line
+    color.domain(d3.keys(GRAPHIC_DATA[0]).filter(function(key) { 
         return key !== 'date';
     }));
 
     // parse data into columns
-    var formatted_data = {};
-    for (var column in graphic_data[0]) {
+    var formattedData = {};
+    for (var column in GRAPHIC_DATA[0]) {
         if (column == 'date') continue;
-        formatted_data[column] = graphic_data.map(function(d) {
+        formattedData[column] = GRAPHIC_DATA.map(function(d) {
             return { 'date': d['date'], 'amt': d[column] };
-        }).filter(function(d) {
-            return d['amt'].length > 0;
+// filter out empty data. uncomment this if you have inconsistent data.
+//        }).filter(function(d) {
+//            return d['amt'].length > 0;
         });
     }
     
-    
     // set the data domain
-    x.domain(d3.extent(graphic_data, function(d) { 
+    x.domain(d3.extent(GRAPHIC_DATA, function(d) { 
         return d['date'];
     }));
 
-    y.domain([ 0, d3.max(d3.entries(formatted_data), function(c) { 
+    y.domain([ 0, d3.max(d3.entries(formattedData), function(c) { 
             return d3.max(c['value'], function(v) { 
                 var n = v['amt'];
                 return Math.ceil(n/5) * 5; // round to next 5
@@ -134,13 +177,12 @@ function draw_graph(width) {
         })
     ]);
 
-
     // draw the legend
     var legend = d3.select('#graphic')
         .append('ul')
             .attr('class', 'key')
             .selectAll('g')
-                .data(d3.entries(formatted_data))
+                .data(d3.entries(formattedData))
             .enter().append('li')
                 .attr('class', function(d, i) { 
                     return 'key-item key-' + i + ' ' + classify(d['key']);
@@ -162,35 +204,40 @@ function draw_graph(width) {
             .attr('height', height + margin['top'] + margin['bottom'])
         .append('g')
             .attr('transform', 'translate(' + margin['left'] + ',' + margin['top'] + ')');
-
-    var xBottom = svg.append('g') // Add the X Axis
+            
+    // x-axis (bottom)
+	svg.append('g')
         .attr('class', 'x axis')
         .attr('transform', 'translate(0,' + height + ')')
         .call(xAxis);
 
-    var yTop = svg.append('g') // Add the Y Axis
+	// y-axis (left)
+    svg.append('g')
         .attr('class', 'y axis')
         .call(yAxis);
-
-    var xGrid = svg.append('g')
+    
+    // x-axis gridlines
+    svg.append('g')
         .attr('class', 'x grid')
         .attr('transform', 'translate(0,' + height + ')')
-        .call(x_axis_grid()
+        .call(xAxisGrid()
             .tickSize(-height, 0, 0)
             .tickFormat('')
         );
-
-    var yGrid = svg.append('g')         
+    
+    // y-axis gridlines
+    svg.append('g')         
         .attr('class', 'y grid')
-        .call(y_axis_grid()
+        .call(yAxisGrid()
             .tickSize(-width, 0, 0)
             .tickFormat('')
         );
-
-    var lines = svg.append('g')
+    
+    // draw the line(s)
+    svg.append('g')
         .attr('class', 'lines')
         .selectAll('path')
-        .data(d3.entries(formatted_data))
+        .data(d3.entries(formattedData))
         .enter()
         .append('path')
             .attr('class', function(d, i) {
@@ -218,22 +265,4 @@ function classify(str) { // clean up strings to use as CSS classes
  * (NB: Use window.load instead of document.ready
  * to ensure all images have loaded)
  */
-$(window).load(function() {
-    if (Modernizr.svg) {
-        $graphic = $('#graphic');
-
-        d3.csv(graphic_data_url, function(error, data) {
-            graphic_data = data;
-
-            graphic_data.forEach(function(d) {
-                d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
-            });
-            
-            pymChild = new pym.Child({
-                renderCallback: render
-            });
-        });
-    } else {
-        pymChild = new pym.Child({ });
-    }
-})
+$(window).load(onWindowLoaded);
