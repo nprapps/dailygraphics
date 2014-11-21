@@ -2,10 +2,8 @@
 var $graphic = null;
 var pymChild = null;
 
-var GRAPHIC_DATA;
 var GRAPHIC_DATA_URL = 'data.csv';
 var GRAPHIC_DEFAULT_WIDTH = 600;
-var IS_MOBILE = false;
 var MOBILE_THRESHOLD = 540;
 
 var colors = {
@@ -15,6 +13,8 @@ var colors = {
     'teal1': '#0B403F', 'teal2': '#11605E', 'teal3': '#17807E', 'teal4': '#51A09E', 'teal5': '#8BC0BF', 'teal6': '#C5DFDF',
     'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
 };
+var graphicData = null;
+var isMobile = false;
 
 // D3 formatters
 var fmtComma = d3.format(',');
@@ -30,8 +30,8 @@ var onWindowLoaded = function() {
         $graphic = $('#graphic');
 
         d3.csv(GRAPHIC_DATA_URL, function(error, data) {
-            GRAPHIC_DATA = data;
-            GRAPHIC_DATA.forEach(function(d) {
+            graphicData = data;
+            graphicData.forEach(function(d) {
                 d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
             });
 
@@ -56,9 +56,9 @@ var render = function(containerWidth) {
     
     // check the container width; set mobile flag if applicable
     if (containerWidth <= MOBILE_THRESHOLD) {
-        IS_MOBILE = true;
+        isMobile = true;
     } else {
-        IS_MOBILE = false;
+        isMobile = false;
     }
     
     // clear out existing graphics
@@ -88,7 +88,7 @@ var drawGraph = function(graphicWidth) {
     var ticksY;
 
     // params that depend on the container width 
-    if (IS_MOBILE) {
+    if (isMobile) {
         aspectWidth = 4;
         aspectHeight = 3;
         ticksX = 5;
@@ -116,7 +116,7 @@ var drawGraph = function(graphicWidth) {
         .orient('bottom')
         .ticks(ticksX)
         .tickFormat(function(d,i) {
-            if (IS_MOBILE) {
+            if (isMobile) {
                 return '\u2019' + fmtYearAbbrev(d);
             } else {
                 return fmtYearFull(d);
@@ -147,15 +147,15 @@ var drawGraph = function(graphicWidth) {
         });
 
     // assign a color to each line
-    color.domain(d3.keys(GRAPHIC_DATA[0]).filter(function(key) { 
+    color.domain(d3.keys(graphicData[0]).filter(function(key) { 
         return key !== 'date';
     }));
 
     // parse data into columns
     var formattedData = {};
-    for (var column in GRAPHIC_DATA[0]) {
+    for (var column in graphicData[0]) {
         if (column == 'date') continue;
-        formattedData[column] = GRAPHIC_DATA.map(function(d) {
+        formattedData[column] = graphicData.map(function(d) {
             return { 'date': d['date'], 'amt': d[column] };
 // filter out empty data. uncomment this if you have inconsistent data.
 //        }).filter(function(d) {
@@ -164,7 +164,7 @@ var drawGraph = function(graphicWidth) {
     }
     
     // set the data domain
-    x.domain(d3.extent(GRAPHIC_DATA, function(d) { 
+    x.domain(d3.extent(graphicData, function(d) { 
         return d['date'];
     }));
 
@@ -194,7 +194,6 @@ var drawGraph = function(graphicWidth) {
         .text(function(d) {
             return d['key'];
         });
-
 
     // draw the chart
     var svg = d3.select('#graphic')
