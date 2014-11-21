@@ -26,23 +26,22 @@ var fmtYearFull = d3.time.format('%Y');
  * Initialize
  */
 var onWindowLoaded = function() {
-	if (Modernizr.svg) {
-		$graphic = $('#graphic');
+    if (Modernizr.svg) {
+        $graphic = $('#graphic');
 
-		d3.csv(GRAPHIC_DATA_URL, function(error, data) {
-			GRAPHIC_DATA = data;
+        d3.csv(GRAPHIC_DATA_URL, function(error, data) {
+            GRAPHIC_DATA = data;
+            GRAPHIC_DATA.forEach(function(d) {
+                d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
+            });
 
-			GRAPHIC_DATA.forEach(function(d) {
-				d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
-			});
-		
-			pymChild = new pym.Child({
-				renderCallback: render
-			});
-		});
-	} else {
-		pymChild = new pym.Child({ });
-	}
+            pymChild = new pym.Child({
+                renderCallback: render
+            });
+        });
+    } else {
+        pymChild = new pym.Child({ });
+    }
 }
 
 
@@ -50,7 +49,7 @@ var onWindowLoaded = function() {
  * Render the graphic
  */
 var render = function(containerWidth) {
-	// fallback if page is loaded outside of an iframe
+    // fallback if page is loaded outside of an iframe
     if (!containerWidth) {
         containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
@@ -69,7 +68,7 @@ var render = function(containerWidth) {
     // (this is a separate function in case I want to be able to draw multiple charts later.)
     drawGraph(containerWidth);
 
-	// update iframe
+    // update iframe
     if (pymChild) {
         pymChild.sendHeightToParent();
     }
@@ -88,7 +87,7 @@ var drawGraph = function(graphicWidth) {
     var ticksX;
     var ticksY;
 
-	// params that depend on the container width 
+    // params that depend on the container width 
     if (IS_MOBILE) {
         aspectWidth = 4;
         aspectHeight = 3;
@@ -101,7 +100,7 @@ var drawGraph = function(graphicWidth) {
         ticksY = 10;
     }
 
-	// define chart dimensions
+    // define chart dimensions
     var width = graphicWidth - margin['left'] - margin['right'];
     var height = Math.ceil((graphicWidth * aspectHeight) / aspectWidth) - margin['top'] - margin['bottom'];
 
@@ -111,7 +110,7 @@ var drawGraph = function(graphicWidth) {
     var y = d3.scale.linear()
         .range([ height, 0 ]);
 
-	// define axis and grid
+    // define axis and grid
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient('bottom')
@@ -125,7 +124,7 @@ var drawGraph = function(graphicWidth) {
         });
 
     var xAxisGrid = function() {
-    	return xAxis;
+        return xAxis;
     }
 
     var yAxis = d3.svg.axis()
@@ -134,10 +133,10 @@ var drawGraph = function(graphicWidth) {
         .ticks(ticksY);
 
     var yAxisGrid = function() {
-    	return yAxis;
+        return yAxis;
     }
 
-	// define the line(s)
+    // define the line(s)
     var line = d3.svg.line()
         .interpolate('basis')
         .x(function(d) { 
@@ -206,12 +205,12 @@ var drawGraph = function(graphicWidth) {
             .attr('transform', 'translate(' + margin['left'] + ',' + margin['top'] + ')');
             
     // x-axis (bottom)
-	svg.append('g')
+    svg.append('g')
         .attr('class', 'x axis')
         .attr('transform', 'translate(0,' + height + ')')
         .call(xAxis);
 
-	// y-axis (left)
+    // y-axis (left)
     svg.append('g')
         .attr('class', 'y axis')
         .call(yAxis);
