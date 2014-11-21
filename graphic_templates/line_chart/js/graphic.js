@@ -255,7 +255,7 @@ var drawGraph = function(graphicWidth) {
 /*
  * Helper functions
  */
-function classify(str) { // clean up strings to use as CSS classes
+ var classify = function(str) { // clean up strings to use as CSS classes
     return str.replace(/\s+/g, '-').toLowerCase();
 }
 
