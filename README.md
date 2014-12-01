@@ -111,6 +111,7 @@ dailygraphics includes starter code for a few different types of graphics (and w
 
 * For a very basic new graphic, run ```fab add_graphic:$SLUG```
 * For a bar chart, run ```fab add_bar_chart:$SLUG```
+* For a grouped bar chart, run ```fab add_grouped_bar_chart:$SLUG```
 * For a line chart, run ```fab add_line_chart:$SLUG```
 * For a responsive HTML table, run ```fab add_table:$SLUG```
 
