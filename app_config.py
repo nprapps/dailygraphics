@@ -27,7 +27,7 @@ GRAPHICS_PATH = os.path.abspath('../graphics')
 """
 DEPLOYMENT
 """
-PRODUCTION_S3_BUCKETS = ['stlpr-prod']
+PRODUCTION_S3_BUCKETS = ['apps.stlpublicradio.org']
 STAGING_S3_BUCKETS = ['stlpr-stg']
 ASSETS_S3_BUCKET = 'stlpr-assets'
 
