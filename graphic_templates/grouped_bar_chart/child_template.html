@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="http://media.npr.org/favicon.ico" />
 
     <style type="text/css">
-        /* base styles */
+       /* base styles */
         html { -webkit-text-size-adjust: none; }
         body {
             margin: 0;
@@ -20,7 +20,7 @@
             color: #333;
         }
         h1 {
-            margin: 0 0 6px 0;
+            margin: 0 0 15px 0;
             font-size: 16px;
             color: #333;
         }
@@ -28,7 +28,7 @@
             font-weight: normal;
             color: #666;
             font-size: 14px;
-            margin: 0 0 18px 0;
+            margin: -7px 0 22px 0;
         }
         .footnotes { margin-bottom: 20px; }
         .footnotes h4 {
@@ -48,14 +48,8 @@
             text-decoration: none;
         }
         a:hover, a:active { opacity: 0.7; }
-
-        /* graphic */
-        #graphic { margin: 0 0 11px 0; }
-        #graphic img.fallback {
-            max-width: 100%;
-            height: auto;
-        }
-
+        
+        /* key */
         .key {
             margin: 0 0 22px 0;
             padding: 0;
@@ -80,10 +74,22 @@
             color: #333;
             font-weight: normal;
         }
+        
+        /* graphic */
+        #graphic { 
+            margin: 0 0 11px 0;
+            position: relative;
+        }
+        #graphic .chart { position: relative; }
+
+        #graphic img.fallback {
+            max-width: 100%;
+            height: auto;
+        }
 
         .axis {
             font-size: 12px;
-            fill: #666;
+            fill: #999;
         }
         .axis path,
         .axis line {
@@ -103,10 +109,32 @@
         }
         .grid.y .tick:first-child { display: none; }
 
-        .lines {
-            fill: none;
-            stroke-width: 3px;
-            stroke: #ccc;
+        .bars rect { 
+            fill: #17807E;
+            shape-rendering: crispEdges;
+        }
+        
+        .value text { font-size: 10px; }
+        .value text.outer { fill: #999; }
+        .value text.inner { fill: #fff; }
+
+        .labels {
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            border: none;
+        }
+        .labels li {
+            position: absolute;
+            text-align: right;
+            font-size: 12px;
+            line-height: 1.3;
+            display: table;
+        }
+        .labels li span {
+            display: table-cell;
+            vertical-align: middle;
         }
     </style>
 </head>
