@@ -109,15 +109,17 @@ Add a new graphic
 
 dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go):
 
-* For a very basic new graphic, run ```fab add_graphic:name-of-graphic```
-* For a line chart, run ```fab add_line_chart:name-of-graphic```
-* For a responsive HTML table, run ```fab add_table:name-of-graphic```
+* For a very basic new graphic, run ```fab add_graphic:$SLUG```
+* For a bar chart, run ```fab add_bar_chart:$SLUG```
+* For a grouped bar chart, run ```fab add_grouped_bar_chart:$SLUG```
+* For a line chart, run ```fab add_line_chart:$SLUG```
+* For a responsive HTML table, run ```fab add_table:$SLUG```
 
-Running any of these commands will create the folder ```name-of-graphic``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
+Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
 
 Build out your graphic in ```child_template.html```, and put your javascript in ```js/graphic.js```.
 
-**Note**: `name-of-graphic` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
+**Note**: `$SLUG` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
 Here are some examples:
 
@@ -151,7 +153,8 @@ fab staging deploy
 Embedding
 ---------
 
-Deploy the project to production. Visit ```http://apps.npr.org/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into an HTML assets in your CMS.
+Deploy the project to production. Visit ```http://apps.npr.org/dailygraphics/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into your page. (Some CMSes treat code snippets like this as a separate "HTML asset.")
+
 
 Connecting to a Google Spreadsheet
 ----------------------------------
@@ -184,12 +187,15 @@ The deploy process will always pull down the latest spreadsheet and render the c
 
 Note: Your graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
 
+
 Storing media assets
 --------------------
 
 (Note: this section describes usage of NPR's assets rig. This is optional and you don't need to use it in order to use dailygraphics.)
 
 Large media assets (images, videos, audio) are synced with an Amazon S3 bucket configured in ```app_config.ASSETS_S3_BUCKET``` in a folder with the name of the project. This allows everyone who works on the project to access these assets without storing them in the graphics repository, giving us faster clone times and the ability to open source our work.
+
+When you use one of the supported fab commands to create a new graphic (e.g., ```fab add_graphic:$SLUG```), your graphic folder will include an ```assets``` folder. Files stored here will not go up to GitHub, but will sync with S3.
 
 Syncing these assets requires running a couple different commands at the right times. When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets.sync:$SLUG```. This will do a few things:
 
@@ -201,4 +207,3 @@ Syncing these assets requires running a couple different commands at the right t
 * You can also take all remote versions (type "ra") or all local versions (type "la"). Type "c" to cancel if you aren't sure what to do.
 
 Unfortunantely, there is no automatic way to know when a file has been intentionally deleted from the server or your local directory. When you want to simultaneously remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets.rm:"$SLUG/assets/file_name_here.jpg"```
-
