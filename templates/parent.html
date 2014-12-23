@@ -15,22 +15,11 @@
     <div id='preview'>
     </div>
 
-    <h3>Production embed</h3>
+    <h3>Production embed (Core Publisher)</h3>
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
-<div id="responsive-embed-{{ slug }}">
-</div>
-<script src="http://{{ PRODUCTION_S3_BUCKETS[0] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/js/lib/pym.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(function() {
-    var pymParent = new pym.Parent(
-        'responsive-embed-{{ slug }}',
-        'http://{{ PRODUCTION_S3_BUCKETS[0] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html',
-        {}
-    );
-});
-</script>
+		<p data-pym-src="http://{{ PRODUCTION_S3_BUCKETS[0] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">&nbsp;</p><script src="http://{{ PRODUCTION_S3_BUCKETS[0] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/js/lib/pym.js" type="text/javascript"></script>
     </textarea>
 <!-- end textarea contents -->
 
