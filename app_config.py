@@ -27,13 +27,28 @@ GRAPHICS_PATH = os.path.abspath('../graphics')
 """
 DEPLOYMENT
 """
-PRODUCTION_S3_BUCKETS = ['apps.npr.org', 'apps2.npr.org']
-STAGING_S3_BUCKETS = ['stage-apps.npr.org']
-ASSETS_S3_BUCKET = 'assets.apps.npr.org'
+PRODUCTION_S3_BUCKET = {
+    'bucket_name': 'apps.npr.org',
+    'region': 'us-east-1'
+}
+
+STAGING_S3_BUCKET = {
+    'bucket_name': 'stage-apps.npr.org',
+    'region': 'us-east-1'
+}
+
+ASSETS_S3_BUCKET = {
+    'bucket_name': 'assets.apps.npr.org',
+    'region': 'us-east-1'
+}
+
+DEFAULT_MAX_AGE = 20
+ASSETS_MAX_AGE = 86400
 
 # These variables will be set at runtime. See configure_targets() below
-S3_BUCKETS = []
+S3_BUCKET = None 
 S3_BASE_URL = ''
+S3_DEPLOY_URL = None
 DEBUG = True
 
 def configure_targets(deployment_target):
@@ -41,22 +56,26 @@ def configure_targets(deployment_target):
     Configure deployment targets. Abstracted so this can be
     overriden for rendering before deployment.
     """
-    global S3_BUCKETS
+    global S3_BUCKET
     global S3_BASE_URL
+    global S3_DEPLOY_URL
     global DEBUG
     global DEPLOYMENT_TARGET
 
     if deployment_target == 'production':
-        S3_BUCKETS = PRODUCTION_S3_BUCKETS
-        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
+        S3_BUCKET = PRODUCTION_S3_BUCKET
+        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
+        S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
         DEBUG = False
     elif deployment_target == 'staging':
-        S3_BUCKETS = STAGING_S3_BUCKETS
-        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
+        S3_BUCKET = STAGING_S3_BUCKET
+        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
+        S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
         DEBUG = True
     else:
-        S3_BUCKETS = []
+        S3_BUCKETS = None 
         S3_BASE_URL = 'http://127.0.0.1:8000'
+        S3_DEPLOY_URL = None 
         DEBUG = True
 
     DEPLOYMENT_TARGET = deployment_target

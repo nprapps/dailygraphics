@@ -21,12 +21,12 @@
     <textarea readonly="readonly" rows="10" cols="50">
 <div id="responsive-embed-{{ slug }}">
 </div>
-<script src="http://{{ PRODUCTION_S3_BUCKETS[0] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/js/lib/pym.js" type="text/javascript"></script>
+<script src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/js/lib/pym.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function() {
     var pymParent = new pym.Parent(
         'responsive-embed-{{ slug }}',
-        'http://{{ PRODUCTION_S3_BUCKETS[0] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html',
+        'http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html',
         {}
     );
 });

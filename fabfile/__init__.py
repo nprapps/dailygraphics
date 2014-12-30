@@ -4,7 +4,7 @@ from glob import glob
 import imp
 import os
 
-from fabric.api import local, require, settings, task
+from fabric.api import local, require, task
 from fabric.state import env
 
 import app
@@ -13,6 +13,7 @@ from etc.gdocs import GoogleDoc
 
 # Other fabfiles
 import assets
+import flat
 import utils
 
 """
@@ -100,50 +101,6 @@ Changes to deployment requires a full-stack test. Deployment
 has two primary functions: Pushing flat files to S3 and deploying
 code to a remote server if required.
 """
-def _deploy_to_s3(path='.gzip'):
-    """
-    Deploy the gzipped stuff to S3.
-    """
-    # Clear files that should never be deployed
-    local('rm -rf %s/live-data' % path)
-    local('rm -rf %s/sitemap.xml' % path)
-
-    exclude_flags = ''
-    include_flags = ''
-
-    with open('gzip_types.txt') as f:
-        for line in f:
-            exclude_flags += '--exclude "%s" ' % line.strip()
-            include_flags += '--include "%s" ' % line.strip()
-
-    sync = 'aws s3 sync %s %s --acl "public-read" ' + exclude_flags + ' --cache-control "max-age=5" --region "us-east-1"'
-    sync_gzip = 'aws s3 sync %s %s --acl "public-read" --content-encoding "gzip" --exclude "*" ' + include_flags + ' --cache-control "max-age=5" --region "us-east-1"'
-    sync_assets = 'aws s3 sync %s %s --acl "public-read" --cache-control "max-age=86400" --region "us-east-1"'
-
-    for bucket in app_config.S3_BUCKETS:
-        local(sync % (path, 's3://%s/%s/%s' % (
-            bucket,
-            app_config.PROJECT_SLUG,
-            path.split('.gzip/')[1]
-        )))
-
-        local(sync_gzip % (path, 's3://%s/%s/%s' % (
-            bucket,
-            app_config.PROJECT_SLUG,
-            path.split('.gzip/')[1]
-        )))
-
-        local(sync_assets % ('www/assets/', 's3://%s/%s/assets/' % (
-            bucket,
-            app_config.PROJECT_SLUG
-        )))
-
-def _gzip(in_path='www', out_path='.gzip'):
-    """
-    Gzips everything in www and puts it all in gzip
-    """
-    local('python gzip_assets.py %s %s' % (in_path, out_path))
-
 @task
 def deploy(slug=''):
     """
@@ -155,8 +112,27 @@ def deploy(slug=''):
         utils.confirm('You are about about to deploy ALL graphics. Are you sure you want to do this? (Deploy a single graphic with "deploy:SLUG".)')
 
     render(slug)
-    _gzip('%s/%s' % (app_config.GRAPHICS_PATH, slug), '.gzip/graphics/%s' % slug)
-    _deploy_to_s3('.gzip/graphics/%s' % slug)
+    #_gzip('%s/%s' % (app_config.GRAPHICS_PATH, slug), '.gzip/graphics/%s' % slug)
+
+    graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    s3_root = '%s/%s' % (app_config.PROJECT_SLUG, slug)
+    graphic_assets = '%s/assets' % graphic_root
+    s3_assets = '%s/assets' % s3_root
+
+    flat.deploy_folder(
+        graphic_root,
+        s3_root,
+        max_age=app_config.DEFAULT_MAX_AGE,
+        ignore=['%s/*' % graphic_assets]
+    )
+
+    flat.deploy_folder(
+        graphic_assets,
+        s3_assets,
+        max_age=app_config.ASSETS_MAX_AGE
+    )
+
+    #_deploy_to_s3('.gzip/graphics/%s' % slug)
 
 def download_copy(slug):
     """
@@ -226,24 +202,3 @@ def add_table(slug):
     local('cp -r graphic_templates/table %s' % graphic_path)
     download_copy(slug)
 
-"""
-Destruction
-
-Changes to destruction require setup/deploy to a test host in order to test.
-Destruction should remove all files related to the project from both a remote
-host and S3.
-"""
-@task
-def shiva_the_destroyer():
-    """
-    Deletes the app from s3
-    """
-    require('settings', provided_by=[production, staging])
-
-    utils.confirm("You are about to destroy everything deployed to %s for this project.\nDo you know what you're doing?" % app_config.DEPLOYMENT_TARGET)
-
-    with settings(warn_only=True):
-        sync = 'aws s3 rm %s --recursive --region "us-east-1"'
-
-        for bucket in app_config.S3_BUCKETS:
-            local(sync % ('s3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
