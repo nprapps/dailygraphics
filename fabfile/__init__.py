@@ -7,7 +7,7 @@ import os
 from fabric.api import local, require, task
 from fabric.state import env
 
-import app
+import app as flat_app
 import app_config
 from etc.gdocs import GoogleDoc
 
@@ -45,16 +45,6 @@ def staging():
     app_config.configure_targets(env.settings)
 
 """
-Running the app
-"""
-@task
-def app(port='8000'):
-    """
-    Serve app.py.
-    """
-    local('gunicorn -b 0.0.0.0:%s --debug --reload app:wsgi_app' % port)
-
-"""
 Template-specific functions
 
 Changing the template functions should produce output
@@ -81,12 +71,12 @@ def _render_graphics(paths):
     for path in paths:
         slug = path.split('%s/' % app_config.GRAPHICS_PATH)[1].split('/')[0]
 
-        with app.app.test_request_context(path='graphics/%s/' % slug):
-            view = app.__dict__['_graphics_detail']
-            content = view(slug)
+        with flat_app.app.test_request_context(path='graphics/%s/' % slug):
+            view = flat_app.__dict__['_graphics_detail']
+            content = view(slug).data
 
         with open('%s/index.html' % path, 'w') as writefile:
-            writefile.write(content.encode('utf-8'))
+            writefile.write(content)
 
         # Fallback for legacy projects w/o child templates
         if not os.path.exists('%s/child_template.html' % path):
@@ -94,15 +84,26 @@ def _render_graphics(paths):
 
         download_copy(slug)
 
-        with app.app.test_request_context(path='graphics/%s/child.html' % slug):
-            view = app.__dict__['_graphics_child']
-            content = view(slug)
+        with flat_app.app.test_request_context(path='graphics/%s/child.html' % slug):
+            view = flat_app.__dict__['_graphics_child']
+            content = view(slug).data
 
         with open('%s/child.html' % path, 'w') as writefile:
-            writefile.write(content.encode('utf-8'))
+            writefile.write(content)
 
     # Un-fake-out deployment target
     app_config.configure_targets(app_config.DEPLOYMENT_TARGET)
+
+
+"""
+Running the app
+"""
+@task
+def app(port='8000'):
+    """
+    Serve app.py.
+    """
+    local('gunicorn -b 0.0.0.0:%s --debug --reload app:wsgi_app' % port)
 
 """
 Deployment

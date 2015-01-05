@@ -5,7 +5,7 @@ from glob import glob
 import imp
 import os
 
-from flask import Flask, render_template, render_template_string
+from flask import Flask, make_response, render_template, render_template_string
 from werkzeug.debug import DebuggedApplication
 
 import app_config
@@ -32,7 +32,7 @@ def _graphics_list():
 
     context['graphics_count'] = len(context['graphics'])
 
-    return render_template('index.html', **context)
+    return make_response(render_template('index.html', **context))
 
 @app.route('/graphics/<slug>/')
 def _graphics_detail(slug):
@@ -47,7 +47,7 @@ def _graphics_detail(slug):
     if not os.path.exists('%s/%s/js/lib/pym.js' % (app_config.GRAPHICS_PATH, slug)):
         template = 'parent_old.html'
 
-    return render_template(template, **context)
+    return make_response(render_template(template, **context))
 
 @app.route('/graphics/<slug>/child.html')
 def _graphics_child(slug):
@@ -76,7 +76,7 @@ def _graphics_child(slug):
     with open('%s/child_template.html' % graphic_path) as f:
         template = f.read().decode('utf-8')
 
-    return render_template_string(template, **context)
+    return make_response(render_template_string(template, **context))
 
 app.register_blueprint(static.static)
 
