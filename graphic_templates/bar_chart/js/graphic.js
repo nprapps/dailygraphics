@@ -59,14 +59,14 @@ var render = function(containerWidth) {
     if (!containerWidth) {
         containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
-    
+
     // check the container width; set mobile flag if applicable
     if (containerWidth <= MOBILE_THRESHOLD) {
         isMobile = true;
     } else {
         isMobile = false;
     }
-    
+
     // clear out existing graphics
     $graphic.empty();
 
@@ -76,7 +76,7 @@ var render = function(containerWidth) {
 
     // update iframe
     if (pymChild) {
-        pymChild.sendHeightToParent();
+        pymChild.sendHeight();
     }
 }
 
@@ -86,10 +86,10 @@ var render = function(containerWidth) {
  */
 var drawGraph = function(graphicWidth) {
     var graph = d3.select('#graphic');
-    var margin = { 
-        top: 0, 
-        right: 15, 
-        bottom: 20, 
+    var margin = {
+        top: 0,
+        right: 15,
+        bottom: 20,
         left: (LABEL_WIDTH + LABEL_MARGIN)
     };
     var numBars = graphicData.length;
@@ -100,7 +100,7 @@ var drawGraph = function(graphicWidth) {
     var height = ((BAR_HEIGHT + BAR_GAP) * numBars);
 
     var x = d3.scale.linear()
-        .domain([ 0, d3.max(graphicData, function(d) { 
+        .domain([ 0, d3.max(graphicData, function(d) {
             return Math.ceil(d['amt']/5) * 5; // round to next 5
         }) ])
         .range([0, width]);
@@ -116,8 +116,8 @@ var drawGraph = function(graphicWidth) {
         .tickFormat(function(d) {
             return d.toFixed(0) + '%';
         });
-        
-    var xAxisGrid = function() { 
+
+    var xAxisGrid = function() {
         return xAxis;
     }
 
@@ -149,27 +149,27 @@ var drawGraph = function(graphicWidth) {
         .selectAll('rect')
             .data(graphicData)
         .enter().append('rect')
-            .attr('y', function(d, i) { 
+            .attr('y', function(d, i) {
                 return i * (BAR_HEIGHT + BAR_GAP);
             })
-            .attr('width', function(d){ 
+            .attr('width', function(d){
                 return x(d['amt']);
             })
             .attr('height', BAR_HEIGHT)
-            .attr('class', function(d, i) { 
+            .attr('class', function(d, i) {
                 return 'bar-' + i + ' ' + classify(d['label']);
             });
-    
+
     // show the values for each bar
     svg.append('g')
         .attr('class', 'value')
         .selectAll('text')
             .data(graphicData)
         .enter().append('text')
-            .attr('x', function(d) { 
+            .attr('x', function(d) {
                 return x(d['amt']);
             })
-            .attr('y', function(d, i) { 
+            .attr('y', function(d, i) {
                 return i * (BAR_HEIGHT + BAR_GAP);
             })
             .attr('dx', function(d) {
@@ -187,8 +187,8 @@ var drawGraph = function(graphicWidth) {
                     return 'end';
                 }
             })
-            .attr('class', function(d) { 
-                var c = classify(d['label']); 
+            .attr('class', function(d) {
+                var c = classify(d['label']);
                 if (x(d['amt']) < VALUE_MIN_WIDTH) {
                     c += ' outer';
                 } else {
@@ -219,7 +219,7 @@ var drawGraph = function(graphicWidth) {
                 return classify(d['label']);
             })
             .append('span')
-                .text(function(d) { 
+                .text(function(d) {
                     return d['label'];
                 });
 }
