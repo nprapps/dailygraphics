@@ -6,6 +6,7 @@ import imp
 import os
 
 from flask import Flask, render_template, render_template_string
+from werkzeug.debug import DebuggedApplication
 
 import app_config
 import copytext
@@ -79,14 +80,12 @@ def _graphics_child(slug):
 
 app.register_blueprint(static.static)
 
+if app_config.DEBUG:
+    wsgi_app = DebuggedApplication(app, evalex=False)
+else:
+    wsgi_app = app
+
+
 # Boilerplate
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--port')
-    args = parser.parse_args()
-    server_port = 8000
-
-    if args.port:
-        server_port = int(args.port)
-
-    app.run(host='0.0.0.0', port=server_port, debug=app_config.DEBUG)
+    print 'This command has been removed! Please run "fab app" instead!'
