@@ -113,17 +113,14 @@ has two primary functions: Pushing flat files to S3 and deploying
 code to a remote server if required.
 """
 @task
-def deploy(slug=''):
+def deploy(slug):
     """
     Deploy the latest app to S3 and, if configured, to our servers.
     """
     require('settings', provided_by=[production, staging])
 
-    if not slug:
-        utils.confirm('You are about about to deploy ALL graphics. Are you sure you want to do this? (Deploy a single graphic with "deploy:SLUG".)')
-
+    assets.sync(slug)
     render(slug)
-    #_gzip('%s/%s' % (app_config.GRAPHICS_PATH, slug), '.gzip/graphics/%s' % slug)
 
     graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     s3_root = '%s/%s' % (app_config.PROJECT_SLUG, slug)
@@ -142,8 +139,6 @@ def deploy(slug=''):
         s3_assets,
         max_age=app_config.ASSETS_MAX_AGE
     )
-
-    #_deploy_to_s3('.gzip/graphics/%s' % slug)
 
 def download_copy(slug):
     """
