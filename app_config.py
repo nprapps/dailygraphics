@@ -38,8 +38,8 @@ STAGING_S3_BUCKET = {
 }
 
 ASSETS_S3_BUCKET = {
-    'bucket_name': 'assets.apps.npr.org',
-    'region': 'stlpr-assets'
+    'bucket_name': 'stlpr-assets',
+    'region': 'us-east-1'
 }
 
 DEFAULT_MAX_AGE = 20
