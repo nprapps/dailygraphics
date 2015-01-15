@@ -73,7 +73,7 @@ def configure_targets(deployment_target):
         S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
         DEBUG = True
     else:
-        S3_BUCKETS = None 
+        S3_BUCKET = None 
         S3_BASE_URL = 'http://127.0.0.1:8000'
         S3_DEPLOY_URL = None 
         DEBUG = True
