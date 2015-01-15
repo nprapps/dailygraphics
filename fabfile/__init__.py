@@ -119,11 +119,12 @@ def deploy(slug):
     """
     require('settings', provided_by=[production, staging])
 
+    update_copy(slug)
     assets.sync(slug)
     render(slug)
 
     graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    s3_root = '%s/%s' % (app_config.PROJECT_SLUG, slug)
+    s3_root = '%s/graphics/%s' % (app_config.PROJECT_SLUG, slug)
     graphic_assets = '%s/assets' % graphic_root
     s3_assets = '%s/assets' % s3_root
 
