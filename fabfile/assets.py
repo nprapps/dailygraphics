@@ -4,13 +4,14 @@
 Commands related to the syncing assets.
 """
 
+from fnmatch import fnmatch
 from glob import glob
 import os
 
 import boto
 from fabric.api import prompt, task
+
 import app_config
-from fnmatch import fnmatch
 import utils
 
 @task
@@ -22,8 +23,12 @@ def sync(slug):
 
     assets_root = '%s/%s/assets' % (app_config.GRAPHICS_PATH, slug)
     s3_root = '%s/%s' % (app_config.ASSETS_SLUG, slug)
-    with open('%s/assetsignore' % assets_root, 'r') as f:
-        ignore_globs = [l.strip() for l in f]
+
+    try:
+        with open('%s/assetsignore' % assets_root, 'r') as f:
+            ignore_globs = [l.strip() for l in f]
+    except IOError:
+        ignore_globs = []
 
     local_paths = []
     not_lowercase = []
@@ -49,10 +54,12 @@ def sync(slug):
 
             local_paths.append(full_path)
 
+    # Prevent case sensitivity differences between OSX and S3 from screwing us up
     if not_lowercase:
         print 'The following filenames are not lowercase, please change them before running `assets.sync`:'
+
         for name in not_lowercase:
-            print ' %s' % name
+            print '    %s' % name
 
         return
 
@@ -172,8 +179,8 @@ def rm(path):
                 file_list.extend(os.listdir(local_path))
 
                 continue
-            assets_slug = '%s/%s' % (app_config.ASSETS_SLUG, slug)
 
+            assets_slug = '%s/%s' % (app_config.ASSETS_SLUG, slug)
             key_name = local_path.replace(assets_root, assets_slug, 1)
             key = bucket.get_key(key_name)
 
@@ -185,7 +192,7 @@ def _assets_get_bucket():
     """
     s3 = boto.connect_s3()
 
-    return s3.get_bucket(app_config.ASSETS_S3_BUCKET)
+    return s3.get_bucket(app_config.ASSETS_S3_BUCKET['bucket_name'])
 
 def _assets_confirm(local_path):
     """

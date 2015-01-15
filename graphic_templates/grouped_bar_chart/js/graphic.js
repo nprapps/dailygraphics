@@ -42,7 +42,7 @@ var onWindowLoaded = function() {
             graphicData.forEach(function(d) {
                 d['key'] = d['Group'];
                 d['value'] = [];
-                color.domain().map(function(name) { 
+                color.domain().map(function(name) {
                     d['value'].push({ 'label': name, 'amt': +d[name] });
                     delete d[name];
                 });
@@ -67,14 +67,14 @@ var render = function(containerWidth) {
     if (!containerWidth) {
         containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
-    
+
     // check the container width; set mobile flag if applicable
     if (containerWidth <= MOBILE_THRESHOLD) {
         isMobile = true;
     } else {
         isMobile = false;
     }
-    
+
     // clear out existing graphics
     $graphic.empty();
 
@@ -84,17 +84,17 @@ var render = function(containerWidth) {
 
     // update iframe
     if (pymChild) {
-        pymChild.sendHeightToParent();
+        pymChild.sendHeight();
     }
 }
 
 
 var drawGraph = function(graphicWidth) {
     var graph = d3.select('#graphic');
-    var margin = { 
-        top: 0, 
-        right: 15, 
-        bottom: 20, 
+    var margin = {
+        top: 0,
+        right: 15,
+        bottom: 20,
         left: (LABEL_WIDTH + LABEL_MARGIN)
     };
     var numGroups = graphicData.length;
@@ -105,20 +105,20 @@ var drawGraph = function(graphicWidth) {
     // define chart dimensions
     var width = graphicWidth - margin['left'] - margin['right'];
     var height = (((((BAR_HEIGHT + BAR_GAP_INNER) * numGroupBars) - BAR_GAP_INNER) + BAR_GAP) * numGroups) - BAR_GAP + BAR_GAP_INNER;
-    
+
     var x = d3.scale.linear()
-        .domain([ 0, d3.max(graphicData, function(c) { 
-                return d3.max(c['value'], function(v) { 
+        .domain([ 0, d3.max(graphicData, function(c) {
+                return d3.max(c['value'], function(v) {
                     var n = v['amt'];
                     return Math.ceil(n/10) * 10; // round to next 10
-                }); 
+                });
             })
         ])
         .range([0, width]);
-    
+
     var y = d3.scale.linear()
         .range([ height, 0 ]);
-        
+
     // define axis and grid
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -127,18 +127,18 @@ var drawGraph = function(graphicWidth) {
         .tickFormat(function(d) {
             return d.toFixed(0) + '%';
         });
-        
-    var xAxisGrid = function() { 
+
+    var xAxisGrid = function() {
         return xAxis;
     }
-    
+
     // draw the legend
     var legend = graph.append('ul')
         .attr('class', 'key')
         .selectAll('g')
             .data(graphicData[0]['value'])
         .enter().append('li')
-            .attr('class', function(d, i) { 
+            .attr('class', function(d, i) {
                 return 'key-item key-' + i + ' ' + classify(d['label']);
             });
     legend.append('b')
@@ -149,17 +149,17 @@ var drawGraph = function(graphicWidth) {
         .text(function(d) {
             return d['label'];
         });
-        
+
     // draw the chart
     var chart = graph.append('div')
         .attr('class', 'chart');
-    
+
     var svg = chart.append('svg')
         .attr('width', width + margin['left'] + margin['right'])
         .attr('height', height + margin['top'] + margin['bottom'])
         .append('g')
         .attr('transform', 'translate(' + margin['left'] + ',' + margin['top'] + ')');
-    
+
     // x-axis (bottom)
     svg.append('g')
         .attr('class', 'x axis')
@@ -174,54 +174,54 @@ var drawGraph = function(graphicWidth) {
             .tickSize(-height, 0, 0)
             .tickFormat('')
         );
-        
+
     // draw the bars
     var barGroup = svg.selectAll('.bar-group')
         .data(graphicData)
         .enter().append('g')
             .attr('class', 'g')
-            .attr('transform', function(d,i) { 
+            .attr('transform', function(d,i) {
                 if (i == 0) {
                     return 'translate(0,0)';
                 } else {
                     return 'translate(0,' + ((groupHeight + BAR_GAP) * i) + ')';
                 }
             });
-            
+
     barGroup.selectAll('rect')
         .data(function(d) { return d['value']; })
         .enter().append('rect')
             .attr('height', BAR_HEIGHT)
-            .attr('x', function(d, i) { 
+            .attr('x', function(d, i) {
                 return 0;
             })
-            .attr('y', function(d, i) { 
+            .attr('y', function(d, i) {
                 if (i == 0) {
                     return 0;
                 } else {
                     return (BAR_HEIGHT * i) + (BAR_GAP_INNER * i);
                 }
             })
-            .attr('width', function(d) { 
+            .attr('width', function(d) {
                 return x(d['amt']);
             })
             .style('fill', function(d) {
             	return color(d['label']);
             })
-            .attr('class', function(d) { 
+            .attr('class', function(d) {
                 return 'y-' + d['label'];
             });
-    
+
     // show the values for each bar
     barGroup.append('g')
         .attr('class', 'value')
         .selectAll('text')
         .data(function(d) { return d['value']; })
         .enter().append('text')
-            .attr('x', function(d) { 
-                return x(d['amt']); 
+            .attr('x', function(d) {
+                return x(d['amt']);
             })
-            .attr('y', function(d, i) { 
+            .attr('y', function(d, i) {
                 if (i == 0) {
                     return 0;
                 } else {
@@ -243,8 +243,8 @@ var drawGraph = function(graphicWidth) {
                     return 'end';
                 }
             })
-            .attr('class', function(d) { 
-                var c = classify(d['label']); 
+            .attr('class', function(d) {
+                var c = classify(d['label']);
                 if (x(d['amt']) < VALUE_MIN_WIDTH) {
                     c += ' outer';
                 } else {
@@ -252,14 +252,14 @@ var drawGraph = function(graphicWidth) {
                 }
                 return c;
             })
-            .text(function(d) { 
+            .text(function(d) {
             	v = d['amt'].toFixed(0);
             	if (d['amt'] > 0 && v == 0) {
             		v = '<1';
             	}
                 return v + '%';
             });
-    
+
     // draw labels for each bar
     var labels = chart.append('ul')
         .attr('class', 'labels')
@@ -272,7 +272,7 @@ var drawGraph = function(graphicWidth) {
                 s += 'width: ' + (margin['left'] - 10) + 'px; ';
                 s += 'height: ' + BAR_HEIGHT + 'px; ';
                 s += 'left: ' + 0 + 'px; ';
-                
+
                 if (i == 0) {
                     s += 'top: 0px; ';
                 } else {
@@ -284,7 +284,7 @@ var drawGraph = function(graphicWidth) {
                 return classify(d['key']);
             })
             .append('span')
-                .text(function(d) { 
+                .text(function(d) {
                     return d['key']
                 });
 }

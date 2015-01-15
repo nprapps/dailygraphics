@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-import argparse
 from glob import glob
 import imp
 import os
 
-from flask import Flask, render_template, render_template_string
+from flask import Flask, make_response, render_template, render_template_string
+from werkzeug.debug import DebuggedApplication
 
 import app_config
 import copytext
@@ -13,6 +13,7 @@ from render_utils import make_context, urlencode_filter
 import static
 
 app = Flask(app_config.PROJECT_SLUG)
+app.debug = app_config.DEBUG
 
 app.jinja_env.filters['urlencode'] = urlencode_filter
 
@@ -31,7 +32,7 @@ def _graphics_list():
 
     context['graphics_count'] = len(context['graphics'])
 
-    return render_template('index.html', **context)
+    return make_response(render_template('index.html', **context))
 
 @app.route('/graphics/<slug>/')
 def _graphics_detail(slug):
@@ -46,7 +47,7 @@ def _graphics_detail(slug):
     if not os.path.exists('%s/%s/js/lib/pym.js' % (app_config.GRAPHICS_PATH, slug)):
         template = 'parent_old.html'
 
-    return render_template(template, **context)
+    return make_response(render_template(template, **context))
 
 @app.route('/graphics/<slug>/child.html')
 def _graphics_child(slug):
@@ -75,18 +76,16 @@ def _graphics_child(slug):
     with open('%s/child_template.html' % graphic_path) as f:
         template = f.read().decode('utf-8')
 
-    return render_template_string(template, **context)
+    return make_response(render_template_string(template, **context))
 
 app.register_blueprint(static.static)
 
+if app_config.DEBUG:
+    wsgi_app = DebuggedApplication(app, evalex=False)
+else:
+    wsgi_app = app
+
+
 # Boilerplate
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--port')
-    args = parser.parse_args()
-    server_port = 8000
-
-    if args.port:
-        server_port = int(args.port)
-
-    app.run(host='0.0.0.0', port=server_port, debug=app_config.DEBUG)
+    print 'This command has been removed! Please run "fab app" instead!'
