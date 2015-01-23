@@ -209,3 +209,8 @@ def add_table(slug):
     local('cp -r graphic_templates/table %s' % graphic_path)
     download_copy(slug)
 
+@task
+def add_map(slug):
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    local('cp -r graphic_templates/map %s' % graphic_path)
+    download_copy(slug)
