@@ -65,11 +65,13 @@ def _graphics_child(slug):
 
     context = make_context()
     context['slug'] = slug
-    context['COPY'] = copytext.Copy(filename='%s/%s.xlsx' % (graphic_path, slug))
 
     try:
         graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
         context.update(graphic_config.__dict__)
+
+        if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
+            context['COPY'] = copytext.Copy(filename='%s/%s.xlsx' % (graphic_path, slug))
     except IOError:
         pass
 
