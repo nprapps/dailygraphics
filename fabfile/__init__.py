@@ -146,8 +146,17 @@ def download_copy(slug):
     Downloads a Google Doc as an .xlsx file.
     """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
 
+    try:
+        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
+    except IOError:
+        print '%s/graphic_config.py does not exist.' % slug
+        return
+
+    if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
+        print 'COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.' % slug
+        return
+        
     doc = {}
     doc['key'] = graphic_config.COPY_GOOGLE_DOC_KEY
     doc['file_name'] = slug
