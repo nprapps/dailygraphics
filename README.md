@@ -33,6 +33,7 @@ In addition to big, long-term projects, the NPR Visuals team also produces short
 * [Responsive Charts With D3 And Pym.js](http://blog.apps.npr.org/2014/05/19/responsive-charts.html)
 * [Making Data Tables Responsive](http://blog.apps.npr.org/2014/05/09/responsive-data-tables.html)
 * [Managing Instagram Photo Call-Outs](http://blog.apps.npr.org/2014/05/29/photo-callouts.html)
+* [Baking Chart Data Into Your Page](http://blog.apps.npr.org/2015/01/28/dailygraphics-json.html)
 
 #### Things We've Built Using Dailygraphics
 * [Responsive charts](http://www.npr.org/blogs/codeswitch/2014/05/14/298726161/new-orleans-police-hope-to-win-the-city-back-one-kid-at-a-time)
@@ -97,7 +98,7 @@ A Flask app is used to run the project locally. It will automatically recompile 
 
 ```
 workon dailygraphics
-python app.py
+fab app
 ```
 
 Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo. Click on the graphic you are working on to view it.
@@ -162,6 +163,11 @@ Connecting to a Google Spreadsheet
 This section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet.
 
 In order to use the Google Spreadsheet syncing you will need to have environment variables set for ``APPS_GOOGLE_EMAIL`` and ``APPS_GOOGLE_PASS``. If you use bash you might add these to ``~/.bash_profile``.
+
+```
+export APPS_GOOGLE_EMAIL='EMAIL@GMAIL.COM'
+export APPS_GOOGLE_PASS='PASSWORD'
+```
 
 New graphics by default point to the main [app-template](https://github.com/nprapps/app-template)'s copy spreadsheet template. If you want to use this spreadsheet template as the basis for your project, make a copy of it first.
 
