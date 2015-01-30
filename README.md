@@ -169,6 +169,8 @@ export APPS_GOOGLE_EMAIL='EMAIL@GMAIL.COM'
 export APPS_GOOGLE_PASS='PASSWORD'
 ```
 
+KNOWN ISSUE: Our copytext rig will not work with Gmail accounts with two-factor authentication enabled. If this is an issue, we suggest either creating a separate Gmail account without two-factor for use with dailygraphics, or not using the copytext feature.
+
 New graphics by default point to the main [app-template](https://github.com/nprapps/app-template)'s copy spreadsheet template. If you want to use this spreadsheet template as the basis for your project, make a copy of it first.
 
 To connect this spreadsheet (or any spreadsheet) to your graphic, update the ```graphic_config.py``` file in your graphic's folder with the ID of your spreadsheet:
