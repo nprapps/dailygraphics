@@ -24,7 +24,7 @@ function render(width) {
 			
 			// update filename, collection name
      
-			 d3.json("topojson file", function(error, geodata) {
+			 d3.json("data.topojson", function(error, geodata) {
 				 
 				 var regions = topojson.feature(geodata, geodata.objects.collection);
 				 var geojson;
@@ -33,12 +33,20 @@ function render(width) {
 				 //set up styling logic
 				 
 				 function getColor(d) {
-					 return colors.red
+
+			 //example logic to get color based on number
+			 return d < .95 ? colors.red :
+			 		d < .96 ? colors.tangerine :
+			 		d < .97 ? colors.orange :
+				 	d < .98 ? colors.yellow :
+			 		d < .99 ? colors.green :
+				 	colors.dkgreen;
+
 					 
 					 // example logic to get color based on string
 					 // (d == 'dropped' ? colors.green :
-// 					 d == 'new' ? colors.red :
-// 					 colors.maroon)
+					 //  d == 'new' ? colors.red :
+					 //  colors.maroon)
 						 
 					 }
 				 
@@ -124,8 +132,23 @@ function render(width) {
 				 legend.onAdd = function (map) {
 
 				     var div = L.DomUtil.create('div', 'info legend')
-						 //update legend
-					 div.innerHTML = '<i style="background:' + colors.red + '"></i> Added to the suit<br /><i style="background:' + colors.maroon + '"></i> Also named in the suit<br /><i style="background:' + colors.green + '"></i> Dropped from the suit<br />';
+					
+					 // Legend with strings
+					 // div.innerHTML = '<i style="background:' + colors.red + '"></i> Added to the suit<br /><i style="background:' + colors.maroon + '"></i> Also named in the suit<br /><i style="background:' + colors.green + '"></i> Dropped from the suit<br />';
+					 
+					 // Legend with numbers
+					 grades = [.94, .95, .96, .97, .98, .99],
+					 text = ['< 95%','95-96%','96-97%','97-98%','98-99%','>99%']
+					 labels = [];
+					 for (var i = 0; i < grades.length; i++) {
+						 	from = grades[i];
+							to = grades[i + 1];
+							labels.push(
+								'<i style="background:' + getColor(grades[i] + .001) + '"></i> ' +
+								text[i] );
+						}
+						div.innerHTML = labels.join('<br>');
+					 
 
 				     return div;
 				 };
