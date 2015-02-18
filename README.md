@@ -41,6 +41,11 @@ In addition to big, long-term projects, the NPR Visuals team also produces short
 * [Before/after slider](http://www.npr.org/blogs/parallels/2014/01/30/268924183/report-syrian-government-has-demolished-entire-neighborhoods#con268946930)
 * [Small audio interactive](http://www.npr.org/blogs/health/2014/05/05/308349318/you-had-me-at-hello-the-science-behind-first-impressions#con309025607)
 
+This codebase is licensed under the MIT open source license. See the [LICENSE](https://github.com/nprapps/dailygraphics/blob/master/LICENSE) file for the complete license.
+
+Please note: logos, fonts and other media referenced via url from this template are not covered by this license. Do not republish NPR media assets without written permission. Open source libraries in this repository are redistributed for convenience and are each governed by their own license.
+
+Also note: Though open source, this project is not intended to be a generic solution. We strongly encourage those who love dailygraphics to use it as a basis for their own project template. We have no plans to remove NPR-specific code from this project.
 
 Assumptions
 -----------
