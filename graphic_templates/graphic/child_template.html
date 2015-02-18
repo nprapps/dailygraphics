@@ -12,42 +12,42 @@
     <link rel="shortcut icon" href="http://media.npr.org/favicon.ico" />
 
     <!-- Fonts -->
-    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.4.10/webfont.js"></script>
+    <script src="http://apps.npr.org/dailygraphics/graphics/fonts/js/lib/webfont.js"></script>
     <script>
         WebFont.load({
              custom: {
-                 families: [
-                     'Gotham SSm:n4,n7',
-                     'Gotham:n4,n7'
-                 ],
-                 urls: [
-                     'http://s.npr.org/templates/css/fonts/GothamSSm.css',
-                     'http://s.npr.org/templates/css/fonts/Gotham.css'
-                 ]
+                 families: [ 'Gotham SSm:n4,n7' ],
+                 urls: [ 'http://s.npr.org/templates/css/fonts/GothamSSm.css' ]
              },
              timeout: 10000
          });
     </script>
-    
+        
     <style type="text/css">
         /* base styles */
         html { -webkit-text-size-adjust: none; }
         body {
             margin: 0;
-            padding: 0;
-            font: 14px/1.4 Arial, Helvetica, sans-serif;
-            color: #333;
+            padding: 33px 0;
+            font: 14px/1.4 Helvetica, Arial, sans-serif;
+            color: #555;
         }
         h1 {
-            margin: 0 0 6px 0;
-            font-size: 14px;
-            color: #333;
+            margin: 0 0 33px 0;
+            font-size: 20px;
+            color: #666;
+            font-family: 'Gotham SSm',Helvetica,Arial,sans-serif;
+            font-weight: normal;
+            line-height: 1.3;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
         }
         h2 {
             font-weight: normal;
-            color: #666;
+            color: #777;
             font-size: 12px;
-            margin: 0 0 22px 0;
+            margin: -22px 0 22px 0;
+            line-height: 1.6;
         }
         .footnotes { margin-bottom: 20px; }
         .footnotes h4 {
@@ -59,14 +59,17 @@
         .footer p {
             margin: 2px 0 0 0;
             font-size: 11px;
-            line-height: 1.3;
-            color: #808080;
+            line-height: 1.7;
+            color: #999;
+        }
+        .footer p {
+            font-style: italic;
         }
         a, a:link, a:visited {
             color: #4774CC;
             text-decoration: none;
         }
-        a:hover, a:active { opacity: 0.7; }
+        a:hover, a:active { color: #bccae5; }
     </style>
 
 </head>

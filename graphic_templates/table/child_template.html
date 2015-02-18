@@ -11,25 +11,49 @@
     <meta name="robots" content="noindex" />
     <link rel="shortcut icon" href="http://media.npr.org/favicon.ico" />
 
+    <!-- Fonts -->
+    <script src="http://apps.npr.org/dailygraphics/graphics/fonts/js/lib/webfont.js"></script>
+    <script>
+        WebFont.load({
+             custom: {
+                 families: [ 
+                    'Gotham SSm:n4,n7',
+                    'Knockout 31 4r:n4'
+                 ],
+                 urls: [ 
+                    'http://s.npr.org/templates/css/fonts/GothamSSm.css',
+                    'http://s.npr.org/templates/css/fonts/Knockout.css'
+                 ]
+             },
+             timeout: 10000
+         });
+    </script>
+        
     <style type="text/css">
         /* base styles */
         html { -webkit-text-size-adjust: none; }
         body {
             margin: 0;
-            padding: 0;
-            font: 14px/1.4 Arial, Helvetica, sans-serif;
-            color: #333;
+            padding: 33px 0;
+            font: 14px/1.4 Helvetica, Arial, sans-serif;
+            color: #555;
         }
         h1 {
-            margin: 0 0 6px 0;
-            font-size: 14px;
-            color: #333;
+            margin: 0 0 33px 0;
+            font-size: 20px;
+            color: #666;
+            font-family: 'Gotham SSm',Helvetica,Arial,sans-serif;
+            font-weight: normal;
+            line-height: 1.3;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
         }
         h2 {
             font-weight: normal;
-            color: #666;
+            color: #777;
             font-size: 12px;
-            margin: 0 0 22px 0;
+            margin: -22px 0 22px 0;
+            line-height: 1.6;
         }
         .footnotes { margin-bottom: 20px; }
         .footnotes h4 {
@@ -41,41 +65,56 @@
         .footer p {
             margin: 2px 0 0 0;
             font-size: 11px;
-            line-height: 1.3;
-            color: #808080;
+            line-height: 1.7;
+            color: #999;
+        }
+        .footer p {
+            font-style: italic;
         }
         a, a:link, a:visited {
             color: #4774CC;
             text-decoration: none;
         }
-        a:hover, a:active { opacity: 0.7; }
+        a:hover, a:active { color: #bccae5; }
         
         /* table */
+        #graphic { margin-bottom: 33px; }
         table {
             border-collapse: collapse;
             padding: 0;
-            margin: 0 0 22px 0;
             width: 100%;
             font-size: 12px;
+            color: #666;
+        }
+        table th,
+        table td {
+            padding: 10px;
+            text-align: left;
         }
         table th {
-            text-align: left;
             border-bottom: 2px solid #eee;
             vertical-align: bottom;
+            font-family: 'Knockout 31 4r';
+            font-weight: normal;
+            text-transform: uppercase;
+            padding-top: 0;
+            line-height: 1.2;
+            letter-spacing: 0.05em;
+            -webkit-font-smoothing: antialiased;
         }
         table td {
             border-bottom: 1px solid #eee;
             vertical-align: top;
         }
-        table th,
-        table td {
-            padding: 10px;
-            color: #333;
+        
+        table th.amt,
+        table td.amt {
             text-align: right;
         }
-        table th:nth-child(1),
-        table td:nth-child(1) {
-            text-align: left;
+
+        table tr.shadedrow { 
+            background-color: #f1f1f1; 
+            color: #333;
             font-weight: bold;
         }
 
@@ -89,38 +128,47 @@
             thead { display: none; }
             table tr,
             table th,
-            table td {
+            table td,
+            table td.amt {
                 display: block;
                 padding: 0;
                 text-align: left;
                 white-space: normal;
             }
-            table td { 
+            table td,
+            table td.amt { 
                 border: none;
                 margin-bottom: 6px;
-                color: #444;
             }
             table td:empty { display: none; }
 
             table tr {
                 border-bottom: 1px solid #eee;
-                padding-bottom: 11px;
-                margin-bottom: 11px;
+                padding: 10px;
             }
+            table tr:first-child { border-top: 1px solid #eee; }
+
             table th[data-title]:before,
             table td[data-title]:before {
                 content: attr(data-title) ":\00A0";
-                font-weight: bold;
+                display: inline-block;
+                width: 75%;
+                min-width: 220px;
+                width: 220px;
             }
 
             table tr td:first-child { 
                 font-size: 14px;
-                font-weight: bold;
                 margin-bottom: 6px;
                 color: #333;
+                font-family: 'Knockout 31 4r', Helvetica, Arial, sans-serif;
+                font-weight: 500;
+                letter-spacing: 0.02em;
+                text-transform: uppercase;
             }
             table tr td:first-child:before {
                 content: '';
+                display: none;
             }
         }
     </style>
@@ -135,16 +183,16 @@
             <thead>
                 <tr>
                     <th>{{ COPY.labels.hdr_state }}</th>
-                    <th>{{ COPY.labels.hdr_something }}</th>
-                    <th>{{ COPY.labels.hdr_another_thing }}</th>
+                    <th class="amt">{{ COPY.labels.hdr_something }}</th>
+                    <th class="amt">{{ COPY.labels.hdr_another_thing }}</th>
                 </tr>
             </thead>
 
             {% for row in COPY.data %}
             <tr class="{{ row.state|lower|replace(' ', '-') }}">
                 <td data-title="{{ COPY.labels.hdr_state }}">{{ row.state }}</td>
-                <td data-title="{{ COPY.labels.hdr_something }}">{{ row.something }}</td>
-                <td data-title="{{ COPY.labels.hdr_another_thing }}">{{ row.another_thing }}</td>
+                <td data-title="{{ COPY.labels.hdr_something }}" class="amt">{{ row.something }}</td>
+                <td data-title="{{ COPY.labels.hdr_another_thing }}" class="amt">{{ row.another_thing }}</td>
             </tr>
             {% endfor %}
 
