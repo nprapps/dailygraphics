@@ -201,6 +201,12 @@ def add_bar_chart(slug):
     download_copy(slug)
 
 @task
+def add_column_chart(slug):
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    local('cp -r graphic_templates/column_chart %s' % graphic_path)
+    download_copy(slug)
+
+@task
 def add_grouped_bar_chart(slug):
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/grouped_bar_chart %s' % graphic_path)
