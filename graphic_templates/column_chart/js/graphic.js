@@ -86,6 +86,10 @@ var render = function(containerWidth) {
 var drawGraph = function(graphicWidth) {
     var aspectHeight = 9;
     var aspectWidth = 16;
+    if (isMobile) {
+        aspectHeight = 3;
+        aspectWidth = 4;
+    }
     var margin = {  
         top: 5, 
         right: 5, 
@@ -95,11 +99,6 @@ var drawGraph = function(graphicWidth) {
     var ticksY = 4;
     var width = graphicWidth - margin['left'] - margin['right'];
     var height = Math.ceil((width * aspectHeight) / aspectWidth) - margin['top'] - margin['bottom'];
-    
-    if (isMobile) {
-        aspectHeight = 3;
-        aspectWidth = 4;
-    }
     
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1)
