@@ -62,18 +62,19 @@
             line-height: 1.7;
             color: #999;
         }
-        .footer p {
-            font-style: italic;
-        }
+        .footer p { font-style: italic; }
+        .footer p em { font-style: normal; }
+
         a, a:link, a:visited {
             color: #4774CC;
             text-decoration: none;
         }
         a:hover, a:active { color: #bccae5; }
         
+
         /* key */
         .key {
-            margin: 0 0 22px 0;
+            margin: -11px 0 33px 0;
             padding: 0;
             list-style-type: none;
         }
@@ -93,55 +94,65 @@
         .key .key-item label { 
             white-space: nowrap;
             font-size: 12px;
-            color: #333;
+            color: #666;
             font-weight: normal;
+            -webkit-font-smoothing: antialiased;
         }
         
-        /* graphic */
-        #graphic { 
-            margin: 0 0 11px 0;
-            position: relative;
-        }
-        #graphic .chart { position: relative; }
 
-        #graphic img.fallback {
-            max-width: 100%;
-            height: auto;
+        /* graphic */
+        #graphic {
+            position: relative;
+            margin-bottom: 11px;
         }
+        #graphic:before,
+        #graphic:after {
+            content: ' ';
+            display: table;
+        }
+        #graphic:after { clear: both; }
+        #graphic img {
+        	max-width: 100%;
+        	height: auto;
+        }
+
+        .chart { position: relative; }
 
         .axis {
-            font-size: 12px;
+            font-size: 11px;
+            -webkit-font-smoothing: antialiased;
             fill: #999;
         }
         .axis path,
         .axis line {
             fill: none;
-            stroke: #666;
+            stroke: #ccc;
             shape-rendering: crispEdges;
         }
         .axis.y path { display: none; }
         .axis.y .tick line { display: none; }
-
+        .grid.y g:first-child line { display: none; }
         .grid path { display: none; }
         .grid .tick {
-            stroke: #ccc;
-            stroke-dasharray: 1px 3px;
+            stroke: #eee;
             stroke-width: 1px;
             shape-rendering: crispEdges;
         }
-        .grid.y .tick:first-child { display: none; }
 
         .bars rect { 
             fill: #17807E;
             shape-rendering: crispEdges;
         }
         
-        .value text { font-size: 10px; }
-        .value text.outer { fill: #999; }
-        .value text.inner { fill: #fff; }
+        .value text { 
+            font-size: 10px;
+            -webkit-font-smoothing: antialiased;
+        }
+        .value .in { fill: #fff; }
+        .value .out { fill: #999; }
 
         .labels {
-            position: absolute;
+        	position: absolute;
             margin: 0;
             padding: 0;
             list-style-type: none;
@@ -152,7 +163,9 @@
             text-align: right;
             font-size: 12px;
             line-height: 1.3;
+            color: #666;
             display: table;
+            -webkit-font-smoothing: antialiased;
         }
         .labels li span {
             display: table-cell;
