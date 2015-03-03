@@ -107,8 +107,10 @@ var drawGraph = function(graphicWidth) {
         }));
     
     var y = d3.scale.linear()
-        .range([height, 0])
-        .domain([0, 300]);
+        .domain([ 0, d3.max(graphicData, function(d) {
+            return Math.ceil(d['amt']/50) * 50; // round to next 50
+        }) ])
+        .range([height, 0]);
     
     var xAxis = d3.svg.axis()
         .scale(x)

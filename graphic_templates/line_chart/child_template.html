@@ -62,27 +62,19 @@
             line-height: 1.7;
             color: #999;
         }
-        .footer p {
-            font-style: italic;
-        }
+        .footer p { font-style: italic; }
+        .footer p em { font-style: normal; }
+
         a, a:link, a:visited {
             color: #4774CC;
             text-decoration: none;
         }
         a:hover, a:active { color: #bccae5; }
 
-        /* graphic */
-        #graphic { 
-        	margin: 0 0 11px 0;
-        	position: relative;
-        }
-        #graphic img.fallback {
-            max-width: 100%;
-            height: auto;
-        }
 
+        /* key */
         .key {
-            margin: 0 0 22px 0;
+            margin: -11px 0 33px 0;
             padding: 0;
             list-style-type: none;
         }
@@ -102,31 +94,50 @@
         .key .key-item label { 
             white-space: nowrap;
             font-size: 12px;
-            color: #333;
+            color: #666;
             font-weight: normal;
+            -webkit-font-smoothing: antialiased;
         }
 
+
+        /* graphic */
+        #graphic {
+            position: relative;
+            margin-bottom: 11px;
+        }
+        #graphic:before,
+        #graphic:after {
+            content: ' ';
+            display: table;
+        }
+        #graphic:after { clear: both; }
+        #graphic img {
+        	max-width: 100%;
+        	height: auto;
+        }
+        
+        
+        /* chart */
         .axis {
-            font-size: 12px;
-            fill: #666;
+            font-size: 11px;
+            -webkit-font-smoothing: antialiased;
+            fill: #999;
         }
         .axis path,
         .axis line {
             fill: none;
-            stroke: #666;
+            stroke: #ccc;
             shape-rendering: crispEdges;
         }
         .axis.y path { display: none; }
         .axis.y .tick line { display: none; }
-
+        .grid.y g:first-child line { display: none; }
         .grid path { display: none; }
         .grid .tick {
-            stroke: #ccc;
-            stroke-dasharray: 1px 3px;
+            stroke: #eee;
             stroke-width: 1px;
             shape-rendering: crispEdges;
         }
-        .grid.y .tick:first-child { display: none; }
 
         .lines {
             fill: none;

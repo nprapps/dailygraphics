@@ -68,17 +68,30 @@
             line-height: 1.7;
             color: #999;
         }
-        .footer p {
-            font-style: italic;
-        }
+        .footer p { font-style: italic; }
+        .footer p em { font-style: normal; }
+
         a, a:link, a:visited {
             color: #4774CC;
             text-decoration: none;
         }
         a:hover, a:active { color: #bccae5; }
         
+
+        /* graphic */
+        #graphic {
+            position: relative;
+            margin-bottom: 22px;
+        }
+        #graphic:before,
+        #graphic:after {
+            content: ' ';
+            display: table;
+        }
+        #graphic:after { clear: both; }
+
+
         /* table */
-        #graphic { margin-bottom: 33px; }
         table {
             border-collapse: collapse;
             padding: 0;
