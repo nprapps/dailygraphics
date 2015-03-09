@@ -190,36 +190,54 @@ App-specific commands
 """
 @task
 def add_graphic(slug):
+    """
+    Create a basic project.
+    """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/graphic %s' % graphic_path)
     download_copy(slug)
 
 @task
 def add_bar_chart(slug):
+    """
+    Create a bar chart.
+    """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/bar_chart %s' % graphic_path)
     download_copy(slug)
 
 @task
 def add_column_chart(slug):
+    """
+    Create a column chart.
+    """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/column_chart %s' % graphic_path)
     download_copy(slug)
 
 @task
 def add_grouped_bar_chart(slug):
+    """
+    Create a grouped bar chart.
+    """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/grouped_bar_chart %s' % graphic_path)
     download_copy(slug)
 
 @task
 def add_line_chart(slug):
+    """
+    Create a line chart.
+    """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/line_chart %s' % graphic_path)
     download_copy(slug)
 
 @task
 def add_table(slug):
+    """
+    Create a data table.
+    """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/table %s' % graphic_path)
     download_copy(slug)

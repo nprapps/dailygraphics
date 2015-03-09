@@ -85,7 +85,11 @@ mkvirtualenv --no-site-packages dailygraphics
 pip install -r requirements.txt
 ```
 
-You'll now need to create a folder to hold the graphics created and deployed by this rig. This is configured in `app_config.GRAPHICS_PATH` and defaults to `../graphics`. By keeping the graphics in a separate folder they can easily be easily version controlled in their own repository.
+You'll now need to create a folder to hold the graphics created and deployed by this rig. This is configured in `app_config.GRAPHICS_PATH` and defaults to `../graphics`.
+
+**NPR Visuals:** Graphics are stored in a separate, private repository, and `app_config.GRAPHICS_PATH` points to that folder. You will need to separately `git clone` that repository.
+
+**Outside of NPR:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
 
 Configuration
 -------------
@@ -106,9 +110,14 @@ workon dailygraphics
 fab app
 ```
 
-Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo. Click on the graphic you are working on to view it.
+Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo. Click on the graphic you are working on to view it. Alternately, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
 
-Alternately, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
+Do you use [iTerm2](http://iterm2.com)? Here's [a sample AppleScript](https://gist.github.com/alykat/debf281765db3a0c2e88) to automatically launch a three-paned terminal window (one for the dailygraphics machine, one for the local webserver, and another for the separate graphics repo). You can save this locally, customize it to match your own configuration and add an alias for it to your `.bash_profile`.
+
+```
+alias dailygraphics="osascript ~/PATH-TO-FILE/iterm_dailygraphics.scpt"
+```
+
 
 Add a new graphic
 -----------------
