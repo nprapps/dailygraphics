@@ -112,11 +112,25 @@ fab app
 
 Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo. Click on the graphic you are working on to view it. Alternately, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
 
+#### Terminal shortcut
+
 Do you use [iTerm2](http://iterm2.com)? Here's [a sample AppleScript](https://gist.github.com/alykat/debf281765db3a0c2e88) to automatically launch a three-paned terminal window (one for the dailygraphics machine, one for the local webserver, and another for the separate graphics repo). You can save this locally, customize it to match your own configuration and add an alias for it to your `.bash_profile`.
 
 ```
 alias dailygraphics="osascript ~/PATH-TO-FILE/iterm_dailygraphics.scpt"
 ```
+
+#### Troubleshooting
+
+Do you get an error that looks like this when you run the webserver?
+
+```
+Fatal error: local() encountered an error (return code 1) while executing 'gunicorn -b 0.0.0.0:8000 --debug --reload app:wsgi_app'
+
+Aborting.
+```
+
+It's possible that the webserver is already running silently in the background. [Here's how to fix it.](https://github.com/nprapps/dailygraphics/issues/74) 
 
 
 Add a new graphic
