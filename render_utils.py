@@ -196,3 +196,14 @@ def urlencode_filter(s):
 
     return Markup(s)
 
+def format_currency(s):
+    
+    t = float(s)
+    
+    return "${:,.2f}".format(t)
+    
+def format_thousands(s):
+    
+    t = float(s)
+    
+    return "{:,.0f}".format(t)    
