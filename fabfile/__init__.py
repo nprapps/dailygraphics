@@ -216,6 +216,15 @@ def add_column_chart(slug):
     download_copy(slug)
 
 @task
+def add_stacked_column_chart(slug):
+    """
+    Create a stacked column chart.
+    """
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    local('cp -r graphic_templates/stacked_column_chart %s' % graphic_path)
+    download_copy(slug)
+
+@task
 def add_grouped_bar_chart(slug):
     """
     Create a grouped bar chart.
