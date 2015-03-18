@@ -138,15 +138,15 @@ Add a new graphic
 
 dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go):
 
-| Type | Fab command |
-| ---- | ----------- |
-| Very basic new graphic | ```fab add_graphic:$SLUG``` |
-| Bar chart | ```fab add_bar_chart:$SLUG``` |
-| Grouped bar chart | ```fab add_grouped_bar_chart:$SLUG``` |
-| Column chart | ```fab add_column_chart:$SLUG``` |
-| Stacked column chart | ```fab add_stacked_column_chart:$SLUG``` |
-| Line chart | ```fab add_line_chart:$SLUG``` |
-| Responsive HTML table | ```fab add_table:$SLUG``` |
+| Image | Type | Fab command |
+| :---- | :--- | :---------- |
+| ![Basic graphic](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/graphic.png) | Very basic new graphic | ```fab add_graphic:$SLUG``` |
+| ![Bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/bar-chart.png) | Bar chart | ```fab add_bar_chart:$SLUG``` |
+| ![Grouped bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/grouped-bar-chart.png) | Grouped bar chart | ```fab add_grouped_bar_chart:$SLUG``` |
+| ![Column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/column-chart.png) | Column chart | ```fab add_column_chart:$SLUG``` |
+| ![Stacked column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-column-chart.png) | Stacked column chart | ```fab add_stacked_column_chart:$SLUG``` |
+| ![Line chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/line-chart.png) | Line chart | ```fab add_line_chart:$SLUG``` |
+| ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
 
 Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
 
