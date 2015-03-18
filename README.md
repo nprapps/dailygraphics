@@ -110,7 +110,7 @@ workon dailygraphics
 fab app
 ```
 
-Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo. Click on the graphic you are working on to view it. Alternately, visit ```http://localhost:8000/graphics/NAME_OF_GRAPHIC``` in your browser to view the specific graphic you are working on.
+Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo. Click on the graphic you are working on to view it. Alternately, visit ```http://localhost:8000/graphics/$SLUG``` in your browser to view the specific graphic you are working on.
 
 #### Terminal shortcut
 
@@ -138,13 +138,15 @@ Add a new graphic
 
 dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go):
 
-* For a very basic new graphic, run ```fab add_graphic:$SLUG```
-* For a bar chart, run ```fab add_bar_chart:$SLUG```
-* For a grouped bar chart, run ```fab add_grouped_bar_chart:$SLUG```
-* For a column chart, run ```fab add_column_chart:$SLUG```
-* For a stacked column chart, run ```fab add_stacked_column_chart:$SLUG```
-* For a line chart, run ```fab add_line_chart:$SLUG```
-* For a responsive HTML table, run ```fab add_table:$SLUG```
+| Type | Fab command |
+| ---- | ----------- |
+| Very basic new graphic | ```fab add_graphic:$SLUG``` |
+| Bar chart | ```fab add_bar_chart:$SLUG``` |
+| Grouped bar chart | ```fab add_grouped_bar_chart:$SLUG``` |
+| Column chart | ```fab add_column_chart:$SLUG``` |
+| Stacked column chart | ```fab add_stacked_column_chart:$SLUG``` |
+| Line chart | ```fab add_line_chart:$SLUG``` |
+| Responsive HTML table | ```fab add_table:$SLUG``` |
 
 Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
 
@@ -166,10 +168,10 @@ When it's time to publish your graphic, it's better to deploy a single graphic r
 To deploy a specific graphic:
 
 ```
-fab staging deploy:NAME_OF_GRAPHIC
+fab staging deploy:$SLUG
 ```
 ```
-fab production deploy:NAME_OF_GRAPHIC
+fab production deploy:$SLUG
 ```
 
 To deploy all graphics, leave off the graphic slug (**but don't do this unless you're absolutely sure** &mdash; you may deploy something that's not ready to be deployed yet):
@@ -184,7 +186,7 @@ fab staging deploy
 Embedding
 ---------
 
-Deploy the project to production. Visit ```http://apps.npr.org/dailygraphics/graphics/NAME_OF_GRAPHIC```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into your page. (Some CMSes treat code snippets like this as a separate "HTML asset.")
+Deploy the project to production. Visit ```http://apps.npr.org/dailygraphics/graphics/$SLUG```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into your page. (Some CMSes treat code snippets like this as a separate "HTML asset.")
 
 
 Connecting to a Google Spreadsheet
@@ -212,7 +214,7 @@ COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHZuX1UycXplRlBfLVB0UVNldHJYZmc'
 Run this command to pull down the latest copy of the spreadsheet:
 
 ```
-fab update_copy:NAME_OF_GRAPHIC
+fab update_copy:$SLUG
 ```
 
 To pull down **all** spreadsheets in the dailygraphics repository, run:
