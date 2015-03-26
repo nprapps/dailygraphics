@@ -169,26 +169,26 @@ var drawGraph = function(graphicWidth) {
                 return i * (BAR_HEIGHT + BAR_GAP);
             })
             .attr('dx', function(d) {
-                if (x(d['amt']) < VALUE_MIN_WIDTH) {
-                    return 6;
-                } else {
+                if (x(d['amt']) > VALUE_MIN_WIDTH) {
                     return -6;
+                } else {
+                    return 6;
                 }
             })
             .attr('dy', (BAR_HEIGHT / 2) + 3)
             .attr('text-anchor', function(d) {
-                if (x(d['amt']) < VALUE_MIN_WIDTH) {
-                    return 'begin';
-                } else {
+                if (x(d['amt']) > VALUE_MIN_WIDTH) {
                     return 'end';
+                } else {
+                    return 'begin';
                 }
             })
             .attr('class', function(d) {
                 var c = classify(d['label']);
-                if (x(d['amt']) < VALUE_MIN_WIDTH) {
-                    c += ' outer';
+                if (x(d['amt']) > VALUE_MIN_WIDTH) {
+                    c += ' in';
                 } else {
-                    c += ' inner';
+                    c += ' out';
                 }
                 return c;
             })
@@ -199,7 +199,7 @@ var drawGraph = function(graphicWidth) {
     // draw labels for each bar
     var labels = d3.select('#graphic').append('ul')
         .attr('class', 'labels')
-        .attr('style', 'width: ' + LABEL_WIDTH + 'px; top: 0; left: 0;')
+        .attr('style', 'width: ' + LABEL_WIDTH + 'px; top: ' + margin['top'] + 'px; left: 0;')
         .selectAll('li')
             .data(graphicData)
         .enter().append('li')

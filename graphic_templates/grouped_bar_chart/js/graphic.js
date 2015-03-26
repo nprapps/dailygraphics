@@ -176,10 +176,10 @@ var drawGraph = function(graphicWidth) {
         );
 
     // draw the bars
-    var barGroup = svg.selectAll('.bar-group')
+    var barGroup = svg.selectAll('.bars')
         .data(graphicData)
         .enter().append('g')
-            .attr('class', 'g')
+            .attr('class', 'g bars')
             .attr('transform', function(d,i) {
                 if (i == 0) {
                     return 'translate(0,0)';
@@ -229,26 +229,26 @@ var drawGraph = function(graphicWidth) {
                 }
             })
             .attr('dx', function(d) {
-                if (x(d['amt']) < VALUE_MIN_WIDTH) {
-                    return 6;
-                } else {
+                if (x(d['amt']) > VALUE_MIN_WIDTH) {
                     return -6;
+                } else {
+                    return 6;
                 }
             })
             .attr('dy', (BAR_HEIGHT / 2) + 4)
             .attr('text-anchor', function(d) {
-                if (x(d['amt']) < VALUE_MIN_WIDTH) {
-                    return 'begin';
-                } else {
+                if (x(d['amt']) > VALUE_MIN_WIDTH) {
                     return 'end';
+                } else {
+                    return 'begin';
                 }
             })
             .attr('class', function(d) {
                 var c = classify(d['label']);
-                if (x(d['amt']) < VALUE_MIN_WIDTH) {
-                    c += ' outer';
+                if (x(d['amt']) > VALUE_MIN_WIDTH) {
+                    c += ' in';
                 } else {
-                    c += ' inner';
+                    c += ' out';
                 }
                 return c;
             })
