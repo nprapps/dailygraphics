@@ -135,14 +135,18 @@ def deploy(slug):
     flat.deploy_folder(
         graphic_root,
         s3_root,
-        max_age=app_config.DEFAULT_MAX_AGE,
+        headers={
+            'Cache-Control': 'max-age=%i' % app_config.DEFAULT_MAX_AGE
+        },
         ignore=['%s/*' % graphic_assets]
     )
 
     flat.deploy_folder(
         graphic_assets,
         s3_assets,
-        max_age=app_config.ASSETS_MAX_AGE
+        headers={
+            'Cache-Control': 'max-age=%i' % app_config.ASSETS_MAX_AGE
+        }
     )
 
 def download_copy(slug):
