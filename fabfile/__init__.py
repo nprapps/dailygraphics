@@ -119,6 +119,10 @@ def deploy(slug):
     """
     require('settings', provided_by=[production, staging])
 
+    if not slug:
+        print 'You must specify a project slug, like this: "deploy:slug"'
+        return
+
     update_copy(slug)
     assets.sync(slug)
     render(slug)
@@ -156,7 +160,7 @@ def download_copy(slug):
     if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
         print 'COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.' % slug
         return
-        
+
     doc = {}
     doc['key'] = graphic_config.COPY_GOOGLE_DOC_KEY
     doc['file_name'] = slug
@@ -250,4 +254,3 @@ def add_table(slug):
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/table %s' % graphic_path)
     download_copy(slug)
-
