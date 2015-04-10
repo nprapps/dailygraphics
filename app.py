@@ -18,6 +18,7 @@ app.debug = app_config.DEBUG
 app.jinja_env.filters['urlencode'] = urlencode_filter
 
 @app.route('/')
+@oauth.oauth_required
 def _graphics_list():
     """
     Renders a list of all graphics for local testing.
@@ -35,6 +36,7 @@ def _graphics_list():
     return make_response(render_template('index.html', **context))
 
 @app.route('/graphics/<slug>/')
+@oauth.oauth_required
 def _graphics_detail(slug):
     """
     Renders a parent.html index with child.html embedded as iframe.
@@ -50,6 +52,7 @@ def _graphics_detail(slug):
     return make_response(render_template(template, **context))
 
 @app.route('/graphics/<slug>/child.html')
+@oauth.oauth_required
 def _graphics_child(slug):
     """
     Renders a child.html for embedding.
@@ -81,6 +84,7 @@ def _graphics_child(slug):
     return make_response(render_template_string(template, **context))
 
 app.register_blueprint(static.static)
+app.register_blueprint(oauth.oauth)
 
 if app_config.DEBUG:
     wsgi_app = DebuggedApplication(app, evalex=False)
