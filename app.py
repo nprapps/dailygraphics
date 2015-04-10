@@ -18,7 +18,6 @@ app.debug = app_config.DEBUG
 app.jinja_env.filters['urlencode'] = urlencode_filter
 
 @app.route('/')
-@oauth.oauth_required
 def _graphics_list():
     """
     Renders a list of all graphics for local testing.
