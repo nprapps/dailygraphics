@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 
-from glob import glob
-import imp
-import os
-
-from flask import Flask, make_response, render_template, render_template_string
-from werkzeug.debug import DebuggedApplication
-
 import app_config
 import copytext
-from render_utils import make_context, urlencode_filter
+import imp
+import oauth
+import os
 import static
+
+from flask import Flask, make_response, render_template, render_template_string
+from glob import glob
+from render_utils import make_context, urlencode_filter
+from werkzeug.debug import DebuggedApplication
 
 app = Flask(app_config.PROJECT_SLUG)
 app.debug = app_config.DEBUG
