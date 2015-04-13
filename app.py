@@ -1,21 +1,22 @@
 #!/usr/bin/env python
 
-from glob import glob
-import imp
-import os
-
-from flask import Flask, make_response, render_template, render_template_string
-from werkzeug.debug import DebuggedApplication
-
 import app_config
 import copytext
-from render_utils import make_context, urlencode_filter
+import imp
+import oauth
+import os
 import static
+
+from flask import Flask, make_response, render_template, render_template_string
+from glob import glob
+from render_utils import make_context, urlencode_filter, render_with_context
+from werkzeug.debug import DebuggedApplication
 
 app = Flask(app_config.PROJECT_SLUG)
 app.debug = app_config.DEBUG
 
-app.jinja_env.filters['urlencode'] = urlencode_filter
+app.add_template_filter(urlencode_filter, 'urlencode')
+app.jinja_env.globals.update(render=render_with_context)
 
 @app.route('/')
 def _graphics_list():
@@ -35,6 +36,7 @@ def _graphics_list():
     return make_response(render_template('index.html', **context))
 
 @app.route('/graphics/<slug>/')
+@oauth.oauth_required
 def _graphics_detail(slug):
     """
     Renders a parent.html index with child.html embedded as iframe.
@@ -50,6 +52,7 @@ def _graphics_detail(slug):
     return make_response(render_template(template, **context))
 
 @app.route('/graphics/<slug>/child.html')
+@oauth.oauth_required
 def _graphics_child(slug):
     """
     Renders a child.html for embedding.
@@ -81,6 +84,7 @@ def _graphics_child(slug):
     return make_response(render_template_string(template, **context))
 
 app.register_blueprint(static.static)
+app.register_blueprint(oauth.oauth)
 
 if app_config.DEBUG:
     wsgi_app = DebuggedApplication(app, evalex=False)
