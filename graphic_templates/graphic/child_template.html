@@ -75,7 +75,7 @@
 </head>
 <body>
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline }}</h1>{% endif %}
-    {% if COPY.labels.subhed %}<h2>{{ COPY.labels.subhed }}</h2>{% endif %}
+    {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed) }}</h2>{% endif %}
 
     <div id="graphic"></div>
     
