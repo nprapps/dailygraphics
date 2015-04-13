@@ -197,75 +197,66 @@ def update_copy(slug=None):
 """
 App-specific commands
 """
+def _add_graphic(slug, template):
+    """
+    Create a graphic with `slug` from `template`
+    """
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    local('cp -r graphic_templates/%s %s' % (template, graphic_path))
+    print 'Creating spreadsheet...'
+    copy_spreadsheet(slug)
+    download_copy(slug)
+    print 'Run `fab app` and visit http://127.0.0.1:8000/graphics/%s to view' % slug
+
+
 @task
 def add_graphic(slug):
     """
     Create a basic project.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/graphic %s' % graphic_path)
-    copy_spreadsheet(slug)
-    download_copy(slug)
+    _add_graphic(slug, 'graphic')
 
 @task
 def add_bar_chart(slug):
     """
     Create a bar chart.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/bar_chart %s' % graphic_path)
-    copy_spreadsheet(slug)
-    download_copy(slug)
+    _add_graphic(slug, 'bar_chart')
 
 @task
 def add_column_chart(slug):
     """
     Create a column chart.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/column_chart %s' % graphic_path)
-    copy_spreadsheet(slug)
-    download_copy(slug)
+    _add_graphic(slug, 'column_chart')
 
 @task
 def add_stacked_column_chart(slug):
     """
     Create a stacked column chart.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/stacked_column_chart %s' % graphic_path)
-    copy_spreadsheet(slug)
-    download_copy(slug)
+    _add_graphic(slug, 'stacked_column_chart')
 
 @task
 def add_grouped_bar_chart(slug):
     """
     Create a grouped bar chart.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/grouped_bar_chart %s' % graphic_path)
-    copy_spreadsheet(slug)
-    download_copy(slug)
+    _add_graphic(slug, 'grouped_bar_chart')
 
 @task
 def add_line_chart(slug):
     """
     Create a line chart.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/line_chart %s' % graphic_path)
-    copy_spreadsheet(slug)
-    download_copy(slug)
+    _add_graphic(slug, 'line_chart')
 
 @task
 def add_table(slug):
     """
     Create a data table.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/table %s' % graphic_path)
-    copy_spreadsheet(slug)
-    download_copy(slug)
+    _add_graphic(slug, 'table')
 
 def _check_credentials():
     """
