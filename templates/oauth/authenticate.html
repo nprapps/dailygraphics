@@ -10,11 +10,12 @@
     {% if result.user %}
     <h1>Success!</h1>
 
-    <p>That was it. Nothing more to do. This should work for all app template projects.</p>
+    <p>You are now authenticated.</p>
 
-    <p>Your copy spreadsheet was automatically updated. Run <code>fab text</code> to update again.</p>
-
+    {% if not request.url_root.endswith('8888/') %}
     <p><a href="/" class="btn btn-primary btn-lg"><b>Take me back!</b> <i class="fa fa-chevron-circle-right"></i></a></p>
+    {% endif %}
+
     {% endif %}
 </div>
 {% endblock %}
