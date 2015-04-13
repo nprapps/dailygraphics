@@ -12,7 +12,9 @@
 
     <p>You are now authenticated.</p>
 
-    {% if not request.url_root.endswith('8888/') %}
+    {% if request.url_root.endswith('8888/') %}
+    <p>You can close this window.</p>
+    {% else %}
     <p><a href="/" class="btn btn-primary btn-lg"><b>Take me back!</b> <i class="fa fa-chevron-circle-right"></i></a></p>
     {% endif %}
 
