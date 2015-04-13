@@ -204,6 +204,7 @@ def add_graphic(slug):
     """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/graphic %s' % graphic_path)
+    copy_spreadsheet(slug)
     download_copy(slug)
 
 @task
@@ -213,6 +214,7 @@ def add_bar_chart(slug):
     """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/bar_chart %s' % graphic_path)
+    copy_spreadsheet(slug)
     download_copy(slug)
 
 @task
