@@ -1,20 +1,26 @@
 #!/usr/bin/env python
 
-from glob import glob
-import imp
-import os
-
-from fabric.api import local, require, task
-from fabric.state import env
-
 import app as flat_app
 import app_config
-from etc.gdocs import GoogleDoc
-
-# Other fabfiles
 import assets
 import flat
+import imp
+import json
+import os
+import subprocess
 import utils
+import webbrowser
+
+from distutils.spawn import find_executable
+from fabric.api import local, prompt, require, settings, task
+from fabric.state import env
+from glob import glob
+from oauth import get_document, get_credentials
+from time import sleep
+
+
+SPREADSHEET_COPY_URL_TEMPLATE = 'https://www.googleapis.com/drive/v2/files/%s/copy'
+SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=1'
 
 """
 Base configuration
@@ -103,7 +109,7 @@ def app(port='8000'):
     """
     Serve app.py.
     """
-    local('gunicorn -b 0.0.0.0:%s --debug --reload app:wsgi_app' % port)
+    local('gunicorn -b 0.0.0.0:%s --timeout 3600 --debug --reload app:wsgi_app' % port)
 
 """
 Deployment
@@ -165,13 +171,8 @@ def download_copy(slug):
         print 'COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.' % slug
         return
 
-    doc = {}
-    doc['key'] = graphic_config.COPY_GOOGLE_DOC_KEY
-    doc['file_name'] = slug
-
-    g = GoogleDoc(**doc)
-    g.get_auth()
-    g.get_document()
+    copy_path = os.path.join(graphic_path, '%s.xlsx' % slug)
+    get_document(graphic_config.COPY_GOOGLE_DOC_KEY, copy_path)
 
 @task
 def update_copy(slug=None):
@@ -196,65 +197,118 @@ def update_copy(slug=None):
 """
 App-specific commands
 """
+def _add_graphic(slug, template):
+    """
+    Create a graphic with `slug` from `template`
+    """
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    local('cp -r graphic_templates/%s %s' % (template, graphic_path))
+    print 'Creating spreadsheet...'
+    copy_spreadsheet(slug)
+    download_copy(slug)
+    print 'Run `fab app` and visit http://127.0.0.1:8000/graphics/%s to view' % slug
+
+
 @task
 def add_graphic(slug):
     """
     Create a basic project.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/graphic %s' % graphic_path)
-    download_copy(slug)
+    _add_graphic(slug, 'graphic')
 
 @task
 def add_bar_chart(slug):
     """
     Create a bar chart.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/bar_chart %s' % graphic_path)
-    download_copy(slug)
+    _add_graphic(slug, 'bar_chart')
 
 @task
 def add_column_chart(slug):
     """
     Create a column chart.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/column_chart %s' % graphic_path)
-    download_copy(slug)
+    _add_graphic(slug, 'column_chart')
 
 @task
 def add_stacked_column_chart(slug):
     """
     Create a stacked column chart.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/stacked_column_chart %s' % graphic_path)
-    download_copy(slug)
+    _add_graphic(slug, 'stacked_column_chart')
 
 @task
 def add_grouped_bar_chart(slug):
     """
     Create a grouped bar chart.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/grouped_bar_chart %s' % graphic_path)
-    download_copy(slug)
+    _add_graphic(slug, 'grouped_bar_chart')
 
 @task
 def add_line_chart(slug):
     """
     Create a line chart.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/line_chart %s' % graphic_path)
-    download_copy(slug)
+    _add_graphic(slug, 'line_chart')
 
 @task
 def add_table(slug):
     """
     Create a data table.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    local('cp -r graphic_templates/table %s' % graphic_path)
-    download_copy(slug)
+    _add_graphic(slug, 'table')
+
+def _check_credentials():
+    """
+    Check credentials and spawn server and browser if not
+    """
+    credentials = get_credentials()
+    if not credentials or 'https://www.googleapis.com/auth/drive' not in credentials.config['google']['scope']:
+        try:
+            with open(os.devnull, 'w') as fnull:
+                print 'Credentials were not found or permissions were not correct. Automatically opening a browser to authenticate with Google.'
+                gunicorn = find_executable('gunicorn')
+                process = subprocess.Popen([gunicorn, '-b', '127.0.0.1:8888', 'app:wsgi_app'], stdout=fnull, stderr=fnull)
+                webbrowser.open_new('http://127.0.0.1:8888/oauth')
+                print 'Waiting...'
+                while not credentials:
+                    try:
+                        credentials = get_credentials()
+                        sleep(1)
+                    except ValueError:
+                        continue
+                print 'Successfully authenticated!'
+                process.terminate()
+        except KeyboardInterrupt:
+            print '\nCtrl-c pressed. Later, skater!'
+            exit()
+
+def copy_spreadsheet(slug):
+    """
+    Copy the COPY spreadsheet
+    """
+    _check_credentials()
+
+    config_path = '%s/%s/graphic_config.py' % (app_config.GRAPHICS_PATH, slug)
+    graphic_config = imp.load_source('graphic_config', config_path)
+
+    kwargs = {
+        'credentials': get_credentials(),
+        'url': SPREADSHEET_COPY_URL_TEMPLATE % graphic_config.COPY_GOOGLE_DOC_KEY,
+        'method': 'POST',
+        'headers': {'Content-Type': 'application/json'},
+        'body': json.dumps({
+            'title': '%s GRAPHIC COPY' % slug,
+        }),
+    }
+
+    resp = app_config.authomatic.access(**kwargs)
+    if resp.status == 200:
+        spreadsheet_key = resp.data['id']
+        spreadsheet_url = SPREADSHEET_VIEW_TEMPLATE % spreadsheet_key
+        print 'New spreadsheet created successfully!'
+        print 'View it online at %s' % spreadsheet_url
+        utils.replace_in_file(config_path, graphic_config.COPY_GOOGLE_DOC_KEY, spreadsheet_key)
+    else:
+        print 'Error creating spreadsheet (status code %s) with message %s' % (resp.status, resp.reason)
+        return None

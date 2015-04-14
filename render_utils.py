@@ -7,6 +7,7 @@ import urllib
 
 from cssmin import cssmin
 from flask import Markup, g, render_template, request
+from jinja2 import contextfunction, Template
 from slimit import minify
 
 import app_config
@@ -196,3 +197,7 @@ def urlencode_filter(s):
 
     return Markup(s)
 
+@contextfunction
+def render_with_context(context, text):
+    template = Template(text.__unicode__())
+    return template.render(**context)

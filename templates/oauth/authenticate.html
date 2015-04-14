@@ -1,0 +1,23 @@
+{% extends 'oauth/_oauth_base.html' %}
+
+{% block content %}
+<div class="jumbotron">
+    {% if result.error %}
+    <h1>Oh no, there was an error!</h1>
+    <p><strong>Error message:</strong> {{ result.error.message }}</p>
+    {% endif %}
+
+    {% if result.user %}
+    <h1>Success!</h1>
+
+    <p>You are now authenticated.</p>
+
+    {% if request.url_root.endswith('8888/') %}
+    <p>You can close this window.</p>
+    {% else %}
+    <p><a href="/" class="btn btn-primary btn-lg"><b>Take me back!</b> <i class="fa fa-chevron-circle-right"></i></a></p>
+    {% endif %}
+
+    {% endif %}
+</div>
+{% endblock %}
