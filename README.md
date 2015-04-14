@@ -98,7 +98,7 @@ The dailygraphics project configuration defaults are specific to NPR. If you wan
 
 At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS``, ``STAGING_S3_BUCKETS`` and ``ASSETS_S3_BUCKET``. (``ASSETS_S3_BUCKET`` *must* be different from the other buckets.)
 
-See also: [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+**See also:** [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 
 Run the project
 ---------------
@@ -194,18 +194,20 @@ Connecting to a Google Spreadsheet
 
 This section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet.
 
-In order to use the Google Spreadsheet syncing you will need to have environment variables set for ``APPS_GOOGLE_EMAIL`` and ``APPS_GOOGLE_PASS``. If you use bash you might add these to ``~/.bash_profile``.
+As of April 2015, we've changed our approach to authenticating with Google to sync Google Spreadsheet data. Now, dailygraphics relies on OAuth authentication. This approach is more secure (username and password are no longer stored in environment variables) and works for accounts with two-factor authentication enabled.
 
-```
-export APPS_GOOGLE_EMAIL='EMAIL@GMAIL.COM'
-export APPS_GOOGLE_PASS='PASSWORD'
-```
+If you cloned dailygraphics prior to April 2015, and want to update to the latest version, be sure to ```pip install –U -r requirements.txt```
 
-KNOWN ISSUE: Our copytext rig will not work with Gmail accounts with two-factor authentication enabled. If this is an issue, we suggest either creating a separate Gmail account without two-factor for use with dailygraphics, or not using the copytext feature.
+Following the steps in [this blog post](http://blog.apps.npr.org/2015/03/02/app-template-oauth.html), you will need to:
+1. Set up a Google API application for your organization
+2. Save the client environment variables in your ```.bash_profile```
+3. Authenticate with Google.
 
-New graphics by default point to the main [app-template](https://github.com/nprapps/app-template)'s copy spreadsheet template. If you want to use this spreadsheet template as the basis for your project, make a copy of it first.
+You should only need to do this once.
 
-To connect this spreadsheet (or any spreadsheet) to your graphic, update the ```graphic_config.py``` file in your graphic's folder with the ID of your spreadsheet:
+**NPR Visuals:** The environment variables you need have already been generated, so you can skip part 1. Contact Alyson, David or Chris for more information.
+
+New graphics by default clone our dailygraphics copy spreadsheet template. To point to a different spreadsheet, update the ```graphic_config.py``` file in your graphic's folder with the ID of your spreadsheet:
 
 ```
 COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHZuX1UycXplRlBfLVB0UVNldHJYZmc'
@@ -217,6 +219,8 @@ Run this command to pull down the latest copy of the spreadsheet:
 fab update_copy:$SLUG
 ```
 
+Alternately, while you are developing your graphic locally, you can append ```?refresh=1``` to your graphic's localhost URL to refresh the spreadsheet every time you refresh the page. (It can be a little slow, though, so it might be most efficient to do this only when you’re actively working on the spreadsheet.)
+
 To pull down **all** spreadsheets in the dailygraphics repository, run:
 
 ```
@@ -225,9 +229,9 @@ fab update_copy
 
 The deploy process will always pull down the latest spreadsheet and render the contents to your page.
 
-If you do **not** want a copytext spreadsheet, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
-
 Note: Your graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
+
+If you do **not** want a copytext spreadsheet, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
 
 
 Storing media assets
