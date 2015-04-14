@@ -100,7 +100,7 @@ At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS
 
 **Google OAuth**
 
-The default configuration assumes that you want to use NPR's copytext rig to [pull content from a Google Spreadsheet](sync Google Spreadsheet data](#connecting-to-a-google-spreadsheet).
+The default configuration assumes that you want to use NPR's copytext rig to [pull content from a Google Spreadsheet](#connecting-to-a-google-spreadsheet).
 
 As of April 2015, we've changed our approach to authenticating with Google to sync Google Spreadsheet data. Now, dailygraphics relies on OAuth authentication. This approach is more secure (username and password are no longer stored in environment variables) and works for accounts with two-factor authentication enabled.
 
