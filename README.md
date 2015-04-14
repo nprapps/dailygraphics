@@ -188,14 +188,6 @@ fab staging deploy:$SLUG
 fab production deploy:$SLUG
 ```
 
-To deploy all graphics, leave off the graphic slug (**but don't do this unless you're absolutely sure** &mdash; you may deploy something that's not ready to be deployed yet):
-
-```
-fab production deploy
-```
-```
-fab staging deploy
-```
 
 Embedding
 ---------
