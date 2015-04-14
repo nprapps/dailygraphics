@@ -205,9 +205,9 @@ Following the steps in [this blog post](http://blog.apps.npr.org/2015/03/02/app-
 
 You should only need to do this once.
 
-**NPR Visuals:** The environment variables you need have already been generated, so you can skip part 1. Contact Alyson, David or Chris for more information.
+_(**NPR Visuals:** The environment variables you need have already been generated, so you can skip part 1. Contact Alyson, David or Chris for more information.)_
 
-New graphics by default clone our dailygraphics copy spreadsheet template. To point to a different spreadsheet, update the ```graphic_config.py``` file in your graphic's folder with the ID of your spreadsheet:
+When you create a new graphic, dailygraphics will by default clone our [dailygraphics copy spreadsheet template](https://docs.google.com/spreadsheets/d/1ciRc--h8HuBpQzMebVygC4x_y9dvKxp6OA45ccRrIX4/edit#gid=0). To use a different spreadsheet (either in your graphics templates or in a particular project), update the ```graphic_config.py``` file in your graphic's folder with the ID of your spreadsheet:
 
 ```
 COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHZuX1UycXplRlBfLVB0UVNldHJYZmc'
