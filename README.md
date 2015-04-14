@@ -98,7 +98,21 @@ The dailygraphics project configuration defaults are specific to NPR. If you wan
 
 At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS``, ``STAGING_S3_BUCKETS`` and ``ASSETS_S3_BUCKET``. (``ASSETS_S3_BUCKET`` *must* be different from the other buckets.)
 
-**See also:** [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+**Google OAuth**
+
+The default configuration assumes that you want to use NPR's copytext rig to [pull content from a Google Spreadsheet](sync Google Spreadsheet data](#connecting-to-a-google-spreadsheet).
+
+As of April 2015, we've changed our approach to authenticating with Google to sync Google Spreadsheet data. Now, dailygraphics relies on OAuth authentication. This approach is more secure (username and password are no longer stored in environment variables) and works for accounts with two-factor authentication enabled.
+
+Following the steps in [this blog post](http://blog.apps.npr.org/2015/03/02/app-template-oauth.html), you will need to:
+- Set up a Google API application for your organization
+- Save the client environment variables in your ```.bash_profile```
+- Authenticate with Google.
+
+You should only need to do this once.
+
+**NPR Visuals:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson, David or Chris for more information.
+
 
 Run the project
 ---------------
@@ -148,7 +162,7 @@ dailygraphics includes starter code for a few different types of graphics (and w
 | ![Line chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/line-chart.png) | Line chart | ```fab add_line_chart:$SLUG``` |
 | ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
 
-Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
+Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic. It also will clone a new Google Spreadsheet for you to use for text and data.
 
 Build out your graphic in ```child_template.html```, and put your javascript in ```js/graphic.js```.
 
@@ -193,19 +207,6 @@ Connecting to a Google Spreadsheet
 ----------------------------------
 
 This section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet.
-
-As of April 2015, we've changed our approach to authenticating with Google to sync Google Spreadsheet data. Now, dailygraphics relies on OAuth authentication. This approach is more secure (username and password are no longer stored in environment variables) and works for accounts with two-factor authentication enabled.
-
-If you cloned dailygraphics prior to April 2015, and want to update to the latest version, be sure to ```pip install –U -r requirements.txt```
-
-Following the steps in [this blog post](http://blog.apps.npr.org/2015/03/02/app-template-oauth.html), you will need to:
-1. Set up a Google API application for your organization
-2. Save the client environment variables in your ```.bash_profile```
-3. Authenticate with Google.
-
-You should only need to do this once.
-
-_(**NPR Visuals:** The environment variables you need have already been generated, so you can skip part 1. Contact Alyson, David or Chris for more information.)_
 
 When you create a new graphic, dailygraphics will by default clone our [dailygraphics copy spreadsheet template](https://docs.google.com/spreadsheets/d/1ciRc--h8HuBpQzMebVygC4x_y9dvKxp6OA45ccRrIX4/edit#gid=0). To use a different spreadsheet (either in your graphics templates or in a particular project), update the ```graphic_config.py``` file in your graphic's folder with the ID of your spreadsheet:
 
