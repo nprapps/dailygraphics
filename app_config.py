@@ -8,6 +8,7 @@ import os
 
 from authomatic.providers import oauth2
 from authomatic import Authomatic
+setattr(oauth2.Google, "_x_use_authorization_header", False)
 
 """
 NAMES
