@@ -203,9 +203,16 @@ def _add_graphic(slug, template):
     """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     local('cp -r graphic_templates/%s %s' % (template, graphic_path))
-    print 'Creating spreadsheet...'
-    copy_spreadsheet(slug)
-    download_copy(slug)
+
+    config_path = os.path.join(graphic_path, 'graphic_config.py')
+
+    if os.path.isfile(config_path):
+        print 'Creating spreadsheet...'
+        copy_spreadsheet(slug)
+        download_copy(slug)
+    else:
+        print 'No graphic_config.py found, not creating spreadsheet'
+
     print 'Run `fab app` and visit http://127.0.0.1:8000/graphics/%s to view' % slug
 
 
