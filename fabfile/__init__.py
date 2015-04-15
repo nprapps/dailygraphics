@@ -2,6 +2,7 @@
 
 import app as flat_app
 import app_config
+import boto
 import assets
 import flat
 import imp
@@ -194,6 +195,7 @@ def update_copy(slug=None):
         print slug
         download_copy(slug)
 
+
 """
 App-specific commands
 """
@@ -202,6 +204,10 @@ def _add_graphic(slug, template):
     Create a graphic with `slug` from `template`
     """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+
+    if _check_slug(slug):
+        return
+
     local('cp -r graphic_templates/%s %s' % (template, graphic_path))
 
     config_path = os.path.join(graphic_path, 'graphic_config.py')
@@ -215,6 +221,23 @@ def _add_graphic(slug, template):
 
     print 'Run `fab app` and visit http://127.0.0.1:8000/graphics/%s to view' % slug
 
+def _check_slug(slug):
+    """
+    Does slug exist in graphics folder or production s3 bucket?
+    """
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    if os.path.isdir(graphic_path):
+        print 'Error: Directory already exists'
+        return True
+
+    s3 = boto.connect_s3()
+    bucket = s3.get_bucket(app_config.PRODUCTION_S3_BUCKET['bucket_name'])
+    key = bucket.get_key('%s/graphics/%s/child.html' % (app_config.PROJECT_SLUG, slug))
+    if key:
+        print 'Error: Slug exists on apps.npr.org'
+        return True
+
+    return False
 
 @task
 def add_graphic(slug):
