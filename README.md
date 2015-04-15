@@ -87,9 +87,9 @@ pip install -r requirements.txt
 
 You'll now need to create a folder to hold the graphics created and deployed by this rig. This is configured in `app_config.GRAPHICS_PATH` and defaults to `../graphics`.
 
-**NPR Visuals:** Graphics are stored in a separate, private repository, and `app_config.GRAPHICS_PATH` points to that folder. You will need to separately `git clone` that repository.
+**NPR users:** Graphics are stored in a separate, private repository, and `app_config.GRAPHICS_PATH` points to that folder. You will need to separately `git clone` that repository.
 
-**Outside of NPR:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
+**All other users:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
 
 Configuration
 -------------
@@ -100,7 +100,7 @@ At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS
 
 **Google OAuth**
 
-The default configuration assumes that you want to use NPR's copytext rig to [pull content from a Google Spreadsheet](#connecting-to-a-google-spreadsheet).
+The default configuration assumes that you want to use NPR's copytext rig to [pull content from a Google Spreadsheet](#connecting-to-a-google-spreadsheet). If you do not want to use Google Spreadsheets at all, delete all instances of ```graphic_config.py``` from the template folders inside ```graphic_templates```. You can skip the OAuth steps below.
 
 As of April 2015, we've changed our approach to authenticating with Google to sync Google Spreadsheet data. Now, dailygraphics relies on OAuth authentication. This approach is more secure (username and password are no longer stored in environment variables) and works for accounts with two-factor authentication enabled.
 
@@ -111,7 +111,7 @@ Following the steps in [this blog post](http://blog.apps.npr.org/2015/03/02/app-
 
 You should only need to do this once.
 
-**NPR Visuals:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson, David or Chris for more information.
+**NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson, David or Chris for more information.
 
 
 Run the project
@@ -174,6 +174,11 @@ Here are some examples:
 * Good: my-project-name<br>Bad: my project name
 * Good: my-wonderful-project<br>Bad: my wonderful project!
 
+**NPR users:** For added clarity, append the current date or known pubdate to your slug name, YYYYMMDD-style. For example: ```my-project-name-20150415```
+
+When you create a new project, dailygraphics will check against your local projects and the projects published to production to make sure that the ```$SLUG``` you've chosen does not already exist.
+
+
 Deploy to S3
 ------------
 
@@ -222,9 +227,9 @@ fab update_copy
 
 The deploy process will always pull down the latest spreadsheet and render the contents to your page.
 
-Note: Your graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
+Note: Your published graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
 
-If you do **not** want a copytext spreadsheet, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
+If you do **not** want want to use the copytext spreadsheet for a given project, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
 
 
 Storing media assets
