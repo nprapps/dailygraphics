@@ -3,23 +3,16 @@ body {
     color: #333;
 }
 
-header { margin-bottom: 11px; }
-header:before,
-header:after {
-    content: ' ';
-    display: table;
-}
-header:after { clear: both; }
 h1 {
     font-size: 20px;
     margin: 0;
-    float: left;
 }
 h2 {
     font-size: 14px;
     margin: 0 0 11px 0;
 }
-h3 {
+
+button {
     font-size: 12px;
     line-height: 28px;
     margin: 0;
@@ -29,7 +22,28 @@ h3 {
     background-color: #f1f1f1;
     font-weight: bold;
     -webkit-font-smoothing: antialiased;
+    color: #4774CC;
+    border: none;
 }
+button:hover,
+button:active {
+    opacity: 0.7;
+}
+
+.graphics-list li {
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
+.parent-header { margin-bottom: 11px; }
+.parent-header:before,
+.parent-header:after {
+    content: ' ';
+    display: table;
+}
+.parent-header:after { clear: both; }
+.parent-header h1 { float: left; }
+.parent-header button { float: right; }
 
 textarea {
     display: block;

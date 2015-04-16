@@ -1,6 +1,18 @@
-<!-- index -->
-<h1>There are {{ graphics_count }} graphics:</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graphic Embed : NPR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../../css/dailygraphics.css" type="text/css">
+</head>
+<body>
 
-<ol>{% for graphic in graphics %}
+<!-- index -->
+<h1>There are <strong>{{ graphics_count }}</strong> graphics:</h1>
+
+<ol class="graphics-list">{% for graphic in graphics %}
     <li><a href="/graphics/{{ graphic }}/?refresh=1">{{ graphic }}</a></li>
 {% endfor %}</ol>
+
+</body>
+</html>

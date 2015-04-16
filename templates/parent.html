@@ -7,10 +7,10 @@
 </head>
 <body>
 
-    <header>
+    <header class="parent-header">
         <h1>Preview</h1>
         {% if COPY_GOOGLE_DOC_KEY %}{% if COPY_GOOGLE_DOC_KEY != 'None' %}
-        <h3><a href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">Edit spreadsheet</a></h3>
+        <button><a href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">Edit spreadsheet</a></button>
         {% endif %}{% endif %}
     </header>
 
