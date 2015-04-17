@@ -230,12 +230,17 @@ def _check_slug(slug):
         print 'Error: Directory already exists'
         return True
 
-    s3 = boto.connect_s3()
-    bucket = s3.get_bucket(app_config.PRODUCTION_S3_BUCKET['bucket_name'])
-    key = bucket.get_key('%s/graphics/%s/child.html' % (app_config.PROJECT_SLUG, slug))
-    if key:
-        print 'Error: Slug exists on apps.npr.org'
-        return True
+    try:
+        s3 = boto.connect_s3()
+        bucket = s3.get_bucket(app_config.PRODUCTION_S3_BUCKET['bucket_name'])
+        key = bucket.get_key('%s/graphics/%s/child.html' % (app_config.PROJECT_SLUG, slug))
+        if key:
+            print 'Error: Slug exists on apps.npr.org'
+            return True
+    except boto.exception.NoAuthHandlerFound:
+        print 'Could not authenticate, skipping Amazon S3 check'
+    except boto.exception.S3ResponseError:
+        print 'Could not access S3 bucket, skipping Amazon S3 check'
 
     return False
 
