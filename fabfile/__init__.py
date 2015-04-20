@@ -280,6 +280,13 @@ def add_grouped_bar_chart(slug):
     _add_graphic(slug, 'grouped_bar_chart')
 
 @task
+def add_stacked_bar_chart(slug):
+    """
+    Create a stacked bar chart.
+    """
+    _add_graphic(slug, 'stacked_bar_chart')
+
+@task
 def add_line_chart(slug):
     """
     Create a line chart.
