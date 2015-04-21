@@ -18,7 +18,17 @@
             margin: 0 0 11px 0;
         }
 
-        button {
+        a, a:link,
+        a:visited {
+            color: #4774CC;
+            text-decoration: none;
+        }
+        a:hover,
+        a:active {
+            color: #bccae5;
+        }
+
+        a.btn-spreadsheet {
             font-size: 12px;
             line-height: 28px;
             margin: 0;
@@ -28,11 +38,9 @@
             background-color: #f1f1f1;
             font-weight: bold;
             -webkit-font-smoothing: antialiased;
-            color: #4774CC;
-            border: none;
         }
-        button:hover,
-        button:active {
+        a.btn-spreadsheet:hover,
+        a.btn-spreadsheet:active {
             opacity: 0.7;
         }
 
@@ -55,12 +63,6 @@
             display: block;
             margin-bottom: 33px;
         }
-
-        a, a:link, a:visited {
-            color: #4774CC;
-            text-decoration: none;
-        }
-        a:hover, a:active { color: #bccae5; }
     </style>
 </head>
 <body>
@@ -69,7 +71,7 @@
         <h1>Preview</h1>
         {% if not DEPLOYMENT_TARGET %}
         {% if COPY_GOOGLE_DOC_KEY %}{% if COPY_GOOGLE_DOC_KEY != 'None' %}
-        <button><a href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">Edit spreadsheet</a></button>
+        <a class="btn-spreadsheet" href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">Edit spreadsheet</a>
         {% endif %}{% endif %}
         {% endif %}
     </header>
