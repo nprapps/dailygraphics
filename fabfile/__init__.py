@@ -156,6 +156,9 @@ def deploy(slug):
         }
     )
 
+    print ''
+    print '%s URL: %s/graphics/%s/' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug)
+
 def download_copy(slug):
     """
     Downloads a Google Doc as an .xlsx file.
