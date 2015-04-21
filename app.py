@@ -43,11 +43,21 @@ def _graphics_detail(slug):
     """
     context = make_context()
     context['slug'] = slug
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
     template = 'parent.html'
 
     if not os.path.exists('%s/%s/js/lib/pym.js' % (app_config.GRAPHICS_PATH, slug)):
         template = 'parent_old.html'
+
+    try:
+        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
+        context.update(graphic_config.__dict__)
+
+        if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
+            context['COPY'] = copytext.Copy(filename='%s/%s.xlsx' % (graphic_path, slug))
+    except IOError:
+        pass
 
     return make_response(render_template(template, **context))
 

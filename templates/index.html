@@ -1,6 +1,76 @@
-<!-- index -->
-<h1>There are {{ graphics_count }} graphics:</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graphic Embed : NPR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <style type="text/css">
+        body {
+            font: 14px/1.4 Helvetica, Arial, sans-serif;
+            color: #333;
+        }
 
-<ol>{% for graphic in graphics %}
+        h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+        h2 {
+            font-size: 14px;
+            margin: 0 0 11px 0;
+        }
+
+        button {
+            font-size: 12px;
+            line-height: 28px;
+            margin: 0;
+            float: right;
+            padding: 0 11px;
+            border-radius: 4px;
+            background-color: #f1f1f1;
+            font-weight: bold;
+            -webkit-font-smoothing: antialiased;
+            color: #4774CC;
+            border: none;
+        }
+        button:hover,
+        button:active {
+            opacity: 0.7;
+        }
+
+        .graphics-list li {
+            margin-top: 0;
+            margin-bottom: 6px;
+        }
+
+        .parent-header { margin-bottom: 11px; }
+        .parent-header:before,
+        .parent-header:after {
+            content: ' ';
+            display: table;
+        }
+        .parent-header:after { clear: both; }
+        .parent-header h1 { float: left; }
+        .parent-header button { float: right; }
+
+        textarea {
+            display: block;
+            margin-bottom: 33px;
+        }
+
+        a, a:link, a:visited {
+            color: #4774CC;
+            text-decoration: none;
+        }
+        a:hover, a:active { color: #bccae5; }
+    </style>
+</head>
+<body>
+
+<!-- index -->
+<h1>There are <strong>{{ graphics_count }}</strong> graphics:</h1>
+
+<ol class="graphics-list">{% for graphic in graphics %}
     <li><a href="/graphics/{{ graphic }}/?refresh=1">{{ graphic }}</a></li>
 {% endfor %}</ol>
+
+</body>
+</html>

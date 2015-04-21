@@ -3,19 +3,81 @@
 <head>
     <title>Graphic Embed : NPR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
-    <style>
+    <style type="text/css">
+        body {
+            font: 14px/1.4 Helvetica, Arial, sans-serif;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+        h2 {
+            font-size: 14px;
+            margin: 0 0 11px 0;
+        }
+
+        button {
+            font-size: 12px;
+            line-height: 28px;
+            margin: 0;
+            float: right;
+            padding: 0 11px;
+            border-radius: 4px;
+            background-color: #f1f1f1;
+            font-weight: bold;
+            -webkit-font-smoothing: antialiased;
+            color: #4774CC;
+            border: none;
+        }
+        button:hover,
+        button:active {
+            opacity: 0.7;
+        }
+
+        .graphics-list li {
+            margin-top: 0;
+            margin-bottom: 6px;
+        }
+
+        .parent-header { margin-bottom: 11px; }
+        .parent-header:before,
+        .parent-header:after {
+            content: ' ';
+            display: table;
+        }
+        .parent-header:after { clear: both; }
+        .parent-header h1 { float: left; }
+        .parent-header button { float: right; }
+
         textarea {
             display: block;
+            margin-bottom: 33px;
         }
+
+        a, a:link, a:visited {
+            color: #4774CC;
+            text-decoration: none;
+        }
+        a:hover, a:active { color: #bccae5; }
     </style>
 </head>
 <body>
-    <h3>Preview</h3>
+
+    <header class="parent-header">
+        <h1>Preview</h1>
+        {% if not DEPLOYMENT_TARGET %}
+        {% if COPY_GOOGLE_DOC_KEY %}{% if COPY_GOOGLE_DOC_KEY != 'None' %}
+        <button><a href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">Edit spreadsheet</a></button>
+        {% endif %}{% endif %}
+        {% endif %}
+    </header>
 
     <div id='preview'>
     </div>
 
-    <h3>Production embed</h3>
+    <h2>Production embed code</h2>
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
@@ -34,7 +96,7 @@ $(function() {
     </textarea>
 <!-- end textarea contents -->
 
-    <h3>Localhost embed</h3>
+    <h2>Localhost embed code</h2>
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
