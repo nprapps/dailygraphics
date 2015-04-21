@@ -68,7 +68,9 @@
 <body>
 
     <header class="parent-header">
-        <h1>Preview</h1>
+        <h1>
+            {% if DEPLOYMENT_TARGET %}{{ DEPLOYMENT_TARGET|capitalize }} p{% else %}P{% endif %}review for {{ slug }}
+        </h1>
         {% if not DEPLOYMENT_TARGET %}
         {% if COPY_GOOGLE_DOC_KEY %}{% if COPY_GOOGLE_DOC_KEY != 'None' %}
         <a class="btn-spreadsheet" href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">Edit spreadsheet</a>
