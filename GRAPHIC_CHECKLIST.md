@@ -2,8 +2,11 @@
 
 ## Initial Concept
 
-* Is the data organized by the component most important to the narrative? (e.g. geographic->map, temporal->timeline, ordinal->table)
-* Do we have adequate narrative context to understand the meaning of the data?
+* Is the data organized by the component most important to the narrative?
+  * geographic -> map
+  * temporal -> timeline
+  * ordinal -> table
+* Do we have sufficient narrative context to understand the meaning of the data?
 * If the data is vulnerable to being misinterpreted, have we adequately warned against it?
 
 ## Data
@@ -12,16 +15,17 @@
 * Is the data internally complete? (e.g., no missing years) If not, do we make it clear what data is missing?
   * For example, in a chart: dotted or missing lines and a corresponding footnote
   * In a table: “n/a” in the table cell, or an asterisk + footnote
-* Does any bucketing of the data effectively illustrate the distribution? (quartiles, quintiles, equal-interval, jenks breaks, box plot, etc.)
+* Have we been careful to ensure we don't treat "0" and "null" interchangably?
+* Does any bucketing of the data effectively represent the distribution? (quartiles, quintiles, equal-interval, jenks breaks, box plot, etc.)
 
 ## Text
 
 * Is the headline human-friendly? (conversational, non-technical)
 * Is Every Word In The Headline Capitalized? (NPR headline style)
-* Are quotes in the headline singular and escaped? (&lsquo;)
+* Are quotes in the headline singular and escaped? (&amp;lsquo;)
 * Does the Source line link back, if possible?
 * Does the Credit line include everyone who worked on the graphic?
-* Do the footnotes explain anything a normal reader would need to know to understand the chart fully?
+* Do the footnotes explain all caveats a normal reader would need to know to understand the chart fully?
 
 ## Technical / Code
 
@@ -51,6 +55,6 @@
 
 * Has the graphic been edited by Alyson?
 * Has the graphic gone through line edit and copy edit?
-* Line edit: Review/edit by a digital editor
-* Copy edit: Final edit by the copy desk. Most daily graphics are copy edited at the same time as their stories. But more complex graphics should go to copyedit before that, to give editors more time to review.
+  * Line edit: Review/edit by a digital editor
+  * Copy edit: Final edit by the copy desk. Most daily graphics are copy edited at the same time as their stories. But more complex graphics should go to copyedit before that, to give editors more time to review.
 * Have you added the graphic to the Graphics Archive page in Confluence?
