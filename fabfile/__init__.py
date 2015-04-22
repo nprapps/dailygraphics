@@ -349,6 +349,7 @@ def copy_spreadsheet(slug):
     """
     _check_credentials()
 
+    config_path = '%s/%s/graphic_config.py' % (app_config.GRAPHICS_PATH, slug)
     graphic_config = _graphic_config(slug)
 
     kwargs = {
