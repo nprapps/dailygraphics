@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 
 import app as flat_app
 import app_config
@@ -19,7 +19,6 @@ from glob import glob
 from oauth import get_document, get_credentials
 from time import sleep
 
-
 SPREADSHEET_COPY_URL_TEMPLATE = 'https://www.googleapis.com/drive/v2/files/%s/copy'
 SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=1'
 
@@ -27,6 +26,21 @@ SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=
 Base configuration
 """
 env.settings = None
+
+def _graphic_config(slug):
+    """
+    Load and the graphic config for a graphic.
+    """
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+
+    try:
+        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
+    except IOError:
+        print '%s/graphic_config.py does not exist.' % slug
+
+        raise
+
+    return graphic_config
 
 """
 Environments
@@ -139,11 +153,16 @@ def deploy(slug):
     graphic_assets = '%s/assets' % graphic_root
     s3_assets = '%s/assets' % s3_root
 
+    graphic_config = _graphic_config(slug)
+
+    default_max_age = getattr(graphic_config, 'DEFAULT_MAX_AGE', None) or app_config.DEFAULT_MAX_AGE
+    assets_max_age = getattr(graphic_config, 'ASSETS_MAX_AGE', None) or app_config.ASSETS_MAX_AGE
+
     flat.deploy_folder(
         graphic_root,
         s3_root,
         headers={
-            'Cache-Control': 'max-age=%i' % app_config.DEFAULT_MAX_AGE
+            'Cache-Control': 'max-age=%i' % default_max_age
         },
         ignore=['%s/*' % graphic_assets]
     )
@@ -152,7 +171,7 @@ def deploy(slug):
         graphic_assets,
         s3_assets,
         headers={
-            'Cache-Control': 'max-age=%i' % app_config.ASSETS_MAX_AGE
+            'Cache-Control': 'max-age=%i' % assets_max_age
         }
     )
 
@@ -164,12 +183,7 @@ def download_copy(slug):
     Downloads a Google Doc as an .xlsx file.
     """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-
-    try:
-        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
-    except IOError:
-        print '%s/graphic_config.py does not exist.' % slug
-        return
+    graphic_config = _graphic_config(slug)
 
     if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
         print 'COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.' % slug
@@ -335,8 +349,7 @@ def copy_spreadsheet(slug):
     """
     _check_credentials()
 
-    config_path = '%s/%s/graphic_config.py' % (app_config.GRAPHICS_PATH, slug)
-    graphic_config = imp.load_source('graphic_config', config_path)
+    graphic_config = _graphic_config(slug)
 
     kwargs = {
         'credentials': get_credentials(),
