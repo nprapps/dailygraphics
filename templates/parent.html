@@ -89,7 +89,7 @@
             color: orange;
         }
 
-        .production
+        .production,
         a.production,
         a.production:visited {
             color: red;
@@ -139,30 +139,32 @@
 
         <div class="right">
 
-            {% if DEPLOYMENT_TARGET != None %}
-            <div class="segment">
-                <a class="btn localhost" href="http://localhost:8000/graphics/{{ slug }}/">localhost &raquo;</a>
-            </div>
-            {% endif %}
-
-            {% if DEPLOYMENT_TARGET != 'staging' %}
-            <div class="segment">
-                <a class="btn staging" href="http://stage-apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">staging &raquo;</a>
-            </div>
-            {% endif %}
-
-            {% if DEPLOYMENT_TARGET != 'production' %}
-            <div class="segment">
-                <a class="btn production" href="http://apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
-            </div>
-            {% endif %}
-
             {% if DEPLOYMENT_TARGET != "production" %}
-            {% if COPY_GOOGLE_DOC_KEY %}{% if COPY_GOOGLE_DOC_KEY != 'None' %}
-            <div class="segment">
-                <a class="btn" href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">spreadsheet &raquo;</a>
-            </div>
-            {% endif %}{% endif %}
+                {% if DEPLOYMENT_TARGET != None %}
+                <div class="segment">
+                    <a class="btn localhost" href="http://localhost:8000/graphics/{{ slug }}/">localhost &raquo;</a>
+                </div>
+                {% endif %}
+
+                {% if DEPLOYMENT_TARGET != 'staging' %}
+                <div class="segment">
+                    <a class="btn staging" href="http://stage-apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">staging &raquo;</a>
+                </div>
+                {% endif %}
+
+                {% if DEPLOYMENT_TARGET != 'production' %}
+                <div class="segment">
+                    <a class="btn production" href="http://apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
+                </div>
+                {% endif %}
+
+                {% if COPY_GOOGLE_DOC_KEY %}
+                {% if COPY_GOOGLE_DOC_KEY != 'None' %}
+                <div class="segment">
+                    <a class="btn" href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">spreadsheet &raquo;</a>
+                </div>
+                {% endif %}
+                {% endif %}
             {% endif %}
         </div>
     </header>
@@ -172,7 +174,7 @@
         <div id='preview'>
         </div>
 
-        <h2>Production embed code (for Seamus)</h2>
+        <h2><span class="production">Production</span> embed code (for Seamus)</h2>
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
@@ -191,7 +193,7 @@ $(function() {
     </textarea>
 <!-- end textarea contents -->
 
-        <h2>Production autoinit embed code (for member stations)</h2>
+        <h2><span class="production">Production</span> autoinit embed code (for member stations)</h2>
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
