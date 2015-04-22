@@ -4,15 +4,19 @@
     <title>{% if DEPLOYMENT_TARGET %}{{ DEPLOYMENT_TARGET }} : {% endif %}{{ slug }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <style type="text/css">
+        /* Basic styles */
         body {
             font: 14px/1.4 Helvetica, Arial, sans-serif;
             color: #333;
+            margin: 0;
+            padding: 0;
         }
 
         h1 {
             font-size: 20px;
             margin: 0;
         }
+
         h2 {
             font-size: 14px;
             margin: 0 0 11px 0;
@@ -28,19 +32,19 @@
             color: #bccae5;
         }
 
-        a.btn-spreadsheet {
+        a.btn {
             font-size: 12px;
             line-height: 28px;
             margin: 0;
-            float: right;
+            float: left;
             padding: 0 11px;
             border-radius: 4px;
             background-color: #f1f1f1;
             font-weight: bold;
             -webkit-font-smoothing: antialiased;
         }
-        a.btn-spreadsheet:hover,
-        a.btn-spreadsheet:active {
+        a.btn:hover,
+        a.btn:active {
             opacity: 0.7;
         }
 
@@ -49,15 +53,51 @@
             margin-bottom: 6px;
         }
 
-        .parent-header { margin-bottom: 11px; }
-        .parent-header:before,
-        .parent-header:after {
-            content: ' ';
-            display: table;
+        /* Header */
+        .parent-header {
+            background-color: lightgray;
+            position: fixed;
+            top: 0px;
+            width: 100%;
+            height: 40px;
+            padding: 10px 10px 0 10px;
+            overflow: hidden;
         }
         .parent-header:after { clear: both; }
-        .parent-header h1 { float: left; }
-        .parent-header button { float: right; }
+
+        .parent-header .segment {
+            float: left;
+            padding-left: 5px;
+            padding-right: 5px;
+            white-space: nowrap;
+        }
+
+        .parent-header .right {
+            float: right;
+            margin-right: 20px;
+        }
+
+        .localhost {
+            color: green;
+        }
+
+        .staging {
+            color: orange;
+        }
+
+        .production {
+            color: red;
+        }
+
+        /* Content */
+        .content {
+            margin-top: 60px;
+        }
+
+        #preview {
+            border: 1px dashed black;
+            margin: 10px;
+        }
 
         textarea {
             display: block;
@@ -68,20 +108,48 @@
 <body>
 
     <header class="parent-header">
-        <h1>
-            {% if DEPLOYMENT_TARGET %}{{ DEPLOYMENT_TARGET|capitalize }} p{% else %}P{% endif %}review for {{ slug }}
-        </h1>
-        {% if not DEPLOYMENT_TARGET %}
-        {% if COPY_GOOGLE_DOC_KEY %}{% if COPY_GOOGLE_DOC_KEY != 'None' %}
-        <a class="btn-spreadsheet" href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">Edit spreadsheet</a>
-        {% endif %}{% endif %}
-        {% endif %}
+        <div class="segment">
+            <h1 class="{{ DEPLOYMENT_TARGET or 'localhost' }}">{{ DEPLOYMENT_TARGET or 'localhost' }}</h1>
+        </div>
+        <div class="segment">
+            <h1>{{ slug }}</h1>
+        </div>
+
+        <div class="right">
+            {% if DEPLOYMENT_TARGET != None %}
+            <div class="segment">
+                <a class="btn" href="http://localhost:8000/graphics/{{ slug }}/">localhost &raquo;</a>
+            </div>
+            {% endif %}
+
+            {% if DEPLOYMENT_TARGET != 'staging' %}
+            <div class="segment">
+                <a class="btn" href="http://stage-apps.npr.org/dailygraphics/graphics/{{ slug }}/">staging &raquo;</a>
+            </div>
+            {% endif %}
+
+            {% if DEPLOYMENT_TARGET != 'production' %}
+            <div class="segment">
+                <a class="btn" href="http://apps.npr.org/dailygraphics/graphics/{{ slug }}/">production &raquo;</a>
+            </div>
+            {% endif %}
+
+            {% if not DEPLOYMENT_TARGET %}
+            {% if COPY_GOOGLE_DOC_KEY %}{% if COPY_GOOGLE_DOC_KEY != 'None' %}
+            <div class="segment">
+                <a class="btn" href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">COPY spreadsheet &raquo;</a>
+            </div>
+            {% endif %}{% endif %}
+            {% endif %}
+        </div>
     </header>
 
-    <div id='preview'>
-    </div>
+    <div class="content">
 
-    <h2>Production embed code</h2>
+        <div id='preview'>
+        </div>
+
+        <h2>Production embed code</h2>
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
@@ -100,7 +168,7 @@ $(function() {
     </textarea>
 <!-- end textarea contents -->
 
-    <h2>Localhost embed code</h2>
+        <h2>Localhost embed code</h2>
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
@@ -118,6 +186,8 @@ $(function() {
 </script>
     </textarea>
 <!-- end textarea contents -->
+
+    </div>
 
     <script src="js/lib/jquery.js" type="text/javascript"></script>
     <script src="js/lib/pym.js" type="text/javascript"></script>
