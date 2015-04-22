@@ -89,6 +89,10 @@
             color: red;
         }
 
+        .resize {
+            background-color: white;
+        }
+
         /* Content */
         .content {
             margin-top: 60px;
@@ -115,7 +119,20 @@
             <h1>{{ slug }}</h1>
         </div>
 
+        <div class="segment">
+            <a id="resize-mobile" class="btn" href="#">&middot; Mobile (480px)</a>
+        </div>
+
+        <div class="segment">
+            <a id="resize-desktop" class="btn" href="#">&middot; Desktop (680px)</a>
+        </div>
+
+        <div class="segment">
+            <a id="resize-fluid" class="btn" href="#">&middot; Fluid (100%)</a>
+        </div>
+
         <div class="right">
+
             {% if DEPLOYMENT_TARGET != None %}
             <div class="segment">
                 <a class="btn" href="http://localhost:8000/graphics/{{ slug }}/">localhost &raquo;</a>
@@ -193,6 +210,27 @@ $(function() {
     <script src="js/lib/pym.js" type="text/javascript"></script>
     <script type="text/javascript">
         var pymParent = new pym.Parent('preview', 'child.html', {});
+
+        $('#resize-mobile').on('click', function() {
+            $('#preview').width(480);
+            pymParent.sendWidth();
+
+            return false;
+        });
+
+        $('#resize-desktop').on('click', function() {
+            $('#preview').width(680);
+            pymParent.sendWidth();
+
+            return false;
+        });
+
+        $('#resize-fluid').on('click', function() {
+            $('#preview').width('100%');
+            pymParent.sendWidth();
+
+            return false;
+        });
     </script>
 </body>
 </html>
