@@ -211,7 +211,8 @@ def _add_graphic(slug, template):
     if _check_slug(slug):
         return
 
-    local('cp -r graphic_templates/%s %s' % (template, graphic_path))
+    local('cp -r graphic_templates/_base %s' % (graphic_path))
+    local('cp -r graphic_templates/%s/* %s' % (template, graphic_path))
 
     config_path = os.path.join(graphic_path, 'graphic_config.py')
 
