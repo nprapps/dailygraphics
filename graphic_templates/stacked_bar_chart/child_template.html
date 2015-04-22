@@ -71,7 +71,7 @@
             text-decoration: none;
         }
         a:hover, a:active { color: #bccae5; }
-        
+
         /* graph */
         #graphic {
             position: relative;
@@ -109,12 +109,12 @@
             shape-rendering: crispEdges;
         }
 
-        rect { 
+        rect {
             fill-opacity: 0.7;
             shape-rendering: crispEdges;
         }
         .overall rect { fill-opacity: 1; }
-        
+
         .value text {
             font-size: 10px;
             fill: #fff;
@@ -141,7 +141,7 @@
             display: table-cell;
             vertical-align: middle;
         }
-        .labels li.overall { 
+        .labels li.overall {
             font-weight: bold;
             color: #111;
         }
@@ -152,27 +152,27 @@
             padding: 0;
             list-style-type: none;
         }
-        .key .key-item { 
+        .key .key-item {
             display: inline-block;
             margin: 0 18px 0 0;
             padding: 0;
             line-height: 15px;
         }
-        .key .key-item b { 
+        .key .key-item b {
             display: inline-block;
             width: 15px;
             height: 15px;
             margin-right: 6px;
             float: left;
         }
-        .key .key-item label { 
+        .key .key-item label {
             white-space: nowrap;
             font-size: 12px;
             color: #666;
             font-weight: normal;
             -webkit-font-smoothing: antialiased;
         }
-        
+
         @media screen and (max-width: 500px) {
             .value { display: none; }
         }
@@ -184,7 +184,7 @@
     {% if COPY.labels.subhed %}<h2>{{ COPY.labels.subhed }}</h2>{% endif %}
 
     <div id="graphic"><img src="fallback.png" alt="[chart]" /></div>
-    
+
     {% if COPY.labels.footnote %}
     <div class="footnotes">
         <h4>Notes</h4>
@@ -197,7 +197,7 @@
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit }}</p>{% endif %}
     </div>
 
-    <script src="js/lib/jquery.js" type="text/javascript"></script>
+    <script src="js/lib/jquery.min.js" type="text/javascript"></script>
     <script src="js/lib/d3.v3.min.js" type="text/javascript"></script>
     <script src="js/lib/modernizr.svg.min.js" type="text/javascript"></script>
     <script src="js/lib/pym.js" type="text/javascript"></script>

@@ -65,10 +65,10 @@ ASSETS_S3_BUCKET = {
 }
 
 DEFAULT_MAX_AGE = 20
-ASSETS_MAX_AGE = 86400
+ASSETS_MAX_AGE = 300
 
 # These variables will be set at runtime. See configure_targets() below
-S3_BUCKET = None 
+S3_BUCKET = None
 S3_BASE_URL = ''
 S3_DEPLOY_URL = None
 DEBUG = True
@@ -95,9 +95,9 @@ def configure_targets(deployment_target):
         S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
         DEBUG = True
     else:
-        S3_BUCKET = None 
+        S3_BUCKET = None
         S3_BASE_URL = 'http://127.0.0.1:8000'
-        S3_DEPLOY_URL = None 
+        S3_DEPLOY_URL = None
         DEBUG = True
 
     DEPLOYMENT_TARGET = deployment_target
@@ -108,4 +108,3 @@ Run automated configuration
 DEPLOYMENT_TARGET = os.environ.get('DEPLOYMENT_TARGET', None)
 
 configure_targets(DEPLOYMENT_TARGET)
-
