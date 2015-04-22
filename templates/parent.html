@@ -193,13 +193,11 @@ $(function() {
     </textarea>
 <!-- end textarea contents -->
 
-        <h2><span class="production">Production</span> autoinit embed code (for member stations)</h2>
+        <h2><span class="production">Production</span> autoinit embed code (<a href="http://blog.apps.npr.org/2014/12/19/pym-core-publisher.html">for member stations</a>)</h2>
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
-<div data-pym-src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">
-</div>
-<script src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/js/lib/pym.js" type="text/javascript"></script>
+<p data-pym-src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">&amp;nbsp;</p><script src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/js/lib/pym.js" type="text/javascript"></script>
     </textarea>
 <!-- end textarea contents -->
 
