@@ -1,0 +1,47 @@
+#graphic {
+    position: relative;
+    margin-bottom: 11px;
+}
+#graphic:before,
+#graphic:after {
+    content: ' ';
+    display: table;
+}
+#graphic:after { clear: both; }
+#graphic img {
+    max-width: 100%;
+    height: auto;
+}
+
+.axis {
+    font-size: 11px;
+    -webkit-font-smoothing: antialiased;
+    fill: #999;
+}
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #ccc;
+    shape-rendering: crispEdges;
+}
+.axis.y path { display: none; }
+.axis.y .tick line { display: none; }
+.grid.y g:first-child line { display: none; }
+.grid path { display: none; }
+.grid .tick {
+    stroke: #eee;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+
+.bars rect {
+    fill: #17807E;
+    shape-rendering: crispEdges;
+}
+
+.value text {
+    font-size: 10px;
+    -webkit-font-smoothing: antialiased;
+}
+.value .in { fill: #fff; }
+.value .out { fill: #999; }
