@@ -10,12 +10,6 @@ var colorD3;
 var graphicData = null;
 var isMobile = false;
 
-// D3 formatters
-var fmtComma = d3.format(',');
-var fmtYearAbbrev = d3.time.format('%y');
-var fmtYearFull = d3.time.format('%Y');
-
-
 /*
  * Initialize
  */
