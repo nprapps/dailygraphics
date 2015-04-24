@@ -1,15 +1,10 @@
  #!/usr/bin/env python
 
-import app as flat_app
-import app_config
 import boto
-import assets
-import flat
 import imp
 import json
 import os
 import subprocess
-import utils
 import webbrowser
 
 from distutils.spawn import find_executable
@@ -18,6 +13,12 @@ from fabric.state import env
 from glob import glob
 from oauth import get_document, get_credentials
 from time import sleep
+
+import app_config
+import assets
+import flat
+import render
+import utils
 
 SPREADSHEET_COPY_URL_TEMPLATE = 'https://www.googleapis.com/drive/v2/files/%s/copy'
 SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=1'
@@ -66,57 +67,6 @@ def staging():
     app_config.configure_targets(env.settings)
 
 """
-Template-specific functions
-
-Changing the template functions should produce output
-with fab render without any exceptions. Any file used
-by the site templates should be rendered by fab render.
-"""
-@task
-def render(slug=''):
-    """
-    Render HTML templates and compile assets.
-    """
-    if slug:
-        _render_graphics(['%s/%s' % (app_config.GRAPHICS_PATH, slug)])
-    else:
-        _render_graphics(glob('%s/*' % app_config.GRAPHICS_PATH))
-
-def _render_graphics(paths):
-    """
-    Render a set of graphics
-    """
-    # Fake out deployment target
-    app_config.configure_targets(env.get('settings', None))
-
-    for path in paths:
-        slug = path.split('%s/' % app_config.GRAPHICS_PATH)[1].split('/')[0]
-
-        with flat_app.app.test_request_context(path='graphics/%s/' % slug):
-            view = flat_app.__dict__['_graphics_detail']
-            content = view(slug).data
-
-        with open('%s/index.html' % path, 'w') as writefile:
-            writefile.write(content)
-
-        # Fallback for legacy projects w/o child templates
-        if not os.path.exists('%s/child_template.html' % path):
-            continue
-
-        download_copy(slug)
-
-        with flat_app.app.test_request_context(path='graphics/%s/child.html' % slug):
-            view = flat_app.__dict__['_graphics_child']
-            content = view(slug).data
-
-        with open('%s/child.html' % path, 'w') as writefile:
-            writefile.write(content)
-
-    # Un-fake-out deployment target
-    app_config.configure_targets(app_config.DEPLOYMENT_TARGET)
-
-
-"""
 Running the app
 """
 @task
@@ -146,7 +96,7 @@ def deploy(slug):
 
     update_copy(slug)
     assets.sync(slug)
-    render(slug)
+    render.render(slug)
 
     graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     s3_root = '%s/graphics/%s' % (app_config.PROJECT_SLUG, slug)

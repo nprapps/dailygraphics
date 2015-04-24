@@ -9,14 +9,14 @@ import static
 
 from flask import Flask, make_response, render_template, render_template_string
 from glob import glob
-from render_utils import make_context, urlencode_filter, render_with_context
+from render_utils import make_context, urlencode_filter
 from werkzeug.debug import DebuggedApplication
 
 app = Flask(app_config.PROJECT_SLUG)
 app.debug = app_config.DEBUG
 
 app.add_template_filter(urlencode_filter, 'urlencode')
-app.jinja_env.globals.update(render=render_with_context)
+#app.jinja_env.globals.update(render=render_with_context)
 
 @app.route('/')
 def _graphics_list():
@@ -76,7 +76,7 @@ def _graphics_child(slug):
 
         return contents
 
-    context = make_context()
+    context = make_context(asset_depth=2, root_path=graphic_path)
     context['slug'] = slug
 
     try:

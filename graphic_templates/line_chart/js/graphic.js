@@ -1,18 +1,27 @@
-// global vars
-var $graphic = null;
-var pymChild = null;
-
+// Configuration
+var GRAPHIC_ID = '#graphic';
 var GRAPHIC_DATA_URL = 'data.csv';
 var GRAPHIC_DEFAULT_WIDTH = 600;
 var MOBILE_THRESHOLD = 540;
 
-var colors = {
+var GRAPHIC_MARGIN = {
+    top: 5,
+    right: 15,
+    bottom: 30,
+    left: 22
+};
+
+var COLORS = {
     'red1': '#6C2315', 'red2': '#A23520', 'red3': '#D8472B', 'red4': '#E27560', 'red5': '#ECA395', 'red6': '#F5D1CA',
     'orange1': '#714616', 'orange2': '#AA6A21', 'orange3': '#E38D2C', 'orange4': '#EAAA61', 'orange5': '#F1C696', 'orange6': '#F8E2CA',
     'yellow1': '#77631B', 'yellow2': '#B39429', 'yellow3': '#EFC637', 'yellow4': '#F3D469', 'yellow5': '#F7E39B', 'yellow6': '#FBF1CD',
     'teal1': '#0B403F', 'teal2': '#11605E', 'teal3': '#17807E', 'teal4': '#51A09E', 'teal5': '#8BC0BF', 'teal6': '#C5DFDF',
     'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
 };
+
+// Globals
+var $graphic = null;
+var pymChild = null;
 var graphicData = null;
 var isMobile = false;
 
@@ -21,54 +30,54 @@ var fmtComma = d3.format(',');
 var fmtYearAbbrev = d3.time.format('%y');
 var fmtYearFull = d3.time.format('%Y');
 
-
 /*
- * INITIALIZE
+ * Initialize graphic
  */
 var onWindowLoaded = function() {
+    $graphic = $(GRAPHIC_ID);
+
     if (Modernizr.svg) {
-        $graphic = $('#graphic');
-
-        d3.csv(GRAPHIC_DATA_URL, function(error, data) {
-            graphicData = data;
-            graphicData.forEach(function(d) {
-                d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
-            });
-
-            pymChild = new pym.Child({
-                renderCallback: render
-            });
-        });
+        d3.csv(GRAPHIC_DATA_URL, onDataLoaded);
     } else {
-        pymChild = new pym.Child({ });
+        pymChild = new pym.Child({});
     }
 }
 
+/*
+ * CSV loaded
+ */
+var onDataLoaded = function(error, data) {
+    graphicData = data;
+    graphicData.forEach(function(d) {
+        d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
+    });
+
+    pymChild = new pym.Child({
+        renderCallback: render
+    });
+}
 
 /*
- * RENDER THE GRAPHIC
+ * Render the graphic(s)
  */
 var render = function(containerWidth) {
-    // fallback if page is loaded outside of an iframe
+    // Fallback if page is loaded outside of an iframe
     if (!containerWidth) {
         containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
 
-    // check the container width; set mobile flag if applicable
     if (containerWidth <= MOBILE_THRESHOLD) {
         isMobile = true;
     } else {
         isMobile = false;
     }
 
-    // clear out existing graphics
+    // Clear out existing graphic (for re-drawing)
     $graphic.empty();
 
-    // draw the new graphic
-    // (this is a separate function in case I want to be able to draw multiple charts later.)
-    drawGraph(containerWidth);
+    drawGraph(containerWidth, GRAPHIC_ID, graphicData);
 
-    // update iframe
+    // Resize iframe to fit
     if (pymChild) {
         pymChild.sendHeight();
     }
@@ -78,37 +87,29 @@ var render = function(containerWidth) {
 /*
  * DRAW THE GRAPH
  */
-var drawGraph = function(graphicWidth) {
-    var aspectHeight;
-    var aspectWidth;
-    var color = d3.scale.ordinal()
-        .range([ colors['red3'], colors['yellow3'], colors['blue3'], colors['orange3'], colors['teal3'] ]);
-    var graph = d3.select('#graphic');
-    var margin = {
-    	top: 5,
-    	right: 15,
-    	bottom: 30,
-    	left: 22
-    };
-    var ticksX;
-    var ticksY;
+var drawGraph = function(graphicWidth, id, data) {
+    var graph = d3.select(id);
 
-    // params that depend on the container width
+    var color = d3.scale.ordinal()
+        .range([ COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3'] ]);
+
+    // Desktop / default
+    var aspectWidth = 4;
+    var aspectHeight = 3;
+    var ticksX = 10;
+    var ticksY = 10;
+
+    // Mobile
     if (isMobile) {
         aspectWidth = 4;
         aspectHeight = 3;
         ticksX = 5;
         ticksY = 5;
-    } else {
-        aspectWidth = 16;
-        aspectHeight = 9;
-        ticksX = 10;
-        ticksY = 10;
     }
 
     // define chart dimensions
-    var width = graphicWidth - margin['left'] - margin['right'];
-    var height = Math.ceil((graphicWidth * aspectHeight) / aspectWidth) - margin['top'] - margin['bottom'];
+    var width = graphicWidth - GRAPHIC_MARGIN['left'] - GRAPHIC_MARGIN['right'];
+    var height = Math.ceil((graphicWidth * aspectHeight) / aspectWidth) - GRAPHIC_MARGIN['top'] - GRAPHIC_MARGIN['bottom'];
 
     var x = d3.time.scale()
         .range([ 0, width ])
@@ -121,7 +122,7 @@ var drawGraph = function(graphicWidth) {
         .scale(x)
         .orient('bottom')
         .ticks(ticksX)
-        .tickFormat(function(d,i) {
+        .tickFormat(function(d, i) {
             if (isMobile) {
                 return '\u2019' + fmtYearAbbrev(d);
             } else {
@@ -191,10 +192,12 @@ var drawGraph = function(graphicWidth) {
 			.attr('class', function(d, i) {
 				return 'key-item key-' + i + ' ' + classify(d['key']);
 			});
+
     legend.append('b')
         .style('background-color', function(d) {
             return color(d['key']);
         });
+
     legend.append('label')
         .text(function(d) {
             return d['key'];
@@ -202,10 +205,10 @@ var drawGraph = function(graphicWidth) {
 
     // draw the chart
     var svg = graph.append('svg')
-		.attr('width', width + margin['left'] + margin['right'])
-		.attr('height', height + margin['top'] + margin['bottom'])
+		.attr('width', width + GRAPHIC_MARGIN['left'] + GRAPHIC_MARGIN['right'])
+		.attr('height', height + GRAPHIC_MARGIN['top'] + GRAPHIC_MARGIN['bottom'])
         .append('g')
-            .attr('transform', 'translate(' + margin['left'] + ',' + margin['top'] + ')');
+            .attr('transform', 'translate(' + GRAPHIC_MARGIN['left'] + ',' + GRAPHIC_MARGIN['top'] + ')');
 
     // x-axis (bottom)
     svg.append('g')
@@ -255,9 +258,9 @@ var drawGraph = function(graphicWidth) {
 
 
 /*
- * HELPER FUNCTIONS
+ * Convert arbitrary strings to valid css classes
  */
-var classify = function(str) { // clean up strings to use as CSS classes
+var classify = function(str) {
     return str.replace(/\s+/g, '-').toLowerCase();
 }
 
