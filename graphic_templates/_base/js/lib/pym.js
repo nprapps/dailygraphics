@@ -1,4 +1,3 @@
-/*! pym.js - v0.4.1 - 2014-12-12 */
 /*
 * Pym.js is library that resizes an iframe based on the width of the parent and the resulting height of the child.
 * Check out the docs at http://blog.apps.npr.org/pym.js/ or the readme at README.md for usage.
@@ -143,6 +142,9 @@
         this.messageRegex = _makeMessageRegex(this.id);
         this.messageHandlers = {};
 
+        // ensure a config object
+        config = (config || {});
+
         /**
          * Construct the iframe.
          *
@@ -154,7 +156,7 @@
             var width = this.el.offsetWidth.toString();
 
             // Create an iframe element attached to the document.
-            this.iframe = document.createElement("iframe");
+            this.iframe = document.createElement('iframe');
 
             // Save fragment id
             var hash = '';
@@ -246,16 +248,31 @@
          */
         this._onHeightMessage = function(message) {
             /*
-             * Handle parent message from child.
+             * Handle parent height message from child.
              */
             var height = parseInt(message);
 
             this.iframe.setAttribute('height', height + 'px');
         };
 
+        /**
+         * Navigate parent to a new url.
+         *
+         * @memberof Parent.prototype
+         * @method _onNavigateToMessage
+         * @param {String} message The url to navigate to.
+         */
+        this._onNavigateToMessage = function(message) {
+            /*
+             * Handle parent scroll message from child.
+             */
+             document.location.href = message;
+        };
 
         /**
          * Bind a callback to a given messageType from the child.
+         *
+         * Reserved message names are: "height", "scrollTo" and "navigateTo".
          *
          * @memberof Parent.prototype
          * @method onMessage
@@ -301,8 +318,9 @@
             this.settings[key] = config[key];
         }
 
-        // Add height event callback
+        // Bind required message handlers
         this.onMessage('height', this._onHeightMessage);
+        this.onMessage('navigateTo', this._onNavigateToMessage);
 
         // Add a listener for processing messages from the child.
         var that = this;
@@ -335,8 +353,13 @@
         this.messageRegex = null;
         this.messageHandlers = {};
 
+        // ensure a config object
+        config = (config || {});
+
         /**
          * Bind a callback to a given messageType from the child.
+         *
+         * Reserved message names are: "width".
          *
          * @memberof Child.prototype
          * @method onMessage
@@ -402,6 +425,33 @@
         };
 
         /**
+         * Resize iframe in response to new width message from parent.
+         *
+         * @memberof Child.prototype
+         * @method _onWidthMessage
+         * @param {String} message The new width.
+         */
+        this._onWidthMessage = function(message) {
+            /*
+             * Handle width message from the child.
+             */
+            var width = parseInt(message);
+
+            // Change the width if it's different.
+            if (width !== this.parentWidth) {
+                this.parentWidth = width;
+
+                // Call the callback function if it exists.
+                if (this.settings.renderCallback) {
+                    this.settings.renderCallback(width);
+                }
+
+                // Send the height back to the parent.
+                this.sendHeight();
+            }
+        };
+
+        /**
          * Send a message to the the Parent.
          *
          * @memberof Child.prototype
@@ -438,30 +488,25 @@
         };
 
         /**
-         * Resize iframe in response to new width message from parent.
+         * Scroll parent to a given element id.
          *
          * @memberof Child.prototype
-         * @method _onWidthMessage
-         * @param {String} message The new width.
+         * @method scrollParentTo
+         * @param {String} hash The id of the element to scroll to.
          */
-        this._onWidthMessage = function(message) {
-            /*
-             * Handle width message from the child.
-             */
-            var width = parseInt(message);
+        this.scrollParentTo = function(hash) {
+            this.sendMessage('navigateTo', '#' + hash);
+        };
 
-            // Change the width if it's different.
-            if (width !== this.parentWidth) {
-                this.parentWidth = width;
-
-                // Call the callback function if it exists.
-                if (this.settings.renderCallback) {
-                    this.settings.renderCallback(width);
-                }
-
-                // Send the height back to the parent.
-                this.sendHeight();
-            }
+        /**
+         * Navigate parent to a given url.
+         *
+         * @memberof Parent.prototype
+         * @method navigateParentTo
+         * @param {String} url The url to navigate to.
+         */
+        this.navigateParentTo = function(url) {
+            this.sendMessage('navigateTo', url);
         };
 
         // Identify what ID the parent knows this child as.
@@ -471,7 +516,7 @@
         // Get the initial width from a URL parameter.
         var width = parseInt(_getParameterByName('initialWidth'));
 
-        // Bind the width message handler
+        // Bind the required message handlers
         this.onMessage('width', this._onWidthMessage);
 
         // Initialize settings with overrides.
