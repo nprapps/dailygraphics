@@ -6,7 +6,7 @@ from fabric.api import task
 from fabric.state import env
 from fabric.tasks import execute
 
-import app as flat_app
+import app
 import app_config
 
 @task(default=True)
@@ -31,8 +31,8 @@ def _render_graphics(paths):
     for path in paths:
         slug = path.split('%s/' % app_config.GRAPHICS_PATH)[1].split('/')[0]
 
-        with flat_app.app.test_request_context(path='graphics/%s/' % slug):
-            view = flat_app.__dict__['_graphics_detail']
+        with app.app.test_request_context(path='graphics/%s/' % slug):
+            view = app.graphic.__dict__['_graphics_detail']
             content = view(slug).data
 
         with open('%s/index.html' % path, 'w') as writefile:
@@ -42,13 +42,13 @@ def _render_graphics(paths):
         if not os.path.exists('%s/child_template.html' % path):
             continue
 
-        execute('update_copy', slug)
+        #execute('update_copy', slug)
 
-        with flat_app.app.test_request_context(path='graphics/%s/child.html' % slug):
+        with app.app.test_request_context(path='graphics/%s/child.html' % slug):
             g.compile_includes = True
             g.compiled_includes = {}
 
-            view = flat_app.__dict__['_graphics_child']
+            view = app.graphic.__dict__['_graphics_child']
             content = view(slug).data
 
         with open('%s/child.html' % path, 'w') as writefile:

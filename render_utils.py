@@ -133,11 +133,12 @@ class CSSIncluder(Includer):
         src_paths = []
 
         for src in self.includes:
+            css_path = '%s/%s' % (self.root_path, src)
 
-            src_paths.append('%s/%s' % (self.root_path, src))
+            src_paths.append(css_path)
 
             try:
-                compressed_src = subprocess.check_output(["node_modules/less/bin/lessc", "-x", src])
+                compressed_src = subprocess.check_output(["node_modules/less/bin/lessc", "-x", css_path])
                 output.append(compressed_src)
             except:
                 print 'It looks like "lessc" isn\'t installed. Try running: "npm install"'
