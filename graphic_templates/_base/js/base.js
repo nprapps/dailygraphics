@@ -5,3 +5,10 @@ var COLORS = {
     'teal1': '#0B403F', 'teal2': '#11605E', 'teal3': '#17807E', 'teal4': '#51A09E', 'teal5': '#8BC0BF', 'teal6': '#C5DFDF',
     'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
 };
+
+/*
+ * Convert arbitrary strings to valid css classes
+ */
+var classify = function(str) {
+    return str.replace(/\s+/g, '-').toLowerCase();
+}

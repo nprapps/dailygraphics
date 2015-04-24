@@ -248,15 +248,6 @@ var drawGraph = function(graphicWidth, id, data) {
             });
 }
 
-
-/*
- * Convert arbitrary strings to valid css classes
- */
-var classify = function(str) {
-    return str.replace(/\s+/g, '-').toLowerCase();
-}
-
-
 /*
  * Initially load the graphic
  * (NB: Use window.load instead of document.ready

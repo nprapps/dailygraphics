@@ -260,15 +260,6 @@ var drawGraph = function(graphicWidth) {
     }
 }
 
-
-/*
- * HELPER FUNCTIONS
- */
-function classify(str) {
-    return str.replace(/\s+/g, '-').toLowerCase();
-}
-
-
 /*
  * Initially load the graphic
  * (NB: Use window.load instead of document.ready

@@ -215,15 +215,6 @@ var drawGraph = function(graphicWidth) {
             });
 }
 
-
-/*
- * HELPER FUNCTIONS
- */
-var classify = function(str) { // clean up strings to use as CSS classes
-    return str.replace(/\s+/g, '-').toLowerCase();
-}
-
-
 /*
  * Initially load the graphic
  * (NB: Use window.load instead of document.ready
