@@ -32,6 +32,9 @@ def _render_graphics(paths):
         slug = path.split('%s/' % app_config.GRAPHICS_PATH)[1].split('/')[0]
 
         with app.app.test_request_context(path='graphics/%s/' % slug):
+            g.compile_includes = True
+            g.compiled_includes = {}
+            
             view = app.graphic.__dict__['_graphics_detail']
             content = view(slug).data
 
@@ -41,8 +44,6 @@ def _render_graphics(paths):
         # Fallback for legacy projects w/o child templates
         if not os.path.exists('%s/child_template.html' % path):
             continue
-
-        #execute('update_copy', slug)
 
         with app.app.test_request_context(path='graphics/%s/child.html' % slug):
             g.compile_includes = True

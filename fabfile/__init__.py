@@ -95,7 +95,7 @@ def deploy(slug):
         return
 
     update_copy(slug)
-    assets.sync(slug)
+    #assets.sync(slug)
     render.render(slug)
 
     graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
@@ -115,6 +115,15 @@ def deploy(slug):
             'Cache-Control': 'max-age=%i' % default_max_age
         },
         ignore=['%s/*' % graphic_assets]
+    )
+
+    # Deploy parent assets
+    flat.deploy_folder(
+        'www',
+        app_config.PROJECT_SLUG,
+        headers={
+            'Cache-Control': 'max-age=%i' % default_max_age
+        }
     )
 
     flat.deploy_folder(
