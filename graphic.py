@@ -72,13 +72,13 @@ def _graphics_child(slug):
     return make_response(render_template_string(template, **context))
 
 # Render graphic LESS files on-demand
-@graphic.route('/<slug>/less/<string:filename>')
+@graphic.route('/<slug>/css/<filename>.less')
 def _graphic_less(slug, filename):
     """
     Compiles LESS for a graphic.
     """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    less_path = '%s/less/%s' % (graphic_path, filename)
+    less_path = '%s/css/%s.less' % (graphic_path, filename)
 
     if not os.path.exists(less_path):
         abort(404)

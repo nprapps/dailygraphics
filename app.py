@@ -10,13 +10,14 @@ import app_config
 import copytext
 import graphic
 import oauth
-from render_utils import make_context, urlencode_filter
+from render_utils import make_context, render_with_context, urlencode_filter
 import static
 
 app = Flask(app_config.PROJECT_SLUG)
 app.debug = app_config.DEBUG
 
 app.add_template_filter(urlencode_filter, 'urlencode')
+app.jinja_env.globals.update(render=render_with_context)
 
 @app.route('/')
 def _graphics_list():

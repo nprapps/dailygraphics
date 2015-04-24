@@ -10,6 +10,7 @@ import subprocess
 from flask import Markup, g, render_template, request
 from slimit import minify
 from smartypants import smartypants
+from jinja2 import contextfunction, Template
 
 import app_config
 import copytext
@@ -221,3 +222,12 @@ def smarty_filter(s):
     except:
         print 'This string failed to encode: %s' % s
         return Markup(s)
+
+@contextfunction
+def render_with_context(context, text):
+    """
+    Render a template within a template!
+    """
+    template = Template(text.__unicode__())
+
+    return template.render(**context)
