@@ -79,10 +79,18 @@ The project contains the following folders and important files:
 Bootstrap the project
 ---------------------
 
+Node.js is required for the static asset pipeline. If you don't already have it, get it like this:
+
+```
+brew install node
+curl https://npmjs.org/install.sh | sh
+```
+
 ```
 cd dailygraphics
 mkvirtualenv --no-site-packages dailygraphics
 pip install -r requirements.txt
+npm install
 ```
 
 You'll now need to create a folder to hold the graphics created and deployed by this rig. This is configured in `app_config.GRAPHICS_PATH` and defaults to `../graphics`.
@@ -94,7 +102,7 @@ You'll now need to create a folder to hold the graphics created and deployed by 
 Configuration
 -------------
 
-The dailygraphics project configuration defaults are specific to NPR. If you want to use it in your newsroom you should fork this repository and update ``app_config.py`` with your own configuration. 
+The dailygraphics project configuration defaults are specific to NPR. If you want to use it in your newsroom you should fork this repository and update ``app_config.py`` with your own configuration.
 
 At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS``, ``STAGING_S3_BUCKETS`` and ``ASSETS_S3_BUCKET``. (``ASSETS_S3_BUCKET`` *must* be different from the other buckets.)
 
@@ -144,7 +152,7 @@ Fatal error: local() encountered an error (return code 1) while executing 'gunic
 Aborting.
 ```
 
-It's possible that the webserver is already running silently in the background. [Here's how to fix it.](https://github.com/nprapps/dailygraphics/issues/74) 
+It's possible that the webserver is already running silently in the background. [Here's how to fix it.](https://github.com/nprapps/dailygraphics/issues/74)
 
 
 Add a new graphic
