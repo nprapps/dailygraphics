@@ -5,11 +5,12 @@ import os
 import subprocess
 
 from flask import Blueprint, abort, make_response, render_template, render_template_string
+from jinja2 import Environment, FileSystemLoader
 
 import app_config
 import copytext
 import oauth
-from render_utils import make_context
+from render_utils import make_context, render_with_context
 
 graphic = Blueprint('graphic', __name__)
 
@@ -66,10 +67,11 @@ def _graphics_child(slug):
     except IOError:
         pass
 
-    with open('%s/child_template.html' % graphic_path) as f:
-        template = f.read().decode('utf-8')
+    env = Environment(loader=FileSystemLoader(graphic_path))
+    env.globals.update(render=render_with_context)
+    template = env.get_template('child_template.html')
 
-    return make_response(render_template_string(template, **context))
+    return make_response(template.render(**context))
 
 # Render graphic LESS files on-demand
 @graphic.route('/<slug>/css/<filename>.less')

@@ -1,34 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base_template.html' %}
 
-<head>
-    <title>Graphic : NPR</title>
+{% block content %}
 
-    <meta name="description" content="">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="robots" content="noindex" />
-    <link rel="shortcut icon" href="http://media.npr.org/favicon.ico" />
-
-    <!-- Fonts -->
-    <script src="http://apps.npr.org/dailygraphics/graphics/fonts/js/lib/webfont.js"></script>
-    <script>
-        WebFont.load({
-             custom: {
-                 families: [ 'Gotham SSm:n4,n7' ],
-                 urls: [ 'http://s.npr.org/templates/css/fonts/GothamSSm.css' ]
-             },
-             timeout: 10000
-         });
-    </script>
-
-    {{ CSS.push('css/base.less') }}
-    {{ CSS.push('css/graphic.less') }}
-    {{ CSS.render('css/graphic-header.css') }}
-</head>
-
-<body>
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed) }}</h2>{% endif %}
 
@@ -46,12 +19,4 @@
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit }}</p>{% endif %}
     </div>
 
-    {{ JS.push('js/lib/jquery.js') }}
-    {{ JS.push('js/lib/d3.min.js') }}
-    {{ JS.push('js/lib/modernizr.svg.min.js') }}
-    {{ JS.push('js/lib/pym.js') }}
-    {{ JS.push('js/base.js') }}
-    {{ JS.push('js/graphic.js') }}
-    {{ JS.render('js/graphic-footer.js') }}
-</body>
-</html>
+{% endblock content %}

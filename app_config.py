@@ -67,6 +67,14 @@ ASSETS_S3_BUCKET = {
 DEFAULT_MAX_AGE = 20
 ASSETS_MAX_AGE = 300
 
+"""
+ANALYTICS
+"""
+
+GOOGLE_ANALYTICS = {
+    'ACCOUNT_ID': 'UA-5828686-75'
+}
+
 # These variables will be set at runtime. See configure_targets() below
 S3_BUCKET = None
 S3_BASE_URL = ''
