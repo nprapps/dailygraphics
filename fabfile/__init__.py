@@ -311,6 +311,10 @@ def copy_spreadsheet(slug):
     config_path = '%s/%s/graphic_config.py' % (app_config.GRAPHICS_PATH, slug)
     graphic_config = _graphic_config(slug)
 
+    if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
+        print 'Skipping spreadsheet creation. (COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.)' % slug
+        return
+
     kwargs = {
         'credentials': get_credentials(),
         'url': SPREADSHEET_COPY_URL_TEMPLATE % graphic_config.COPY_GOOGLE_DOC_KEY,
