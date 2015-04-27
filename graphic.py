@@ -20,9 +20,11 @@ def _graphics_detail(slug):
     """
     Renders a parent.html index with child.html embedded as iframe.
     """
-    context = make_context()
-    context['slug'] = slug
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+
+    # NOTE: Parent must load pym.js from same source as child to prevent version conflicts!
+    context = make_context(asset_depth=2, root_path=graphic_path)
+    context['slug'] = slug
 
     template = 'parent.html'
 
