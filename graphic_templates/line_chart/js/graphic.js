@@ -144,7 +144,7 @@ var drawGraph = function(graphicWidth) {
 
     // define the line(s)
     var line = d3.svg.line()
-        .interpolate('basis')
+        .interpolate('monotone')
         .x(function(d) {
             return x(d['date']);
         })
