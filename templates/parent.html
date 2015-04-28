@@ -203,9 +203,11 @@ $(function() {
 
     </div>
 
-    {{ JS.push('js/lib/jquery.js') }}
-    {{ JS.push('js/lib/pym.js') }}
-    {{ JS.render('js/parent-footer.js') }}
+    <!-- Do not remove: workaround for old graphics w/ minified js -->
+    <script type="text/javascript" src="js/lib/jquery.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="js/lib/pym.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 
     <script type="text/javascript">
         var pymParent = new pym.Parent('preview', 'child.html', {});
