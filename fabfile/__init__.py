@@ -204,6 +204,7 @@ def update_copy(slug=None):
     """
     if slug:
         download_copy(slug)
+        return
 
     slugs = os.listdir(app_config.GRAPHICS_PATH)
 
