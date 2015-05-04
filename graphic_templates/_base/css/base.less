@@ -36,6 +36,8 @@
 @blue5      : #A8D5EF;
 @blue6      : #D3EAF7;
 
+
+/* base styles */
 html { -webkit-text-size-adjust: none; }
 body {
     margin: 0;
@@ -88,3 +90,21 @@ a, a:link, a:visited {
     text-decoration: none;
 }
 a:hover, a:active { color: #bccae5; }
+
+
+#graphic {
+    position: relative;
+    margin-bottom: 11px;
+    
+    &:before,
+    &:after {
+        content: ' ';
+        display: table;
+    }
+    &:after { clear: both; }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
