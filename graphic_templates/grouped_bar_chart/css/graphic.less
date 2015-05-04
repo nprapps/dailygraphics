@@ -1,37 +1,4 @@
-.chart { position: relative; }
-
-.axis {
-    font-size: 11px;
-    -webkit-font-smoothing: antialiased;
-    fill: #999;
-}
-.axis path,
-.axis line {
-    fill: none;
-    stroke: #ccc;
-    shape-rendering: crispEdges;
-}
-.axis.y path { display: none; }
-.axis.y .tick line { display: none; }
-.grid.y g:first-child line { display: none; }
-.grid path { display: none; }
-.grid .tick {
-    stroke: #eee;
-    stroke-width: 1px;
-    shape-rendering: crispEdges;
-}
-
-.bars rect {
-    fill: #17807E;
-    shape-rendering: crispEdges;
-}
-
-.value text {
-    font-size: 10px;
-    -webkit-font-smoothing: antialiased;
-}
-.value .in { fill: #fff; }
-.value .out { fill: #999; }
+.bars rect { fill: #17807E; }
 
 .labels {
     position: absolute;
@@ -39,17 +6,19 @@
     padding: 0;
     list-style-type: none;
     border: none;
-}
-.labels li {
-    position: absolute;
-    text-align: right;
-    font-size: 12px;
-    line-height: 1.3;
-    color: #666;
-    display: table;
-    -webkit-font-smoothing: antialiased;
-}
-.labels li span {
-    display: table-cell;
-    vertical-align: middle;
+
+    li {
+        position: absolute;
+        text-align: right;
+        font-size: 12px;
+        line-height: 1.3;
+        color: #666;
+        display: table;
+        -webkit-font-smoothing: antialiased;
+        
+        span {
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
 }

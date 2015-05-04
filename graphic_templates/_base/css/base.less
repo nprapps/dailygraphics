@@ -84,6 +84,7 @@ h2 {
 }
 .footer p { font-style: italic; }
 .footer p em { font-style: normal; }
+.footnotes p strong { color: #666; }
 
 a, a:link, a:visited {
     color: #4774CC;
@@ -107,4 +108,84 @@ a:hover, a:active { color: #bccae5; }
         max-width: 100%;
         height: auto;
     }
+}
+
+
+/* key */
+.key {
+    margin: -11px 0 33px 0;
+    padding: 0;
+    list-style-type: none;
+    
+    .key-item { 
+        display: inline-block;
+        margin: 0 18px 0 0;
+        padding: 0;
+        line-height: 15px;
+
+        b { 
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 6px;
+            float: left;
+        }
+
+        label { 
+            white-space: nowrap;
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
+            -webkit-font-smoothing: antialiased;
+        }
+    }
+}
+
+
+/* chart styles */
+.chart { position: relative; }
+
+line,
+rect {
+    shape-rendering: crispEdges;
+}
+
+.axis {
+    font-size: 11px;
+    -webkit-font-smoothing: antialiased;
+    fill: #999;
+
+    path,
+    line {
+        fill: none;
+        stroke: #ccc;
+        shape-rendering: crispEdges;
+    }
+    
+    &.y {
+        path { display: none; }
+        .tick line { display: none; }
+    }
+}
+
+.grid {
+    path { display: none; }
+    .tick {
+        stroke: #eee;
+        stroke-width: 1px;
+        shape-rendering: crispEdges;
+    }
+
+    &.y {
+        g:first-child line { display: none; }
+    }
+}
+
+.value text {
+    font-size: 10px;
+    -webkit-font-smoothing: antialiased;
+    
+    &.in { fill: #fff; }
+    &.out { fill: #999; }
+    &.other { display: none; }
 }
