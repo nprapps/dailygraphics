@@ -269,6 +269,13 @@ def add_stacked_bar_chart(slug):
     _add_graphic(slug, 'stacked_bar_chart')
 
 @task
+def add_state_grid_map(slug):
+    """
+    Create a state grid cartogram
+    """
+    _add_graphic(slug, 'state_grid_map')
+
+@task
 def add_line_chart(slug):
     """
     Create a line chart.
