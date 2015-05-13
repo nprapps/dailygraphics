@@ -8,13 +8,13 @@
     <div id="graphic"></div>
 
     {% if COPY.labels.footnote %}
-    <div class="state-footnotes">
+    <div class="footnotes">
         <h4>Notes</h4>
         <p>{{ COPY.labels.footnote }}</p>
     </div>
     {% endif %}
 
-    <div class="state-footer">
+    <div class="footer">
         {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source }}</p>{% endif %}
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit }}</p>{% endif %}
     </div>
@@ -91,7 +91,7 @@
 {% endblock content %}
 
 {% block js %}
-    <script>
+    <script type="text/javascript">
         var MAPS = [
             {{ COPY['boolean_map'].json() }},
             {{ COPY['category_map'].json() }}
@@ -102,7 +102,7 @@
     {{ JS.push('js/lib/modernizr.svg.min.js') }}
     {{ JS.push('js/lib/jquery.js') }}
     {{ JS.push('js/lib/underscore.js') }}
-    {{ JS.push('js/lib/d3.js') }}
+    {{ JS.push('js/lib/d3.min.js') }}
     {{ JS.push('js/lib/pym.js') }}
     {{ JS.push('js/base.js') }}
     {{ JS.push('js/graphic.js') }}

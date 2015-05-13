@@ -2,7 +2,6 @@
 var $graphic = null;
 var $mapTemplate = null;
 var pymChild = null;
-var stateLabels = d3.selectAll('svg text');
 
 var MOBILE_THRESHOLD = 500;
 var GRAPHIC_DEFAULT_WIDTH = 600;
@@ -56,10 +55,13 @@ var render = function(containerWidth) {
         isMobile = false;
     }
 
+    // clear out existing graphics
+    $graphic.empty();
+
     // draw the new graphic
     // (this is a separate function in case I want to be able to draw multiple charts later.)
-    var categories = makeCategories(MAPS[0]);
-    drawMap($('#graphic'), MAPS[0], categories);
+    drawMap('boolean', MAPS[0]);
+    drawMap('category', MAPS[1]);
 
     // update iframe
     if (pymChild) {
@@ -68,77 +70,64 @@ var render = function(containerWidth) {
 }
 
 /*
- * Assign colors to categories in the map data
+ * Determine unique categories
  */
-var makeCategories = function(mapData) {
-    var categoryColors = [
-        COLORS['red4'],
-        COLORS['orange4'],
-        COLORS['teal4'],
-        COLORS['yellow4'],
-        COLORS['blue4']
-    ];
-
-    var categories = {};
-    var color;
-
-    _.each(mapData, function(state) {
-        if (state['category'] !== null) {
-            if (_.has(categories, state['category'])) {
-                color = categories[state['category']];
-            } else {
-                color = categoryColors.pop();
-                categories[state['category']] = color;
-            }
+var makeCategories = function(data) {
+    var categories = [];
+    _.each(data, function(state) {
+        if (state['category'] != null) {
+            categories.push(state['category']);
         }
     });
-
-    return categories;
+    return d3.set(categories).values().sort();
 }
+
 
 /*
  * Build and render a legend from map categories
  */
-var renderLegend = function($el, categories) {
-    _.each(categories, function(color, key) {
+var renderLegend = function($el, color) {
+    _.each(color.domain(), function(key, i) {
         var $item = $('<li class="key-item"><label>' + key + '</label></li>')
-        var $color = $('<b style="background:' + color + '"></b>');
+        var $color = $('<b style="background:' + color(key) + '"></b>');
         $color.prependTo($item);
-        $item.prependTo($el);
+        $item.appendTo($el);
     });
 }
 
 /*
  * DRAW THE GRAPH
  */
-var drawMap = function($el, mapData, categories) {
-    $el.empty();
+var drawMap = function(id, mapData) {
+    // create div for this map
+    $graphic.append('<div id="map-' + id + '" class="tile-grid-map"></div>')
+    var $el = $('#map-' + id);
 
-    if ($el.attr('id') === 'graphic') {
-        $el.append($mapTemplate.html());
-    } else {
-        $el.append($('#map-template-river').html());
-    }
+    // append map template
+    $el.append($mapTemplate.html());
 
+    // define color range
+    var color = d3.scale.ordinal()
+        .domain(makeCategories(mapData))
+        .range([ COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3'] ]);
+
+    // make the legend
     var $legend = $el.find('.key');
-    renderLegend($legend, categories);
+    renderLegend($legend, color);
 
-    var svg = d3.select('#' + $el.attr('id') + ' svg');
-
+    // flip the colors where a category is defined
     _.each(mapData, function(state) {
-        var color;
-
         if (state['category'] !== null) {
-            var color = categories[state['category']];
             var stateClass = 'state-' + classify(state['state_name']);
             $el.find('.' + stateClass)
                 .attr('class', stateClass + ' state-active')
-                .attr('fill', color);
+                .attr('fill', color(state['category']));
         }
     });
 
     // Draw labels
-    stateLabels =  svg.append('g')
+    var svg = d3.select('#' + $el.attr('id') + ' svg');
+    var stateLabels = svg.append('g')
         .selectAll('text')
             .data(mapData)
         .enter().append('text')
@@ -156,7 +145,6 @@ var drawMap = function($el, mapData, categories) {
             })
             .attr('x', function(d) {
                 var className = '.state-' + classify(d['state_name']);
-                console.log(className);
                 var tileBox = svg.select(className)[0][0].getBBox();
 
                 return tileBox['x'] + tileBox['width'] * 0.52;
