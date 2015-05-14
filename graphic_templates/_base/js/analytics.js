@@ -6,8 +6,8 @@ var ANALYTICS = (function () {
     /*
      * Google Analytics
      */
-    var DIMENSION_PARENT_HOSTNAME = 'dimension1';
-    var DIMENSION_PARENT_URL = 'dimension2';
+    var DIMENSION_PARENT_URL = 'dimension1';
+    var DIMENSION_PARENT_HOSTNAME = 'dimension2';
     var DIMENSION_PARENT_INITIAL_WIDTH = 'dimension3';
 
     var setupGoogle = function() {
@@ -38,8 +38,8 @@ var ANALYTICS = (function () {
         var initialWidth = getParameterByName('initialWidth') || '';
 
         var customData = {};
-        customData[DIMENSION_PARENT_HOSTNAME] = parentHostname;
         customData[DIMENSION_PARENT_URL] = parentUrl;
+        customData[DIMENSION_PARENT_HOSTNAME] = parentHostname;
         customData[DIMENSION_PARENT_INITIAL_WIDTH] = initialWidth;
 
         // Track pageview
