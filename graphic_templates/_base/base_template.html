@@ -46,6 +46,7 @@
 </head>
 <body>
     <!-- Analytics -->
+    {{ JS.push('js/base.js') }}
     {{ JS.push('js/analytics.js') }}
     {{ JS.render('js/graphic-header.js') }}
 
@@ -58,10 +59,10 @@
     {% block js %}
 
         {{ JS.push('js/lib/jquery.js') }}
+        {{ JS.push('js/lib/underscore.js') }}
         {{ JS.push('js/lib/d3.min.js') }}
         {{ JS.push('js/lib/modernizr.svg.min.js') }}
         {{ JS.push('js/lib/pym.js') }}
-        {{ JS.push('js/base.js') }}
         {{ JS.push('js/graphic.js') }}
         {{ JS.render('js/graphic-footer.js') }}
 
