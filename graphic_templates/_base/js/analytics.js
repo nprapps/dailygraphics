@@ -13,7 +13,14 @@ var ANALYTICS = (function () {
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+        // By default Google tracks the query string, but we want to ignore it.
+        var location = window.location.protocol +
+            '//' + window.location.hostname +
+            window.location.pathname;
+
         ga('create', GOOGLE_ANALYTICS_ACCOUNT_ID, 'auto');
+        ga('set', 'location', location);
+        ga('set', 'page', window.location.pathname);
         ga('send', 'pageview');
      }
 
