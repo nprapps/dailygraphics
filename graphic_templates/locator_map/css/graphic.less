@@ -28,19 +28,6 @@ path.landmass { fill: #a8d5ef; }
     stroke-width: 1px;
 }
 
-.roads path {
-    fill: none;
-    stroke: #ddd;
-    stroke-width: 1px;
-}
-
-.quakes circle {
-    fill: #E38D2C;
-    fill-opacity: 0.3;
-    stroke: #fff;
-    stroke-width: .5;
-}
-
 .cities path {
     fill: #999;
     
@@ -85,6 +72,18 @@ path.landmass { fill: #a8d5ef; }
     &.bhutan { display: none; }
 }
 
+.scale-bar {
+    line {
+        stroke: #666;
+        stroke-width: 5px;
+    }
+    text {
+        font-family: Helvetica, Arial,sans-serif;
+        fill: #666;
+        font-size: 60%;
+        -webkit-font-smoothing: antialiased;
+    }
+}
 
 // responsive styles
 @media screen and (max-width: 480px) {
