@@ -54,57 +54,6 @@ var onDataLoaded = function(error, data) {
 }
 
 /*
- * Calculate an end point given a starting point, bearing and distance.
- * Adapted from http://www.movable-type.co.uk/scripts/latlong.html
- */
-var calculateDestinationPoint = function(lat, lon, distance, bearing) {
-    var radius = 6371000;
-
-    var distanceFraction = distance / radius; // angular distance in radians
-    var bearingR = bearing * Math.PI / 180;
-
-    var lat1r = lat * Math.PI / 180;
-    var lng1r = lon * Math.PI / 180;
-
-    var lat2r = Math.asin(
-        Math.sin(lat1r) * Math.cos(distanceFraction) +
-        Math.cos(lat1r) * Math.sin(distanceFraction) * Math.cos(bearingR)
-    );
-
-    var lng2r = lng1r + Math.atan2(
-        Math.sin(bearingR) * Math.sin(distanceFraction) * Math.cos(lat1r),
-        Math.cos(distanceFraction) - Math.sin(lat1r) * Math.sin(lat2r)
-    );
-
-    lng2r = (lng2r + 3 * Math.PI) % (2 * Math.PI) - Math.PI; // normalise to -180..+180°
-
-    return [lng2r * 180 / Math.PI, lat2r * 180 / Math.PI];
-};
-
-/*
- * Calculate a scale bar, as follows:
- * - Select a starting pixel coordinate
- * - Convert coordinate to map space
- * - Calculate a fixed distance end coordinate *east* of the start coordinate
- * - Convert end coordinate back to pixel space
- * - Calculate geometric distance between start and end pixel coordinates.
- * - Set end coordinate's x value to start coordinate + distance. Y coords hold constant.
- */
-var calculateScaleBarEndPoint = function(projection, start, miles) {
-    var startGeo = projection.invert(start);
-
-    var km = miles * 1.60934;
-    var meters = km * 1000;
-
-    var endGeo = calculateDestinationPoint(startGeo[1], startGeo[0], meters, 90);
-    var end = projection([endGeo[0], endGeo[1]])
-
-    var distance = Math.sqrt(Math.pow(end[0] - start[0], 2) + Math.pow(end[1] - start[1], 2));
-
-    return [start[0] + distance, start[1]];
-}
-
-/*
  * DRAW THE MAP
  */
 function drawMap(containerWidth) {
@@ -297,8 +246,9 @@ function drawMap(containerWidth) {
     d3.selectAll('.shadow')
         .attr('filter', 'url(#textshadow)');
 
+    var scaleBarDistance = calculateOptimalScaleBarDistance(bbox, 10);
     var scaleBarStart = [10, mapHeight - 20];
-    var scaleBarEnd = calculateScaleBarEndPoint(projection, scaleBarStart, 100);
+    var scaleBarEnd = calculateScaleBarEndPoint(projection, scaleBarStart, scaleBarDistance);
 
     svg.append('g')
         .attr('class', 'scale-bar')
