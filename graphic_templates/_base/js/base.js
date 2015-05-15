@@ -8,7 +8,33 @@ var COLORS = {
 
 /*
  * Convert arbitrary strings to valid css classes
+ * via: https://gist.github.com/mathewbyrne/1280286
  */
 var classify = function(str) {
-    return str.replace(/\s+/g, '-').toLowerCase();
+    return str.toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+}
+
+/*
+ * Parse a url parameter by name.
+ * via: http://stackoverflow.com/a/901144
+ */
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+/*
+ * Convert a url to a location object.
+ */
+function urlToLocation(url) {
+    var a = document.createElement('a');
+    a.href = url;
+    return a;
 }

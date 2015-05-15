@@ -306,15 +306,13 @@ function drawMap(containerWidth) {
         .attr('x1', scaleBarStart[0])
         .attr('y1', scaleBarStart[1])
         .attr('x2', scaleBarEnd[0])
-        .attr('y2', scaleBarEnd[1])
-        .style('stroke', 'black')
-        .style('stroke-width', '5px')
+        .attr('y2', scaleBarEnd[1]);
 
     d3.select('.scale-bar')
         .append('text')
         .attr('x', scaleBarEnd[0] + 5)
         .attr('y', scaleBarEnd[1] + 3)
-        .text('100 miles')
+        .text('100 miles');
 
     // update iframe
     if (pymChild) {

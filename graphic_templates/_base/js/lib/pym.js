@@ -176,7 +176,11 @@
             }
 
             // Append the initial width as a querystring parameter, and the fragment id
-            this.iframe.src = this.url + 'initialWidth=' + width + '&childId=' + this.id + hash;
+            this.iframe.src = this.url +
+                'initialWidth=' + width +
+                '&childId=' + this.id +
+                '&parentUrl=' + encodeURIComponent(window.location.href) +
+                hash;
 
             // Set some attributes to this proto-iframe.
             this.iframe.setAttribute('width', '100%');
@@ -343,6 +347,7 @@
     lib.Child = function(config) {
         this.parentWidth = null;
         this.id = null;
+        this.parentUrl = null;
 
         this.settings = {
             renderCallback: null,
@@ -353,7 +358,7 @@
         this.messageRegex = null;
         this.messageHandlers = {};
 
-        // ensure a config object
+        // Ensure a config object
         config = (config || {});
 
         /**
@@ -515,6 +520,9 @@
 
         // Get the initial width from a URL parameter.
         var width = parseInt(_getParameterByName('initialWidth'));
+
+        // Get the url of the parent frame
+        this.parentUrl = _getParameterByName('parentUrl');
 
         // Bind the required message handlers
         this.onMessage('width', this._onWidthMessage);
