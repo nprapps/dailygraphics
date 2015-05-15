@@ -278,11 +278,13 @@ pip install mapturner
 
 To get started, create a new graphic using that template:
 
-```fab add_map:$slug```
+```
+fab add_map:$slug
+```
 
 Inside the project folder, there will be a configuration file called ```geodata.yaml```. Edit that file to specify the particular layers and data columns you will want. Options included:
 
-* ```bbox```: The bounding box for your map. To get coordinates (x0 y0 x1 y1, space-delimited) appropriate to your project, go to a site like [geojson.io](http://geojson.io/), draw a box, and copy the coordinates of that box. (In the case of geojson.io, you will need the first and third set of coordinates shown.)
+* ```bbox```: The bounding box for your map. To get coordinates (```x0 y0 x1 y1```, space-delimited) appropriate to your project, go to a site like [geojson.io](http://geojson.io/), draw a box, and copy the coordinates of that box. (In the case of geojson.io, you will need the first and third set of coordinates shown.)
 * Default layers: ```countries```, ```cities``` (for the primary/featured country), ```neighbors``` (for neighboring countries), ```lakes``` and ```rivers```. The default layers point to Natural Earth shapefiles. mapturner also supports CSVs with latitude and longitude columns.
 * For each shapefile layer, you can specify options to pass to the TopoJSON converter, including:
   * ```id-property```: a column value you want to use as an identifier in the exported TopoJSON file
@@ -291,4 +293,6 @@ Inside the project folder, there will be a configuration file called ```geodata.
 
 In your terminal, in the ```dailygraphics``` virtualenv, navigate to your project folder. Run mapturner to process your map's geodata:
 
-```mapturner data/geodata.yaml data/geodata.json```
+```
+mapturner data/geodata.yaml data/geodata.json
+```
