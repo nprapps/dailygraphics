@@ -1,0 +1,111 @@
+svg { 
+    font-size: 20px;
+    background-color: #d3eaf7;
+}
+
+.countries path {
+    fill: #ddd;
+    stroke: #ebebeb;
+    stroke-width: 2.5px;
+
+    &.primary {
+        fill: #fff;
+        stroke: #bababa;
+    }
+}
+
+path.landmass { fill: #a8d5ef; }
+
+.lakes path {
+    fill: #d3eaf7;
+    stroke: #a8d5ef;
+    stroke-width: 1px;
+}
+
+.rivers path {
+    fill: none;
+    stroke: #a8d5ef;
+    stroke-width: 1px;
+}
+
+.roads path {
+    fill: none;
+    stroke: #ddd;
+    stroke-width: 1px;
+}
+
+.quakes circle {
+    fill: #E38D2C;
+    fill-opacity: 0.3;
+    stroke: #fff;
+    stroke-width: .5;
+}
+
+.cities path {
+    fill: #999;
+    
+    &.admin-0-capital { fill: #333; }
+}
+
+.city-labels text {
+    fill: #787878;
+    font-size: 65%;
+    text-anchor: start;
+    font-family: 'Gotham SSm', Helvetica, Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+
+    &.admin-0-capital {
+        fill: #555;
+        font-weight: bold;
+    }
+}
+
+.city-labels.shadow text { 
+    fill: #fff;
+    stroke: #fff;
+    stroke-width: 2px;
+    opacity: .7;
+}
+
+.country-labels text {
+    fill: #787878;
+    font-size: 80%;
+    text-transform: uppercase;
+    letter-spacing: 7px;
+    text-anchor: middle;
+    font-family: 'Gotham SSm', Helvetica, Arial,sans-serif;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+
+    &.primary {
+        fill: #555;
+        font-weight: 700;
+        font-size: 90%;
+    }
+    &.bhutan { display: none; }
+}
+
+
+// responsive styles
+@media screen and (max-width: 480px) {
+    svg { font-size: 12px; }
+    .countries path { stroke-width: 2px; }
+    .country-labels text {
+        &.bangladesh,
+        &.bhutan { 
+            display: none;
+        }
+    }
+    .city-labels text { letter-spacing: .5px; }
+    .city-labels.shadow { display: none; }
+    .city-labels text,
+    .cities path {
+        &.scalerank-4,
+        &.scalerank-5,
+        &.scalerank-6,
+        &.scalerank-7,
+        &.scalerank-8 {
+            display: none;
+        }
+    }
+}

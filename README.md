@@ -12,6 +12,7 @@ dailygraphics
 * [Embedding](#embedding)
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Storing media assets](#storing-media-assets)
+* [Creating locator maps](#creating-locator-maps)
 
 What is this?
 -------------
@@ -169,11 +170,14 @@ dailygraphics includes starter code for a few different types of graphics (and w
 | ![Column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/column-chart.png) | Column chart | ```fab add_column_chart:$SLUG``` |
 | ![Stacked column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-column-chart.png) | Stacked column chart | ```fab add_stacked_column_chart:$SLUG``` |
 | ![Line chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/line-chart.png) | Line chart | ```fab add_line_chart:$SLUG``` |
+| tktktk | Locator map | ```fab add_map:$SLUG``` |
 | ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
 
 Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic. It also will clone a new Google Spreadsheet for you to use for text and data.
 
 Build out your graphic in ```child_template.html```, and put your javascript in ```js/graphic.js```.
+
+[More about working with the locator map template.](#creating-locator-maps)
 
 **Note**: `$SLUG` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
@@ -260,3 +264,35 @@ Syncing these assets requires running a couple different commands at the right t
 * You can also take all remote versions (type "ra") or all local versions (type "la"). Type "c" to cancel if you aren't sure what to do.
 
 Unfortunately, there is no automatic way to know when a file has been intentionally deleted from the server or your local directory. When you want to simultaneously remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets.rm:"$SLUG/assets/file_name_here.jpg"```
+
+Creating Locator Maps
+---------------------
+
+The new locator map template is designed to simplify creating basic locator maps with D3, TopoJSON and [Natural Earth](http://www.naturalearthdata.com) data. It will not create production-ready maps, but it will quickly generate a code-based starting point for a map project.
+
+_(Note: The code in the example is tailored for a map centered on Nepal. You'll want to edit the configuration, JavaScript and LESS accordingly.)_
+
+To generate the necessary TopoJSON file, you will need to install the [mapturner](https://github.com/nprapps/mapturner) library, if you don't already have it. Mapturner also requires ogr2ogr/GDAL and topojson. **[See the mapturner docs](https://github.com/nprapps/mapturner)** for more information on getting started.
+
+To get started, create a new graphic using that template:
+
+```
+fab add_map:$slug
+```
+
+Inside the project folder, there will be a configuration file called ```geodata.yaml```. Edit that file to specify the particular layers and data columns you will want. Options included:
+
+* ```bbox```: The bounding box for your map. To get coordinates (```x0 y0 x1 y1```, space-delimited) appropriate to your project, go to a site like [Bounding Box](http://boundingbox.klokantech.com), draw a box (larger than you need), and copy the coordinates of that box. (In the case of Bounding Box, choose the "CSV" coordinate output and replace the commas with spaces.)
+* Default layers: ```countries```, ```cities``` (for the primary/featured country), ```neighbors``` (for neighboring countries), ```lakes``` and ```rivers```. The default layers point to Natural Earth shapefiles. mapturner also supports CSVs with latitude and longitude columns.
+* For each shapefile layer, you can specify options to pass to the TopoJSON converter, including:
+  * ```id-property```: a column value you want to use as an identifier in the exported TopoJSON file
+  * ```properties```: columns you want TopoJSON to preserve in the exported file (by default, it strips out most non-geo data)
+  * ```where```: a query to pass in to filter the data returned (for example: ```where: adm0name != 'Nepal' AND scalerank <= 2```)
+
+([See the mapturner docs](https://github.com/nprapps/mapturner) for more details.)
+
+In your terminal, in the ```dailygraphics``` virtualenv, navigate to your project folder. Run mapturner to process your map's geodata:
+
+```
+mapturner geodata.yaml data/geodata.json
+```
