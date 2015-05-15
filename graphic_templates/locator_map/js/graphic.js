@@ -251,6 +251,8 @@ function drawMap(containerWidth) {
             .text(function(d) {
                 return d['properties']['country'];
             });
+    d3.select('.country-labels text.' + classify(PRIMARY_COUNTRY))
+        .attr('class', 'label primary ' + classify(PRIMARY_COUNTRY));
 
     var cityLabels = [ 'city-labels shadow',
                        'city-labels',
