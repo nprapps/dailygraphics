@@ -36,7 +36,6 @@ COUNTRY_LABEL_ADJUSTMENTS['Bangladesh'] = { 'text-anchor': 'end', 'dx': -10 };
  * INITIALIZE
  */
 var onWindowLoaded = function() {
-    console.log('onWindowLoaded');
     d3.json(GEO_DATA_URL, onDataLoaded);
     $graphic = $('#graphic');
 }
@@ -46,7 +45,6 @@ var onWindowLoaded = function() {
  * LOAD THE DATA
  */
 var onDataLoaded = function(error, data) {
-    console.log('onDataLoaded');
     geoData = data;
 
     pymChild = new pym.Child({
@@ -59,8 +57,6 @@ var onDataLoaded = function(error, data) {
  * DRAW THE MAP
  */
 function drawMap(containerWidth) {
-    console.log('DRAW_MAP');
-
     // fallback if page is loaded outside of an iframe
     if (!containerWidth) {
         containerWidth = MAP_DEFAULT_WIDTH;
@@ -89,7 +85,6 @@ function drawMap(containerWidth) {
     var geoLakes = topojson.feature(geoData, geoData['objects']['lakes']);
     var geoCities = topojson.feature(geoData, geoData['objects']['cities']);
     var geoNeighbors = topojson.feature(geoData, geoData['objects']['neighbors']);
-    var geoQuakes = topojson.feature(geoData, geoData['objects']['quakes']);
 
     // delete existing map
     $graphic.empty();
@@ -143,24 +138,6 @@ function drawMap(containerWidth) {
             .data(geoLakes['features'])
         .enter().append('path')
             .attr('d', path);
-
-    svg.append('g')
-        .attr('class', 'quakes')
-        .selectAll('circle')
-            .data(geoQuakes['features'])
-        .enter().append('circle')
-            .attr('cx', function(d) { 
-                var pos = projection(d['geometry']['coordinates'])
-                return pos[0];
-            })
-            .attr('cy', function(d) { 
-                var pos = projection(d['geometry']['coordinates'])
-                return pos[1];
-            })
-            .attr('r', function(d) {
-                return radius(d['properties']['intensity']);
-            });
-
 
     svg.append('g')
         .attr('class', 'cities nepal')
