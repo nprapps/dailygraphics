@@ -294,5 +294,5 @@ Inside the project folder, there will be a configuration file called ```geodata.
 In your terminal, in the ```dailygraphics``` virtualenv, navigate to your project folder. Run mapturner to process your map's geodata:
 
 ```
-mapturner data/geodata.yaml data/geodata.json
+mapturner geodata.yaml data/geodata.json
 ```
