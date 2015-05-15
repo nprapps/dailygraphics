@@ -270,6 +270,8 @@ Creating Locator Maps
 
 The new locator map template is designed to simplify creating basic locator maps with D3, TopoJSON and [Natural Earth](http://www.naturalearthdata.com) data. It will not create production-ready maps, but it will quickly generate a code-based starting point for a map project.
 
+_(Note: The code in the example is tailored for a map centered on Nepal. You'll want to edit the configuration, JavaScript and LESS accordingly.)_
+
 To generate the necessary TopoJSON file, you will need to install the [mapturner](https://github.com/nprapps/mapturner) library, if you don't already have it. (We've only recently added it to the dailygraphics requirements.txt file.)
 
 ```
