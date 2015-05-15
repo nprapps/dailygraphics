@@ -53,6 +53,56 @@ var onDataLoaded = function(error, data) {
     });
 }
 
+/*
+ * Calculate an end point given a starting point, bearing and distance.
+ * Adapted from http://www.movable-type.co.uk/scripts/latlong.html
+ */
+var calculateDestinationPoint = function(lat, lon, distance, bearing) {
+    var radius = 6371000;
+
+    var distanceFraction = distance / radius; // angular distance in radians
+    var bearingR = bearing * Math.PI / 180;
+
+    var lat1r = lat * Math.PI / 180;
+    var lng1r = lon * Math.PI / 180;
+
+    var lat2r = Math.asin(
+        Math.sin(lat1r) * Math.cos(distanceFraction) +
+        Math.cos(lat1r) * Math.sin(distanceFraction) * Math.cos(bearingR)
+    );
+
+    var lng2r = lng1r + Math.atan2(
+        Math.sin(bearingR) * Math.sin(distanceFraction) * Math.cos(lat1r),
+        Math.cos(distanceFraction) - Math.sin(lat1r) * Math.sin(lat2r)
+    );
+
+    lng2r = (lng2r + 3 * Math.PI) % (2 * Math.PI) - Math.PI; // normalise to -180..+180°
+
+    return [lng2r * 180 / Math.PI, lat2r * 180 / Math.PI];
+};
+
+/*
+ * Calculate a scale bar, as follows:
+ * - Select a starting pixel coordinate
+ * - Convert coordinate to map space
+ * - Calculate a fixed distance end coordinate *east* of the start coordinate
+ * - Convert end coordinate back to pixel space
+ * - Calculate geometric distance between start and end pixel coordinates.
+ * - Set end coordinate's x value to start coordinate + distance. Y coords hold constant.
+ */
+var calculateScaleBarEndPoint = function(projection, start, miles) {
+    var startGeo = projection.invert(start);
+
+    var km = miles * 1.60934;
+    var meters = km * 1000;
+
+    var endGeo = calculateDestinationPoint(startGeo[1], startGeo[0], meters, 90);
+    var end = projection([endGeo[0], endGeo[1]])
+
+    var distance = Math.sqrt(Math.pow(end[0] - start[0], 2) + Math.pow(end[1] - start[1], 2));
+
+    return [start[0] + distance, start[1]];
+}
 
 /*
  * DRAW THE MAP
@@ -69,7 +119,7 @@ function drawMap(containerWidth) {
     } else {
         isMobile = false;
     }
-    
+
     // dimensions
     var mapWidth = containerWidth;
     var mapHeight = mapWidth * MAP_DEFAULT_HEIGHT / MAP_DEFAULT_WIDTH;
@@ -79,7 +129,7 @@ function drawMap(containerWidth) {
     // data vars
     var bbox = geoData['bbox'];
     var mapCentroid = [ ((bbox[0] + bbox[2])/2), ((bbox[1] + bbox[3])/2) ];
-    
+
     var geoCountries = topojson.feature(geoData, geoData['objects']['countries']);
     var geoRivers = topojson.feature(geoData, geoData['objects']['rivers']);
     var geoLakes = topojson.feature(geoData, geoData['objects']['lakes']);
@@ -186,7 +236,7 @@ function drawMap(containerWidth) {
             .attr('class', function(d) {
                 return 'label ' + classify(d['id']);
             })
-            .attr('transform', function(d) { 
+            .attr('transform', function(d) {
                 return 'translate(' + path.centroid(d) + ')';
             })
             .attr('text-anchor', function(d) {
@@ -201,10 +251,10 @@ function drawMap(containerWidth) {
             .text(function(d) {
                 return d['properties']['country'];
             });
-            
-    var cityLabels = [ 'city-labels shadow', 
-                       'city-labels', 
-                       'city-labels shadow primary', 
+
+    var cityLabels = [ 'city-labels shadow',
+                       'city-labels',
+                       'city-labels shadow primary',
                        'city-labels primary' ];
     cityLabels.forEach(function(v, k) {
         var cityData;
@@ -213,7 +263,7 @@ function drawMap(containerWidth) {
         } else {
             cityData = geoCities['features'];
         }
-    
+
         svg.append('g')
             .attr('class', v)
             .selectAll('.label')
@@ -244,6 +294,25 @@ function drawMap(containerWidth) {
     });
     d3.selectAll('.shadow')
         .attr('filter', 'url(#textshadow)');
+
+    var scaleBarStart = [10, mapHeight - 20];
+    var scaleBarEnd = calculateScaleBarEndPoint(projection, scaleBarStart, 100);
+
+    svg.append('g')
+        .attr('class', 'scale-bar')
+        .append('line')
+        .attr('x1', scaleBarStart[0])
+        .attr('y1', scaleBarStart[1])
+        .attr('x2', scaleBarEnd[0])
+        .attr('y2', scaleBarEnd[1])
+        .style('stroke', 'black')
+        .style('stroke-width', '5px')
+
+    d3.select('.scale-bar')
+        .append('text')
+        .attr('x', scaleBarEnd[0] + 5)
+        .attr('y', scaleBarEnd[1] + 3)
+        .text('100 miles')
 
     // update iframe
     if (pymChild) {
