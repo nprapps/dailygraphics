@@ -1,15 +1,20 @@
-svg { font-size: 20px; }
+svg { 
+    font-size: 20px;
+    background-color: #d3eaf7;
+}
 
 .countries path {
     fill: #ddd;
     stroke: #ebebeb;
     stroke-width: 2.5px;
 
-    &.nepal {
+    &.primary {
         fill: #fff;
         stroke: #bababa;
     }
 }
+
+path.landmass { fill: #a8d5ef; }
 
 .lakes path {
     fill: #d3eaf7;
@@ -72,7 +77,7 @@ svg { font-size: 20px; }
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
 
-    &.nepal {
+    &.primary {
         fill: #555;
         font-weight: 700;
         font-size: 90%;
@@ -86,8 +91,6 @@ svg { font-size: 20px; }
     svg { font-size: 12px; }
     .countries path { stroke-width: 2px; }
     .country-labels text {
-//        font-size: 11px;
-//        &.nepal { font-size: 11px; }
         &.bangladesh,
         &.bhutan { 
             display: none;

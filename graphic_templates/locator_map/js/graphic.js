@@ -8,6 +8,7 @@ var MAP_DEFAULT_SCALE = 3000;
 var CITY_DOT_RADIUS = 3;
 var QUAKE_DOT_RADIUS = 15;
 var MOBILE_THRESHOLD = 500;
+var PRIMARY_COUNTRY = 'Nepal';
 
 // geo data
 var GEO_DATA_URL = 'data/geodata.json';
@@ -80,7 +81,6 @@ function drawMap(containerWidth) {
     var mapCentroid = [ ((bbox[0] + bbox[2])/2), ((bbox[1] + bbox[3])/2) ];
     
     var geoCountries = topojson.feature(geoData, geoData['objects']['countries']);
-    geoCountries['features'][0]['properties']['country'] = 'Bangla.';
     var geoRivers = topojson.feature(geoData, geoData['objects']['rivers']);
     var geoLakes = topojson.feature(geoData, geoData['objects']['lakes']);
     var geoCities = topojson.feature(geoData, geoData['objects']['cities']);
@@ -95,12 +95,18 @@ function drawMap(containerWidth) {
         .attr('height', mapHeight);
 
     defs = svg.append('defs');
-    filter = defs.append('filter')
-        .attr('id', 'dropshadow');
-    filter.append('feGaussianBlur')
+    textFilter = defs.append('filter')
+        .attr('id', 'textshadow');
+    textFilter.append('feGaussianBlur')
         .attr('in', 'SourceGraphic')
         .attr('result', 'blurOut')
         .attr('stdDeviation', '.25');
+    landFilter = defs.append('filter')
+        .attr('id', 'landshadow');
+    landFilter.append('feGaussianBlur')
+        .attr('in', 'SourceGraphic')
+        .attr('result', 'blurOut')
+        .attr('stdDeviation', '10');
 
     var projection = d3.geo.mercator()
         .center(mapCentroid)
@@ -111,9 +117,11 @@ function drawMap(containerWidth) {
         .projection(projection)
         .pointRadius(CITY_DOT_RADIUS * scaleFactor);
 
-    var radius = d3.scale.sqrt()
-        .domain([0, 10])
-        .range([0, (QUAKE_DOT_RADIUS * scaleFactor)]); // scale max dot size to the map dimensions
+    svg.append('path')
+        .attr('class', 'landmass')
+        .datum(geoCountries)
+        .attr('filter', 'url(#landshadow)')
+        .attr('d', path);
 
     svg.append('g')
         .attr('class', 'countries')
@@ -124,6 +132,9 @@ function drawMap(containerWidth) {
                 return classify(d['id']);
             })
             .attr('d', path);
+    d3.select('.countries path.' + classify(PRIMARY_COUNTRY))
+        .moveToFront()
+        .attr('class', 'primary ' + classify(PRIMARY_COUNTRY));
 
     svg.append('g')
         .attr('class', 'rivers')
@@ -140,7 +151,7 @@ function drawMap(containerWidth) {
             .attr('d', path);
 
     svg.append('g')
-        .attr('class', 'cities nepal')
+        .attr('class', 'cities primary')
         .selectAll('path')
             .data(geoCities['features'])
         .enter().append('path')
@@ -193,8 +204,8 @@ function drawMap(containerWidth) {
             
     var cityLabels = [ 'city-labels shadow', 
                        'city-labels', 
-                       'city-labels shadow nepal', 
-                       'city-labels nepal' ];
+                       'city-labels shadow primary', 
+                       'city-labels primary' ];
     cityLabels.forEach(function(v, k) {
         var cityData;
         if (v == 'city-labels shadow' || v == 'city-labels') {
@@ -232,7 +243,7 @@ function drawMap(containerWidth) {
                 });
     });
     d3.selectAll('.shadow')
-        .attr('filter', 'url(#dropshadow)');
+        .attr('filter', 'url(#textshadow)');
 
     // update iframe
     if (pymChild) {
@@ -251,6 +262,13 @@ var positionLabel = function(adjustments, id, attribute) {
         return LABEL_DEFAULTS[attribute];
     }
 }
+
+d3.selection.prototype.moveToFront = function() {
+    return this.each(function(){
+        this.parentNode.appendChild(this);
+    });
+};
+
 
 /*
  * Initially load the graphic
