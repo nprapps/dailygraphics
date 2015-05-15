@@ -19,6 +19,11 @@
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit }}</p>{% endif %}
     </div>
 
+    <script type="text/javascript">
+        var COUNTRIES = {{ COPY.countries.json() }};
+        var CITIES = {{ COPY.cities.json() }};
+    </script>
+
 {% endblock content %}
 
 {% block js %}

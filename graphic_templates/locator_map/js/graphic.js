@@ -249,7 +249,7 @@ function drawMap(containerWidth) {
                 return positionLabel(COUNTRY_LABEL_ADJUSTMENTS, d['id'], 'dy');
             })
             .text(function(d) {
-                return d['properties']['country'];
+                return COUNTRIES[d['properties']['country']] || d['properties']['country'];
             });
     d3.select('.country-labels text.' + classify(PRIMARY_COUNTRY))
         .attr('class', 'label primary ' + classify(PRIMARY_COUNTRY));
@@ -291,7 +291,7 @@ function drawMap(containerWidth) {
                     return positionLabel(CITY_LABEL_ADJUSTMENTS, d['properties']['city'], 'dy');
                 })
                 .text(function(d) {
-                    return d['properties']['city'];
+                    return CITIES[d['properties']['city']] || d['properties']['city'];
                 });
     });
     d3.selectAll('.shadow')
