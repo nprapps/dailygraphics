@@ -20,6 +20,8 @@ def _graphics_detail(slug):
     """
     Renders a parent.html index with child.html embedded as iframe.
     """
+    from flask import request
+
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
     # NOTE: Parent must load pym.js from same source as child to prevent version conflicts!
@@ -36,7 +38,12 @@ def _graphics_detail(slug):
         context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
-            context['COPY'] = copytext.Copy(filename='%s/%s.xlsx' % (graphic_path, slug))
+            copy_path = '%s/%s.xlsx' % (graphic_path, slug)
+
+            if request.args.get('refresh'):
+                oauth.get_document(graphic_config.COPY_GOOGLE_DOC_KEY, copy_path)
+
+            context['COPY'] = copytext.Copy(filename=copy_path)
     except IOError:
         pass
 
@@ -65,7 +72,9 @@ def _graphics_child(slug):
         context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
-            context['COPY'] = copytext.Copy(filename='%s/%s.xlsx' % (graphic_path, slug))
+            copy_path = '%s/%s.xlsx' % (graphic_path, slug)
+
+            context['COPY'] = copytext.Copy(filename=copy_path)
     except IOError:
         pass
 

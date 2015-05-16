@@ -32,7 +32,12 @@ def _templates_detail(slug):
         context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
-            context['COPY'] = copytext.Copy(filename='%s/%s.xlsx' % (template_path, slug))
+            copy_path = '%s/%s.xlsx' % (template_path, slug)
+
+            if request.args.get('refresh'):
+                oauth.get_document(graphic_config.COPY_GOOGLE_DOC_KEY, copy_path)
+
+            context['COPY'] = copytext.Copy(filename=copy_path)
     except IOError:
         pass
 
@@ -56,9 +61,9 @@ def _templates_child(slug):
     context = make_context(asset_depth=2, root_path=template_path)
     context['slug'] = slug
 
-    if os.path.exists('%s/graphic_config.py' % template_path):
-        config_path = '%s/graphic_config.py' % template_path
-    else:
+    config_path = '%s/graphic_config.py' % template_path
+
+    if not os.path.exists(config_path):
         config_path = '%s/_base/graphic_config.py' % app_config.TEMPLATES_PATH
 
     try:
@@ -66,7 +71,9 @@ def _templates_child(slug):
         context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
-            context['COPY'] = copytext.Copy(filename='%s/%s.xlsx' % (template_path, slug))
+            copy_path = '%s/%s.xlsx' % (template_path, slug)
+
+            context['COPY'] = copytext.Copy(filename=copy_path)
     except IOError:
         pass
 

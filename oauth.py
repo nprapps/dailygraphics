@@ -62,8 +62,8 @@ def oauth_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         from flask import request
-        if request.path.startswith('/graphics/'):
 
+        if request.path.startswith('/graphics/'):
             slug = request.path[1:-1].split('/')[-1]
             post_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
@@ -76,10 +76,6 @@ def oauth_required(f):
 
             if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY and (not credentials or not credentials.valid):
                 return redirect(url_for('_oauth.oauth_alert'))
-
-            if request.args.get('refresh') and hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
-                copy_path = os.path.join(app_config.GRAPHICS_PATH, slug, '%s.xlsx' % slug)
-                get_document(graphic_config.COPY_GOOGLE_DOC_KEY, copy_path)
 
         return f(*args, **kwargs)
     return decorated_function
