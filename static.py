@@ -18,8 +18,6 @@ def _static(path):
     else:
         real_path = 'www/%s' % path
 
-    print real_path
-
     try:
         with open('%s' % real_path) as f:
             return f.read(), 200, { 'Content-Type': guess_type(real_path)[0] }

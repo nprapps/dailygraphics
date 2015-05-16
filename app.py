@@ -9,6 +9,7 @@ from werkzeug.debug import DebuggedApplication
 import app_config
 import copytext
 import graphic
+import graphic_templates
 import oauth
 from render_utils import make_context
 import static
@@ -23,6 +24,7 @@ def _graphics_list():
     """
     context = make_context()
     context['graphics'] = []
+    context['templates'] = []
 
     graphics = glob('%s/*' % app_config.GRAPHICS_PATH)
 
@@ -32,9 +34,23 @@ def _graphics_list():
 
     context['graphics_count'] = len(context['graphics'])
 
+    templates = glob('%s/*' % app_config.TEMPLATES_PATH)
+
+    for template in templates:
+        name = template.split('%s/' % app_config.TEMPLATES_PATH)[1]
+
+        if name.startswith('_'):
+            continue
+
+        print name
+        context['templates'].append(name)
+
+    context['templates_count'] = len(context['templates'])
+
     return make_response(render_template('index.html', **context))
 
 app.register_blueprint(graphic.graphic, url_prefix='/graphics')
+app.register_blueprint(graphic_templates.graphic_templates, url_prefix='/templates')
 app.register_blueprint(static.static)
 app.register_blueprint(oauth.oauth)
 
