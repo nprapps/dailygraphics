@@ -24,6 +24,9 @@ var fmtComma = d3.format(',');
 var fmtYearAbbrev = d3.time.format('%y');
 var fmtYearFull = d3.time.format('%Y');
 
+var color;
+var graphicData;
+var isMobile = false;
 
 /*
  * Initialize
@@ -288,15 +291,6 @@ var drawGraph = function(graphicWidth) {
                     return d['key']
                 });
 }
-
-
-/*
- * HELPER FUNCTIONS
- */
-var classify = function(str) { // clean up strings to use as CSS classes
-    return str.replace(/\s+/g, '-').toLowerCase();
-}
-
 
 /*
  * Initially load the graphic

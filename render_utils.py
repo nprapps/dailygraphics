@@ -1,51 +1,55 @@
 #!/usr/bin/env python
 
-import glob
-import os
+import codecs
+from datetime import datetime
+import json
 import time
 import urllib
+import subprocess
 
-from cssmin import cssmin
 from flask import Markup, g, render_template, request
 from slimit import minify
+from smartypants import smartypants
+from jinja2 import contextfunction, Template
 
 import app_config
+import copytext
 
-CSS_HEADER = '''
-/*
- * Looking for the full, uncompressed source? Try here:
- *
- * https://github.com/nprapps/%s
- */
-''' % app_config.REPOSITORY_NAME
+class BetterJSONEncoder(json.JSONEncoder):
+    """
+    A JSON encoder that intelligently handles datetimes.
+    """
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            encoded_object = obj.isoformat()
+        else:
+            encoded_object = json.JSONEncoder.default(self, obj)
 
-JS_HEADER = '''
-/*
- * Looking for the full, uncompressed source? Try here:
- *
- * https://github.com/nprapps/%s
- */
-''' % app_config.REPOSITORY_NAME
+        return encoded_object
 
 class Includer(object):
     """
     Base class for Javascript and CSS psuedo-template-tags.
+
+    See `make_context` for an explanation of `asset_depth`.
     """
-    def __init__(self):
+    def __init__(self, asset_depth=0, root_path='www'):
         self.includes = []
         self.tag_string = None
+        self.asset_depth = asset_depth
+        self.root_path = root_path
 
     def push(self, path):
-            self.includes.append(path)
+        self.includes.append(path)
 
-            return ""
+        return ''
 
     def _compress(self):
         raise NotImplementedError()
 
     def _relativize_path(self, path):
         relative_path = path
-        depth = len(request.path.split('/')) - 2
+        depth = len(request.path.split('/')) - (2 + self.asset_depth)
 
         while depth > 0:
             relative_path = '../%s' % relative_path
@@ -55,28 +59,24 @@ class Includer(object):
 
     def render(self, path):
         if getattr(g, 'compile_includes', False):
-            # Add a timestamp to the rendered filename to prevent caching
-            timestamp = int(time.time())
-            front, back = path.rsplit('.', 1)
-            path = '%s.%i.%s' % (front, timestamp, back)
-            out_path = 'www/%s' % path
+            if path in g.compiled_includes:
+                timestamp_path = g.compiled_includes[path]
+            else:
+                # Add a querystring to the rendered filename to prevent caching
+                timestamp_path = '%s?%i' % (path, int(time.time()))
 
-            # Delete old rendered versions, just to be tidy
-            old_versions = glob.glob('%s.*.%s' % (front, back))
+                out_path = '%s/%s' % (self.root_path, path)
 
-            for f in old_versions:
-                os.remove(f)
+                if path not in g.compiled_includes:
+                    print 'Rendering %s' % out_path
 
-            if out_path not in g.compiled_includes:
-                print 'Rendering %s' % out_path
+                    with codecs.open(out_path, 'w', encoding='utf-8') as f:
+                        f.write(self._compress())
 
-                with open(out_path, 'w') as f:
-                    f.write(self._compress().encode('utf-8'))
+                # See "fab render"
+                g.compiled_includes[path] = timestamp_path
 
-            # See "fab render"
-            g.compiled_includes.append(out_path)
-
-            markup = Markup(self.tag_string % self._relativize_path(path))
+            markup = Markup(self.tag_string % self._relativize_path(timestamp_path))
         else:
             response = ','.join(self.includes)
 
@@ -94,8 +94,8 @@ class JavascriptIncluder(Includer):
     """
     Psuedo-template tag that handles collecting Javascript and serving appropriate clean or compressed versions.
     """
-    def __init__(self):
-        Includer.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Includer.__init__(self, *args, **kwargs)
 
         self.tag_string = '<script type="text/javascript" src="%s"></script>'
 
@@ -104,17 +104,18 @@ class JavascriptIncluder(Includer):
         src_paths = []
 
         for src in self.includes:
-            src_paths.append('www/%s' % src)
+            src_paths.append('%s/%s' % (self.root_path, src))
 
-            with open('www/%s' % src) as f:
-                print '- compressing %s' % src
-                output.append(minify(f.read().encode('utf-8')))
+            with codecs.open('%s/%s' % (self.root_path, src), encoding='utf-8') as f:
+                if not src.endswith('.min.js'):
+                    print '- compressing %s' % src
+                    output.append(minify(f.read()))
+                else:
+                    print '- appending already compressed %s' % src
+                    output.append(f.read())
 
         context = make_context()
         context['paths'] = src_paths
-
-        header = render_template('_js_header.js', **context)
-        output.insert(0, header)
 
         return '\n'.join(output)
 
@@ -122,8 +123,8 @@ class CSSIncluder(Includer):
     """
     Psuedo-template tag that handles collecting CSS and serving appropriate clean or compressed versions.
     """
-    def __init__(self):
-        Includer.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Includer.__init__(self, *args, **kwargs)
 
         self.tag_string = '<link rel="stylesheet" type="text/css" href="%s" />'
 
@@ -133,24 +134,19 @@ class CSSIncluder(Includer):
         src_paths = []
 
         for src in self.includes:
+            css_path = '%s/%s' % (self.root_path, src)
 
-            if src.endswith('less'):
-                src_paths.append('%s' % src)
-                src = src.replace('less', 'css') # less/example.less -> css/example.css
-                src = '%s.less.css' % src[:-4]   # css/example.css -> css/example.less.css
-            else:
-                src_paths.append('www/%s' % src)
+            src_paths.append(css_path)
 
-            with open('www/%s' % src) as f:
-                print '- compressing %s' % src
-                output.append(cssmin(f.read().encode('utf-8')))
+            try:
+                compressed_src = subprocess.check_output(["node_modules/less/bin/lessc", "-x", css_path])
+                output.append(compressed_src)
+            except:
+                print 'It looks like "lessc" isn\'t installed. Try running: "npm install"'
+                raise
 
         context = make_context()
         context['paths'] = src_paths
-
-        header = render_template('_css_header.css', **context)
-        output.insert(0, header)
-
 
         return '\n'.join(output)
 
@@ -168,15 +164,25 @@ def flatten_app_config():
 
     return config
 
-def make_context():
+def make_context(asset_depth=0, root_path='www'):
     """
     Create a base-context for rendering views.
     Includes app_config and JS/CSS includers.
+
+    `asset_depth` indicates how far into the url hierarchy
+    the assets are hosted. If 0, then they are at the root.
+    If 1 then at /foo/, etc.
     """
     context = flatten_app_config()
 
-    context['JS'] = JavascriptIncluder()
-    context['CSS'] = CSSIncluder()
+    context['JS'] = JavascriptIncluder(
+        asset_depth=asset_depth,
+        root_path=root_path
+    )
+    context['CSS'] = CSSIncluder(
+        asset_depth=asset_depth,
+        root_path=root_path
+    )
 
     return context
 
@@ -207,3 +213,33 @@ def format_thousands(s):
     t = float(s)
     
     return "{:,.0f}".format(t)    
+
+def smarty_filter(s):
+    """
+    Filter to smartypants strings.
+    """
+    if type(s) == 'Markup':
+        s = s.unescape()
+
+    # Evaulate COPY elements
+    if type(s) is not unicode:
+        s = unicode(s)
+
+
+    s = s.encode('utf-8')
+    s = smartypants(s)
+
+    try:
+        return Markup(s)
+    except:
+        print 'This string failed to encode: %s' % s
+        return Markup(s)
+
+@contextfunction
+def render_with_context(context, text):
+    """
+    Render a template within a template!
+    """
+    template = Template(text.__unicode__())
+
+    return template.render(**context)

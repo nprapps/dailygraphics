@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Graphic : STLPR</title>
+
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="noindex" />
+    <link rel="shortcut icon" href="https://s3.amazonaws.com/stlpr-assets/stlpr-favicon.ico" />
+
+    {% block fonts %}
+
+    {% endblock %}
+
+    <!-- Configuration -->
+    <script type="text/javascript">
+        GOOGLE_ANALYTICS_ACCOUNT_ID = '{{ GOOGLE_ANALYTICS.ACCOUNT_ID }}';
+        GOOGLE_ANALYTICS_PROJECT_SLUG = '{{ slug }}';
+    </script>
+
+    <!-- CSS + LESS -->
+    {{ CSS.push('css/base.less') }}
+    {{ CSS.push('css/graphic.less') }}
+    {{ CSS.render('css/graphic-header.css') }}
+</head>
+<body>
+    <!-- Analytics -->
+    {{ JS.push('js/base.js') }}
+    {{ JS.push('js/analytics.js') }}
+    {{ JS.render('js/graphic-header.js') }}
+
+    {% block content %}
+
+        The child template content goes here!
+
+    {% endblock content %}
+
+    {% block js %}
+
+        {{ JS.push('js/lib/jquery.js') }}
+        {{ JS.push('js/lib/underscore.js') }}
+        {{ JS.push('js/lib/d3.min.js') }}
+        {{ JS.push('js/lib/modernizr.svg.min.js') }}
+        {{ JS.push('js/lib/pym.js') }}
+        {{ JS.push('js/graphic.js') }}
+        {{ JS.render('js/graphic-footer.js') }}
+
+    {% endblock js %}
+</body>
+</html>

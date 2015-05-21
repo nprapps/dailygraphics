@@ -12,6 +12,7 @@ dailygraphics
 * [Embedding](#embedding)
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Storing media assets](#storing-media-assets)
+* [Creating locator maps](#creating-locator-maps)
 
 What is this?
 -------------
@@ -34,6 +35,8 @@ In addition to big, long-term projects, the NPR Visuals team also produces short
 * [Making Data Tables Responsive](http://blog.apps.npr.org/2014/05/09/responsive-data-tables.html)
 * [Managing Instagram Photo Call-Outs](http://blog.apps.npr.org/2014/05/29/photo-callouts.html)
 * [Baking Chart Data Into Your Page](http://blog.apps.npr.org/2015/01/28/dailygraphics-json.html)
+* [Let’s Tesselate: Hexagons For Tile Grid Maps](http://blog.apps.npr.org/2015/05/11/hex-tile-maps.html)
+* [Simplifying Map Production](http://blog.apps.npr.org/2015/05/18/locator-maps.html)
 
 #### Things We've Built Using Dailygraphics
 * [Responsive charts](http://www.npr.org/blogs/codeswitch/2014/05/14/298726161/new-orleans-police-hope-to-win-the-city-back-one-kid-at-a-time)
@@ -79,26 +82,48 @@ The project contains the following folders and important files:
 Bootstrap the project
 ---------------------
 
+Node.js is required for the static asset pipeline. If you don't already have it, get it like this:
+
+```
+brew install node
+curl https://npmjs.org/install.sh | sh
+```
+
 ```
 cd dailygraphics
 mkvirtualenv --no-site-packages dailygraphics
 pip install -r requirements.txt
+npm install
 ```
 
 You'll now need to create a folder to hold the graphics created and deployed by this rig. This is configured in `app_config.GRAPHICS_PATH` and defaults to `../graphics`.
 
-**NPR Visuals:** Graphics are stored in a separate, private repository, and `app_config.GRAPHICS_PATH` points to that folder. You will need to separately `git clone` that repository.
+**NPR users:** Graphics are stored in a separate, private repository, and `app_config.GRAPHICS_PATH` points to that folder. You will need to separately `git clone` that repository.
 
-**Outside of NPR:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
+**All other users:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
 
 Configuration
 -------------
 
-The dailygraphics project configuration defaults are specific to NPR. If you want to use it in your newsroom you should fork this repository and update ``app_config.py`` with your own configuration. 
+The dailygraphics project configuration defaults are specific to NPR. If you want to use it in your newsroom you should fork this repository and update ``app_config.py`` with your own configuration.
 
 At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS``, ``STAGING_S3_BUCKETS`` and ``ASSETS_S3_BUCKET``. (``ASSETS_S3_BUCKET`` *must* be different from the other buckets.)
 
-See also: [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+**Google OAuth**
+
+The default configuration assumes that you want to use NPR's copytext rig to [pull content from a Google Spreadsheet](#connecting-to-a-google-spreadsheet). If you do not want to use Google Spreadsheets at all, delete all instances of ```graphic_config.py``` from the template folders inside ```graphic_templates```. You can skip the OAuth steps below.
+
+As of April 2015, we've changed our approach to authenticating with Google to sync Google Spreadsheet data. Now, dailygraphics relies on OAuth authentication. This approach is more secure (username and password are no longer stored in environment variables) and works for accounts with two-factor authentication enabled.
+
+Following the steps in [this blog post](http://blog.apps.npr.org/2015/03/02/app-template-oauth.html), you will need to:
+- Set up a Google API application for your organization
+- Save the client environment variables in your ```.bash_profile```
+- Authenticate with Google.
+
+You should only need to do this once.
+
+**NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson, David or Chris for more information.
+
 
 Run the project
 ---------------
@@ -130,27 +155,28 @@ Fatal error: local() encountered an error (return code 1) while executing 'gunic
 Aborting.
 ```
 
-It's possible that the webserver is already running silently in the background. [Here's how to fix it.](https://github.com/nprapps/dailygraphics/issues/74) 
+It's possible that the webserver is already running silently in the background. [Here's how to fix it.](https://github.com/nprapps/dailygraphics/issues/74)
 
 
 Add a new graphic
 -----------------
 
-dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go):
+dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go). Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic. It also will clone a new Google Spreadsheet for you to use for text and data.
+
+Build out your graphic in ```child_template.html```, and put your javascript in ```js/graphic.js```.
 
 | Image | Type | Fab command |
 | :---- | :--- | :---------- |
 | ![Basic graphic](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/graphic.png) | Very basic new graphic | ```fab add_graphic:$SLUG``` |
 | ![Bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/bar-chart.png) | Bar chart | ```fab add_bar_chart:$SLUG``` |
 | ![Grouped bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/grouped-bar-chart.png) | Grouped bar chart | ```fab add_grouped_bar_chart:$SLUG``` |
+| ![Stacked bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-bar-chart.png) | Stacked bar chart | ```fab add_stacked_bar_chart:$SLUG``` |
 | ![Column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/column-chart.png) | Column chart | ```fab add_column_chart:$SLUG``` |
 | ![Stacked column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-column-chart.png) | Stacked column chart | ```fab add_stacked_column_chart:$SLUG``` |
 | ![Line chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/line-chart.png) | Line chart | ```fab add_line_chart:$SLUG``` |
+| ![Locator map](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/locator-map.png) | [Locator map](#creating-locator-maps) | ```fab add_map:$SLUG``` |
+| ![State grid map](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/state-grid-map.png) | State grid map | ```fab add_state_grid_map:$SLUG``` |
 | ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
-
-Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic.
-
-Build out your graphic in ```child_template.html```, and put your javascript in ```js/graphic.js```.
 
 **Note**: `$SLUG` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
@@ -159,6 +185,11 @@ Here are some examples:
 * Good: my-project-name<br>Bad: My-Project-NAME
 * Good: my-project-name<br>Bad: my project name
 * Good: my-wonderful-project<br>Bad: my wonderful project!
+
+**NPR users:** For added clarity, append the current date or known pubdate to your slug name, YYYYMMDD-style. For example: ```my-project-name-20150415```
+
+When you create a new project, dailygraphics will check against your local projects and the projects published to production to make sure that the ```$SLUG``` you've chosen does not already exist.
+
 
 Deploy to S3
 ------------
@@ -174,14 +205,6 @@ fab staging deploy:$SLUG
 fab production deploy:$SLUG
 ```
 
-To deploy all graphics, leave off the graphic slug (**but don't do this unless you're absolutely sure** &mdash; you may deploy something that's not ready to be deployed yet):
-
-```
-fab production deploy
-```
-```
-fab staging deploy
-```
 
 Embedding
 ---------
@@ -194,18 +217,7 @@ Connecting to a Google Spreadsheet
 
 This section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet.
 
-In order to use the Google Spreadsheet syncing you will need to have environment variables set for ``APPS_GOOGLE_EMAIL`` and ``APPS_GOOGLE_PASS``. If you use bash you might add these to ``~/.bash_profile``.
-
-```
-export APPS_GOOGLE_EMAIL='EMAIL@GMAIL.COM'
-export APPS_GOOGLE_PASS='PASSWORD'
-```
-
-KNOWN ISSUE: Our copytext rig will not work with Gmail accounts with two-factor authentication enabled. If this is an issue, we suggest either creating a separate Gmail account without two-factor for use with dailygraphics, or not using the copytext feature.
-
-New graphics by default point to the main [app-template](https://github.com/nprapps/app-template)'s copy spreadsheet template. If you want to use this spreadsheet template as the basis for your project, make a copy of it first.
-
-To connect this spreadsheet (or any spreadsheet) to your graphic, update the ```graphic_config.py``` file in your graphic's folder with the ID of your spreadsheet:
+When you create a new graphic, dailygraphics will by default clone our [dailygraphics copy spreadsheet template](https://docs.google.com/spreadsheets/d/1ciRc--h8HuBpQzMebVygC4x_y9dvKxp6OA45ccRrIX4/edit#gid=0). To use a different spreadsheet (either in your graphics templates or in a particular project), update the ```graphic_config.py``` file in your graphic's folder with the ID of your spreadsheet:
 
 ```
 COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHZuX1UycXplRlBfLVB0UVNldHJYZmc'
@@ -217,6 +229,8 @@ Run this command to pull down the latest copy of the spreadsheet:
 fab update_copy:$SLUG
 ```
 
+Alternately, while you are developing your graphic locally, you can append ```?refresh=1``` to your graphic's localhost URL to refresh the spreadsheet every time you refresh the page. (It can be a little slow, though, so it might be most efficient to do this only when you’re actively working on the spreadsheet.)
+
 To pull down **all** spreadsheets in the dailygraphics repository, run:
 
 ```
@@ -225,9 +239,9 @@ fab update_copy
 
 The deploy process will always pull down the latest spreadsheet and render the contents to your page.
 
-If you do **not** want a copytext spreadsheet, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
+Note: Your published graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
 
-Note: Your graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
+If you do **not** want want to use the copytext spreadsheet for a given project, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
 
 
 Storing media assets
@@ -249,3 +263,37 @@ Syncing these assets requires running a couple different commands at the right t
 * You can also take all remote versions (type "ra") or all local versions (type "la"). Type "c" to cancel if you aren't sure what to do.
 
 Unfortunately, there is no automatic way to know when a file has been intentionally deleted from the server or your local directory. When you want to simultaneously remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets.rm:"$SLUG/assets/file_name_here.jpg"```
+
+Creating Locator Maps
+---------------------
+
+The new locator map template is designed to simplify creating basic locator maps with D3, TopoJSON and [Natural Earth](http://www.naturalearthdata.com) data. It will not create production-ready maps, but it will quickly generate a code-based starting point for a map project.
+
+To generate the necessary TopoJSON file, you will need to install the [mapturner](https://github.com/nprapps/mapturner) library. Mapturner also requires ogr2ogr/GDAL and topojson. **[See the mapturner docs](https://github.com/nprapps/mapturner)** for set-up information.
+
+_(Note: The code in our example is tailored for a map centered on Nepal. You'll want to edit the configuration, JavaScript and LESS accordingly.)_
+
+To get started, create a new graphic using that template:
+
+```
+fab add_map:$slug
+```
+
+Inside the project folder, edit the configuration file ```geodata.yaml``` to specify the particular layers and data columns you want. Options included:
+
+* ```bbox```: The bounding box for your map. To get coordinates (```x1 y1 x2 y2```, space-delimited) appropriate to your project, go to a site like [Bounding Box](http://boundingbox.klokantech.com), draw a box around the area you want (with a good amount of margin), and copy the coordinates of that box. (If you're using Bounding Box, choose the "CSV" coordinate output and replace the commas with spaces.)
+* Default layers: ```countries```, ```cities``` (for the primary/featured country), ```neighbors``` (for neighboring countries), ```lakes``` and ```rivers```. The default layers point to Natural Earth shapefiles. mapturner also supports geoJSON and CSVs with latitude and longitude columns.
+* For each shapefile layer, you can specify options to pass to the TopoJSON converter, including:
+  * ```id-property```: a column value you want to use as an identifier in the exported TopoJSON file
+  * ```properties```: columns you want TopoJSON to preserve in the exported file (by default, it strips out most non-geo data)
+  * ```where```: a query to pass in to filter the data returned (for example: ```where: adm0name != 'Nepal' AND scalerank <= 2```)
+
+([See the mapturner docs](https://github.com/nprapps/mapturner) for more details.)
+
+In your terminal, in the ```dailygraphics``` virtualenv, navigate to your project folder. Run mapturner to process your map's geodata:
+
+```
+mapturner geodata.yaml data/geodata.json
+```
+
+In your project ```js/graphic.js``` folder, change the ```PRIMARY_COUNTRY``` variable at the top from Nepal to the name of your featured country. You will also want to adjust the ```MAP_DEFAULT_SCALE``` and ```MAP_DEFAULT_HEIGHT``` variables so that your featured country fits onscreen.

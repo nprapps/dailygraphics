@@ -6,6 +6,9 @@ Project-wide application configuration.
 
 import os
 
+from authomatic.providers import oauth2
+from authomatic import Authomatic
+
 """
 NAMES
 """
@@ -23,6 +26,28 @@ REPOSITORY_URL = 'git@github.com:stlpublicradio/%s.git' % REPOSITORY_NAME
 
 # Path to the folder containing the graphics
 GRAPHICS_PATH = os.path.abspath('../graphics')
+
+# Path to the graphic templates
+TEMPLATES_PATH = os.path.abspath('graphic_templates')
+
+"""
+OAUTH
+"""
+
+GOOGLE_OAUTH_CREDENTIALS_PATH = '~/.google_oauth_credentials'
+
+authomatic_config = {
+    'google': {
+        'id': 1,
+        'class_': oauth2.Google,
+        'consumer_key': os.environ.get('GOOGLE_OAUTH_CLIENT_ID'),
+        'consumer_secret': os.environ.get('GOOGLE_OAUTH_CONSUMER_SECRET'),
+        'scope': ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/userinfo.email'],
+        'offline': True,
+    },
+}
+
+authomatic = Authomatic(authomatic_config, os.environ.get('AUTHOMATIC_SALT'))
 
 """
 DEPLOYMENT
@@ -43,10 +68,18 @@ ASSETS_S3_BUCKET = {
 }
 
 DEFAULT_MAX_AGE = 20
-ASSETS_MAX_AGE = 86400
+ASSETS_MAX_AGE = 300
+
+"""
+ANALYTICS
+"""
+
+GOOGLE_ANALYTICS = {
+    'ACCOUNT_ID': 'UA-5828686-75'
+}
 
 # These variables will be set at runtime. See configure_targets() below
-S3_BUCKET = None 
+S3_BUCKET = None
 S3_BASE_URL = ''
 S3_DEPLOY_URL = None
 DEBUG = True
@@ -73,9 +106,9 @@ def configure_targets(deployment_target):
         S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
         DEBUG = True
     else:
-        S3_BUCKET = None 
+        S3_BUCKET = None
         S3_BASE_URL = 'http://127.0.0.1:8000'
-        S3_DEPLOY_URL = None 
+        S3_DEPLOY_URL = None
         DEBUG = True
 
     DEPLOYMENT_TARGET = deployment_target
@@ -86,4 +119,3 @@ Run automated configuration
 DEPLOYMENT_TARGET = os.environ.get('DEPLOYMENT_TARGET', None)
 
 configure_targets(DEPLOYMENT_TARGET)
-

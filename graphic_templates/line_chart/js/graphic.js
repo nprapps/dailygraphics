@@ -1,70 +1,78 @@
-// global vars
-var $graphic = null;
-var pymChild = null;
-
+// Configuration
+var GRAPHIC_ID = '#graphic';
 var GRAPHIC_DATA_URL = 'data.csv';
 var GRAPHIC_DEFAULT_WIDTH = 600;
 var MOBILE_THRESHOLD = 540;
 
 var colors = {
     'brown': '#6b6256','tan': '#a5a585','ltgreen': '#70a99a','green': '#449970','dkgreen': '#31716e','ltblue': '#55b7d9','blue': '#358fb3','dkblue': '#006c8e','yellow': '#f1bb4f','orange': '#f6883e','tangerine': '#e8604d','red': '#cc203b','pink': '#c72068','maroon': '#8c1b52','purple': '#571751'
+
+var GRAPHIC_MARGIN = {
+    top: 5,
+    right: 15,
+    bottom: 30,
+    left: 22
 };
-var graphicData = null;
-var isMobile = false;
 
 // D3 formatters
 var fmtComma = d3.format(',');
 var fmtYearAbbrev = d3.time.format('%y');
 var fmtYearFull = d3.time.format('%Y');
 
+// Globals
+var $graphic = null;
+var pymChild = null;
+var graphicData = null;
+var isMobile = false;
 
 /*
- * INITIALIZE
+ * Initialize graphic
  */
 var onWindowLoaded = function() {
+    $graphic = $(GRAPHIC_ID);
+
     if (Modernizr.svg) {
-        $graphic = $('#graphic');
-
-        d3.csv(GRAPHIC_DATA_URL, function(error, data) {
-            graphicData = data;
-            graphicData.forEach(function(d) {
-                d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
-            });
-
-            pymChild = new pym.Child({
-                renderCallback: render
-            });
-        });
+        d3.csv(GRAPHIC_DATA_URL, onDataLoaded);
     } else {
-        pymChild = new pym.Child({ });
+        pymChild = new pym.Child({});
     }
 }
 
+/*
+ * CSV loaded
+ */
+var onDataLoaded = function(error, data) {
+    graphicData = data;
+    graphicData.forEach(function(d) {
+        d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
+    });
+
+    pymChild = new pym.Child({
+        renderCallback: render
+    });
+}
 
 /*
- * RENDER THE GRAPHIC
+ * Render the graphic(s)
  */
 var render = function(containerWidth) {
-    // fallback if page is loaded outside of an iframe
+    // Fallback if page is loaded outside of an iframe
     if (!containerWidth) {
         containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
 
-    // check the container width; set mobile flag if applicable
     if (containerWidth <= MOBILE_THRESHOLD) {
         isMobile = true;
     } else {
         isMobile = false;
     }
 
-    // clear out existing graphics
+    // Clear out existing graphic (for re-drawing)
     $graphic.empty();
 
-    // draw the new graphic
-    // (this is a separate function in case I want to be able to draw multiple charts later.)
-    drawGraph(containerWidth);
+    drawGraph(containerWidth, GRAPHIC_ID, graphicData);
 
-    // update iframe
+    // Resize iframe to fit
     if (pymChild) {
         pymChild.sendHeight();
     }
@@ -74,37 +82,29 @@ var render = function(containerWidth) {
 /*
  * DRAW THE GRAPH
  */
-var drawGraph = function(graphicWidth) {
-    var aspectHeight;
-    var aspectWidth;
+var drawGraph = function(graphicWidth, id, data) {
+    var graph = d3.select(id);
+
     var color = d3.scale.ordinal()
         .range([ colors['red'], colors['yellow'], colors['blue'], colors['green'], colors['tangerine'] ]);
-    var graph = d3.select('#graphic');
-    var margin = {
-    	top: 5,
-    	right: 15,
-    	bottom: 30,
-    	left: 22
-    };
-    var ticksX;
-    var ticksY;
 
-    // params that depend on the container width
+    // Desktop / default
+    var aspectWidth = 4;
+    var aspectHeight = 3;
+    var ticksX = 10;
+    var ticksY = 10;
+
+    // Mobile
     if (isMobile) {
         aspectWidth = 4;
         aspectHeight = 3;
         ticksX = 5;
         ticksY = 5;
-    } else {
-        aspectWidth = 16;
-        aspectHeight = 9;
-        ticksX = 10;
-        ticksY = 10;
     }
 
     // define chart dimensions
-    var width = graphicWidth - margin['left'] - margin['right'];
-    var height = Math.ceil((graphicWidth * aspectHeight) / aspectWidth) - margin['top'] - margin['bottom'];
+    var width = graphicWidth - GRAPHIC_MARGIN['left'] - GRAPHIC_MARGIN['right'];
+    var height = Math.ceil((graphicWidth * aspectHeight) / aspectWidth) - GRAPHIC_MARGIN['top'] - GRAPHIC_MARGIN['bottom'];
 
     var x = d3.time.scale()
         .range([ 0, width ])
@@ -117,7 +117,7 @@ var drawGraph = function(graphicWidth) {
         .scale(x)
         .orient('bottom')
         .ticks(ticksX)
-        .tickFormat(function(d,i) {
+        .tickFormat(function(d, i) {
             if (isMobile) {
                 return '\u2019' + fmtYearAbbrev(d);
             } else {
@@ -140,7 +140,7 @@ var drawGraph = function(graphicWidth) {
 
     // define the line(s)
     var line = d3.svg.line()
-        .interpolate('basis')
+        .interpolate('monotone')
         .x(function(d) {
             return x(d['date']);
         })
@@ -187,10 +187,12 @@ var drawGraph = function(graphicWidth) {
 			.attr('class', function(d, i) {
 				return 'key-item key-' + i + ' ' + classify(d['key']);
 			});
+
     legend.append('b')
         .style('background-color', function(d) {
             return color(d['key']);
         });
+
     legend.append('label')
         .text(function(d) {
             return d['key'];
@@ -198,10 +200,10 @@ var drawGraph = function(graphicWidth) {
 
     // draw the chart
     var svg = graph.append('svg')
-		.attr('width', width + margin['left'] + margin['right'])
-		.attr('height', height + margin['top'] + margin['bottom'])
+		.attr('width', width + GRAPHIC_MARGIN['left'] + GRAPHIC_MARGIN['right'])
+		.attr('height', height + GRAPHIC_MARGIN['top'] + GRAPHIC_MARGIN['bottom'])
         .append('g')
-            .attr('transform', 'translate(' + margin['left'] + ',' + margin['top'] + ')');
+            .attr('transform', 'translate(' + GRAPHIC_MARGIN['left'] + ',' + GRAPHIC_MARGIN['top'] + ')');
 
     // x-axis (bottom)
     svg.append('g')
@@ -248,15 +250,6 @@ var drawGraph = function(graphicWidth) {
                 return line(d['value']);
             });
 }
-
-
-/*
- * HELPER FUNCTIONS
- */
-var classify = function(str) { // clean up strings to use as CSS classes
-    return str.replace(/\s+/g, '-').toLowerCase();
-}
-
 
 /*
  * Initially load the graphic

@@ -1,0 +1,195 @@
+// Colors
+// -------------------------
+
+@brown		: #6b6256;
+@tan		: #a5a585;
+@ltgreen	: #70a99a;
+@green		: #449970;
+@dkgreen 	: #31716e;
+@ltblue 	: #55b7d9;
+@blue		: #358fb3;
+@dkblue		: #006c8e;
+@yellow		: #f1bb4f;
+@orange 	: #f6883e;
+@tangerine 	: #e8604d;
+@red		: #cc203b;
+@pink		: #c72068;
+@maroon 	: #8c1b52;
+@purple 	: #571751;
+
+@import url(http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Titillium+Web:700,400,300);
+
+/* base styles */
+html { -webkit-text-size-adjust: none; }
+body {
+    margin: 0;
+    padding: 33px 0;
+    font: 14px/1.4 'Titillium Web', Helvetica, sans-serif;
+    color: #555;
+}
+
+h1 {
+	margin: 0 0 20px 0;
+	font-size: 20px;
+	color: #000;
+	font-weight: 700;
+	line-height: 1.3;
+	-webkit-font-smoothing: antialiased;}
+
+h2,h3 {
+	font-weight: 700;
+	color: #777;
+	margin: 20px 0 0 0;
+	line-height: 1.6;
+}
+
+h2 {
+	font-size: 16px;
+}
+
+h3 {
+	font-size: 14px;
+}
+
+.footnotes {
+    margin-bottom: 20px;
+
+    h4 {
+        margin: 2px 0 7px 0;
+        color: #666;
+        font-size: 11px;
+    }
+}
+
+.footnotes p,
+.footer p {
+    margin: 2px 0 0 0;
+    font-size: 11px;
+    line-height: 1.7;
+    color: #999;
+}
+.footer p { font-style: italic; }
+.footer p em { font-style: normal; }
+.footnotes p strong { color: #666; }
+
+a, a:link, a:visited {
+    color: #4774CC;
+    text-decoration: none;
+}
+a:hover, a:active { color: #bccae5; }
+
+
+#graphic {
+    position: relative;
+    margin-bottom: 11px;
+    
+    &:before,
+    &:after {
+        content: ' ';
+        display: table;
+    }
+    &:after { clear: both; }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+
+/* key */
+.key {
+    margin: -11px 0 33px 0;
+    padding: 0;
+    list-style-type: none;
+    
+    .key-item { 
+        display: inline-block;
+        margin: 0 18px 0 0;
+        padding: 0;
+        line-height: 15px;
+
+        b { 
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 6px;
+            float: left;
+        }
+
+        label { 
+            white-space: nowrap;
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
+            -webkit-font-smoothing: antialiased;
+        }
+    }
+}
+
+
+/* chart styles */
+.chart { position: relative; }
+
+line,
+rect {
+    shape-rendering: crispEdges;
+}
+
+.axis {
+    font-size: 11px;
+    -webkit-font-smoothing: antialiased;
+    fill: #999;
+
+    path,
+    line {
+        fill: none;
+        stroke: #ccc;
+        shape-rendering: crispEdges;
+    }
+    
+    &.y {
+        path { display: none; }
+        .tick line { display: none; }
+    }
+}
+
+.grid {
+    path { display: none; }
+    .tick {
+        stroke: #eee;
+        stroke-width: 1px;
+        shape-rendering: crispEdges;
+    }
+
+    &.y {
+        g:first-child line { display: none; }
+    }
+}
+
+.value text {
+    font-size: 10px;
+    -webkit-font-smoothing: antialiased;
+    
+    &.in { fill: #fff; }
+    &.out { fill: #999; }
+    &.other { display: none; }
+}
+
+/* Size "Full" divs in Core Publisher correctly — add div.full inside body tags */
+		@media screen and (max-width: 641px) { 
+			div.full { 
+				margin-right: 8.75%; 
+			} 
+		}
+		@media screen and (min-width: 642px) and (max-width: 1009px) {
+			div.full {
+				margin-right: 8.3%; 
+			}
+		}
+		@media screen and (min-width: 1011px) and (max-width: 1025px) {
+			div.full {
+				margin-right: 8.3%;
+			}
+		}
+		
