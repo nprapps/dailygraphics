@@ -96,6 +96,7 @@ var BarChart = function(config) {
         this.ticks = {
             x: 4
         };
+        this.roundTicksFactor = 5;
 
         // Calculate actual chart size
         this.chartWidth = this.config.width - this.margins.left - this.margins.right;
@@ -115,10 +116,9 @@ var BarChart = function(config) {
      */
     this.createScales = function() {
         this.xScale = d3.scale.linear()
-            .domain([0, d3.max(this.config.data, function(d) {
-                // TKTK: make configurable
-                return Math.ceil(d['amt']/5) * 5; // round to next 5
-            })])
+            .domain([0, d3.max(this.config.data, _.bind(function(d) {
+                return Math.ceil(d['amt'] / this.roundTicksFactor) * this.roundTicksFactor;
+            }, this))])
             .range([0, this.chartWidth]);
 
         this.yScale = d3.scale.linear()
