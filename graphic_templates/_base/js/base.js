@@ -20,6 +20,31 @@ var classify = function(str) {
 }
 
 /*
+ * Convert key/value pairs to a style string.
+ */
+var formatStyle = function(props) {
+    var s = '';
+
+    for (var key in props) {
+        s += key + ': ' + props[key].toString() + '; ';
+    }
+
+    return s;
+}
+
+/*
+ * Create a SVG tansform for a given translation.
+ */
+var makeTranslate = function(x, y) {
+    var transform = d3.transform();
+
+    transform.translate[0] = x;
+    transform.translate[1] = y;
+
+    return transform.toString();
+}
+
+/*
  * Parse a url parameter by name.
  * via: http://stackoverflow.com/a/901144
  */

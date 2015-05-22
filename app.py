@@ -42,7 +42,6 @@ def _graphics_list():
         if name.startswith('_'):
             continue
 
-        print name
         context['templates'].append(name)
 
     context['templates_count'] = len(context['templates'])

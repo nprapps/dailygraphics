@@ -1,41 +1,68 @@
-// global vars
-var $graphic = null;
-var pymChild = null;
-
-var GRAPHIC_DATA_URL = 'data.csv';
+// Global config
 var GRAPHIC_DEFAULT_WIDTH = 600;
 var MOBILE_THRESHOLD = 500;
-var VALUE_MIN_WIDTH = 30;
 
-var graphicData;
+// Cached selectors
+var $graphic = null;
+
+// Global vars
+var pymChild = null;
 var isMobile = false;
+var graphicData = null;
 
 /*
- * Initialize
+ * Initialize the graphic.
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
         $graphic = $('#graphic');
 
-        d3.csv(GRAPHIC_DATA_URL, function(error, data) {
-            graphicData = data;
-
-            graphicData.forEach(function(d) {
-                d['amt'] = +d['amt'];
-            });
-
-            pymChild = new pym.Child({
-                renderCallback: render
-            });
-        });
+        loadLocalData(GRAPHIC_DATA);
+        //loadCSV('data.csv')
     } else {
-        pymChild = new pym.Child({ });
+        pymChild = new pym.Child({});
     }
 }
 
+/*
+ * Load graphic data from a local source.
+ */
+var loadLocalData = function(data) {
+    graphicData = data;
+
+    formatData();
+
+    pymChild = new pym.Child({
+        renderCallback: render
+    });
+}
 
 /*
- * RENDER THE GRAPHIC
+ * Load graphic data from a CSV.
+ */
+var loadCSV = function(url) {
+    d3.csv(GRAPHIC_DATA_URL, function(error, data) {
+        graphicData = data;
+
+        formatData();
+
+        pymChild = new pym.Child({
+            renderCallback: render
+        });
+    });
+}
+
+/*
+ * Format graphic data for processing by D3.
+ */
+var formatData = function() {
+    graphicData.forEach(function(d) {
+        d['amt'] = +d['amt'];
+    });
+}
+
+/*
+ * Render the graphic(s). Called by pym with the container width.
  */
 var render = function(containerWidth) {
     if (!containerWidth) {
@@ -51,24 +78,18 @@ var render = function(containerWidth) {
     // Clear existing graphic (for redraw)
     $graphic.empty();
 
+    // Render the chart!
     var chart = new BarChart({
         container: '#graphic',
         width: containerWidth,
         data: graphicData
     });
 
-    // update iframe
+    // Update iframe
     if (pymChild) {
         pymChild.sendHeight();
     }
 }
-
-/*
- * Initially load the graphic
- * (NB: Use window.load instead of document.ready
- * to ensure all images have loaded)
- */
-$(window).load(onWindowLoaded);
 
 /*
  * Render a bar chart.
@@ -81,10 +102,14 @@ var BarChart = function(config) {
      */
     this.setup = function() {
         // Configuration
+        this.labelColumn = 'label';
+        this.valueColumn = 'amt';
+
         this.barHeight = 30;
         this.barGap = 5;
         this.labelWidth = 85;
         this.labelMargin = 6;
+        this.valueMinWidth = 30;
 
         this.margins = {
             top: 0,
@@ -98,7 +123,7 @@ var BarChart = function(config) {
         };
         this.roundTicksFactor = 5;
 
-        // Calculate actual chart size
+        // Calculate actual chart dimensions
         this.chartWidth = this.config.width - this.margins.left - this.margins.right;
         this.chartHeight = ((this.barHeight + this.barGap) * this.config.data.length);
 
@@ -117,7 +142,7 @@ var BarChart = function(config) {
     this.createScales = function() {
         this.xScale = d3.scale.linear()
             .domain([0, d3.max(this.config.data, _.bind(function(d) {
-                return Math.ceil(d['amt'] / this.roundTicksFactor) * this.roundTicksFactor;
+                return Math.ceil(d[this.valueColumn] / this.roundTicksFactor) * this.roundTicksFactor;
             }, this))])
             .range([0, this.chartWidth]);
 
@@ -144,7 +169,7 @@ var BarChart = function(config) {
     this.renderAxes = function() {
         this.chartElement.append('g')
             .attr('class', 'x axis')
-            .attr('transform', 'translate(0,' + this.chartHeight + ')')
+            .attr('transform', makeTranslate(0, this.chartHeight))
             .call(this. xAxis);
     };
 
@@ -158,7 +183,7 @@ var BarChart = function(config) {
 
         this.chartElement.append('g')
             .attr('class', 'x grid')
-            .attr('transform', 'translate(0,' + this.chartHeight + ')')
+            .attr('transform', makeTranslate(0, this.chartHeight))
             .call(xAxisGrid()
                 .tickSize(-this.chartHeight, 0, 0)
                 .tickFormat('')
@@ -182,9 +207,9 @@ var BarChart = function(config) {
                     return this.xScale(d['amt']);
                 }, this))
                 .attr('height', this.barHeight)
-                .attr('class', function(d, i) {
-                    return 'bar-' + i + ' ' + classify(d['label']);
-                });
+                .attr('class', _.bind(function(d, i) {
+                    return 'bar-' + i + ' ' + classify(d[this.labelColumn]);
+                }, this));
     };
 
     /*
@@ -194,26 +219,30 @@ var BarChart = function(config) {
         this.containerElement
             .append('ul')
             .attr('class', 'labels')
-            .attr('style', 'width: ' + this.labelWidth + 'px; top: ' + this.margins.top + 'px; left: 0;')
+            .attr('style', formatStyle({
+                'width': this.labelWidth + 'px',
+                'top': this.margins.top + 'px',
+                'left': '0'
+            }))
             .selectAll('li')
             .data(this.config.data)
             .enter()
             .append('li')
                 .attr('style', _.bind(function(d, i) {
-                    var s = '';
-                    s += 'width: ' + this.labelWidth + 'px; ';
-                    s += 'height: ' + this.barHeight + 'px; ';
-                    s += 'left: ' + 0 + 'px; ';
-                    s += 'top: ' + (i * (this.barHeight + this.barGap)) + 'px; ';
-                    return s;
-                }, this))
-                .attr('class', function(d) {
-                    return classify(d['label']);
-                })
-                .append('span')
-                    .text(function(d) {
-                        return d['label'];
+                    return formatStyle({
+                        'width': this.labelWidth + 'px',
+                        'height': this.barHeight + 'px',
+                        'left': '0px',
+                        'top': (i * (this.barHeight + this.barGap)) + 'px;'
                     });
+                }, this))
+                .attr('class', _.bind(function(d) {
+                    return classify(d[this.labelColumn]);
+                }, this))
+                .append('span')
+                    .text(_.bind(function(d) {
+                        return d[this.labelColumn];
+                    }, this));
     };
 
     /*
@@ -227,13 +256,13 @@ var BarChart = function(config) {
             .enter()
             .append('text')
                 .attr('x', _.bind(function(d) {
-                    return this.xScale(d['amt']);
+                    return this.xScale(d[this.valueColumn]);
                 }, this))
                 .attr('y', _.bind(function(d, i) {
                     return i * (this.barHeight + this.barGap);
                 }, this))
                 .attr('dx', _.bind(function(d) {
-                    if (this.xScale(d['amt']) > VALUE_MIN_WIDTH) {
+                    if (this.xScale(d[this.valueColumn]) > this.valueMinWidth) {
                         return -6;
                     } else {
                         return 6;
@@ -241,24 +270,24 @@ var BarChart = function(config) {
                 }, this))
                 .attr('dy', (this.barHeight / 2) + 3)
                 .attr('text-anchor', _.bind(function(d) {
-                    if (this.xScale(d['amt']) > VALUE_MIN_WIDTH) {
+                    if (this.xScale(d[this.valueColumn]) > this.valueMinWidth) {
                         return 'end';
                     } else {
                         return 'begin';
                     }
                 }, this))
                 .attr('class', _.bind(function(d) {
-                    var c = classify(d['label']);
-                    if (this.xScale(d['amt']) > VALUE_MIN_WIDTH) {
+                    var c = classify(d[this.labelColumn]);
+                    if (this.xScale(d[this.valueColumn]) > this.valueMinWidth) {
                         c += ' in';
                     } else {
                         c += ' out';
                     }
                     return c;
                 }, this))
-                .text(function(d) {
-                    return d['amt'].toFixed(0) + '%';
-                });
+                .text(_.bind(function(d) {
+                    return d[this.valueColumn].toFixed(0) + '%';
+                }, this));
     }
 
     this.setup();
@@ -271,3 +300,11 @@ var BarChart = function(config) {
 
     return this;
 }
+
+
+/*
+ * Initially load the graphic
+ * (NB: Use window.load instead of document.ready
+ * to ensure all images have loaded)
+ */
+$(window).load(onWindowLoaded);

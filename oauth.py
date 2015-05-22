@@ -37,6 +37,7 @@ def authenticate():
     Run OAuth workflow.
     """
     from flask import request
+    
     response = make_response()
     context = make_context()
 

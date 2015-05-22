@@ -21,6 +21,8 @@ def _templates_detail(slug):
     """
     Renders a parent.html index with child.html embedded as iframe.
     """
+    from flask import request
+    
     template_path = '%s/%s' % (app_config.TEMPLATES_PATH, slug)
 
     # NOTE: Parent must load pym.js from same source as child to prevent version conflicts!
