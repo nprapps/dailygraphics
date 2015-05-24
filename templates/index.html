@@ -75,7 +75,7 @@
 <h1>There are <strong>{{ templates_count }}</strong> templates:</h1>
 
 <ol class="templates-list">{% for template in templates %}
-    <li><a href="/templates/{{ template }}/">{{ template }}</a></li>
+    <li><a href="/templates/{{ template }}/?refresh=1">{{ template }}</a></li>
 {% endfor %}</ol>
 
 </body>

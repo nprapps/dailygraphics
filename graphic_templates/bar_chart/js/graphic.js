@@ -172,9 +172,9 @@ var BarChart = function(config) {
      * Render grid to chart.
      */
     this.renderGrid = function() {
-        var xAxisGrid = function() {
+        var xAxisGrid = _.bind(function() {
             return this.xAxis;
-        }
+        }, this);
 
         this.chartElement.append('g')
             .attr('class', 'x grid')
@@ -289,6 +289,7 @@ var BarChart = function(config) {
     this.createScales();
     this.createAxes();
     this.renderAxes();
+    this.renderGrid();
     this.renderBars();
     this.renderLabels();
     this.renderValues();
