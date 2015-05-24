@@ -1,5 +1,5 @@
 // global vars
-var $graphic = null;
+var graphicElement = null;
 var pymChild = null;
 
 var BAR_HEIGHT = 25;
@@ -72,7 +72,7 @@ var render = function(containerWidth) {
     }
 
     // clear out existing graphics
-    $graphic.empty();
+    graphicElement.html()();
 
     // draw the new graphic
     // (this is a separate function in case I want to be able to draw multiple charts later.)

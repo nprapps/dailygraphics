@@ -203,31 +203,33 @@ $(function() {
 
     </div>
 
-    <!-- Do not remove: workaround for old graphics w/ minified js -->
-    <script type="text/javascript" src="js/lib/jquery.js"></script>
-    <script type="text/javascript" src="js/lib/jquery.min.js"></script>
     <script type="text/javascript" src="js/lib/pym.js"></script>
-    <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 
     <script type="text/javascript">
         var pymParent = new pym.Parent('preview', 'child.html', {});
 
-        $('#resize-mobile').on('click', function() {
-            $('#preview').width(300);
+        var resizeMobileEl = document.querySelector('#resize-mobile');
+        var resizeDesktopEl = document.querySelector('#resize-desktop');
+        var resizeFluidEl = document.querySelector('#resize-fluid');
+        var previewEl = document.querySelector('#preview');
+
+        //el.addEventListener(eventName, eventHandler);
+        resizeMobileEl.addEventListener('click', function() {
+            previewEl.style.width = '300px';
             pymParent.sendWidth();
 
             return false;
         });
 
-        $('#resize-desktop').on('click', function() {
-            $('#preview').width(730);
+        resizeDesktopEl.addEventListener('click', function() {
+            previewEl.style.width = '730px';
             pymParent.sendWidth();
 
             return false;
         });
 
-        $('#resize-fluid').on('click', function() {
-            $('#preview').width('100%');
+        resizeFluidEl.addEventListener('click', function() {
+            previewEl.style.width = '100%';
             pymParent.sendWidth();
 
             return false;

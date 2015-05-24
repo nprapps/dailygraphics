@@ -2,9 +2,6 @@
 var GRAPHIC_DEFAULT_WIDTH = 600;
 var MOBILE_THRESHOLD = 500;
 
-// Cached selectors
-var $graphic = null;
-
 // Global vars
 var pymChild = null;
 var isMobile = false;
@@ -15,8 +12,6 @@ var graphicData = null;
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        $graphic = $('#graphic');
-
         loadLocalData(GRAPHIC_DATA);
         //loadCSV('data.csv')
     } else {
@@ -75,9 +70,6 @@ var render = function(containerWidth) {
         isMobile = false;
     }
 
-    // Clear existing graphic (for redraw)
-    $graphic.empty();
-
     // Render the chart!
     var chart = new BarChart({
         container: '#graphic',
@@ -127,8 +119,11 @@ var BarChart = function(config) {
         this.chartWidth = this.config.width - this.margins.left - this.margins.right;
         this.chartHeight = ((this.barHeight + this.barGap) * this.config.data.length);
 
-        // Create container
+        // Clear existing graphic (for redraw)
         this.containerElement = d3.select(config.container);
+        this.containerElement.html('');
+
+        // Create container
         this.chartElement = this.containerElement.append('svg')
             .attr('width', this.chartWidth + this.margins.left + this.margins.right)
             .attr('height', this.chartHeight + this.margins.top + this.margins.bottom)
@@ -307,4 +302,4 @@ var BarChart = function(config) {
  * (NB: Use window.load instead of document.ready
  * to ensure all images have loaded)
  */
-$(window).load(onWindowLoaded);
+window.onload = onWindowLoaded;
