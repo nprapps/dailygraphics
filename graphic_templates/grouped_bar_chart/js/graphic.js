@@ -1,293 +1,398 @@
-// global vars
-var graphicElement = null;
-var pymChild = null;
-
-var BAR_HEIGHT = 25;
-var BAR_GAP = 10;
-var BAR_GAP_INNER = 2;
-var GRAPHIC_DATA_URL = 'data.csv';
+// Global config
 var GRAPHIC_DEFAULT_WIDTH = 600;
-var LABEL_MARGIN = 6;
-var LABEL_WIDTH = 85;
 var MOBILE_THRESHOLD = 500;
-var VALUE_MIN_WIDTH = 25;
 
-// D3 formatters
-var fmtComma = d3.format(',');
-var fmtYearAbbrev = d3.time.format('%y');
-var fmtYearFull = d3.time.format('%Y');
-
-var color;
-var graphicData;
+// Global vars
+var pymChild = null;
 var isMobile = false;
+var graphicData = null;
 
 /*
- * Initialize
+ * Initialize the graphic.
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        $graphic = $('#graphic');
-
-        d3.csv(GRAPHIC_DATA_URL, function(error, data) {
-            graphicData = data;
-
-            color = d3.scale.ordinal()
-                .range([COLORS['teal3'], COLORS['teal5']])
-                .domain(d3.keys(graphicData[0]).filter(function(key) { return key !== 'Group'; }));
-
-            graphicData.forEach(function(d) {
-                d['key'] = d['Group'];
-                d['value'] = [];
-                color.domain().map(function(name) {
-                    d['value'].push({ 'label': name, 'amt': +d[name] });
-                    delete d[name];
-                });
-                delete d['Group'];
-            });
-
-            pymChild = new pym.Child({
-                renderCallback: render
-            });
-        });
+        loadLocalData(GRAPHIC_DATA);
+        //loadCSV('data.csv')
     } else {
-        pymChild = new pym.Child({ });
+        pymChild = new pym.Child({});
     }
 }
 
+/*
+ * Load graphic data from a local source.
+ */
+var loadLocalData = function(data) {
+    graphicData = data;
+
+    formatData();
+
+    pymChild = new pym.Child({
+        renderCallback: render
+    });
+}
 
 /*
- * RENDER THE GRAPHIC
+ * Load graphic data from a CSV.
+ */
+var loadCSV = function(url) {
+    d3.csv(GRAPHIC_DATA_URL, function(error, data) {
+        graphicData = data;
+
+        formatData();
+
+        pymChild = new pym.Child({
+            renderCallback: render
+        });
+    });
+}
+
+/*
+ * Format graphic data for processing by D3.
+ */
+var formatData = function() {
+    color = d3.scale.ordinal()
+        .range([COLORS['teal3'], COLORS['teal5']])
+        .domain(d3.keys(graphicData[0]).filter(function(key) { return key !== 'Group'; }));
+
+    graphicData.forEach(function(d) {
+        d['key'] = d['Group'];
+        d['values'] = [];
+
+        color.domain().map(function(name) {
+            d['values'].push({ 'label': name, 'amt': +d[name] });
+            delete d[name];
+        });
+
+        delete d['Group'];
+    });
+}
+
+/*
+ * Render the graphic(s). Called by pym with the container width.
  */
 var render = function(containerWidth) {
-    // fallback if page is loaded outside of an iframe
     if (!containerWidth) {
         containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
 
-    // check the container width; set mobile flag if applicable
     if (containerWidth <= MOBILE_THRESHOLD) {
         isMobile = true;
     } else {
         isMobile = false;
     }
 
-    // clear out existing graphics
-    graphicElement.html()();
+    // Render the chart!
+    var chart = new GroupedBarChart({
+        container: '#graphic',
+        width: containerWidth,
+        data: graphicData
+    });
 
-    // draw the new graphic
-    // (this is a separate function in case I want to be able to draw multiple charts later.)
-    drawGraph(containerWidth);
-
-    // update iframe
+    // Update iframe
     if (pymChild) {
         pymChild.sendHeight();
     }
 }
 
+/*
+ * Render a bar chart.
+ */
+var GroupedBarChart = function(config) {
+    this.config = config;
 
-var drawGraph = function(graphicWidth) {
-    var graph = d3.select('#graphic');
-    var margin = {
-        top: 0,
-        right: 15,
-        bottom: 20,
-        left: (LABEL_WIDTH + LABEL_MARGIN)
+    /*
+     * Setup chart container.
+     */
+    this.setup = function() {
+        // Configuration
+        this.labelColumn = 'label';
+        this.valueColumn = 'amt';
+
+        this.numGroups = this.config.data.length;
+        this.numGroupBars = this.config.data[0]['values'].length;
+
+        this.barHeight = 25;
+        this.barGapInner = 2;
+        this.barGap = 10;
+        this.groupHeight =  (this.barHeight * this.numGroupBars) + (this.barGapInner * (this.numGroupBars - 1))
+        this.labelWidth = 85;
+        this.labelMargin = 6;
+        this.valueMinWidth = 25;
+
+        this.margins = {
+            top: 0,
+            right: 15,
+            bottom: 20,
+            left: (this.labelWidth + this.labelMargin)
+        };
+
+        this.ticks = {
+            x: 7
+        };
+        this.roundTicksFactor = 5;
+
+        // Calculate actual chart dimensions
+        this.chartWidth = this.config.width - this.margins.left - this.margins.right;
+        this.chartHeight = (((((this.barHeight + this.barGapInner) * this.numGroupBars) - this.barGapInner) + this.barGap) * this.numGroups) - this.barGap + this.barGapInner;
+
+        // Clear existing graphic (for redraw)
+        this.containerElement = d3.select(config.container);
+        this.containerElement.html('');
     };
-    var numGroups = graphicData.length;
-    var numGroupBars = graphicData[0]['value'].length;
-    var groupHeight = (BAR_HEIGHT * numGroupBars) + (BAR_GAP_INNER * (numGroupBars - 1));
-    var ticksX = 7;
 
-    // define chart dimensions
-    var width = graphicWidth - margin['left'] - margin['right'];
-    var height = (((((BAR_HEIGHT + BAR_GAP_INNER) * numGroupBars) - BAR_GAP_INNER) + BAR_GAP) * numGroups) - BAR_GAP + BAR_GAP_INNER;
+    /*
+     * Render a color legend.
+     */
+    this.renderLegend = function() {
+        var legend = this.containerElement.append('ul')
+            .attr('class', 'key')
+            .selectAll('g')
+                .data(this.config.data[0]['values'])
+            .enter().append('li')
+                .attr('class', _.bind(function(d, i) {
+                    return 'key-item key-' + i + ' ' + classify(d[this.labelColumn]);
+                }, this));
 
-    var x = d3.scale.linear()
-        .domain([ 0, d3.max(graphicData, function(c) {
-                return d3.max(c['value'], function(v) {
-                    var n = v['amt'];
-                    return Math.ceil(n/10) * 10; // round to next 10
-                });
-            })
-        ])
-        .range([0, width]);
+        legend.append('b')
+            .style('background-color', _.bind(function(d) {
+            	return color(d[this.labelColumn]);
+            }, this));
 
-    var y = d3.scale.linear()
-        .range([ height, 0 ]);
-
-    // define axis and grid
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient('bottom')
-        .ticks(ticksX)
-        .tickFormat(function(d) {
-            return d.toFixed(0) + '%';
-        });
-
-    var xAxisGrid = function() {
-        return xAxis;
+        legend.append('label')
+            .text(_.bind(function(d) {
+                return d[this.labelColumn];
+            }, this));
     }
 
-    // draw the legend
-    var legend = graph.append('ul')
-        .attr('class', 'key')
-        .selectAll('g')
-            .data(graphicData[0]['value'])
-        .enter().append('li')
-            .attr('class', function(d, i) {
-                return 'key-item key-' + i + ' ' + classify(d['label']);
+    /*
+     * Create the root SVG element.
+     */
+    this.createSVG = function() {
+        this.chartWrapper = this.containerElement.append('div')
+            .attr('class', 'graphic-wrapper');
+
+        this.chartElement = this.chartWrapper.append('svg')
+            .attr('width', this.chartWidth + this.margins.left + this.margins.right)
+            .attr('height', this.chartHeight + this.margins.top + this.margins.bottom)
+            .append('g')
+            .attr('transform', 'translate(' + this.margins.left + ',' + this.margins.top + ')');
+    }
+
+    /*
+     * Create D3 scale objects.
+     */
+    this.createScales = function() {
+        this.xScale = d3.scale.linear()
+            .domain([0, d3.max(this.config.data, _.bind(function(d) {
+                return d3.max(d['values'], _.bind(function(v) {
+                    return Math.ceil(v[this.valueColumn] / this.roundTicksFactor) * this.roundTicksFactor;
+                }, this));
+            }, this))])
+            .range([0, this.chartWidth]);
+
+        this.yScale = d3.scale.linear()
+            .range([this.chartHeight, 0]);
+    };
+
+    /*
+     * Create D3 axes.
+     */
+    this.createAxes = function() {
+        this.xAxis = d3.svg.axis()
+            .scale(this.xScale)
+            .orient('bottom')
+            .ticks(this.ticks.x)
+            .tickFormat(function(d) {
+                return d.toFixed(0) + '%';
             });
-    legend.append('b')
-        .style('background-color', function(d) {
-        	return color(d['label']);
-        });
-    legend.append('label')
-        .text(function(d) {
-            return d['label'];
-        });
+    };
 
-    // draw the chart
-    var chart = graph.append('div')
-        .attr('class', 'chart');
+    /*
+     * Render axes to chart.
+     */
+    this.renderAxes = function() {
+        this.chartElement.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', makeTranslate(0, this.chartHeight))
+            .call(this. xAxis);
+    };
 
-    var svg = chart.append('svg')
-        .attr('width', width + margin['left'] + margin['right'])
-        .attr('height', height + margin['top'] + margin['bottom'])
-        .append('g')
-        .attr('transform', 'translate(' + margin['left'] + ',' + margin['top'] + ')');
+    /*
+     * Render grid to chart.
+     */
+    this.renderGrid = function() {
+        var xAxisGrid = _.bind(function() {
+            return this.xAxis;
+        }, this);
 
-    // x-axis (bottom)
-    svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(xAxis);
+        this.chartElement.append('g')
+            .attr('class', 'x grid')
+            .attr('transform', makeTranslate(0, this.chartHeight))
+            .call(xAxisGrid()
+                .tickSize(-this.chartHeight, 0, 0)
+                .tickFormat('')
+            );
+    };
 
-    // x-axis gridlines
-    svg.append('g')
-        .attr('class', 'x grid')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(xAxisGrid()
-            .tickSize(-height, 0, 0)
-            .tickFormat('')
-        );
+    /*
+     * Render bars to chart.
+     */
+    this.renderBars = function() {
+        this.barGroups = this.chartElement.selectAll('.bars')
+            .data(this.config.data)
+            .enter()
+            .append('g')
+                .attr('class', 'g bars')
+                .attr('transform', _.bind(function(d, i) {
+                    if (i == 0) {
+                        return makeTranslate(0, 0);
+                    }
 
-    // draw the bars
-    var barGroup = svg.selectAll('.bars')
-        .data(graphicData)
-        .enter().append('g')
-            .attr('class', 'g bars')
-            .attr('transform', function(d,i) {
-                if (i == 0) {
-                    return 'translate(0,0)';
-                } else {
-                    return 'translate(0,' + ((groupHeight + BAR_GAP) * i) + ')';
-                }
-            });
+                    return makeTranslate(0, (this.groupHeight + this.barGap) * i);
+                }, this));
 
-    barGroup.selectAll('rect')
-        .data(function(d) { return d['value']; })
-        .enter().append('rect')
-            .attr('height', BAR_HEIGHT)
-            .attr('x', function(d, i) {
-                return 0;
+        this.barGroups.selectAll('rect')
+            .data(function(d) {
+                return d['values'];
             })
-            .attr('y', function(d, i) {
-                if (i == 0) {
-                    return 0;
-                } else {
-                    return (BAR_HEIGHT * i) + (BAR_GAP_INNER * i);
-                }
-            })
-            .attr('width', function(d) {
-                return x(d['amt']);
-            })
-            .style('fill', function(d) {
-            	return color(d['label']);
-            })
-            .attr('class', function(d) {
-                return 'y-' + d['label'];
-            });
+            .enter()
+            .append('rect')
+                .attr('height', this.barHeight)
+                .attr('x', 0)
+                .attr('y', _.bind(function(d, i) {
+                    if (i == 0) {
+                        return 0;
+                    }
 
-    // show the values for each bar
-    barGroup.append('g')
-        .attr('class', 'value')
-        .selectAll('text')
-        .data(function(d) { return d['value']; })
-        .enter().append('text')
-            .attr('x', function(d) {
-                return x(d['amt']);
+                    return (this.barHeight * i) + (this.barGapInner * i);
+                }, this))
+                .attr('width', _.bind(function(d) {
+                    return this.xScale(d[this.valueColumn]);
+                }, this))
+                .style('fill', _.bind(function(d) {
+                	return color(d[this.labelColumn]);
+                }, this))
+                .attr('class', _.bind(function(d) {
+                    return 'y-' + d[this.labelColumn];
+                }, this));
+    };
+
+    /*
+     * Render bar labels.
+     */
+    this.renderLabels = function() {
+        this.chartWrapper.append('ul')
+            .attr('class', 'labels')
+            .attr('style', formatStyle({
+                'width': this.labelWidth + 'px',
+                'top': this.margins.top + 'px',
+                'left': '0'
+            }))
+            .selectAll('li')
+            .data(this.config.data)
+            .enter()
+            .append('li')
+                .attr('style', _.bind(function(d,i) {
+                    var top = (this.groupHeight + this.barGap) * i;
+
+                    if (i == 0) {
+                        top = 0;
+                    }
+
+                    return formatStyle({
+                        'width': (this.labelWidth - 10) + 'px',
+                        'height': this.barHeight + 'px',
+                        'left': '0px',
+                        'top': top + 'px;'
+                    });
+                }, this))
+                .attr('class', function(d,i) {
+                    return classify(d['key']);
+                })
+                .append('span')
+                    .text(function(d) {
+                        return d['key']
+                    });
+    };
+
+    /*
+     * Render bar values.
+     */
+    this.renderValues = function() {
+        this.barGroups.append('g')
+            .attr('class', 'value')
+            .selectAll('text')
+            .data(function(d) {
+                return d['values'];
             })
-            .attr('y', function(d, i) {
-                if (i == 0) {
-                    return 0;
-                } else {
-                    return (BAR_HEIGHT * i) + BAR_GAP_INNER;
-                }
-            })
-            .attr('dx', function(d) {
-                if (x(d['amt']) > VALUE_MIN_WIDTH) {
-                    return -6;
-                } else {
+            .enter()
+            .append('text')
+                .attr('x', _.bind(function(d) {
+                    return this.xScale(d[this.valueColumn]);
+                }, this))
+                .attr('y', _.bind(function(d, i) {
+                    if (i == 0) {
+                        return 0;
+                    }
+
+                    return (this.barHeight * i) + this.barGapInner;
+                }, this))
+                .attr('dx', _.bind(function(d) {
+                    if (this.xScale(d['amt']) > this.valueMinWidth) {
+                        return -6;
+                    }
+
                     return 6;
-                }
-            })
-            .attr('dy', (BAR_HEIGHT / 2) + 4)
-            .attr('text-anchor', function(d) {
-                if (x(d['amt']) > VALUE_MIN_WIDTH) {
-                    return 'end';
-                } else {
-                    return 'begin';
-                }
-            })
-            .attr('class', function(d) {
-                var c = classify(d['label']);
-                if (x(d['amt']) > VALUE_MIN_WIDTH) {
-                    c += ' in';
-                } else {
-                    c += ' out';
-                }
-                return c;
-            })
-            .text(function(d) {
-            	v = d['amt'].toFixed(0);
-            	if (d['amt'] > 0 && v == 0) {
-            		v = '<1';
-            	}
-                return v + '%';
-            });
+                }, this))
+                .attr('dy', (this.barHeight / 2) + 4)
+                .attr('text-anchor', _.bind(function(d) {
+                    if (this.xScale(d[this.valueColumn]) > this.valueMinWidth) {
+                        return 'end';
+                    } else {
+                        return 'begin';
+                    }
+                }, this))
+                .attr('class', _.bind(function(d) {
+                    var c = classify(d[this.labelColumn]);
 
-    // draw labels for each bar
-    var labels = chart.append('ul')
-        .attr('class', 'labels')
-        .attr('style', 'width: ' + LABEL_WIDTH + 'px; top: 4px; left: 0;')
-        .selectAll('li')
-            .data(graphicData)
-        .enter().append('li')
-            .attr('style', function(d,i) {
-                var s = '';
-                s += 'width: ' + (margin['left'] - 10) + 'px; ';
-                s += 'height: ' + BAR_HEIGHT + 'px; ';
-                s += 'left: ' + 0 + 'px; ';
+                    if (this.xScale(d[this.valueColumn]) > this.valueMinWidth) {
+                        c += ' in';
+                    } else {
+                        c += ' out';
+                    }
 
-                if (i == 0) {
-                    s += 'top: 0px; ';
-                } else {
-                    s += 'top: ' + ((groupHeight + BAR_GAP) * i) + 'px; ';
-                }
-                return s;
-            })
-            .attr('class', function(d,i) {
-                return classify(d['key']);
-            })
-            .append('span')
-                .text(function(d) {
-                    return d['key']
-                });
+                    return c;
+                }, this))
+                .text(_.bind(function(d) {
+                    var v = d[this.valueColumn].toFixed(0);
+
+                    if (d[this.valueColumn] > 0 && v == 0) {
+                        v = '<1';
+                    }
+
+                    return v + '%';
+                }, this));
+    }
+
+    this.setup();
+    this.renderLegend();
+    this.createSVG();
+    this.createScales();
+    this.createAxes();
+    this.renderAxes();
+    this.renderGrid();
+    this.renderBars();
+    this.renderLabels();
+    this.renderValues();
+
+    return this;
 }
+
 
 /*
  * Initially load the graphic
  * (NB: Use window.load instead of document.ready
  * to ensure all images have loaded)
  */
-$(window).load(onWindowLoaded);
+window.onload = onWindowLoaded;
