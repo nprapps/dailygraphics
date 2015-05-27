@@ -51,21 +51,23 @@ var loadCSV = function(url) {
  * Format graphic data for processing by D3.
  */
 var formatData = function() {
-    color = d3.scale.ordinal()
-        .range([COLORS['teal3'], COLORS['teal5']])
-        .domain(d3.keys(graphicData[0]).filter(function(key) { return key !== 'Group'; }));
-
     graphicData.forEach(function(d) {
         d['key'] = d['Group'];
         d['values'] = [];
 
-        color.domain().map(function(name) {
-            d['values'].push({ 'label': name, 'amt': +d[name] });
-            delete d[name];
+        _.each(d, function(v, k) {
+            if (_.contains(['Group', 'key', 'values'], k)) {
+                return;
+            }
+
+            d['values'].push({ 'label': k, 'amt': +v });
+            delete d[k];
         });
 
         delete d['Group'];
     });
+
+    console.log(graphicData);
 }
 
 /*
@@ -142,6 +144,25 @@ var GroupedBarChart = function(config) {
     };
 
     /*
+     * Create D3 scale objects.
+     */
+    this.createScales = function() {
+        this.xScale = d3.scale.linear()
+            .domain([0, d3.max(this.config.data, _.bind(function(d) {
+                return d3.max(d['values'], _.bind(function(v) {
+                    return Math.ceil(v[this.valueColumn] / this.roundTicksFactor) * this.roundTicksFactor;
+                }, this));
+            }, this))])
+            .range([0, this.chartWidth]);
+
+        this.yScale = d3.scale.linear()
+            .range([this.chartHeight, 0]);
+
+        this.colorScale = d3.scale.ordinal()
+            .range([COLORS['teal3'], COLORS['teal5']])
+            .domain(_.pluck(this.config.data[0]['values'], 'label'));
+    };
+    /*
      * Render a color legend.
      */
     this.renderLegend = function() {
@@ -156,7 +177,7 @@ var GroupedBarChart = function(config) {
 
         legend.append('b')
             .style('background-color', _.bind(function(d) {
-            	return color(d[this.labelColumn]);
+            	return this.colorScale(d[this.labelColumn]);
             }, this));
 
         legend.append('label')
@@ -178,22 +199,6 @@ var GroupedBarChart = function(config) {
             .append('g')
             .attr('transform', 'translate(' + this.margins.left + ',' + this.margins.top + ')');
     }
-
-    /*
-     * Create D3 scale objects.
-     */
-    this.createScales = function() {
-        this.xScale = d3.scale.linear()
-            .domain([0, d3.max(this.config.data, _.bind(function(d) {
-                return d3.max(d['values'], _.bind(function(v) {
-                    return Math.ceil(v[this.valueColumn] / this.roundTicksFactor) * this.roundTicksFactor;
-                }, this));
-            }, this))])
-            .range([0, this.chartWidth]);
-
-        this.yScale = d3.scale.linear()
-            .range([this.chartHeight, 0]);
-    };
 
     /*
      * Create D3 axes.
@@ -271,7 +276,7 @@ var GroupedBarChart = function(config) {
                     return this.xScale(d[this.valueColumn]);
                 }, this))
                 .style('fill', _.bind(function(d) {
-                	return color(d[this.labelColumn]);
+                	return this.colorScale(d[this.labelColumn]);
                 }, this))
                 .attr('class', _.bind(function(d) {
                     return 'y-' + d[this.labelColumn];
@@ -376,9 +381,9 @@ var GroupedBarChart = function(config) {
     }
 
     this.setup();
+    this.createScales();
     this.renderLegend();
     this.createSVG();
-    this.createScales();
     this.createAxes();
     this.renderAxes();
     this.renderGrid();
