@@ -33,6 +33,7 @@
 * Are we only including data we’re actually displaying (to keep page weight down)?
 * Have you created a static fallback image for your final graphic? (fallback.png)
   * If there have been late edits to your graphic, have you updated the fallback image?
+* Are all links out target="_blank" so they don't open inside the iframe.
 
 ## Charts
 
