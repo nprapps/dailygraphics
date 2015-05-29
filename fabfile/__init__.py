@@ -283,11 +283,18 @@ def add_line_chart(slug):
     _add_graphic(slug, 'line_chart')
 
 @task
-def add_map(slug):
+def add_locator_map(slug):
     """
     Create a locator map.
     """
     _add_graphic(slug, 'locator_map')
+
+@task
+def add_map(slug):
+    """
+    Create a Leaflet map.
+    """
+    _add_graphic(slug, 'map')
     
 @task
 def add_leaflet_map(slug):

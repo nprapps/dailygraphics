@@ -75,7 +75,7 @@ ANALYTICS
 """
 
 GOOGLE_ANALYTICS = {
-    'ACCOUNT_ID': 'UA-5828686-75'
+    'ACCOUNT_ID': ''
 }
 
 # These variables will be set at runtime. See configure_targets() below
