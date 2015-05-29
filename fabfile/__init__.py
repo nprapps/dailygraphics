@@ -95,7 +95,7 @@ def deploy(slug):
         return
 
     update_copy(slug)
-    #assets.sync(slug)
+    assets.sync(slug)
     render.render(slug)
 
     graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
