@@ -71,7 +71,7 @@ var render = function(containerWidth) {
     }
 
     // Render the chart!
-    var chart = new BarChart({
+    renderBarChart({
         container: '#graphic',
         width: containerWidth,
         data: graphicData
@@ -86,73 +86,68 @@ var render = function(containerWidth) {
 /*
  * Render a bar chart.
  */
-var BarChart = function(config) {
-    this.config = config;
-
+var renderBarChart = function(config) {
     /*
-     * Setup chart container.
+     * Setup
      */
-    this.setup = function() {
-        // Configuration
-        this.labelColumn = 'label';
-        this.valueColumn = 'amt';
+    var labelColumn = 'label';
+    var valueColumn = 'amt';
 
-        this.barHeight = 30;
-        this.barGap = 5;
-        this.labelWidth = 85;
-        this.labelMargin = 6;
-        this.valueMinWidth = 30;
+    var barHeight = 30;
+    var barGap = 5;
+    var labelWidth = 85;
+    var labelMargin = 6;
+    var valueMinWidth = 30;
 
-        this.margins = {
-            top: 0,
-            right: 15,
-            bottom: 20,
-            left: (this.labelWidth + this.labelMargin)
-        };
-
-        this.ticks = {
-            x: 4
-        };
-        this.roundTicksFactor = 5;
-
-        // Calculate actual chart dimensions
-        this.chartWidth = this.config.width - this.margins.left - this.margins.right;
-        this.chartHeight = ((this.barHeight + this.barGap) * this.config.data.length);
-
-        // Clear existing graphic (for redraw)
-        this.containerElement = d3.select(config.container);
-        this.containerElement.html('');
-
-        // Create container
-        this.chartElement = this.containerElement.append('svg')
-            .attr('width', this.chartWidth + this.margins.left + this.margins.right)
-            .attr('height', this.chartHeight + this.margins.top + this.margins.bottom)
-            .append('g')
-            .attr('transform', 'translate(' + this.margins.left + ',' + this.margins.top + ')');
+    var margins = {
+        top: 0,
+        right: 15,
+        bottom: 20,
+        left: (labelWidth + labelMargin)
     };
+
+    var ticks = {
+        x: 4
+    };
+    var roundTicksFactor = 5;
+
+    // Calculate actual chart dimensions
+    var chartWidth = config.width - margins.left - margins.right;
+    var chartHeight = ((barHeight + barGap) * config.data.length);
+
+    // Clear existing graphic (for redraw)
+    var containerElement = d3.select(config.container);
+    containerElement.html('');
+
+    // Create container
+    var chartElement = containerElement.append('svg')
+        .attr('width', chartWidth + margins.left + margins.right)
+        .attr('height', chartHeight + margins.top + margins.bottom)
+        .append('g')
+        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
     /*
      * Create D3 scale objects.
      */
-    this.createScales = function() {
-        this.xScale = d3.scale.linear()
-            .domain([0, d3.max(this.config.data, _.bind(function(d) {
-                return Math.ceil(d[this.valueColumn] / this.roundTicksFactor) * this.roundTicksFactor;
-            }, this))])
-            .range([0, this.chartWidth]);
+    var createScales = function() {
+        xScale = d3.scale.linear()
+            .domain([0, d3.max(config.data, function(d) {
+                return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+            })])
+            .range([0, chartWidth]);
 
-        this.yScale = d3.scale.linear()
-            .range([this.chartHeight, 0]);
+        yScale = d3.scale.linear()
+            .range([chartHeight, 0]);
     };
 
     /*
      * Create D3 axes.
      */
-    this.createAxes = function() {
-        this.xAxis = d3.svg.axis()
-            .scale(this.xScale)
+    var createAxes = function() {
+        xAxis = d3.svg.axis()
+            .scale(xScale)
             .orient('bottom')
-            .ticks(this.ticks.x)
+            .ticks(ticks.x)
             .tickFormat(function(d) {
                 return d.toFixed(0) + '%';
             });
@@ -161,26 +156,26 @@ var BarChart = function(config) {
     /*
      * Render axes to chart.
      */
-    this.renderAxes = function() {
-        this.chartElement.append('g')
+    var renderAxes = function() {
+        chartElement.append('g')
             .attr('class', 'x axis')
-            .attr('transform', makeTranslate(0, this.chartHeight))
-            .call(this. xAxis);
+            .attr('transform', makeTranslate(0, chartHeight))
+            .call(xAxis);
     };
 
     /*
      * Render grid to chart.
      */
-    this.renderGrid = function() {
-        var xAxisGrid = _.bind(function() {
-            return this.xAxis;
-        }, this);
+    var renderGrid = function() {
+        var xAxisGrid = function() {
+            return xAxis;
+        };
 
-        this.chartElement.append('g')
+        chartElement.append('g')
             .attr('class', 'x grid')
-            .attr('transform', makeTranslate(0, this.chartHeight))
+            .attr('transform', makeTranslate(0, chartHeight))
             .call(xAxisGrid()
-                .tickSize(-this.chartHeight, 0, 0)
+                .tickSize(-chartHeight, 0, 0)
                 .tickFormat('')
             );
     };
@@ -188,113 +183,110 @@ var BarChart = function(config) {
     /*
      * Render bars to chart.
      */
-    this.renderBars = function() {
-        this.chartElement.append('g')
+    var renderBars = function() {
+        chartElement.append('g')
             .attr('class', 'bars')
             .selectAll('rect')
-            .data(this.config.data)
+            .data(config.data)
             .enter()
             .append('rect')
-                .attr('y', _.bind(function(d, i) {
-                    return i * (this.barHeight + this.barGap);
-                }, this))
-                .attr('width', _.bind(function(d) {
-                    return this.xScale(d['amt']);
-                }, this))
-                .attr('height', this.barHeight)
-                .attr('class', _.bind(function(d, i) {
-                    return 'bar-' + i + ' ' + classify(d[this.labelColumn]);
-                }, this));
+                .attr('y', function(d, i) {
+                    return i * (barHeight + barGap);
+                })
+                .attr('width', function(d) {
+                    return xScale(d['amt']);
+                })
+                .attr('height', barHeight)
+                .attr('class', function(d, i) {
+                    return 'bar-' + i + ' ' + classify(d[labelColumn]);
+                });
     };
 
     /*
      * Render bar labels.
      */
-    this.renderLabels = function() {
-        this.containerElement
+    var renderLabels = function() {
+        containerElement
             .append('ul')
             .attr('class', 'labels')
             .attr('style', formatStyle({
-                'width': this.labelWidth + 'px',
-                'top': this.margins.top + 'px',
+                'width': labelWidth + 'px',
+                'top': margins.top + 'px',
                 'left': '0'
             }))
             .selectAll('li')
-            .data(this.config.data)
+            .data(config.data)
             .enter()
             .append('li')
-                .attr('style', _.bind(function(d, i) {
+                .attr('style', function(d, i) {
                     return formatStyle({
-                        'width': this.labelWidth + 'px',
-                        'height': this.barHeight + 'px',
+                        'width': labelWidth + 'px',
+                        'height': barHeight + 'px',
                         'left': '0px',
-                        'top': (i * (this.barHeight + this.barGap)) + 'px;'
+                        'top': (i * (barHeight + barGap)) + 'px;'
                     });
-                }, this))
-                .attr('class', _.bind(function(d) {
-                    return classify(d[this.labelColumn]);
-                }, this))
+                })
+                .attr('class', function(d) {
+                    return classify(d[labelColumn]);
+                })
                 .append('span')
-                    .text(_.bind(function(d) {
-                        return d[this.labelColumn];
-                    }, this));
+                    .text(function(d) {
+                        return d[labelColumn];
+                    });
     };
 
     /*
      * Render bar values.
      */
-    this.renderValues = function() {
-        this.chartElement.append('g')
+    var renderValues = function() {
+        chartElement.append('g')
             .attr('class', 'value')
             .selectAll('text')
-            .data(this.config.data)
+            .data(config.data)
             .enter()
             .append('text')
-                .attr('x', _.bind(function(d) {
-                    return this.xScale(d[this.valueColumn]);
-                }, this))
-                .attr('y', _.bind(function(d, i) {
-                    return i * (this.barHeight + this.barGap);
-                }, this))
-                .attr('dx', _.bind(function(d) {
-                    if (this.xScale(d[this.valueColumn]) > this.valueMinWidth) {
+                .attr('x', function(d) {
+                    return xScale(d[valueColumn]);
+                })
+                .attr('y', function(d, i) {
+                    return i * (barHeight + barGap);
+                })
+                .attr('dx', function(d) {
+                    if (xScale(d[valueColumn]) > valueMinWidth) {
                         return -6;
                     } else {
                         return 6;
                     }
-                }, this))
-                .attr('dy', (this.barHeight / 2) + 3)
-                .attr('text-anchor', _.bind(function(d) {
-                    if (this.xScale(d[this.valueColumn]) > this.valueMinWidth) {
+                })
+                .attr('dy', (barHeight / 2) + 3)
+                .attr('text-anchor', function(d) {
+                    if (xScale(d[valueColumn]) > valueMinWidth) {
                         return 'end';
                     } else {
                         return 'begin';
                     }
-                }, this))
-                .attr('class', _.bind(function(d) {
-                    var c = classify(d[this.labelColumn]);
-                    if (this.xScale(d[this.valueColumn]) > this.valueMinWidth) {
+                })
+                .attr('class', function(d) {
+                    var c = classify(d[labelColumn]);
+                    if (xScale(d[valueColumn]) > valueMinWidth) {
                         c += ' in';
                     } else {
                         c += ' out';
                     }
                     return c;
-                }, this))
-                .text(_.bind(function(d) {
-                    return d[this.valueColumn].toFixed(0) + '%';
-                }, this));
+                })
+                .text(function(d) {
+                    return d[valueColumn].toFixed(0) + '%';
+                });
     }
 
-    this.setup();
-    this.createScales();
-    this.createAxes();
-    this.renderAxes();
-    this.renderGrid();
-    this.renderBars();
-    this.renderLabels();
-    this.renderValues();
-
-    return this;
+    createScales();
+    createAxes();
+    renderAxes();
+    renderGrid();
+    renderBars();
+    renderLabels();
+    renderValues();
 }
 
 
