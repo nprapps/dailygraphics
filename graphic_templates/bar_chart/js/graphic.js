@@ -127,7 +127,7 @@ var renderBarChart = function(config) {
     /*
      * Create the root SVG element.
      */
-    createSVG = function() {
+    var createSVG = function() {
         chartWrapper = containerElement.append('div')
             .attr('class', 'graphic-wrapper');
 

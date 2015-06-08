@@ -2,20 +2,12 @@
 var GRAPHIC_DEFAULT_WIDTH = 600;
 var MOBILE_THRESHOLD = 500;
 
-var GRAPHIC_MARGIN = {
-    top: 5,
-    right: 15,
-    bottom: 30,
-    left: 22
-};
-
 // Global vars
 var pymChild = null;
 var isMobile = false;
 var graphicData = null;
 
 // D3 formatters
-var fmtComma = d3.format(',');
 var fmtYearAbbrev = d3.time.format('%y');
 var fmtYearFull = d3.time.format('%Y');
 
@@ -116,7 +108,7 @@ var renderLineChart = function(config) {
 
     var margins = {
         top: 5,
-        right: 15,
+        right: 75,
         bottom: 20,
         left: 30
     };
@@ -144,12 +136,17 @@ var renderLineChart = function(config) {
     var containerElement = d3.select(config.container);
     containerElement.html('');
 
+    var formattedData = {};
+    var xScale = null;
+    var yScale = null;
+    var colorScale = null;
+    var chartWrapper = null;
+    var chartElement = null;
+
     /*
      * Restructure tabular data for easier charting.
      */
     var reformatData = function() {
-        formattedData = {};
-
         for (var column in graphicData[0]) {
             if (column == 'date') {
                 continue;
@@ -221,7 +218,7 @@ var renderLineChart = function(config) {
     /*
      * Create the root SVG element.
      */
-    createSVG = function() {
+    var createSVG = function() {
         chartWrapper = containerElement.append('div')
             .attr('class', 'graphic-wrapper');
 
@@ -326,6 +323,36 @@ var renderLineChart = function(config) {
                 });
     };
 
+    var renderEndValues = function() {
+        chartElement.append('g')
+            .attr('class', 'value')
+            .selectAll('text')
+            .data(d3.entries(formattedData))
+            .enter().append('text')
+                .attr('x', function(d, i) {
+                    var last = d['value'][d['value'].length - 1];
+
+                    return xScale(last['date']) + 5;
+                })
+                .attr('y', function(d) {
+                    var last = d['value'][d['value'].length - 1];
+
+                    return yScale(last['amt']) + 3;
+                })
+                .text(function(d) {
+                    var last = d['value'][d['value'].length - 1];
+                    var value = last['amt'];
+
+                    var label = last['amt'].toFixed(1);
+
+                    if (!isMobile) {
+                        label = d['key'] + ': ' + label;
+                    }
+
+                    return label;
+                });
+    }
+
     reformatData();
     createScales();
     renderLegend();
@@ -334,6 +361,7 @@ var renderLineChart = function(config) {
     renderAxes();
     renderGrid();
     renderLines();
+    renderEndValues();
 }
 
 

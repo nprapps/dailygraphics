@@ -93,31 +93,31 @@ var renderColumnChart = function(config) {
     /*
      * Setup chart container.
      */
-    labelColumn = 'label';
-    valueColumn = 'amt';
+    var labelColumn = 'label';
+    var valueColumn = 'amt';
 
-    aspectWidth = isMobile ? 4 : 16;
-    aspectHeight = isMobile ? 3 : 9;
-    valueMinHeight = 30;
+    var aspectWidth = isMobile ? 4 : 16;
+    var aspectHeight = isMobile ? 3 : 9;
+    var valueMinHeight = 30;
 
-    margins = {
+    var margins = {
         top: 5,
         right: 5,
         bottom: 20,
         left: 30
     };
 
-    ticks = {
+    var ticks = {
         y: 4
     };
-    roundTicksFactor = 50;
+    var roundTicksFactor = 50;
 
     // Calculate actual chart dimensions
-    chartWidth = config.width - margins.left - margins.right;
-    chartHeight = Math.ceil((config.width * aspectHeight) / aspectWidth) - margins.top - margins.bottom;
+    var chartWidth = config.width - margins.left - margins.right;
+    var chartHeight = Math.ceil((config.width * aspectHeight) / aspectWidth) - margins.top - margins.bottom;
 
     // Clear existing graphic (for redraw)
-    containerElement = d3.select(config.container);
+    var containerElement = d3.select(config.container);
     containerElement.html('');
 
     var chartWrapper = null;
@@ -130,7 +130,7 @@ var renderColumnChart = function(config) {
     /*
      * Create the root SVG element.
      */
-    createSVG = function() {
+    var createSVG = function() {
         chartWrapper = containerElement.append('div')
             .attr('class', 'graphic-wrapper');
 
@@ -144,7 +144,7 @@ var renderColumnChart = function(config) {
     /*
      * Create D3 scale objects.
      */
-    createScales = function() {
+    var createScales = function() {
         xScale = d3.scale.ordinal()
             .rangeRoundBands([0, chartWidth], .1)
             .domain(config.data.map(function (d) {
@@ -161,7 +161,7 @@ var renderColumnChart = function(config) {
     /*
      * Create D3 axes.
      */
-    createAxes = function() {
+    var createAxes = function() {
         xAxis = d3.svg.axis()
             .scale(xScale)
             .orient('bottom')
@@ -181,7 +181,7 @@ var renderColumnChart = function(config) {
     /*
      * Render axes to chart.
      */
-    renderAxes = function() {
+    var renderAxes = function() {
         chartElement.append('g')
             .attr('class', 'x axis')
             .attr('transform', makeTranslate(0, chartHeight))
@@ -195,7 +195,7 @@ var renderColumnChart = function(config) {
     /*
      * Render grid to chart.
      */
-    renderGrid = function() {
+    var renderGrid = function() {
         var yAxisGrid = function() {
             return yAxis;
         };
@@ -211,7 +211,7 @@ var renderColumnChart = function(config) {
     /*
      * Render bars to chart.
      */
-    renderBars = function() {
+    var renderBars = function() {
         chartElement.append('g')
             .attr('class', 'bars')
             .selectAll('rect')
@@ -244,7 +244,7 @@ var renderColumnChart = function(config) {
     /*
      * Render 0 value line.
      */
-    renderZeroLine = function() {
+    var renderZeroLine = function() {
         chartElement.append('line')
             .attr('class', 'y grid grid-0')
             .attr('x1', 0)
@@ -256,7 +256,7 @@ var renderColumnChart = function(config) {
     /*
      * Render bar values.
      */
-    renderValues = function() {
+    var renderValues = function() {
         chartElement.append('g')
             .attr('class', 'value')
             .selectAll('text')
