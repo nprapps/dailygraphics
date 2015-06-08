@@ -48,7 +48,7 @@ var makeTranslate = function(x, y) {
  * Parse a url parameter by name.
  * via: http://stackoverflow.com/a/901144
  */
-function getParameterByName(name) {
+var getParameterByName = function(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
@@ -58,7 +58,7 @@ function getParameterByName(name) {
 /*
  * Convert a url to a location object.
  */
-function urlToLocation(url) {
+var urlToLocation = function(url) {
     var a = document.createElement('a');
     a.href = url;
     return a;
