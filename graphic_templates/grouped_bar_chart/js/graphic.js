@@ -66,8 +66,6 @@ var formatData = function() {
 
         delete d['Group'];
     });
-
-    console.log(graphicData);
 }
 
 /*
@@ -85,7 +83,7 @@ var render = function(containerWidth) {
     }
 
     // Render the chart!
-    var chart = new GroupedBarChart({
+    renderGroupedBarChart({
         container: '#graphic',
         width: containerWidth,
         data: graphicData
@@ -100,114 +98,109 @@ var render = function(containerWidth) {
 /*
  * Render a bar chart.
  */
-var GroupedBarChart = function(config) {
-    this.config = config;
-
+var renderGroupedBarChart = function(config) {
     /*
      * Setup chart container.
      */
-    this.setup = function() {
-        // Configuration
-        this.labelColumn = 'label';
-        this.valueColumn = 'amt';
+    labelColumn = 'label';
+    valueColumn = 'amt';
 
-        this.numGroups = this.config.data.length;
-        this.numGroupBars = this.config.data[0]['values'].length;
+    numGroups = config.data.length;
+    numGroupBars = config.data[0]['values'].length;
 
-        this.barHeight = 25;
-        this.barGapInner = 2;
-        this.barGap = 10;
-        this.groupHeight =  (this.barHeight * this.numGroupBars) + (this.barGapInner * (this.numGroupBars - 1))
-        this.labelWidth = 85;
-        this.labelMargin = 6;
-        this.valueMinWidth = 25;
+    barHeight = 25;
+    barGapInner = 2;
+    barGap = 10;
+    groupHeight =  (barHeight * numGroupBars) + (barGapInner * (numGroupBars - 1))
+    labelWidth = 85;
+    labelMargin = 6;
+    valueMinWidth = 25;
 
-        this.margins = {
-            top: 0,
-            right: 15,
-            bottom: 20,
-            left: (this.labelWidth + this.labelMargin)
-        };
-
-        this.ticks = {
-            x: 7
-        };
-        this.roundTicksFactor = 5;
-
-        // Calculate actual chart dimensions
-        this.chartWidth = this.config.width - this.margins.left - this.margins.right;
-        this.chartHeight = (((((this.barHeight + this.barGapInner) * this.numGroupBars) - this.barGapInner) + this.barGap) * this.numGroups) - this.barGap + this.barGapInner;
-
-        // Clear existing graphic (for redraw)
-        this.containerElement = d3.select(config.container);
-        this.containerElement.html('');
+    margins = {
+        top: 0,
+        right: 15,
+        bottom: 20,
+        left: (labelWidth + labelMargin)
     };
+
+    ticks = {
+        x: 7
+    };
+    roundTicksFactor = 5;
+
+    // Calculate actual chart dimensions
+    chartWidth = config.width - margins.left - margins.right;
+    chartHeight = (((((barHeight + barGapInner) * numGroupBars) - barGapInner) + barGap) * numGroups) - barGap + barGapInner;
+
+    // Clear existing graphic (for redraw)
+    containerElement = d3.select(config.container);
+    containerElement.html('');
 
     /*
      * Create D3 scale objects.
      */
-    this.createScales = function() {
-        this.xScale = d3.scale.linear()
-            .domain([0, d3.max(this.config.data, _.bind(function(d) {
-                return d3.max(d['values'], _.bind(function(v) {
-                    return Math.ceil(v[this.valueColumn] / this.roundTicksFactor) * this.roundTicksFactor;
-                }, this));
-            }, this))])
-            .range([0, this.chartWidth]);
+    createScales = function() {
+        xScale = d3.scale.linear()
+            .domain([0, d3.max(config.data, function(d) {
+                return d3.max(d['values'], function(v) {
+                    return Math.ceil(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
+                });
+            })])
+            .range([0, chartWidth]);
 
-        this.yScale = d3.scale.linear()
-            .range([this.chartHeight, 0]);
+        yScale = d3.scale.linear()
+            .range([chartHeight, 0]);
 
-        this.colorScale = d3.scale.ordinal()
+        colorScale = d3.scale.ordinal()
             .range([COLORS['teal3'], COLORS['teal5']])
-            .domain(_.pluck(this.config.data[0]['values'], 'label'));
+            .domain(_.pluck(config.data[0]['values'], 'label'));
     };
     /*
      * Render a color legend.
      */
-    this.renderLegend = function() {
-        var legend = this.containerElement.append('ul')
+    renderLegend = function() {
+        var legend = containerElement.append('ul')
             .attr('class', 'key')
             .selectAll('g')
-                .data(this.config.data[0]['values'])
+                .data(config.data[0]['values'])
             .enter().append('li')
-                .attr('class', _.bind(function(d, i) {
-                    return 'key-item key-' + i + ' ' + classify(d[this.labelColumn]);
-                }, this));
+                .attr('class', function(d, i) {
+                    return 'key-item key-' + i + ' ' + classify(d[labelColumn]);
+                });
 
         legend.append('b')
-            .style('background-color', _.bind(function(d) {
-            	return this.colorScale(d[this.labelColumn]);
-            }, this));
+            .style('background-color', function(d) {
+            	return colorScale(d[labelColumn]);
+            });
 
         legend.append('label')
-            .text(_.bind(function(d) {
-                return d[this.labelColumn];
-            }, this));
+            .text(function(d) {
+                return d[labelColumn];
+            });
     }
 
     /*
      * Create the root SVG element.
      */
-    this.createSVG = function() {
-        this.chartWrapper = this.containerElement.append('div')
+    createSVG = function() {
+        chartWrapper = containerElement.append('div')
             .attr('class', 'graphic-wrapper');
 
-        this.chartElement = this.chartWrapper.append('svg')
-            .attr('width', this.chartWidth + this.margins.left + this.margins.right)
-            .attr('height', this.chartHeight + this.margins.top + this.margins.bottom)
+        chartElement = chartWrapper.append('svg')
+            .attr('width', chartWidth + margins.left + margins.right)
+            .attr('height', chartHeight + margins.top + margins.bottom)
             .append('g')
-            .attr('transform', 'translate(' + this.margins.left + ',' + this.margins.top + ')');
+            .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
     }
 
     /*
      * Create D3 axes.
      */
-    this.createAxes = function() {
-        this.xAxis = d3.svg.axis()
-            .scale(this.xScale)
+    createAxes = function() {
+        xAxis = d3.svg.axis()
+            .scale(xScale)
             .orient('bottom')
-            .ticks(this.ticks.x)
+            .ticks(ticks.x)
             .tickFormat(function(d) {
                 return d.toFixed(0) + '%';
             });
@@ -216,26 +209,26 @@ var GroupedBarChart = function(config) {
     /*
      * Render axes to chart.
      */
-    this.renderAxes = function() {
-        this.chartElement.append('g')
+    renderAxes = function() {
+        chartElement.append('g')
             .attr('class', 'x axis')
-            .attr('transform', makeTranslate(0, this.chartHeight))
-            .call(this. xAxis);
+            .attr('transform', makeTranslate(0, chartHeight))
+            .call( xAxis);
     };
 
     /*
      * Render grid to chart.
      */
-    this.renderGrid = function() {
-        var xAxisGrid = _.bind(function() {
-            return this.xAxis;
-        }, this);
+    renderGrid = function() {
+        var xAxisGrid = function() {
+            return xAxis;
+        };
 
-        this.chartElement.append('g')
+        chartElement.append('g')
             .attr('class', 'x grid')
-            .attr('transform', makeTranslate(0, this.chartHeight))
+            .attr('transform', makeTranslate(0, chartHeight))
             .call(xAxisGrid()
-                .tickSize(-this.chartHeight, 0, 0)
+                .tickSize(-chartHeight, 0, 0)
                 .tickFormat('')
             );
     };
@@ -243,75 +236,75 @@ var GroupedBarChart = function(config) {
     /*
      * Render bars to chart.
      */
-    this.renderBars = function() {
-        this.barGroups = this.chartElement.selectAll('.bars')
-            .data(this.config.data)
+    renderBars = function() {
+        barGroups = chartElement.selectAll('.bars')
+            .data(config.data)
             .enter()
             .append('g')
                 .attr('class', 'g bars')
-                .attr('transform', _.bind(function(d, i) {
+                .attr('transform', function(d, i) {
                     if (i == 0) {
                         return makeTranslate(0, 0);
                     }
 
-                    return makeTranslate(0, (this.groupHeight + this.barGap) * i);
-                }, this));
+                    return makeTranslate(0, (groupHeight + barGap) * i);
+                });
 
-        this.barGroups.selectAll('rect')
+        barGroups.selectAll('rect')
             .data(function(d) {
                 return d['values'];
             })
             .enter()
             .append('rect')
-                .attr('height', this.barHeight)
+                .attr('height', barHeight)
                 .attr('x', 0)
-                .attr('y', _.bind(function(d, i) {
+                .attr('y', function(d, i) {
                     if (i == 0) {
                         return 0;
                     }
 
-                    return (this.barHeight * i) + (this.barGapInner * i);
-                }, this))
-                .attr('width', _.bind(function(d) {
-                    return this.xScale(d[this.valueColumn]);
-                }, this))
-                .style('fill', _.bind(function(d) {
-                	return this.colorScale(d[this.labelColumn]);
-                }, this))
-                .attr('class', _.bind(function(d) {
-                    return 'y-' + d[this.labelColumn];
-                }, this));
+                    return (barHeight * i) + (barGapInner * i);
+                })
+                .attr('width', function(d) {
+                    return xScale(d[valueColumn]);
+                })
+                .style('fill', function(d) {
+                	return colorScale(d[labelColumn]);
+                })
+                .attr('class', function(d) {
+                    return 'y-' + d[labelColumn];
+                });
     };
 
     /*
      * Render bar labels.
      */
-    this.renderLabels = function() {
-        this.chartWrapper.append('ul')
+    renderLabels = function() {
+        chartWrapper.append('ul')
             .attr('class', 'labels')
             .attr('style', formatStyle({
-                'width': this.labelWidth + 'px',
-                'top': this.margins.top + 'px',
+                'width': labelWidth + 'px',
+                'top': margins.top + 'px',
                 'left': '0'
             }))
             .selectAll('li')
-            .data(this.config.data)
+            .data(config.data)
             .enter()
             .append('li')
-                .attr('style', _.bind(function(d,i) {
-                    var top = (this.groupHeight + this.barGap) * i;
+                .attr('style', function(d,i) {
+                    var top = (groupHeight + barGap) * i;
 
                     if (i == 0) {
                         top = 0;
                     }
 
                     return formatStyle({
-                        'width': (this.labelWidth - 10) + 'px',
-                        'height': this.barHeight + 'px',
+                        'width': (labelWidth - 10) + 'px',
+                        'height': barHeight + 'px',
                         'left': '0px',
                         'top': top + 'px;'
                     });
-                }, this))
+                })
                 .attr('class', function(d,i) {
                     return classify(d['key']);
                 })
@@ -324,8 +317,8 @@ var GroupedBarChart = function(config) {
     /*
      * Render bar values.
      */
-    this.renderValues = function() {
-        this.barGroups.append('g')
+    renderValues = function() {
+        barGroups.append('g')
             .attr('class', 'value')
             .selectAll('text')
             .data(function(d) {
@@ -333,65 +326,62 @@ var GroupedBarChart = function(config) {
             })
             .enter()
             .append('text')
-                .attr('x', _.bind(function(d) {
-                    return this.xScale(d[this.valueColumn]);
-                }, this))
-                .attr('y', _.bind(function(d, i) {
+                .attr('x', function(d) {
+                    return xScale(d[valueColumn]);
+                })
+                .attr('y', function(d, i) {
                     if (i == 0) {
                         return 0;
                     }
 
-                    return (this.barHeight * i) + this.barGapInner;
-                }, this))
-                .attr('dx', _.bind(function(d) {
-                    if (this.xScale(d['amt']) > this.valueMinWidth) {
+                    return (barHeight * i) + barGapInner;
+                })
+                .attr('dx', function(d) {
+                    if (xScale(d['amt']) > valueMinWidth) {
                         return -6;
                     }
 
                     return 6;
-                }, this))
-                .attr('dy', (this.barHeight / 2) + 4)
-                .attr('text-anchor', _.bind(function(d) {
-                    if (this.xScale(d[this.valueColumn]) > this.valueMinWidth) {
+                })
+                .attr('dy', (barHeight / 2) + 4)
+                .attr('text-anchor', function(d) {
+                    if (xScale(d[valueColumn]) > valueMinWidth) {
                         return 'end';
                     } else {
                         return 'begin';
                     }
-                }, this))
-                .attr('class', _.bind(function(d) {
-                    var c = classify(d[this.labelColumn]);
+                })
+                .attr('class', function(d) {
+                    var c = classify(d[labelColumn]);
 
-                    if (this.xScale(d[this.valueColumn]) > this.valueMinWidth) {
+                    if (xScale(d[valueColumn]) > valueMinWidth) {
                         c += ' in';
                     } else {
                         c += ' out';
                     }
 
                     return c;
-                }, this))
-                .text(_.bind(function(d) {
-                    var v = d[this.valueColumn].toFixed(0);
+                })
+                .text(function(d) {
+                    var v = d[valueColumn].toFixed(0);
 
-                    if (d[this.valueColumn] > 0 && v == 0) {
+                    if (d[valueColumn] > 0 && v == 0) {
                         v = '<1';
                     }
 
                     return v + '%';
-                }, this));
+                });
     }
 
-    this.setup();
-    this.createScales();
-    this.renderLegend();
-    this.createSVG();
-    this.createAxes();
-    this.renderAxes();
-    this.renderGrid();
-    this.renderBars();
-    this.renderLabels();
-    this.renderValues();
-
-    return this;
+    createScales();
+    renderLegend();
+    createSVG();
+    createAxes();
+    renderAxes();
+    renderGrid();
+    renderBars();
+    renderLabels();
+    renderValues();
 }
 
 

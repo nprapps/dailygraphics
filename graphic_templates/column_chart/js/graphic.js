@@ -285,8 +285,6 @@ var renderColumnChart = function(config) {
     renderBars();
     renderZeroLine();
     renderValues();
-
-    return this;
 }
 
 /*
