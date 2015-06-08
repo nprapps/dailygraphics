@@ -121,10 +121,9 @@ var renderLineChart = function(config) {
 
     // Mobile
     if (isMobile) {
-        aspectWidth = 4;
-        aspectHeight = 3;
         ticks.x = 5;
         ticks.y = 5;
+        margins.right = 25;
     }
 
     // Calculate actual chart dimensions
@@ -148,13 +147,13 @@ var renderLineChart = function(config) {
      */
     var reformatData = function() {
         for (var column in graphicData[0]) {
-            if (column == 'date') {
+            if (column == dateColumn) {
                 continue;
             }
 
             formattedData[column] = graphicData.map(function(d) {
                 return {
-                    'date': d['date'],
+                    'date': d[dateColumn],
                     'amt': d[column]
                 };
     // filter out empty data. uncomment this if you have inconsistent data.
@@ -177,7 +176,7 @@ var renderLineChart = function(config) {
         yScale = d3.scale.linear()
             .domain([ 0, d3.max(d3.entries(formattedData), function(c) {
                     return d3.max(c['value'], function(v) {
-                        var n = v['amt'];
+                        var n = v[valueColumn];
                         return Math.ceil(n / 5) * 5; // round to next 5
                     });
                 })
@@ -332,18 +331,18 @@ var renderLineChart = function(config) {
                 .attr('x', function(d, i) {
                     var last = d['value'][d['value'].length - 1];
 
-                    return xScale(last['date']) + 5;
+                    return xScale(last[dateColumn]) + 5;
                 })
                 .attr('y', function(d) {
                     var last = d['value'][d['value'].length - 1];
 
-                    return yScale(last['amt']) + 3;
+                    return yScale(last[valueColumn]) + 3;
                 })
                 .text(function(d) {
                     var last = d['value'][d['value'].length - 1];
-                    var value = last['amt'];
+                    var value = last[valueColumn];
 
-                    var label = last['amt'].toFixed(1);
+                    var label = last[valueColumn].toFixed(1);
 
                     if (!isMobile) {
                         label = d['key'] + ': ' + label;
