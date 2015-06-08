@@ -3,30 +3,30 @@ var GRAPHIC_DEFAULT_WIDTH = 600;
 var MOBILE_THRESHOLD = 500;
 var GEO_DATA_URL = 'data/geodata.json';
 
+var LABEL_DEFAULTS = {
+    'text-anchor': 'start',
+    'dx': '6',
+    'dy': '4'
+}
+
+var CITY_LABEL_ADJUSTMENTS = {
+    'Biratnagar': { 'dy': -3 },
+    'Birganj': { 'dy': -3 },
+    'Kathmandu': { 'text-anchor': 'end', 'dx': -4, 'dy': -4 },
+    'Nepalganj': { 'text-anchor': 'end', 'dx': -4, 'dy': 12 },
+    'Pokhara': { 'text-anchor': 'end', 'dx': -6 },
+    'Kanpur': { 'dy': 12 }
+}
+
+var COUNTRY_LABEL_ADJUSTMENTS = {
+    'Nepal': { 'text-anchor': 'end', 'dx': -50, 'dy': -20 },
+    'Bangladesh': { 'text-anchor': 'end', 'dx': -10 }
+}
+
 // Global vars
 var pymChild = null;
 var isMobile = false;
 var geoData = null;
-
-
-// labels
-var LABEL_DEFAULTS = [];
-LABEL_DEFAULTS['text-anchor'] = 'start';
-LABEL_DEFAULTS['dx'] = '6';
-LABEL_DEFAULTS['dy'] = '4';
-
-var CITY_LABEL_ADJUSTMENTS = [];
-CITY_LABEL_ADJUSTMENTS['Biratnagar'] = { 'dy': -3 };
-CITY_LABEL_ADJUSTMENTS['Birganj'] = { 'dy': -3 };
-CITY_LABEL_ADJUSTMENTS['Kathmandu'] = { 'text-anchor': 'end', 'dx': -4, 'dy': -4 };
-CITY_LABEL_ADJUSTMENTS['Nepalganj'] = { 'text-anchor': 'end', 'dx': -4, 'dy': 12 };
-CITY_LABEL_ADJUSTMENTS['Pokhara'] = { 'text-anchor': 'end', 'dx': -6 };
-CITY_LABEL_ADJUSTMENTS['Kanpur'] = { 'dy': 12 };
-
-var COUNTRY_LABEL_ADJUSTMENTS = [];
-COUNTRY_LABEL_ADJUSTMENTS['Nepal'] = { 'text-anchor': 'end', 'dx': -50, 'dy': -20 };
-COUNTRY_LABEL_ADJUSTMENTS['Bangladesh'] = { 'text-anchor': 'end', 'dx': -10 };
-
 
 /*
  * Initialize the graphic.
@@ -173,12 +173,14 @@ var renderLocatorMap = function(config) {
      * Render countries.
      */
     var renderCountries = function() {
+        // Land shadow
         chartElement.append('path')
             .attr('class', 'landmass')
             .datum(mapData['countries'])
             .attr('filter', 'url(#landshadow)')
             .attr('d', path);
 
+        // Land outlines
         chartElement.append('g')
             .attr('class', 'countries')
             .selectAll('path')
@@ -189,9 +191,12 @@ var renderLocatorMap = function(config) {
                 })
                 .attr('d', path);
 
-        d3.select('.countries path.' + classify(config.primaryCountry))
+        // Highlight primary country
+        var primaryCountryClass = classify(config.primaryCountry);
+
+        d3.select('.countries path.' + primaryCountryClass)
             .moveToFront()
-            .attr('class', 'primary ' + classify(config.primaryCountry));
+            .classed('primary ' + primaryCountryClass, true);
     }
 
     /*
@@ -230,9 +235,11 @@ var renderLocatorMap = function(config) {
                 .attr('d', path)
                 .attr('class', function(d) {
                     var c = 'place';
+
                     c += ' ' + classify(d['properties']['city']);
                     c += ' ' + classify(d['properties']['featurecla']);
                     c += ' scalerank-' + d['properties']['scalerank'];
+
                     return c;
                 });
     }
@@ -249,11 +256,28 @@ var renderLocatorMap = function(config) {
                 .attr('d', path)
                 .attr('class', function(d) {
                     var c = 'place';
+
                     c += ' ' + classify(d['properties']['city']);
                     c += ' ' + classify(d['properties']['featurecla']);
                     c += ' scalerank-' + d['properties']['scalerank'];
+
                     return c;
                 });
+    }
+
+    /*
+     * Apply adjustments to label positioning.
+     */
+    var positionLabel = function(adjustments, id, attribute) {
+        if (adjustments[id]) {
+            if (adjustments[id][attribute]) {
+                return adjustments[id][attribute];
+            } else {
+                return LABEL_DEFAULTS[attribute];
+            }
+        } else {
+            return LABEL_DEFAULTS[attribute];
+        }
     }
 
     /*
@@ -284,38 +308,43 @@ var renderLocatorMap = function(config) {
                     return COUNTRIES[d['properties']['country']] || d['properties']['country'];
                 });
 
-        d3.select('.country-labels text.' + classify(config.primaryCountry))
-            .attr('class', 'label primary ' + classify(config.primaryCountry));
+        // Highlight primary country
+        var primaryCountryClass = classify(config.primaryCountry);
+
+        d3.select('.country-labels text.' + primaryCountryClass)
+            .classed('label primary ' + primaryCountryClass, true);
     }
 
     /*
      * Render city labels.
      */
     var renderCityLabels = function() {
-        var cityLabels = [ 'city-labels shadow',
+        var layers = [ 'city-labels shadow',
                            'city-labels',
                            'city-labels shadow primary',
                            'city-labels primary' ];
 
-        cityLabels.forEach(function(v, k) {
-            var cityData;
+        layers.forEach(function(layer) {
+            var data = [];
 
-            if (v == 'city-labels shadow' || v == 'city-labels') {
-                cityData = mapData['neighbors']['features'];
+            if (layer == 'city-labels shadow' || layer == 'city-labels') {
+                data = mapData['neighbors']['features'];
             } else {
-                cityData = mapData['cities']['features'];
+                data = mapData['cities']['features'];
             }
 
             chartElement.append('g')
-                .attr('class', v)
+                .attr('class', layer)
                 .selectAll('.label')
-                    .data(mapData['cities'])
+                    .data(data)
                 .enter().append('text')
                     .attr('class', function(d) {
                         var c = 'label';
+
                         c += ' ' + classify(d['properties']['city']);
                         c += ' ' + classify(d['properties']['featurecla']);
                         c += ' scalerank-' + d['properties']['scalerank'];
+
                         return c;
                     })
                     .attr('transform', function(d) {
@@ -377,18 +406,9 @@ var renderLocatorMap = function(config) {
     renderScaleBar();
 }
 
-var positionLabel = function(adjustments, id, attribute) {
-    if (adjustments[id]) {
-        if (adjustments[id][attribute]) {
-            return adjustments[id][attribute];
-        } else {
-            return LABEL_DEFAULTS[attribute];
-        }
-    } else {
-        return LABEL_DEFAULTS[attribute];
-    }
-}
-
+/*
+ * Move a set of D3 elements to the front of the canvas.
+ */
 d3.selection.prototype.moveToFront = function() {
     return this.each(function(){
         this.parentNode.appendChild(this);
