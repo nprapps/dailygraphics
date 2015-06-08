@@ -130,7 +130,6 @@ var renderLineChart = function(config) {
     var chartWidth = config.width - margins.left - margins.right;
     var chartHeight = Math.ceil((config.width * aspectHeight) / aspectWidth) - margins.top - margins.bottom;
 
-
     // Clear existing graphic (for redraw)
     var containerElement = d3.select(config.container);
     containerElement.html('');

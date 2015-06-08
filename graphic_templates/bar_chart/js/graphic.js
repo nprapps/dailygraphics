@@ -299,7 +299,6 @@ var renderBarChart = function(config) {
     renderValues();
 }
 
-
 /*
  * Initially load the graphic
  * (NB: Use window.load instead of document.ready
