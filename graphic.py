@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import imp
+from mimetypes import guess_type
 import os
 import subprocess
 
@@ -101,7 +102,7 @@ def _graphic_less(slug, filename):
     return make_response(r, 200, { 'Content-Type': 'text/css' })
 
 # Serve arbitrary static files on-demand
-@graphic.route('/slug/<path:path>')
+@graphic.route('/<slug>/<path:path>')
 def _static(slug, path):
     real_path = '%s/%s/%s' % (app_config.GRAPHICS_PATH, slug, path)
 

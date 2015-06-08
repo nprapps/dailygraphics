@@ -50,7 +50,6 @@ def _graphics_list():
 
 app.register_blueprint(graphic.graphic, url_prefix='/graphics')
 app.register_blueprint(graphic_templates.graphic_templates, url_prefix='/templates')
-app.register_blueprint(static.static)
 app.register_blueprint(oauth.oauth)
 
 if app_config.DEBUG:
