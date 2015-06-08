@@ -136,6 +136,13 @@ var renderGroupedBarChart = function(config) {
     containerElement = d3.select(config.container);
     containerElement.html('');
 
+    var xScale = null;
+    var yScale = null;
+    var colorScale = null;
+    var chartWrapper = null;
+    var chartElement = null;
+    var xAxis = null;
+
     /*
      * Create D3 scale objects.
      */
@@ -152,8 +159,8 @@ var renderGroupedBarChart = function(config) {
             .range([chartHeight, 0]);
 
         colorScale = d3.scale.ordinal()
-            .range([COLORS['teal3'], COLORS['teal5']])
-            .domain(_.pluck(config.data[0]['values'], 'label'));
+        .domain(_.pluck(config.data[0]['values'], 'label'))
+            .range([COLORS['teal3'], COLORS['teal5']]);
     };
     /*
      * Render a color legend.
@@ -213,7 +220,7 @@ var renderGroupedBarChart = function(config) {
         chartElement.append('g')
             .attr('class', 'x axis')
             .attr('transform', makeTranslate(0, chartHeight))
-            .call( xAxis);
+            .call(xAxis);
     };
 
     /*

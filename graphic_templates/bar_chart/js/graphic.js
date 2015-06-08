@@ -119,6 +119,11 @@ var renderBarChart = function(config) {
     var containerElement = d3.select(config.container);
     containerElement.html('');
 
+    var chartWrapper = null;
+    var chartElement = null;
+    var xScale = null;
+    var xAxis = null;
+
     /*
      * Create the root SVG element.
      */

@@ -120,6 +120,13 @@ var renderColumnChart = function(config) {
     containerElement = d3.select(config.container);
     containerElement.html('');
 
+    var chartWrapper = null;
+    var chartElement = null;
+    var xScale = null;
+    var yScale = null;
+    var xAxis = null;
+    var yAxis = null;
+
     /*
      * Create the root SVG element.
      */
