@@ -120,12 +120,19 @@ var renderColumnChart = function(config) {
     containerElement = d3.select(config.container);
     containerElement.html('');
 
-    // Create container
-    chartElement = containerElement.append('svg')
-        .attr('width', chartWidth + margins.left + margins.right)
-        .attr('height', chartHeight + margins.top + margins.bottom)
-        .append('g')
-        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+    /*
+     * Create the root SVG element.
+     */
+    createSVG = function() {
+        chartWrapper = containerElement.append('div')
+            .attr('class', 'graphic-wrapper');
+
+        chartElement = chartWrapper.append('svg')
+            .attr('width', chartWidth + margins.left + margins.right)
+            .attr('height', chartHeight + margins.top + margins.bottom)
+            .append('g')
+            .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+    }
 
     /*
      * Create D3 scale objects.
@@ -278,6 +285,7 @@ var renderColumnChart = function(config) {
                 });
     }
 
+    createSVG();
     createScales();
     createAxes();
     renderAxes();

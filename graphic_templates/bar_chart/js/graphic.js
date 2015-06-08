@@ -119,12 +119,19 @@ var renderBarChart = function(config) {
     var containerElement = d3.select(config.container);
     containerElement.html('');
 
-    // Create container
-    var chartElement = containerElement.append('svg')
-        .attr('width', chartWidth + margins.left + margins.right)
-        .attr('height', chartHeight + margins.top + margins.bottom)
-        .append('g')
-        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+    /*
+     * Create the root SVG element.
+     */
+    createSVG = function() {
+        chartWrapper = containerElement.append('div')
+            .attr('class', 'graphic-wrapper');
+
+        chartElement = chartWrapper.append('svg')
+            .attr('width', chartWidth + margins.left + margins.right)
+            .attr('height', chartHeight + margins.top + margins.bottom)
+            .append('g')
+            .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+    }
 
     /*
      * Create D3 scale objects.
@@ -135,9 +142,6 @@ var renderBarChart = function(config) {
                 return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
             })])
             .range([0, chartWidth]);
-
-        yScale = d3.scale.linear()
-            .range([chartHeight, 0]);
     };
 
     /*
@@ -280,6 +284,7 @@ var renderBarChart = function(config) {
                 });
     }
 
+    createSVG();
     createScales();
     createAxes();
     renderAxes();
