@@ -269,7 +269,6 @@ var renderBarChart = function(config) {
 
 /*
  * Initially load the graphic
- * (NB: Use window.load instead of document.ready
- * to ensure all images have loaded)
+ * (NB: Use window.load to ensure all images have loaded)
  */
 window.onload = onWindowLoaded;
