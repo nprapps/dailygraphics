@@ -107,17 +107,15 @@ var renderColumnChart = function(config) {
         left: 30
     };
 
-    var ticks = {
-        y: 4
-    };
+    var ticksY = 4;
     var roundTicksFactor = 50;
 
     // Calculate actual chart dimensions
-    var chartWidth = config.width - margins.left - margins.right;
-    var chartHeight = Math.ceil((config.width * aspectHeight) / aspectWidth) - margins.top - margins.bottom;
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = Math.ceil((config['width'] * aspectHeight) / aspectWidth) - margins['top'] - margins['bottom'];
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     /*
@@ -127,22 +125,22 @@ var renderColumnChart = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
-        .attr('width', chartWidth + margins.left + margins.right)
-        .attr('height', chartHeight + margins.top + margins.bottom)
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
         .append('g')
-        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     /*
      * Create D3 scale objects.
      */
     var xScale = d3.scale.ordinal()
         .rangeRoundBands([0, chartWidth], .1)
-        .domain(config.data.map(function (d) {
+        .domain(config['data'].map(function (d) {
             return d[labelColumn];
         }));
 
     var yScale = d3.scale.linear()
-        .domain([0, d3.max(config.data, function(d) {
+        .domain([0, d3.max(config['data'], function(d) {
             return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
         })])
         .range([chartHeight, 0]);
@@ -160,7 +158,7 @@ var renderColumnChart = function(config) {
     var yAxis = d3.svg.axis()
         .scale(yScale)
         .orient('left')
-        .ticks(ticks.y)
+        .ticks(ticksY)
         .tickFormat(function(d) {
             return fmtComma(d);
         });
@@ -197,7 +195,7 @@ var renderColumnChart = function(config) {
     chartElement.append('g')
         .attr('class', 'bars')
         .selectAll('rect')
-        .data(config.data)
+        .data(config['data'])
         .enter()
         .append('rect')
             .attr('x', function(d) {
@@ -238,7 +236,7 @@ var renderColumnChart = function(config) {
     chartElement.append('g')
         .attr('class', 'value')
         .selectAll('text')
-        .data(config.data)
+        .data(config['data'])
         .enter()
         .append('text')
             .attr('x', function(d, i) {

@@ -61,19 +61,19 @@ var renderGraphic = function(config) {
     };
 
     // Calculate actual chart dimensions
-    var chartWidth = config.width - margins.left - margins.right;
-    var chartHeight = Math.ceil((config.width * aspectHeight) / aspectWidth) - margins.top - margins.bottom;
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = Math.ceil((config['width'] * aspectHeight) / aspectWidth) - margins['top'] - margins['bottom'];
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     // Create container
     var chartElement = containerElement.append('svg')
-        .attr('width', chartWidth + margins.left + margins.right)
-        .attr('height', chartHeight + margins.top + margins.bottom)
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
         .append('g')
-        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     // Draw here!
 }

@@ -54,7 +54,7 @@ var render = function(containerWidth) {
  */
 var renderStateGridMap = function(config) {
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     // Copy map template
@@ -64,7 +64,7 @@ var renderStateGridMap = function(config) {
     // Extract categories from data
     var categories = [];
 
-    _.each(config.data, function(state) {
+    _.each(config['data'], function(state) {
         if (state['category'] != null) {
             categories.push(state['category']);
         }
@@ -95,7 +95,7 @@ var renderStateGridMap = function(config) {
     var chartElement = containerElement.select('svg');
 
     // Set state colors
-    _.each(config.data, function(state) {
+    _.each(config['data'], function(state) {
         if (state['category'] !== null) {
             var stateClass = 'state-' + classify(state['state_name']);
 
@@ -108,7 +108,7 @@ var renderStateGridMap = function(config) {
     // Draw state labels
     chartElement.append('g')
         .selectAll('text')
-            .data(config.data)
+            .data(config['data'])
         .enter().append('text')
             .attr('text-anchor', 'middle')
             .text(function(d) {

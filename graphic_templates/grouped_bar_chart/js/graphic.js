@@ -105,8 +105,8 @@ var renderGroupedBarChart = function(config) {
     var labelColumn = 'label';
     var valueColumn = 'amt';
 
-    var numGroups = config.data.length;
-    var numGroupBars = config.data[0]['values'].length;
+    var numGroups = config['data'].length;
+    var numGroupBars = config['data'][0]['values'].length;
 
     var barHeight = 25;
     var barGapInner = 2;
@@ -123,24 +123,22 @@ var renderGroupedBarChart = function(config) {
         left: (labelWidth + labelMargin)
     };
 
-    var ticks = {
-        x: 7
-    };
+    var ticksX = 7;
     var roundTicksFactor = 5;
 
     // Calculate actual chart dimensions
-    var chartWidth = config.width - margins.left - margins.right;
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
     var chartHeight = (((((barHeight + barGapInner) * numGroupBars) - barGapInner) + barGap) * numGroups) - barGap + barGapInner;
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     /*
      * Create D3 scale objects.
      */
     var xScale = d3.scale.linear()
-        .domain([0, d3.max(config.data, function(d) {
+        .domain([0, d3.max(config['data'], function(d) {
             return d3.max(d['values'], function(v) {
                 return Math.ceil(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
             });
@@ -151,7 +149,7 @@ var renderGroupedBarChart = function(config) {
         .range([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
-    .domain(_.pluck(config.data[0]['values'], labelColumn))
+    .domain(_.pluck(config['data'][0]['values'], labelColumn))
         .range([COLORS['teal3'], COLORS['teal5']]);
     /*
      * Render a color legend.
@@ -159,7 +157,7 @@ var renderGroupedBarChart = function(config) {
     var legend = containerElement.append('ul')
         .attr('class', 'key')
         .selectAll('g')
-            .data(config.data[0]['values'])
+            .data(config['data'][0]['values'])
         .enter().append('li')
             .attr('class', function(d, i) {
                 return 'key-item key-' + i + ' ' + classify(d[labelColumn]);
@@ -182,10 +180,10 @@ var renderGroupedBarChart = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
-        .attr('width', chartWidth + margins.left + margins.right)
-        .attr('height', chartHeight + margins.top + margins.bottom)
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
         .append('g')
-        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     /*
      * Create D3 axes.
@@ -193,7 +191,7 @@ var renderGroupedBarChart = function(config) {
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient('bottom')
-        .ticks(ticks.x)
+        .ticks(ticksX)
         .tickFormat(function(d) {
             return d.toFixed(0) + '%';
         });
@@ -225,7 +223,7 @@ var renderGroupedBarChart = function(config) {
      * Render bars to chart.
      */
     var barGroups = chartElement.selectAll('.bars')
-        .data(config.data)
+        .data(config['data'])
         .enter()
         .append('g')
             .attr('class', 'g bars')
@@ -269,11 +267,11 @@ var renderGroupedBarChart = function(config) {
         .attr('class', 'labels')
         .attr('style', formatStyle({
             'width': labelWidth + 'px',
-            'top': margins.top + 'px',
+            'top': margins['top'] + 'px',
             'left': '0'
         }))
         .selectAll('li')
-        .data(config.data)
+        .data(config['data'])
         .enter()
         .append('li')
             .attr('style', function(d,i) {

@@ -125,9 +125,7 @@ var renderStackedColumnChart = function(config) {
         left: 30
     };
 
-    var ticks = {
-        y: 5
-    };
+    var ticksY = 5;
     var roundTicksFactor = 50;
 
     if (isMobile) {
@@ -136,28 +134,28 @@ var renderStackedColumnChart = function(config) {
     }
 
     // Calculate actual chart dimensions
-    var chartWidth = config.width - margins.left - margins.right;
-    var chartHeight = Math.ceil((config.width * aspectHeight) / aspectWidth) - margins.top - margins.bottom;
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = Math.ceil((config['width'] * aspectHeight) / aspectWidth) - margins['top'] - margins['bottom'];
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     /*
      * Create D3 scale objects.
      */
     var xScale = d3.scale.ordinal()
-        .domain(_.pluck(config.data, labelColumn))
+        .domain(_.pluck(config['data'], labelColumn))
         .rangeRoundBands([0, chartWidth], .1)
 
     var yScale = d3.scale.linear()
-        .domain([0, d3.max(config.data, function(d) {
+        .domain([0, d3.max(config['data'], function(d) {
             return Math.ceil(d['total'] / roundTicksFactor) * roundTicksFactor;
         })])
         .rangeRound([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
-        .domain(d3.keys(config.data[0]).filter(function(d) {
+        .domain(d3.keys(config['data'][0]).filter(function(d) {
             return d != labelColumn && d != 'values' && d != 'total';
         }))
         .range([ COLORS['teal2'], COLORS['teal5'] ]);
@@ -191,10 +189,10 @@ var renderStackedColumnChart = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
-        .attr('width', chartWidth + margins.left + margins.right)
-        .attr('height', chartHeight + margins.top + margins.bottom)
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
         .append('g')
-            .attr('transform', makeTranslate(margins.left, margins.top));
+            .attr('transform', makeTranslate(margins['left'], margins['top']));
 
     /*
      * Create D3 axes.
@@ -209,7 +207,7 @@ var renderStackedColumnChart = function(config) {
     var yAxis = d3.svg.axis()
         .scale(yScale)
         .orient('left')
-        .ticks(ticks.y)
+        .ticks(ticksY)
         .tickFormat(function(d) {
             return d;
         });
@@ -229,18 +227,6 @@ var renderStackedColumnChart = function(config) {
     /*
      * Render grid to chart.
      */
-    var xAxisGrid = function() {
-        return xAxis;
-    };
-
-    chartElement.append('g')
-        .attr('class', 'x grid')
-        .attr('transform', makeTranslate(0, chartHeight))
-        .call(xAxisGrid()
-            .tickSize(-chartHeight, 0, 0)
-            .tickFormat('')
-        );
-
     var yAxisGrid = function() {
         return yAxis;
     };
@@ -256,7 +242,7 @@ var renderStackedColumnChart = function(config) {
      * Render bars to chart.
      */
     var bars = chartElement.selectAll('.bars')
-        .data(config.data)
+        .data(config['data'])
         .enter().append('g')
             .attr('class', 'bar')
             .attr('transform', function(d) {

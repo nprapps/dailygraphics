@@ -87,16 +87,16 @@ var renderLocatorMap = function(config) {
     var aspectWidth = 2;
     var aspectHeight = 1.2;
 
-    var bbox = config.data['bbox'];
+    var bbox = config['data']['bbox'];
     var defaultScale = 3000;
     var cityDotRadius = 3;
 
     // Calculate actual map dimensions
-    var mapWidth = config.width;
-    var mapHeight = Math.ceil((config.width * aspectHeight) / aspectWidth);
+    var mapWidth = config['width'];
+    var mapHeight = Math.ceil((config['width'] * aspectHeight) / aspectWidth);
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     var mapProjection = null;
@@ -109,8 +109,8 @@ var renderLocatorMap = function(config) {
      */
     var mapData = {};
 
-    for (var key in config.data['objects']) {
-        mapData[key] = topojson.feature(config.data, config.data['objects'][key]);
+    for (var key in config['data']['objects']) {
+        mapData[key] = topojson.feature(config['data'], config['data']['objects'][key]);
     }
 
     /*
@@ -183,7 +183,7 @@ var renderLocatorMap = function(config) {
             .attr('d', path);
 
     // Highlight primary country
-    var primaryCountryClass = classify(config.primaryCountry);
+    var primaryCountryClass = classify(config['primaryCountry']);
 
     d3.select('.countries path.' + primaryCountryClass)
         .moveToFront()
@@ -290,7 +290,7 @@ var renderLocatorMap = function(config) {
             });
 
     // Highlight primary country
-    var primaryCountryClass = classify(config.primaryCountry);
+    var primaryCountryClass = classify(config['primaryCountry']);
 
     d3.select('.country-labels text.' + primaryCountryClass)
         .classed('label primary ' + primaryCountryClass, true);

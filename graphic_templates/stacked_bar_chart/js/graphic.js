@@ -126,28 +126,26 @@ var renderStackedBarChart = function(config) {
         left: (labelWidth + labelMargin)
     };
 
-    var ticks = {
-        x: 4
-    };
+    var ticksX = 4;
     var roundTicksFactor = 100;
 
     if (isMobile) {
-        ticks.x = 2;
+        ticksX = 2;
     }
 
     // Calculate actual chart dimensions
-    var chartWidth = config.width - margins.left - margins.right;
-    var chartHeight = ((barHeight + barGap) * config.data.length);
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = ((barHeight + barGap) * config['data'].length);
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     /*
      * Create D3 scale objects.
      */
      var xScale = d3.scale.linear()
-         .domain([0, d3.max(config.data, function(d) {
+         .domain([0, d3.max(config['data'], function(d) {
              var lastValue = d['values'][d3['values'].length - 1];
 
              return Math.ceil(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
@@ -155,7 +153,7 @@ var renderStackedBarChart = function(config) {
          .rangeRound([0, chartWidth]);
 
      var colorScale = d3.scale.ordinal()
-         .domain(d3.keys(config.data[0]).filter(function(d) {
+         .domain(d3.keys(config['data'][0]).filter(function(d) {
              return d != 'label' && d != 'values';
          }))
          .range([ COLORS['teal3'], COLORS['orange3'], COLORS['blue3'], '#ccc' ]);
@@ -189,10 +187,10 @@ var renderStackedBarChart = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
-        .attr('width', chartWidth + margins.left + margins.right)
-        .attr('height', chartHeight + margins.top + margins.bottom)
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
         .append('g')
-        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     /*
      * Create D3 axes.
@@ -200,7 +198,7 @@ var renderStackedBarChart = function(config) {
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient('bottom')
-        .ticks(ticks.x)
+        .ticks(ticksX)
         .tickFormat(function(d) {
             return d + '%';
         });
@@ -232,7 +230,7 @@ var renderStackedBarChart = function(config) {
      * Render bars to chart.
      */
      var group = chartElement.selectAll('.group')
-         .data(config.data)
+         .data(config['data'])
          .enter().append('g')
              .attr('class', function(d) {
                  return 'group ' + classify(d['label']);
@@ -297,11 +295,11 @@ var renderStackedBarChart = function(config) {
         .attr('class', 'labels')
         .attr('style', formatStyle({
             'width': labelWidth + 'px',
-            'top': margins.top + 'px',
+            'top': margins['top'] + 'px',
             'left': '0'
         }))
         .selectAll('li')
-        .data(config.data)
+        .data(config['data'])
         .enter()
         .append('li')
             .attr('style', function(d, i) {

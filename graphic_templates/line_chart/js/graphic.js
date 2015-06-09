@@ -113,25 +113,23 @@ var renderLineChart = function(config) {
         left: 30
     };
 
-    var ticks = {
-        x: 10,
-        y: 10
-    };
+    var ticksX = 10;
+    var ticksY = 10;
     var roundTicksFactor = 5;
 
     // Mobile
     if (isMobile) {
-        ticks.x = 5;
-        ticks.y = 5;
-        margins.right = 25;
+        ticksX = 5;
+        ticksY = 5;
+        margins['right'] = 25;
     }
 
     // Calculate actual chart dimensions
-    var chartWidth = config.width - margins.left - margins.right;
-    var chartHeight = Math.ceil((config.width * aspectHeight) / aspectWidth) - margins.top - margins.bottom;
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = Math.ceil((config['width'] * aspectHeight) / aspectWidth) - margins['top'] - margins['bottom'];
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     var formattedData = {};
@@ -164,7 +162,7 @@ var renderLineChart = function(config) {
      * Create D3 scale objects.
      */
     var xScale = d3.time.scale()
-        .domain(d3.extent(config.data, function(d) {
+        .domain(d3.extent(config['data'], function(d) {
             return d[dateColumn];
         }))
         .range([ 0, chartWidth ])
@@ -180,7 +178,7 @@ var renderLineChart = function(config) {
         .range([ chartHeight, 0 ]);
 
     var colorScale = d3.scale.ordinal()
-        .domain(d3.keys(config.data[0]).filter(function(key) {
+        .domain(d3.keys(config['data'][0]).filter(function(key) {
             return key !== dateColumn;
         }))
         .range([ COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3'] ]);
@@ -214,10 +212,10 @@ var renderLineChart = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
-        .attr('width', chartWidth + margins.left + margins.right)
-        .attr('height', chartHeight + margins.top + margins.bottom)
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
         .append('g')
-        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     /*
      * Create D3 axes.
@@ -225,7 +223,7 @@ var renderLineChart = function(config) {
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient('bottom')
-        .ticks(ticks.x)
+        .ticks(ticksX)
         .tickFormat(function(d, i) {
             if (isMobile) {
                 return '\u2019' + fmtYearAbbrev(d);
@@ -237,7 +235,7 @@ var renderLineChart = function(config) {
     var yAxis = d3.svg.axis()
         .scale(yScale)
         .orient('left')
-        .ticks(ticks.y);
+        .ticks(ticksY);
 
     /*
      * Render axes to chart.
