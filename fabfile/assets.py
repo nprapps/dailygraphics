@@ -21,6 +21,10 @@ def sync(slug):
     """
     ignore_globs = []
 
+    if not os.path.exists('%s/%s' % (app_config.GRAPHICS_PATH, slug)):
+        print 'Slug "%s" does not exist!' % slug
+        return
+
     assets_root = '%s/%s/assets' % (app_config.GRAPHICS_PATH, slug)
     s3_root = '%s/%s' % (app_config.ASSETS_SLUG, slug)
 
