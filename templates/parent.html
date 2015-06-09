@@ -206,34 +206,46 @@ $(function() {
     <script type="text/javascript" src="js/lib/pym.js"></script>
 
     <script type="text/javascript">
-        var pymParent = new pym.Parent('preview', 'child.html', {});
-
         var resizeMobileEl = document.querySelector('#resize-mobile');
         var resizeDesktopEl = document.querySelector('#resize-desktop');
         var resizeFluidEl = document.querySelector('#resize-fluid');
         var previewEl = document.querySelector('#preview');
 
-        //el.addEventListener(eventName, eventHandler);
-        resizeMobileEl.addEventListener('click', function() {
+        resizeMobileEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
             previewEl.style.width = '300px';
             pymParent.sendWidth();
 
-            return false;
+            window.location.hash = 'mobile';
         });
 
-        resizeDesktopEl.addEventListener('click', function() {
+        resizeDesktopEl.addEventListener('click', function(e) {
+            e.preventDefault();
             previewEl.style.width = '730px';
             pymParent.sendWidth();
 
-            return false;
+            window.location.hash = 'desktop';
         });
 
-        resizeFluidEl.addEventListener('click', function() {
+        resizeFluidEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
             previewEl.style.width = '100%';
             pymParent.sendWidth();
 
-            return false;
+            window.location.hash = 'fluid';
         });
+
+        if (window.location.hash == '#mobile') {
+            previewEl.style.width = '300px';
+        } else if (window.location.hash == '#desktop') {
+            previewEl.style.width = '730px';
+        } else if (window.location.hash == '#fluid') {
+            previewEl.style.width = '100%';
+        }
+
+        var pymParent = new pym.Parent('preview', 'child.html', {});
     </script>
 </body>
 </html>
