@@ -1,175 +1,147 @@
-// global vars
-var $graphic = null;
-var $mapTemplate = null;
-var pymChild = null;
-
-var MOBILE_THRESHOLD = 500;
+// Global config
 var GRAPHIC_DEFAULT_WIDTH = 600;
+var MOBILE_THRESHOLD = 500;
+var MAP_TEMPLATE_ID = '#map-template';
 
-var COLORS = {
-    'red1': '#6C2315', 'red2': '#A23520', 'red3': '#D8472B', 'red4': '#E27560', 'red5': '#ECA395', 'red6': '#F5D1CA',
-    'orange1': '#714616', 'orange2': '#AA6A21', 'orange3': '#E38D2C', 'orange4': '#EAAA61', 'orange5': '#F1C696', 'orange6': '#F8E2CA',
-    'yellow1': '#77631B', 'yellow2': '#B39429', 'yellow3': '#EFC637', 'yellow4': '#F3D469', 'yellow5': '#F7E39B', 'yellow6': '#FBF1CD',
-    'teal1': '#0B403F', 'teal2': '#11605E', 'teal3': '#17807E', 'teal4': '#51A09E', 'teal5': '#8BC0BF', 'teal6': '#C5DFDF',
-    'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7'
-};
-
-var STATE_COORDINATES = {"Alaska":{"x":0,"y":0},"Maine":{"x":11,"y":0},"Vermont":{"x":10,"y":1},"New Hampshire":{"x":11,"y":1},"Washington":{"x":1,"y":2},"Idaho":{"x":2,"y":2},"Montana":{"x":3,"y":2},"North Dakota":{"x":4,"y":2},"Minnesota":{"x":5,"y":2},"Illinois":{"x":6,"y":2},"Wisconsin":{"x":7,"y":2},"Michigan":{"x":8,"y":2},"New York":{"x":9,"y":2},"Rhode Island":{"x":10,"y":2},"Massachusetts":{"x":11,"y":2},"Oregon":{"x":1,"y":3},"Nevada":{"x":2,"y":3},"Wyoming":{"x":3,"y":3},"South Dakota":{"x":4,"y":3},"Iowa":{"x":5,"y":3},"Indiana":{"x":6,"y":3},"Ohio":{"x":7,"y":3},"Pennsylvania":{"x":8,"y":3},"New Jersey":{"x":9,"y":3},"Connecticut":{"x":10,"y":3},"California":{"x":1,"y":4},"Utah":{"x":2,"y":4},"Colorado":{"x":3,"y":4},"Nebraska":{"x":4,"y":4},"Missouri":{"x":5,"y":4},"Kentucky":{"x":6,"y":4},"West Virginia":{"x":7,"y":4},"Virginia":{"x":8,"y":4},"Maryland":{"x":9,"y":4},"Delaware":{"x":10,"y":4},"Arizona":{"x":2,"y":5},"New Mexico":{"x":3,"y":5},"Kansas":{"x":4,"y":5},"Arkansas":{"x":5,"y":5},"Tennessee":{"x":6,"y":5},"North Carolina":{"x":7,"y":5},"South Carolina":{"x":8,"y":5},"District of Columbia":{"x":9,"y":5},"Oklahoma":{"x":4,"y":6},"Louisiana":{"x":5,"y":6},"Mississippi":{"x":6,"y":6},"Alabama":{"x":7,"y":6},"Georgia":{"x":8,"y":6},"Hawaii":{"x":0,"y":7},"Texas":{"x":4,"y":7},"Florida":{"x":9,"y":7}};
-var GRID = {
-    'x': 12,
-    'y': 8
-};
+// Global vars
+var pymChild = null;
+var isMobile = false;
+var graphicData = null;
 
 /*
- * Initialize
+ * Initialize the graphic.
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        $graphic = $('#graphic');
-        $mapTemplate = $('#map-template');
-
         pymChild = new pym.Child({
             renderCallback: render
         });
     } else {
-        pymChild = new pym.Child({ });
+        pymChild = new pym.Child({});
     }
 }
 
-
 /*
- * RENDER THE GRAPHIC
+ * Render the graphic(s). Called by pym with the container width.
  */
 var render = function(containerWidth) {
-    var graphicWidth;
-
-    // fallback if page is loaded outside of an iframe
     if (!containerWidth) {
         containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
 
-    // check the container width; set mobile flag if applicable
     if (containerWidth <= MOBILE_THRESHOLD) {
         isMobile = true;
     } else {
         isMobile = false;
     }
 
-    // clear out existing graphics
-    $graphic.empty();
+    // Render the map!
+    renderStateGridMap({
+        container: '#category-map',
+        width: containerWidth,
+        data: MAP_DATA
+    });
 
-    // draw the new graphic
-    // (this is a separate function in case I want to be able to draw multiple charts later.)
-    drawMap('boolean', MAPS[0]);
-    drawMap('category', MAPS[1]);
-
-    // update iframe
+    // Update iframe
     if (pymChild) {
         pymChild.sendHeight();
     }
 }
 
+
 /*
- * Determine unique categories
+ * Render a state grid map.
  */
-var makeCategories = function(data) {
+var renderStateGridMap = function(config) {
+    // Clear existing graphic (for redraw)
+    var containerElement = d3.select(config.container);
+    containerElement.html('');
+
+    // Copy map template
+    var template = d3.select(MAP_TEMPLATE_ID);
+    containerElement.html(template.html());
+
+    // Extract categories from data
     var categories = [];
-    _.each(data, function(state) {
+
+    _.each(config.data, function(state) {
         if (state['category'] != null) {
             categories.push(state['category']);
         }
     });
-    return d3.set(categories).values().sort();
-}
 
+    categories = d3.set(categories).values().sort();
 
-/*
- * Build and render a legend from map categories
- */
-var renderLegend = function($el, color) {
-    _.each(color.domain(), function(key, i) {
-        var $item = $('<li class="key-item"><label>' + key + '</label></li>')
-        var $color = $('<b style="background:' + color(key) + '"></b>');
-        $color.prependTo($item);
-        $item.appendTo($el);
-    });
-}
-
-/*
- * DRAW THE GRAPH
- */
-var drawMap = function(id, mapData) {
-    // create div for this map
-    $graphic.append('<div id="map-' + id + '" class="tile-grid-map"></div>')
-    var $el = $('#map-' + id);
-
-    // append map template
-    $el.append($mapTemplate.html());
-
-    // define color range
-    var color = d3.scale.ordinal()
-        .domain(makeCategories(mapData))
+    // Define color scale
+    var colorScale = d3.scale.ordinal()
+        .domain(categories)
         .range([ COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3'] ]);
 
-    // make the legend
-    var $legend = $el.find('.key');
-    renderLegend($legend, color);
+    // Create legend
+    var legendElement = containerElement.select('.key');
 
-    // flip the colors where a category is defined
-    _.each(mapData, function(state) {
+    _.each(colorScale.domain(), function(key, i) {
+        var keyItem = legendElement.append('li')
+            .classed('key-item', true)
+
+        keyItem.append('b')
+            .style('background', colorScale(key));
+
+        keyItem.append('label')
+            .text(key);
+    });
+
+    // Select SVG element
+    var chartElement = containerElement.select('svg');
+
+    // Set state colors
+    _.each(config.data, function(state) {
         if (state['category'] !== null) {
             var stateClass = 'state-' + classify(state['state_name']);
-            $el.find('.' + stateClass)
+
+            chartElement.select('.' + stateClass)
                 .attr('class', stateClass + ' state-active')
-                .attr('fill', color(state['category']));
+                .attr('fill', colorScale(state['category']));
         }
     });
 
-    // Draw labels
-    var svg = d3.select('#' + $el.attr('id') + ' svg');
-    var stateLabels = svg.append('g')
+    // Draw state labels
+    chartElement.append('g')
         .selectAll('text')
-            .data(mapData)
+            .data(config.data)
         .enter().append('text')
             .attr('text-anchor', 'middle')
             .text(function(d) {
-                var state = _.findWhere(STATE_NAMES, { 'name': d['state_name'] });
-                var name = state['name'];
-                var postalCode = state['usps'];
-                var ap = state['ap'];
+                var state = _.findWhere(STATES, { 'name': d['state_name'] });
 
-                return isMobile ? postalCode : ap;
+                return isMobile ? state['usps'] : state['ap'];
             })
             .attr('class', function(d) {
                 return d['category'] !== null ? 'label label-active' : 'label';
             })
             .attr('x', function(d) {
                 var className = '.state-' + classify(d['state_name']);
-                var tileBox = svg.select(className)[0][0].getBBox();
+                var tileBox = chartElement.select(className)[0][0].getBBox();
 
                 return tileBox['x'] + tileBox['width'] * 0.52;
             })
             .attr('y', function(d) {
                 var className = '.state-' + classify(d['state_name']);
-                var tileBox = svg.select(className)[0][0].getBBox();
+                var tileBox = chartElement.select(className)[0][0].getBBox();
                 var textBox = d3.select(this)[0][0].getBBox();
                 var textOffset = textBox['height'] / 2;
+
+                if (isMobile) {
+                    textOffset -= 1;
+                }
 
                 return (tileBox['y'] + tileBox['height'] * 0.5) + textOffset;
             });
 }
 
 /*
- * HELPER FUNCTIONS
- */
-var classify = function(str) { // clean up strings to use as CSS classes
-    return str.replace(/\s+/g, '-').toLowerCase();
-}
-
-
-/*
  * Initially load the graphic
  * (NB: Use window.load instead of document.ready
  * to ensure all images have loaded)
  */
-$(window).load(onWindowLoaded);
+window.onload = onWindowLoaded;

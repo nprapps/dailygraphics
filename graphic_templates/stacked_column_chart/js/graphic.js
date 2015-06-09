@@ -146,7 +146,6 @@ var renderStackedColumnChart = function(config) {
     /*
      * Create D3 scale objects.
      */
-
     var xScale = d3.scale.ordinal()
         .domain(_.pluck(config.data, labelColumn))
         .rangeRoundBands([0, chartWidth], .1)
