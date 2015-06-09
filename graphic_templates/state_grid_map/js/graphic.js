@@ -37,7 +37,7 @@ var render = function(containerWidth) {
 
     // Render the map!
     renderStateGridMap({
-        container: '#category-map',
+        container: '#graphic',
         width: containerWidth,
         data: MAP_DATA
     });
