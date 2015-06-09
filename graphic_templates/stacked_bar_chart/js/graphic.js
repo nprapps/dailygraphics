@@ -105,14 +105,13 @@ var render = function(containerWidth) {
 }
 
 /*
- * Render a bar chart.
+ * Render a stacked bar chart.
  */
 var renderStackedBarChart = function(config) {
     /*
      * Setup
      */
     var labelColumn = 'label';
-    var valueColumn = 'amt';
 
     var barHeight = 30;
     var barGap = 5;
@@ -149,7 +148,9 @@ var renderStackedBarChart = function(config) {
      */
      var xScale = d3.scale.linear()
          .domain([0, d3.max(config.data, function(d) {
-             return Math.ceil(d['values'][d3['values'].length - 1]['x1'] / roundTicksFactor) * roundTicksFactor;
+             var lastValue = d['values'][d3['values'].length - 1];
+
+             return Math.ceil(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
          })])
          .rangeRound([0, chartWidth]);
 
