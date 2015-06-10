@@ -21,6 +21,8 @@ def _templates_detail(slug):
     """
     Renders a parent.html index with child.html embedded as iframe.
     """
+    from flask import request
+
     template_path = '%s/%s' % (app_config.TEMPLATES_PATH, slug)
 
     # NOTE: Parent must load pym.js from same source as child to prevent version conflicts!
@@ -28,7 +30,12 @@ def _templates_detail(slug):
     context['slug'] = slug
 
     try:
-        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % template_path)
+        graphic_config_path = '%s/graphic_config.py' % template_path
+
+        if not os.path.exists(graphic_config_path):
+            graphic_config_path = '%s/%s' % (app_config.TEMPLATES_PATH, '_base')
+
+        graphic_config = imp.load_source('graphic_config', graphic_config_path)
         context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:

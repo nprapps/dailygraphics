@@ -1,185 +1,274 @@
-// global vars
-var $graphic = null;
-var pymChild = null;
-
-var MAP_DEFAULT_WIDTH = 624;
-var MAP_DEFAULT_HEIGHT = 350;
-var MAP_DEFAULT_SCALE = 3000;
-var CITY_DOT_RADIUS = 3;
+// Global config
+var GRAPHIC_DEFAULT_WIDTH = 600;
 var MOBILE_THRESHOLD = 500;
-var PRIMARY_COUNTRY = 'Nepal';
-
-// geo data
 var GEO_DATA_URL = 'data/geodata.json';
-var geoData = null;
 
-// labels
-var LABEL_DEFAULTS = [];
-LABEL_DEFAULTS['text-anchor'] = 'start';
-LABEL_DEFAULTS['dx'] = '6';
-LABEL_DEFAULTS['dy'] = '4';
-
-var CITY_LABEL_ADJUSTMENTS = [];
-CITY_LABEL_ADJUSTMENTS['Biratnagar'] = { 'dy': -3 };
-CITY_LABEL_ADJUSTMENTS['Birganj'] = { 'dy': -3 };
-CITY_LABEL_ADJUSTMENTS['Kathmandu'] = { 'text-anchor': 'end', 'dx': -4, 'dy': -4 };
-CITY_LABEL_ADJUSTMENTS['Nepalganj'] = { 'text-anchor': 'end', 'dx': -4, 'dy': 12 };
-CITY_LABEL_ADJUSTMENTS['Pokhara'] = { 'text-anchor': 'end', 'dx': -6 };
-CITY_LABEL_ADJUSTMENTS['Kanpur'] = { 'dy': 12 };
-
-var COUNTRY_LABEL_ADJUSTMENTS = [];
-COUNTRY_LABEL_ADJUSTMENTS['Nepal'] = { 'text-anchor': 'end', 'dx': -50, 'dy': -20 };
-COUNTRY_LABEL_ADJUSTMENTS['Bangladesh'] = { 'text-anchor': 'end', 'dx': -10 };
-
-
-/*
- * INITIALIZE
- */
-var onWindowLoaded = function() {
-    d3.json(GEO_DATA_URL, onDataLoaded);
-    $graphic = $('#graphic');
+var LABEL_DEFAULTS = {
+    'text-anchor': 'start',
+    'dx': '6',
+    'dy': '4'
 }
 
+var CITY_LABEL_ADJUSTMENTS = {
+    'Biratnagar': { 'dy': -3 },
+    'Birganj': { 'dy': -3 },
+    'Kathmandu': { 'text-anchor': 'end', 'dx': -4, 'dy': -4 },
+    'Nepalganj': { 'text-anchor': 'end', 'dx': -4, 'dy': 12 },
+    'Pokhara': { 'text-anchor': 'end', 'dx': -6 },
+    'Kanpur': { 'dy': 12 }
+}
+
+var COUNTRY_LABEL_ADJUSTMENTS = {
+    'Nepal': { 'text-anchor': 'end', 'dx': -50, 'dy': -20 },
+    'Bangladesh': { 'text-anchor': 'end', 'dx': -10 }
+}
+
+// Global vars
+var pymChild = null;
+var isMobile = false;
+var geoData = null;
 
 /*
- * LOAD THE DATA
+ * Initialize the graphic.
  */
-var onDataLoaded = function(error, data) {
-    geoData = data;
+var onWindowLoaded = function() {
+    if (Modernizr.svg) {
+        loadJSON('data/geodata.json')
+    } else {
+        pymChild = new pym.Child({});
+    }
+}
 
-    pymChild = new pym.Child({
-        renderCallback: drawMap
+/*
+ * Load graphic data from a CSV.
+ */
+var loadJSON = function(url) {
+    d3.json(url, function(error, data) {
+        geoData = data;
+
+        pymChild = new pym.Child({
+            renderCallback: render
+        });
     });
 }
 
 /*
- * DRAW THE MAP
+ * Render the graphic(s). Called by pym with the container width.
  */
-function drawMap(containerWidth) {
-    // fallback if page is loaded outside of an iframe
+var render = function(containerWidth) {
     if (!containerWidth) {
-        containerWidth = MAP_DEFAULT_WIDTH;
+        containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
 
-    // check the container width; set mobile flag if applicable
     if (containerWidth <= MOBILE_THRESHOLD) {
         isMobile = true;
     } else {
         isMobile = false;
     }
 
-    // dimensions
-    var mapWidth = containerWidth;
-    var mapHeight = mapWidth * MAP_DEFAULT_HEIGHT / MAP_DEFAULT_WIDTH;
-    var mapScale = (mapWidth / MAP_DEFAULT_WIDTH) * MAP_DEFAULT_SCALE;
-    var scaleFactor = mapWidth / MAP_DEFAULT_WIDTH;
+    // Render the chart!
+    renderLocatorMap({
+        container: '#graphic',
+        width: containerWidth,
+        data: geoData,
+        primaryCountry: 'Nepal'
+    });
 
-    // data vars
-    var bbox = geoData['bbox'];
-    var mapCentroid = [ ((bbox[0] + bbox[2])/2), ((bbox[1] + bbox[3])/2) ];
+    // Update iframe
+    if (pymChild) {
+        pymChild.sendHeight();
+    }
+}
 
-    var geoCountries = topojson.feature(geoData, geoData['objects']['countries']);
-    var geoRivers = topojson.feature(geoData, geoData['objects']['rivers']);
-    var geoLakes = topojson.feature(geoData, geoData['objects']['lakes']);
-    var geoCities = topojson.feature(geoData, geoData['objects']['cities']);
-    var geoNeighbors = topojson.feature(geoData, geoData['objects']['neighbors']);
+var renderLocatorMap = function(config) {
+    /*
+     * Setup
+     */
+    var aspectWidth = 2;
+    var aspectHeight = 1.2;
 
-    // delete existing map
-    $graphic.empty();
+    var bbox = config['data']['bbox'];
+    var defaultScale = 3000;
+    var cityDotRadius = 3;
 
-    // draw the map
-    var svg = d3.select('#graphic').append('svg')
+    // Calculate actual map dimensions
+    var mapWidth = config['width'];
+    var mapHeight = Math.ceil((config['width'] * aspectHeight) / aspectWidth);
+
+    // Clear existing graphic (for redraw)
+    var containerElement = d3.select(config['container']);
+    containerElement.html('');
+
+    var mapProjection = null;
+    var path = null;
+    var chartWrapper = null;
+    var chartElement = null;
+
+    /*
+     * Extract topo data.
+     */
+    var mapData = {};
+
+    for (var key in config['data']['objects']) {
+        mapData[key] = topojson.feature(config['data'], config['data']['objects'][key]);
+    }
+
+    /*
+     * Create the map projection.
+     */
+    var centroid = [((bbox[0] + bbox[2]) / 2), ((bbox[1] + bbox[3]) / 2)];
+    var mapScale = (mapWidth / GRAPHIC_DEFAULT_WIDTH) * defaultScale;
+    var scaleFactor = mapWidth / GRAPHIC_DEFAULT_WIDTH;
+
+    projection = d3.geo.mercator()
+        .center(centroid)
+        .scale(mapScale)
+        .translate([ mapWidth/2, mapHeight/2 ]);
+
+    path = d3.geo.path()
+        .projection(projection)
+        .pointRadius(cityDotRadius * scaleFactor);
+
+    /*
+     * Create the root SVG element.
+     */
+    chartWrapper = containerElement.append('div')
+        .attr('class', 'graphic-wrapper');
+
+    chartElement = chartWrapper.append('svg')
         .attr('width', mapWidth)
-        .attr('height', mapHeight);
+        .attr('height', mapHeight)
+        .append('g')
 
-    defs = svg.append('defs');
-    textFilter = defs.append('filter')
+    /*
+     * Create SVG filters.
+     */
+    var filters = chartElement.append('filters');
+
+    var textFilter = filters.append('filter')
         .attr('id', 'textshadow');
+
     textFilter.append('feGaussianBlur')
         .attr('in', 'SourceGraphic')
         .attr('result', 'blurOut')
         .attr('stdDeviation', '.25');
-    landFilter = defs.append('filter')
+
+    var landFilter = filters.append('filter')
         .attr('id', 'landshadow');
+
     landFilter.append('feGaussianBlur')
         .attr('in', 'SourceGraphic')
         .attr('result', 'blurOut')
         .attr('stdDeviation', '10');
 
-    var projection = d3.geo.mercator()
-        .center(mapCentroid)
-        .scale(mapScale)
-        .translate([ mapWidth/2, mapHeight/2 ]);
-
-    var path = d3.geo.path()
-        .projection(projection)
-        .pointRadius(CITY_DOT_RADIUS * scaleFactor);
-
-    svg.append('path')
+    /*
+     * Render countries.
+     */
+    // Land shadow
+    chartElement.append('path')
         .attr('class', 'landmass')
-        .datum(geoCountries)
+        .datum(mapData['countries'])
         .attr('filter', 'url(#landshadow)')
         .attr('d', path);
 
-    svg.append('g')
+    // Land outlines
+    chartElement.append('g')
         .attr('class', 'countries')
         .selectAll('path')
-            .data(geoCountries['features'])
+            .data(mapData['countries']['features'])
         .enter().append('path')
             .attr('class', function(d) {
                 return classify(d['id']);
             })
             .attr('d', path);
-    d3.select('.countries path.' + classify(PRIMARY_COUNTRY))
-        .moveToFront()
-        .attr('class', 'primary ' + classify(PRIMARY_COUNTRY));
 
-    svg.append('g')
+    // Highlight primary country
+    var primaryCountryClass = classify(config['primaryCountry']);
+
+    d3.select('.countries path.' + primaryCountryClass)
+        .moveToFront()
+        .classed('primary ' + primaryCountryClass, true);
+
+    /*
+     * Render rivers.
+     */
+    chartElement.append('g')
         .attr('class', 'rivers')
         .selectAll('path')
-            .data(geoRivers['features'])
+            .data(mapData['rivers']['features'])
         .enter().append('path')
             .attr('d', path);
 
-    svg.append('g')
+    /*
+     * Render lakes.
+     */
+    chartElement.append('g')
         .attr('class', 'lakes')
         .selectAll('path')
-            .data(geoLakes['features'])
+            .data(mapData['lakes']['features'])
         .enter().append('path')
             .attr('d', path);
 
-    svg.append('g')
+    /*
+     * Render primary cities.
+     */
+    chartElement.append('g')
         .attr('class', 'cities primary')
         .selectAll('path')
-            .data(geoCities['features'])
+            .data(mapData['cities']['features'])
         .enter().append('path')
             .attr('d', path)
             .attr('class', function(d) {
                 var c = 'place';
+
                 c += ' ' + classify(d['properties']['city']);
                 c += ' ' + classify(d['properties']['featurecla']);
                 c += ' scalerank-' + d['properties']['scalerank'];
+
                 return c;
             });
 
-    svg.append('g')
+    /*
+     * Render neighboring cities.
+     */
+    chartElement.append('g')
         .attr('class', 'cities neighbors')
         .selectAll('path')
-            .data(geoNeighbors['features'])
+            .data(mapData['neighbors']['features'])
         .enter().append('path')
             .attr('d', path)
             .attr('class', function(d) {
                 var c = 'place';
+
                 c += ' ' + classify(d['properties']['city']);
                 c += ' ' + classify(d['properties']['featurecla']);
                 c += ' scalerank-' + d['properties']['scalerank'];
+
                 return c;
             });
 
-    svg.append('g')
+    /*
+     * Apply adjustments to label positioning.
+     */
+    var positionLabel = function(adjustments, id, attribute) {
+        if (adjustments[id]) {
+            if (adjustments[id][attribute]) {
+                return adjustments[id][attribute];
+            } else {
+                return LABEL_DEFAULTS[attribute];
+            }
+        } else {
+            return LABEL_DEFAULTS[attribute];
+        }
+    }
+
+    /*
+     * Render country labels.
+     */
+    chartElement.append('g')
         .attr('class', 'country-labels')
         .selectAll('.label')
-            .data(geoCountries['features'])
+            .data(mapData['countries']['features'])
         .enter().append('text')
             .attr('class', function(d) {
                 return 'label ' + classify(d['id']);
@@ -199,31 +288,44 @@ function drawMap(containerWidth) {
             .text(function(d) {
                 return COUNTRIES[d['properties']['country']] || d['properties']['country'];
             });
-    d3.select('.country-labels text.' + classify(PRIMARY_COUNTRY))
-        .attr('class', 'label primary ' + classify(PRIMARY_COUNTRY));
 
-    var cityLabels = [ 'city-labels shadow',
-                       'city-labels',
-                       'city-labels shadow primary',
-                       'city-labels primary' ];
-    cityLabels.forEach(function(v, k) {
-        var cityData;
-        if (v == 'city-labels shadow' || v == 'city-labels') {
-            cityData = geoNeighbors['features'];
+    // Highlight primary country
+    var primaryCountryClass = classify(config['primaryCountry']);
+
+    d3.select('.country-labels text.' + primaryCountryClass)
+        .classed('label primary ' + primaryCountryClass, true);
+
+    /*
+     * Render city labels.
+     */
+    var layers = [
+        'city-labels shadow',
+        'city-labels',
+        'city-labels shadow primary',
+        'city-labels primary'
+    ];
+
+    layers.forEach(function(layer) {
+        var data = [];
+
+        if (layer == 'city-labels shadow' || layer == 'city-labels') {
+            data = mapData['neighbors']['features'];
         } else {
-            cityData = geoCities['features'];
+            data = mapData['cities']['features'];
         }
 
-        svg.append('g')
-            .attr('class', v)
+        chartElement.append('g')
+            .attr('class', layer)
             .selectAll('.label')
-                .data(cityData)
+                .data(data)
             .enter().append('text')
                 .attr('class', function(d) {
                     var c = 'label';
+
                     c += ' ' + classify(d['properties']['city']);
                     c += ' ' + classify(d['properties']['featurecla']);
                     c += ' scalerank-' + d['properties']['scalerank'];
+
                     return c;
                 })
                 .attr('transform', function(d) {
@@ -242,14 +344,18 @@ function drawMap(containerWidth) {
                     return CITIES[d['properties']['city']] || d['properties']['city'];
                 });
     });
+
     d3.selectAll('.shadow')
         .attr('filter', 'url(#textshadow)');
 
+    /*
+     * Render a scale bar.
+     */
     var scaleBarDistance = calculateOptimalScaleBarDistance(bbox, 10);
     var scaleBarStart = [10, mapHeight - 20];
     var scaleBarEnd = calculateScaleBarEndPoint(projection, scaleBarStart, scaleBarDistance);
 
-    svg.append('g')
+    chartElement.append('g')
         .attr('class', 'scale-bar')
         .append('line')
         .attr('x1', scaleBarStart[0])
@@ -261,36 +367,20 @@ function drawMap(containerWidth) {
         .append('text')
         .attr('x', scaleBarEnd[0] + 5)
         .attr('y', scaleBarEnd[1] + 3)
-        .text('100 miles');
-
-    // update iframe
-    if (pymChild) {
-        pymChild.sendHeight();
-    }
+        .text(scaleBarDistance + ' miles');
 }
 
-var positionLabel = function(adjustments, id, attribute) {
-    if (adjustments[id]) {
-        if (adjustments[id][attribute]) {
-            return adjustments[id][attribute];
-        } else {
-            return LABEL_DEFAULTS[attribute];
-        }
-    } else {
-        return LABEL_DEFAULTS[attribute];
-    }
-}
-
+/*
+ * Move a set of D3 elements to the front of the canvas.
+ */
 d3.selection.prototype.moveToFront = function() {
     return this.each(function(){
         this.parentNode.appendChild(this);
     });
 };
 
-
 /*
  * Initially load the graphic
- * (NB: Use window.load instead of document.ready
- * to ensure all images have loaded)
+ * (NB: Use window.load to ensure all images have loaded)
  */
-$(window).load(onWindowLoaded);
+window.onload = onWindowLoaded;

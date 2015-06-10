@@ -11,6 +11,8 @@
     <meta name="robots" content="noindex" />
     <link rel="shortcut icon" href="https://s3.amazonaws.com/stlpr-assets/stlpr-favicon.ico" />
 
+    <base target="_blank">
+
     {% block fonts %}
 
     {% endblock %}
@@ -40,7 +42,6 @@
 
     {% block js %}
 
-        {{ JS.push('js/lib/jquery.js') }}
         {{ JS.push('js/lib/underscore.js') }}
         {{ JS.push('js/lib/d3.min.js') }}
         {{ JS.push('js/lib/modernizr.svg.min.js') }}

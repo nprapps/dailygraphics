@@ -20,10 +20,35 @@ var classify = function(str) {
 }
 
 /*
+ * Convert key/value pairs to a style string.
+ */
+var formatStyle = function(props) {
+    var s = '';
+
+    for (var key in props) {
+        s += key + ': ' + props[key].toString() + '; ';
+    }
+
+    return s;
+}
+
+/*
+ * Create a SVG tansform for a given translation.
+ */
+var makeTranslate = function(x, y) {
+    var transform = d3.transform();
+
+    transform.translate[0] = x;
+    transform.translate[1] = y;
+
+    return transform.toString();
+}
+
+/*
  * Parse a url parameter by name.
  * via: http://stackoverflow.com/a/901144
  */
-function getParameterByName(name) {
+var getParameterByName = function(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
@@ -33,7 +58,7 @@ function getParameterByName(name) {
 /*
  * Convert a url to a location object.
  */
-function urlToLocation(url) {
+var urlToLocation = function(url) {
     var a = document.createElement('a');
     a.href = url;
     return a;

@@ -203,35 +203,49 @@ $(function() {
 
     </div>
 
-    <!-- Do not remove: workaround for old graphics w/ minified js -->
-    <script type="text/javascript" src="js/lib/jquery.js"></script>
-    <script type="text/javascript" src="js/lib/jquery.min.js"></script>
     <script type="text/javascript" src="js/lib/pym.js"></script>
-    <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 
     <script type="text/javascript">
+        var resizeMobileEl = document.querySelector('#resize-mobile');
+        var resizeDesktopEl = document.querySelector('#resize-desktop');
+        var resizeFluidEl = document.querySelector('#resize-fluid');
+        var previewEl = document.querySelector('#preview');
+
+        resizeMobileEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            previewEl.style.width = '300px';
+            pymParent.sendWidth();
+
+            window.location.hash = 'mobile';
+        });
+
+        resizeDesktopEl.addEventListener('click', function(e) {
+            e.preventDefault();
+            previewEl.style.width = '730px';
+            pymParent.sendWidth();
+
+            window.location.hash = 'desktop';
+        });
+
+        resizeFluidEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            previewEl.style.width = '100%';
+            pymParent.sendWidth();
+
+            window.location.hash = 'fluid';
+        });
+
+        if (window.location.hash == '#mobile') {
+            previewEl.style.width = '300px';
+        } else if (window.location.hash == '#desktop') {
+            previewEl.style.width = '730px';
+        } else if (window.location.hash == '#fluid') {
+            previewEl.style.width = '100%';
+        }
+
         var pymParent = new pym.Parent('preview', 'child.html', {});
-
-        $('#resize-mobile').on('click', function() {
-            $('#preview').width(300);
-            pymParent.sendWidth();
-
-            return false;
-        });
-
-        $('#resize-desktop').on('click', function() {
-            $('#preview').width(730);
-            pymParent.sendWidth();
-
-            return false;
-        });
-
-        $('#resize-fluid').on('click', function() {
-            $('#preview').width('100%');
-            pymParent.sendWidth();
-
-            return false;
-        });
     </script>
 </body>
 </html>

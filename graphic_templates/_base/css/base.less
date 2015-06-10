@@ -51,6 +51,10 @@ h3 {
 	font-size: 14px;
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 .footnotes {
     margin-bottom: 20px;
 
@@ -82,7 +86,7 @@ a:hover, a:active { color: #bccae5; }
 #graphic {
     position: relative;
     margin-bottom: 11px;
-    
+
     &:before,
     &:after {
         content: ' ';
@@ -102,14 +106,14 @@ a:hover, a:active { color: #bccae5; }
     margin: -11px 0 33px 0;
     padding: 0;
     list-style-type: none;
-    
-    .key-item { 
+
+    .key-item {
         display: inline-block;
         margin: 0 18px 0 0;
         padding: 0;
         line-height: 15px;
 
-        b { 
+        b {
             display: inline-block;
             width: 15px;
             height: 15px;
@@ -117,7 +121,7 @@ a:hover, a:active { color: #bccae5; }
             float: left;
         }
 
-        label { 
+        label {
             white-space: nowrap;
             font-size: 12px;
             color: #666;
@@ -147,7 +151,7 @@ rect {
         stroke: #ccc;
         shape-rendering: crispEdges;
     }
-    
+
     &.y {
         path { display: none; }
         .tick line { display: none; }
@@ -170,7 +174,7 @@ rect {
 .value text {
     font-size: 10px;
     -webkit-font-smoothing: antialiased;
-    
+
     &.in { fill: #fff; }
     &.out { fill: #999; }
     &.other { display: none; }
@@ -192,4 +196,3 @@ rect {
 				margin-right: 8.3%;
 			}
 		}
-		

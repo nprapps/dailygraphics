@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import imp
+from mimetypes import guess_type
 import os
 import subprocess
 
@@ -99,3 +100,14 @@ def _graphic_less(slug, filename):
     r = subprocess.check_output(['node_modules/less/bin/lessc', less_path])
 
     return make_response(r, 200, { 'Content-Type': 'text/css' })
+
+# Serve arbitrary static files on-demand
+@graphic.route('/<slug>/<path:path>')
+def _static(slug, path):
+    real_path = '%s/%s/%s' % (app_config.GRAPHICS_PATH, slug, path)
+
+    try:
+        with open(real_path) as f:
+            return f.read(), 200, { 'Content-Type': guess_type(real_path)[0] }
+    except IOError:
+        abort(404)

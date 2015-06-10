@@ -95,7 +95,7 @@ def deploy(slug):
         return
 
     update_copy(slug)
-    #assets.sync(slug)
+    assets.sync(slug)
     render.render(slug)
 
     graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
@@ -196,8 +196,11 @@ def _add_graphic(slug, template):
 
     if os.path.isfile(config_path):
         print 'Creating spreadsheet...'
-        copy_spreadsheet(slug)
-        download_copy(slug)
+
+        success = copy_spreadsheet(slug)
+
+        if success:
+            download_copy(slug)
     else:
         print 'No graphic_config.py found, not creating spreadsheet'
 
@@ -216,6 +219,7 @@ def _check_slug(slug):
         s3 = boto.connect_s3()
         bucket = s3.get_bucket(app_config.PRODUCTION_S3_BUCKET['bucket_name'])
         key = bucket.get_key('%s/graphics/%s/child.html' % (app_config.PROJECT_SLUG, slug))
+        
         if key:
             print 'Error: Slug exists on apps.npr.org'
             return True
@@ -356,12 +360,17 @@ def copy_spreadsheet(slug):
     }
 
     resp = app_config.authomatic.access(**kwargs)
+
     if resp.status == 200:
         spreadsheet_key = resp.data['id']
         spreadsheet_url = SPREADSHEET_VIEW_TEMPLATE % spreadsheet_key
         print 'New spreadsheet created successfully!'
         print 'View it online at %s' % spreadsheet_url
         utils.replace_in_file(config_path, graphic_config.COPY_GOOGLE_DOC_KEY, spreadsheet_key)
-    else:
-        print 'Error creating spreadsheet (status code %s) with message %s' % (resp.status, resp.reason)
-        return None
+
+        return True
+
+        utils.replace_in_file(config_path, graphic_config.COPY_GOOGLE_DOC_KEY, '')
+
+    print 'Error creating spreadsheet (status code %s) with message %s' % (resp.status, resp.reason)
+    return False
