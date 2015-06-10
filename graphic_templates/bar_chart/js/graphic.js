@@ -1,187 +1,261 @@
-// global vars
-var $graphic = null;
-var pymChild = null;
-
-var BAR_HEIGHT = 30;
-var BAR_GAP = 5;
-var GRAPHIC_DATA_URL = 'data.csv';
+// Global config
 var GRAPHIC_DEFAULT_WIDTH = 600;
-var LABEL_MARGIN = 6;
-var LABEL_WIDTH = 85;
 var MOBILE_THRESHOLD = 500;
-var VALUE_MIN_WIDTH = 30;
 
-// D3 formatters
-var fmtComma = d3.format(',');
-var fmtYearAbbrev = d3.time.format('%y');
-var fmtYearFull = d3.time.format('%Y');
-
-var graphicData;
+// Global vars
+var pymChild = null;
 var isMobile = false;
+var graphicData = null;
 
 /*
- * Initialize
+ * Initialize the graphic.
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        $graphic = $('#graphic');
-
-        d3.csv(GRAPHIC_DATA_URL, function(error, data) {
-            graphicData = data;
-
-            graphicData.forEach(function(d) {
-                d['amt'] = +d['amt'];
-            });
-
-            pymChild = new pym.Child({
-                renderCallback: render
-            });
-        });
+        loadLocalData(GRAPHIC_DATA);
+        //loadCSV('data.csv')
     } else {
-        pymChild = new pym.Child({ });
+        pymChild = new pym.Child({});
     }
 }
 
+/*
+ * Load graphic data from a local source.
+ */
+var loadLocalData = function(data) {
+    graphicData = data;
+
+    formatData();
+
+    pymChild = new pym.Child({
+        renderCallback: render
+    });
+}
 
 /*
- * RENDER THE GRAPHIC
+ * Load graphic data from a CSV.
+ */
+var loadCSV = function(url) {
+    d3.csv(GRAPHIC_DATA_URL, function(error, data) {
+        graphicData = data;
+
+        formatData();
+
+        pymChild = new pym.Child({
+            renderCallback: render
+        });
+    });
+}
+
+/*
+ * Format graphic data for processing by D3.
+ */
+var formatData = function() {
+    graphicData.forEach(function(d) {
+        d['amt'] = +d['amt'];
+    });
+}
+
+/*
+ * Render the graphic(s). Called by pym with the container width.
  */
 var render = function(containerWidth) {
-    // fallback if page is loaded outside of an iframe
     if (!containerWidth) {
         containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
 
-    // check the container width; set mobile flag if applicable
     if (containerWidth <= MOBILE_THRESHOLD) {
         isMobile = true;
     } else {
         isMobile = false;
     }
 
-    // clear out existing graphics
-    $graphic.empty();
+    // Render the chart!
+    renderBarChart({
+        container: '#graphic',
+        width: containerWidth,
+        data: graphicData
+    });
 
-    // draw the new graphic
-    // (this is a separate function in case I want to be able to draw multiple charts later.)
-    drawGraph(containerWidth);
-
-    // update iframe
+    // Update iframe
     if (pymChild) {
         pymChild.sendHeight();
     }
 }
 
-
 /*
- * DRAW THE GRAPH
+ * Render a bar chart.
  */
-var drawGraph = function(graphicWidth) {
-    var graph = d3.select('#graphic');
-    var margin = {
+var renderBarChart = function(config) {
+    /*
+     * Setup
+     */
+    var labelColumn = 'label';
+    var valueColumn = 'amt';
+
+    var barHeight = 30;
+    var barGap = 5;
+    var labelWidth = 85;
+    var labelMargin = 6;
+    var valueMinWidth = 30;
+
+    var margins = {
         top: 0,
         right: 15,
         bottom: 20,
-        left: (LABEL_WIDTH + LABEL_MARGIN)
+        left: (labelWidth + labelMargin)
     };
-    var numBars = graphicData.length;
+
     var ticksX = 4;
+    var roundTicksFactor = 5;
 
-    // define chart dimensions
-    var width = graphicWidth - margin['left'] - margin['right'];
-    var height = ((BAR_HEIGHT + BAR_GAP) * numBars);
+    // Calculate actual chart dimensions
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = ((barHeight + barGap) * config['data'].length);
 
-    var x = d3.scale.linear()
-        .domain([ 0, d3.max(graphicData, function(d) {
-            return Math.ceil(d['amt']/5) * 5; // round to next 5
-        }) ])
-        .range([0, width]);
+    // Clear existing graphic (for redraw)
+    var containerElement = d3.select(config['container']);
+    containerElement.html('');
 
-    var y = d3.scale.linear()
-        .range([ height, 0 ]);
+    /*
+     * Create the root SVG element.
+     */
+    var chartWrapper = containerElement.append('div')
+        .attr('class', 'graphic-wrapper');
 
-    // define axis and grid
+    var chartElement = chartWrapper.append('svg')
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
+        .append('g')
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+
+    /*
+     * Create D3 scale objects.
+     */
+    var xScale = d3.scale.linear()
+        .domain([0, d3.max(config['data'], function(d) {
+            return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+        })])
+        .range([0, chartWidth]);
+
+    /*
+     * Create D3 axes.
+     */
     var xAxis = d3.svg.axis()
-        .scale(x)
+        .scale(xScale)
         .orient('bottom')
         .ticks(ticksX)
         .tickFormat(function(d) {
             return d.toFixed(0) + '%';
         });
 
-    var xAxisGrid = function() {
-        return xAxis;
-    }
-
-    // draw the chart
-    var svg = graph.append('svg')
-        .attr('width', width + margin['left'] + margin['right'])
-        .attr('height', height + margin['top'] + margin['bottom'])
-        .append('g')
-        .attr('transform', 'translate(' + margin['left'] + ',' + margin['top'] + ')');
-
-    // x-axis (bottom)
-    svg.append('g')
+    /*
+     * Render axes to chart.
+     */
+    chartElement.append('g')
         .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
+        .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxis);
 
-    // x-axis gridlines
-    svg.append('g')
+    /*
+     * Render grid to chart.
+     */
+    var xAxisGrid = function() {
+        return xAxis;
+    };
+
+    chartElement.append('g')
         .attr('class', 'x grid')
-        .attr('transform', 'translate(0,' + height + ')')
+        .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxisGrid()
-            .tickSize(-height, 0, 0)
+            .tickSize(-chartHeight, 0, 0)
             .tickFormat('')
         );
 
-    // draw the bars
-    svg.append('g')
+    /*
+     * Render bars to chart.
+     */
+    chartElement.append('g')
         .attr('class', 'bars')
         .selectAll('rect')
-            .data(graphicData)
-        .enter().append('rect')
+        ['data'](config['data'])
+        .enter()
+        .append('rect')
             .attr('y', function(d, i) {
-                return i * (BAR_HEIGHT + BAR_GAP);
+                return i * (barHeight + barGap);
             })
-            .attr('width', function(d){
-                return x(d['amt']);
+            .attr('width', function(d) {
+                return xScale(d['amt']);
             })
-            .attr('height', BAR_HEIGHT)
+            .attr('height', barHeight)
             .attr('class', function(d, i) {
-                return 'bar-' + i + ' ' + classify(d['label']);
+                return 'bar-' + i + ' ' + classify(d[labelColumn]);
             });
 
-    // show the values for each bar
-    svg.append('g')
+    /*
+     * Render bar labels.
+     */
+    containerElement
+        .append('ul')
+        .attr('class', 'labels')
+        .attr('style', formatStyle({
+            'width': labelWidth + 'px',
+            'top': margins['top'] + 'px',
+            'left': '0'
+        }))
+        .selectAll('li')
+        ['data'](config['data'])
+        .enter()
+        .append('li')
+            .attr('style', function(d, i) {
+                return formatStyle({
+                    'width': labelWidth + 'px',
+                    'height': barHeight + 'px',
+                    'left': '0px',
+                    'top': (i * (barHeight + barGap)) + 'px;'
+                });
+            })
+            .attr('class', function(d) {
+                return classify(d[labelColumn]);
+            })
+            .append('span')
+                .text(function(d) {
+                    return d[labelColumn];
+                });
+
+    /*
+     * Render bar values.
+     */
+    chartElement.append('g')
         .attr('class', 'value')
         .selectAll('text')
-            .data(graphicData)
-        .enter().append('text')
+        ['data'](config['data'])
+        .enter()
+        .append('text')
             .attr('x', function(d) {
-                return x(d['amt']);
+                return xScale(d[valueColumn]);
             })
             .attr('y', function(d, i) {
-                return i * (BAR_HEIGHT + BAR_GAP);
+                return i * (barHeight + barGap);
             })
             .attr('dx', function(d) {
-                if (x(d['amt']) > VALUE_MIN_WIDTH) {
+                if (xScale(d[valueColumn]) > valueMinWidth) {
                     return -6;
                 } else {
                     return 6;
                 }
             })
-            .attr('dy', (BAR_HEIGHT / 2) + 3)
+            .attr('dy', (barHeight / 2) + 3)
             .attr('text-anchor', function(d) {
-                if (x(d['amt']) > VALUE_MIN_WIDTH) {
+                if (xScale(d[valueColumn]) > valueMinWidth) {
                     return 'end';
                 } else {
                     return 'begin';
                 }
             })
             .attr('class', function(d) {
-                var c = classify(d['label']);
-                if (x(d['amt']) > VALUE_MIN_WIDTH) {
+                var c = classify(d[labelColumn]);
+                if (xScale(d[valueColumn]) > valueMinWidth) {
                     c += ' in';
                 } else {
                     c += ' out';
@@ -189,36 +263,12 @@ var drawGraph = function(graphicWidth) {
                 return c;
             })
             .text(function(d) {
-                return d['amt'].toFixed(0) + '%';
+                return d[valueColumn].toFixed(0) + '%';
             });
-
-    // draw labels for each bar
-    var labels = d3.select('#graphic').append('ul')
-        .attr('class', 'labels')
-        .attr('style', 'width: ' + LABEL_WIDTH + 'px; top: ' + margin['top'] + 'px; left: 0;')
-        .selectAll('li')
-            .data(graphicData)
-        .enter().append('li')
-            .attr('style', function(d,i) {
-                var s = '';
-                s += 'width: ' + LABEL_WIDTH + 'px; ';
-                s += 'height: ' + BAR_HEIGHT + 'px; ';
-                s += 'left: ' + 0 + 'px; ';
-                s += 'top: ' + (i * (BAR_HEIGHT + BAR_GAP)) + 'px; ';
-                return s;
-            })
-            .attr('class', function(d) {
-                return classify(d['label']);
-            })
-            .append('span')
-                .text(function(d) {
-                    return d['label'];
-                });
 }
 
 /*
  * Initially load the graphic
- * (NB: Use window.load instead of document.ready
- * to ensure all images have loaded)
+ * (NB: Use window.load to ensure all images have loaded)
  */
-$(window).load(onWindowLoaded);
+window.onload = onWindowLoaded;

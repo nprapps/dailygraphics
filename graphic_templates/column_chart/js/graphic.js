@@ -1,222 +1,275 @@
-// global vars
-var $graphic = null;
-var pymChild = null;
-
-var GRAPHIC_DATA_URL = 'data.csv';
+// Global config
 var GRAPHIC_DEFAULT_WIDTH = 600;
 var MOBILE_THRESHOLD = 500;
-var VALUE_MIN_HEIGHT = 20;
+
+// Global vars
+var pymChild = null;
+var isMobile = false;
+var graphicData = null;
 
 // D3 formatters
 var fmtComma = d3.format(',');
-var fmtYearAbbrev = d3.time.format('%y');
-var fmtYearFull = d3.time.format('%Y');
-
-var graphicData = null;
-var isMobile = false;
 
 /*
- * Initialize
+ * Initialize the graphic.
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        $graphic = $('#graphic');
-
-        d3.csv(GRAPHIC_DATA_URL, function(error, data) {
-            graphicData = data;
-
-            graphicData.forEach(function(d) {
-                d['amt'] = +d['amt'];
-                d['date'] = d3.time.format('%Y').parse(d['label']);
-            });
-
-            pymChild = new pym.Child({
-                renderCallback: render
-            });
-        });
+        loadLocalData(GRAPHIC_DATA);
+        //loadCSV('data.csv')
     } else {
-        pymChild = new pym.Child({ });
+        pymChild = new pym.Child({});
     }
 }
 
+/*
+ * Load graphic data from a local source.
+ */
+var loadLocalData = function(data) {
+    graphicData = data;
+
+    formatData();
+
+    pymChild = new pym.Child({
+        renderCallback: render
+    });
+}
 
 /*
- * RENDER THE GRAPHIC
+ * Load graphic data from a CSV.
+ */
+var loadCSV = function(url) {
+    d3.csv(GRAPHIC_DATA_URL, function(error, data) {
+        graphicData = data;
+
+        formatData();
+
+        pymChild = new pym.Child({
+            renderCallback: render
+        });
+    });
+}
+
+/*
+ * Format graphic data for processing by D3.
+ */
+var formatData = function() {
+    graphicData.forEach(function(d) {
+        d['amt'] = +d['amt'];
+    });
+}
+
+/*
+ * Render the graphic(s). Called by pym with the container width.
  */
 var render = function(containerWidth) {
-    var graphicWidth;
-
-    // fallback if page is loaded outside of an iframe
     if (!containerWidth) {
         containerWidth = GRAPHIC_DEFAULT_WIDTH;
     }
 
-    // check the container width; set mobile flag if applicable
     if (containerWidth <= MOBILE_THRESHOLD) {
         isMobile = true;
     } else {
         isMobile = false;
     }
 
-    // clear out existing graphics
-    $graphic.empty();
+    // Render the chart!
+    renderColumnChart({
+        container: '#graphic',
+        width: containerWidth,
+        data: graphicData
+    });
 
-    // draw the new graphic
-    // (this is a separate function in case I want to be able to draw multiple charts later.)
-    drawGraph(containerWidth);
-
-    // update iframe
+    // Update iframe
     if (pymChild) {
         pymChild.sendHeight();
     }
 }
 
-
 /*
- * DRAW THE GRAPH
+ * Render a column chart.
  */
-var drawGraph = function(graphicWidth) {
-    var aspectHeight = 9;
-    var aspectWidth = 16;
-    if (isMobile) {
-        aspectHeight = 3;
-        aspectWidth = 4;
-    }
-    var margin = {
+var renderColumnChart = function(config) {
+    /*
+     * Setup chart container.
+     */
+    var labelColumn = 'label';
+    var valueColumn = 'amt';
+
+    var aspectWidth = isMobile ? 4 : 16;
+    var aspectHeight = isMobile ? 3 : 9;
+    var valueMinHeight = 30;
+
+    var margins = {
         top: 5,
         right: 5,
         bottom: 20,
         left: 30
     };
-    var ticksY = 4;
-    var width = graphicWidth - margin['left'] - margin['right'];
-    var height = Math.ceil((width * aspectHeight) / aspectWidth) - margin['top'] - margin['bottom'];
 
-    var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1)
-        .domain(graphicData.map(function (d) {
-            return d['date'];
+    var ticksY = 4;
+    var roundTicksFactor = 50;
+
+    // Calculate actual chart dimensions
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = Math.ceil((config['width'] * aspectHeight) / aspectWidth) - margins['top'] - margins['bottom'];
+
+    // Clear existing graphic (for redraw)
+    var containerElement = d3.select(config['container']);
+    containerElement.html('');
+
+    /*
+     * Create the root SVG element.
+     */
+    var chartWrapper = containerElement.append('div')
+        .attr('class', 'graphic-wrapper');
+
+    var chartElement = chartWrapper.append('svg')
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
+        .append('g')
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+
+    /*
+     * Create D3 scale objects.
+     */
+    var xScale = d3.scale.ordinal()
+        .rangeRoundBands([0, chartWidth], .1)
+        .domain(config['data'].map(function (d) {
+            return d[labelColumn];
         }));
 
-    var y = d3.scale.linear()
-        .domain([ 0, d3.max(graphicData, function(d) {
-            return Math.ceil(d['amt']/50) * 50; // round to next 50
-        }) ])
-        .range([height, 0]);
+    var yScale = d3.scale.linear()
+        .domain([0, d3.max(config['data'], function(d) {
+            return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+        })])
+        .range([chartHeight, 0]);
 
+    /*
+     * Create D3 axes.
+     */
     var xAxis = d3.svg.axis()
-        .scale(x)
+        .scale(xScale)
         .orient('bottom')
-        .tickFormat(function(d,i) {
-            var y;
-            if (isMobile) {
-                y = '\u2019' + fmtYearAbbrev(d);
-            } else {
-                y = fmtYearFull(d);
-            }
-            return y;
+        .tickFormat(function(d, i) {
+            return d;
         });
 
     var yAxis = d3.svg.axis()
-        .scale(y)
+        .scale(yScale)
         .orient('left')
         .ticks(ticksY)
         .tickFormat(function(d) {
             return fmtComma(d);
         });
 
-    var y_axis_grid = function() { return yAxis; }
-
-    // draw the chart itself
-    var svg = d3.select('#graphic').append('svg')
-        .attr('width', width + margin['left'] + margin['right'])
-        .attr('height', height + margin['top'] + margin['bottom'])
-        .append('g')
-            .attr('transform', 'translate(' + margin['left'] + ',' + margin['top'] + ')');
-
-    svg.append('g')
+    /*
+     * Render axes to chart.
+     */
+    chartElement.append('g')
         .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
+        .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxis);
 
-    svg.append('g')
+    chartElement.append('g')
         .attr('class', 'y axis')
-        .call(yAxis);
+        .call(yAxis)
 
-    svg.append('g')
+    /*
+     * Render grid to chart.
+     */
+    var yAxisGrid = function() {
+        return yAxis;
+    };
+
+    chartElement.append('g')
         .attr('class', 'y grid')
-        .call(y_axis_grid()
-            .tickSize(-width, 0)
+        .call(yAxisGrid()
+            .tickSize(-chartWidth, 0)
             .tickFormat('')
         );
 
-    svg.append('g')
+    /*
+     * Render bars to chart.
+     */
+    chartElement.append('g')
         .attr('class', 'bars')
         .selectAll('rect')
-            .data(graphicData)
-        .enter().append('rect')
+        .data(config['data'])
+        .enter()
+        .append('rect')
             .attr('x', function(d) {
-                return x(d['date']);
+                return xScale(d[labelColumn]);
             })
             .attr('y', function(d) {
-                if (d['amt'] < 0) {
-                    return y(0);
-                } else {
-                    return y(d['amt']);
+                if (d[valueColumn] < 0) {
+                    return yScale(0);
                 }
+
+                return yScale(d[valueColumn]);
             })
-            .attr('width', x.rangeBand())
-            .attr('height', function(d){
-                if (d['amt'] < 0) {
-                    return y(d['amt']) - y(0);
-                } else {
-                    return y(0) - y(d['amt']);
+            .attr('width', xScale.rangeBand())
+            .attr('height', function(d) {
+                if (d[valueColumn] < 0) {
+                    return yScale(d[valueColumn]) - yScale(0);
                 }
+
+                return yScale(0) - yScale(d[valueColumn]);
             })
             .attr('class', function(d) {
-                return 'bar bar-' + fmtYearAbbrev(d['date']);
+                return 'bar bar-' + d[labelColumn];
             });
 
-    svg.append('line')
+    /*
+     * Render 0 value line.
+     */
+    chartElement.append('line')
         .attr('class', 'y grid grid-0')
         .attr('x1', 0)
-        .attr('x2', width)
-        .attr('y1', y(0))
-        .attr('y2', y(0));
+        .attr('x2', chartWidth)
+        .attr('y1', yScale(0))
+        .attr('y2', yScale(0));
 
-    svg.append('g')
+    /*
+     * Render bar values.
+     */
+    chartElement.append('g')
         .attr('class', 'value')
         .selectAll('text')
-            .data(graphicData)
-        .enter().append('text')
+        .data(config['data'])
+        .enter()
+        .append('text')
             .attr('x', function(d, i) {
-                return x(d['date']) + (x.rangeBand() / 2);
+                return xScale(d[labelColumn]) + (xScale.rangeBand() / 2);
             })
             .attr('y', function(d) {
-                if (height - y(d['amt']) > VALUE_MIN_HEIGHT) {
-                    return y(d['amt']) + 15;
-                } else {
-                    return y(d['amt']) - 6;
+                var y = yScale(d[valueColumn]);
+
+                if (chartHeight - y > valueMinHeight) {
+                    return y + 15;
                 }
+
+                return y - 6;
             })
             .attr('text-anchor', 'middle')
             .attr('class', function(d) {
-                var c = classify('y-' + d['label']);
-                 if (height - y(d['amt']) > VALUE_MIN_HEIGHT) {
+                var c = 'y-' + classify(d[labelColumn]);
+
+                if (chartHeight - yScale(d[valueColumn]) > valueMinHeight) {
                     c += ' in';
                 } else {
                     c += ' out';
                 }
-               return c;
+
+                return c;
             })
             .text(function(d) {
-                return d['amt'].toFixed(0);
+                return d[valueColumn].toFixed(0);
             });
 }
 
 /*
  * Initially load the graphic
- * (NB: Use window.load instead of document.ready
- * to ensure all images have loaded)
+ * (NB: Use window.load to ensure all images have loaded)
  */
-$(window).load(onWindowLoaded);
+window.onload = onWindowLoaded;

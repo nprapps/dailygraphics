@@ -10,16 +10,18 @@
             <thead>
                 <tr>
                     <th>{{ COPY.labels.hdr_state }}</th>
-                    <th class="amt">{{ COPY.labels.hdr_something }}</th>
-                    <th class="amt">{{ COPY.labels.hdr_another_thing }}</th>
+                    <th>{{ COPY.labels.hdr_usps }}</th>
+                    <th>{{ COPY.labels.hdr_ap }}</th>
+                    <th>{{ COPY.labels.hdr_display }}</th>
                 </tr>
             </thead>
 
             {% for row in COPY.data %}
-            <tr class="{{ row.state|lower|replace(' ', '-') }}">
-                <td data-title="{{ COPY.labels.hdr_state }}">{{ row.state }}</td>
-                <td data-title="{{ COPY.labels.hdr_something }}" class="amt">{{ row.something }}</td>
-                <td data-title="{{ COPY.labels.hdr_another_thing }}" class="amt">{{ row.another_thing }}</td>
+            <tr class="{{ row.usps }}">
+                <td data-title="{{ COPY.labels.hdr_state }}">{{ row.name }}</td>
+                <td data-title="{{ COPY.labels.hdr_usps }}">{{ row.usps }}</td>
+                <td data-title="{{ COPY.labels.hdr_ap }}">{{ row.ap }}</td>
+                <td data-title="{{ COPY.labels.hdr_display }}">{{ row.display }}</td>
             </tr>
             {% endfor %}
 
@@ -42,7 +44,6 @@
 
 {% block js %}
 
-    {{ JS.push('js/lib/jquery.js') }}
     {{ JS.push('js/lib/pym.js') }}
     {{ JS.push('js/graphic.js') }}
     {{ JS.render('js/graphic-footer.js') }}
