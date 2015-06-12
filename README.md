@@ -13,6 +13,7 @@ dailygraphics
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Storing media assets](#storing-media-assets)
 * [Creating locator maps](#creating-locator-maps)
+* [Keeping the graphics directory clean](#keeping-the-graphics-directory-clean)
 
 What is this?
 -------------
@@ -297,3 +298,18 @@ mapturner geodata.yaml data/geodata.json
 ```
 
 In your project ```js/graphic.js``` folder, change the ```PRIMARY_COUNTRY``` variable at the top from Nepal to the name of your featured country. You will also want to adjust the ```MAP_DEFAULT_SCALE``` and ```MAP_DEFAULT_HEIGHT``` variables so that your featured country fits onscreen.
+
+Keeping the graphics directory clean
+------------------------------------
+
+If you are working with multiple users who are creating/deleting graphics, you may find that you end up with folders for deleted graphics containing only their copytext and other, uncommitted files. If this is bothering you, run:
+
+```
+git clean -dn
+```
+
+This will list folders with no committed files. To permanantly delete those folders, run:
+
+```
+git clean -df
+```
