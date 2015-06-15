@@ -171,7 +171,7 @@ var renderLineChart = function(config) {
         .domain([ 0, d3.max(d3.entries(formattedData), function(c) {
                 return d3.max(c['value'], function(v) {
                     var n = v[valueColumn];
-                    return Math.ceil(n / 5) * 5; // round to next 5
+                    return Math.ceil(n / roundTicksFactor) * roundTicksFactor;
                 });
             })
         ])
