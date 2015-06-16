@@ -133,11 +133,6 @@ var renderLineChart = function(config) {
     containerElement.html('');
 
     var formattedData = {};
-    var xScale = null;
-    var yScale = null;
-    var colorScale = null;
-    var chartWrapper = null;
-    var chartElement = null;
 
     /*
      * Restructure tabular data for easier charting.
