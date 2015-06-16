@@ -53,6 +53,8 @@ var loadCSV = function(url) {
 var formatData = function() {
     graphicData.forEach(function(d) {
         d['amt'] = +d['amt'];
+        d['min'] = +d['min'];
+        d['max'] = +d['max'];
     });
 }
 
@@ -71,7 +73,7 @@ var render = function(containerWidth) {
     }
 
     // Render the chart!
-    renderBarChart({
+    renderDotChart({
         container: '#graphic',
         width: containerWidth,
         data: graphicData
@@ -86,28 +88,36 @@ var render = function(containerWidth) {
 /*
  * Render a bar chart.
  */
-var renderBarChart = function(config) {
+var renderDotChart = function(config) {
     /*
      * Setup
      */
     var labelColumn = 'label';
     var valueColumn = 'amt';
+    var minColumn = 'min';
+    var maxColumn = 'max';
 
-    var barHeight = 30;
+    var barHeight = 20;
     var barGap = 5;
-    var labelWidth = 85;
-    var labelMargin = 6;
+    var labelWidth = 60;
+    var labelMargin = 10;
     var valueMinWidth = 30;
+    var dotRadius = 5;
 
     var margins = {
         top: 0,
-        right: 15,
+        right: 20,
         bottom: 20,
         left: (labelWidth + labelMargin)
     };
 
     var ticksX = 4;
     var roundTicksFactor = 5;
+
+    if (isMobile) {
+        ticksX = 6;
+        margins['right'] = 30;
+    }
 
     // Calculate actual chart dimensions
     var chartWidth = config['width'] - margins['left'] - margins['right'];
@@ -134,7 +144,7 @@ var renderBarChart = function(config) {
      */
     var xScale = d3.scale.linear()
         .domain([0, d3.max(config['data'], function(d) {
-            return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+            return Math.ceil(d[maxColumn] / roundTicksFactor) * roundTicksFactor;
         })])
         .range([0, chartWidth]);
 
@@ -146,7 +156,7 @@ var renderBarChart = function(config) {
         .orient('bottom')
         .ticks(ticksX)
         .tickFormat(function(d) {
-            return d.toFixed(0) + '%';
+            return d + '%';
         });
 
     /*
@@ -173,24 +183,42 @@ var renderBarChart = function(config) {
         );
 
     /*
-     * Render bars to chart.
+     * Render range bars to chart.
      */
     chartElement.append('g')
         .attr('class', 'bars')
-        .selectAll('rect')
+        .selectAll('line')
         .data(config['data'])
         .enter()
-        .append('rect')
-            .attr('y', function(d, i) {
-                return i * (barHeight + barGap);
+        .append('line')
+            .attr('x1', function(d, i) {
+                return xScale(d[minColumn]);
             })
-            .attr('width', function(d) {
-                return xScale(d['amt']);
+            .attr('x2', function(d, i) {
+                return xScale(d[maxColumn]);
             })
-            .attr('height', barHeight)
-            .attr('class', function(d, i) {
-                return 'bar-' + i + ' ' + classify(d[labelColumn]);
+            .attr('y1', function(d, i) {
+                return i * (barHeight + barGap) + (barHeight / 2);
+            })
+            .attr('y2', function(d, i) {
+                return i * (barHeight + barGap) + (barHeight / 2);
             });
+
+    /*
+     * Render dots to chart.
+     */
+    chartElement.append('g')
+        .attr('class', 'dots')
+        .selectAll('circle')
+        .data(config['data'])
+        .enter().append('circle')
+            .attr('cx', function(d, i) {
+                return xScale(d[valueColumn]);
+            })
+            .attr('cy', function(d, i) {
+                return i * (barHeight + barGap) + (barHeight / 2);
+            })
+            .attr('r', dotRadius)
 
     /*
      * Render bar labels.
@@ -226,45 +254,22 @@ var renderBarChart = function(config) {
     /*
      * Render bar values.
      */
-    chartElement.append('g')
-        .attr('class', 'value')
-        .selectAll('text')
-        .data(config['data'])
-        .enter()
-        .append('text')
-            .attr('x', function(d) {
-                return xScale(d[valueColumn]);
-            })
-            .attr('y', function(d, i) {
-                return i * (barHeight + barGap);
-            })
-            .attr('dx', function(d) {
-                if (xScale(d[valueColumn]) > valueMinWidth) {
-                    return -6;
-                } else {
-                    return 6;
-                }
-            })
-            .attr('dy', (barHeight / 2) + 3)
-            .attr('text-anchor', function(d) {
-                if (xScale(d[valueColumn]) > valueMinWidth) {
-                    return 'end';
-                } else {
-                    return 'begin';
-                }
-            })
-            .attr('class', function(d) {
-                var c = classify(d[labelColumn]);
-                if (xScale(d[valueColumn]) > valueMinWidth) {
-                    c += ' in';
-                } else {
-                    c += ' out';
-                }
-                return c;
-            })
-            .text(function(d) {
-                return d[valueColumn].toFixed(0) + '%';
-            });
+    _.each(['shadow', 'value'], function(cls) {
+        chartElement.append('g')
+            .attr('class', cls)
+            .selectAll('text')
+            .data(config['data'])
+            .enter().append('text')
+                .attr('x', function(d, i) {
+                    return xScale(d[maxColumn]) + 6;
+                })
+                .attr('y', function(d,i) {
+                    return i * (barHeight + barGap) + (barHeight / 2) + 3;
+                })
+                .text(function(d) {
+                    return d[valueColumn].toFixed(1) + '%';
+                });
+    });
 }
 
 /*
