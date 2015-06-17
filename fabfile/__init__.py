@@ -287,6 +287,20 @@ def add_line_chart(slug):
     _add_graphic(slug, 'line_chart')
 
 @task
+def add_dot_chart(slug):
+    """
+    Create a dot chart with error bars
+    """
+    _add_graphic(slug, 'dot_chart')
+
+@task
+def add_slopegraph(slug):
+    """
+    Create a slopegraph (intended for narrow display)
+    """
+    _add_graphic(slug, 'slopegraph')
+
+@task
 def add_map(slug):
     """
     Create a locator map.
