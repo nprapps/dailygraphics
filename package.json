@@ -2,6 +2,7 @@
     "name": "dailygraphics",
     "version": "1.0.0",
     "dependencies": {
-        "less": "~1.7.0"
+        "less": "~1.7.0",
+        "webpage": "~0.3.0"
     }
 }
