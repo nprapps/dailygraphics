@@ -148,13 +148,13 @@
 
                 {% if DEPLOYMENT_TARGET != 'staging' %}
                 <div class="segment">
-                    <a class="btn staging" href="http://stage-apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">staging &raquo;</a>
+                    <a class="btn staging" href="http://staging.stlpublicradio.org/dailygraphics/graphics/{{ slug }}/" target="_blank">staging &raquo;</a>
                 </div>
                 {% endif %}
 
                 {% if DEPLOYMENT_TARGET != 'production' %}
                 <div class="segment">
-                    <a class="btn production" href="http://apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
+                    <a class="btn production" href="http://apps.stlpublicradio.org/dailygraphics/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
                 </div>
                 {% endif %}
 
