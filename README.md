@@ -71,14 +71,16 @@ The project contains the following folders and important files:
 * ``data`` -- Place for downloaded COPY spreadsheets and other incidental data.
 * ``etc`` -- Miscellanous Python libraries.
 * ``fabfile`` -- [Fabric](http://docs.fabfile.org/en/latest/) commands for automating setup and deployment.
-* ``new_graphic`` -- This directory is copied for each new graphic.
+* ``graphic_templates`` -- Folder templates for different graphic types.
 * ``templates`` -- HTML ([Jinja2](http://jinja.pocoo.org/docs/)) templates, to be compiled locally.
-* ``www`` -- Static assets to be deployed.
 * ``app.py`` -- A [Flask](http://flask.pocoo.org/) app for rendering the project locally.
 * ``app_config.py`` -- Global project configuration for scripts, deployment, etc.
+* ``graphic.py`` -- Flask views for rendering graphics.
+* ``graphic_templates.py`` -- Flask views for rendering graphics templates.
+* ``oauth.py`` -- Flask views for configuring OAuth (for Google Spreadsheets).
+* ``package.json`` -- Node requirements.
 * ``render_utils.py`` -- Code supporting template rendering.
 * ``requirements.txt`` -- Python requirements.
-* ``static.py`` -- Flask views for serving static files.
 
 Bootstrap the project
 ---------------------
