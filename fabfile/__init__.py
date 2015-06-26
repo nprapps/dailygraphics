@@ -94,10 +94,6 @@ def deploy(slug):
         print 'You must specify a project slug, like this: "deploy:slug"'
         return
 
-    update_copy(slug)
-    assets.sync(slug)
-    render.render(slug)
-
     graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     s3_root = '%s/graphics/%s' % (app_config.PROJECT_SLUG, slug)
     graphic_assets = '%s/assets' % graphic_root
@@ -105,8 +101,16 @@ def deploy(slug):
 
     graphic_config = _graphic_config(slug)
 
+    use_assets = getattr(graphic_config, 'USE_ASSETS', True)
     default_max_age = getattr(graphic_config, 'DEFAULT_MAX_AGE', None) or app_config.DEFAULT_MAX_AGE
     assets_max_age = getattr(graphic_config, 'ASSETS_MAX_AGE', None) or app_config.ASSETS_MAX_AGE
+
+    update_copy(slug)
+
+    if use_assets:
+        assets.sync(slug)
+
+    render.render(slug)
 
     flat.deploy_folder(
         graphic_root,
@@ -126,13 +130,14 @@ def deploy(slug):
         }
     )
 
-    flat.deploy_folder(
-        graphic_assets,
-        s3_assets,
-        headers={
-            'Cache-Control': 'max-age=%i' % assets_max_age
-        }
-    )
+    if use_assets:
+        flat.deploy_folder(
+            graphic_assets,
+            s3_assets,
+            headers={
+                'Cache-Control': 'max-age=%i' % assets_max_age
+            }
+        )
 
     print ''
     print '%s URL: %s/graphics/%s/' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug)
