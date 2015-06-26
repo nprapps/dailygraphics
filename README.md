@@ -13,6 +13,7 @@ dailygraphics
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Storing media assets](#storing-media-assets)
 * [Creating locator maps](#creating-locator-maps)
+* [Adding a new graphic template](#adding-a-new-graphic-template)
 * [Keeping the graphics directory clean](#keeping-the-graphics-directory-clean)
 
 What is this?
@@ -303,6 +304,33 @@ mapturner geodata.yaml data/geodata.json
 ```
 
 In your project ```js/graphic.js``` folder, change the ```PRIMARY_COUNTRY``` variable at the top from Nepal to the name of your featured country. You will also want to adjust the ```MAP_DEFAULT_SCALE``` and ```MAP_DEFAULT_HEIGHT``` variables so that your featured country fits onscreen.
+
+Adding a new graphic template
+-----------------------------
+
+To create and use a new graphic template, you will need to follow several steps. First, choose a suitable existing template and copy it's folder, for instance:
+
+```
+cd graphic_templates
+cp -r line_chart scatterplot
+```
+
+Second, open the COPY Google Spreadsheet for the pre-existing graphic template ("line_chart" in the example above). Make a copy of this document and adjust the headline in the copy to match the new chart type. Be sure to make this new spreadsheet public. (Share > Get Shareable Link > Can View)
+
+Third, modify the new template to render your new chart type. You can test your graphic template using the local server, for instance: http://localhost:8000/templates/scatterplot/?refresh=1
+
+Before you can use your new template you'll also need to add a fab command. In ``fabfile/__init__.py`` scroll down to the tasks for creating graphics and add a task for your new template, like this:
+
+```
+@task
+def add_scatterplot(slug):
+    """
+    Create a scatterplot.
+    """
+    _add_graphic(slug, 'scatterplot')
+```
+
+Lastly, commit your new graphic template and your fabfile changes. Your new graphic template is now ready to use.
 
 Keeping the graphics directory clean
 ------------------------------------
