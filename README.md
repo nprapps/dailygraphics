@@ -83,14 +83,16 @@ The project contains the following folders and important files:
 Bootstrap the project
 ---------------------
 
-Node.js is required for the static asset pipeline. If you don't already have it, get it like this:
+Node.js is required for the static asset pipeline. If you don't already have it, get it like this (requires [brew](http://brew.sh/)):
 
 ```
 brew install node
-curl https://npmjs.org/install.sh | sh
 ```
 
+Then setup the project like this:
+
 ```
+git clone https://github.com/nprapps/dailygraphics.git
 cd dailygraphics
 mkvirtualenv --no-site-packages dailygraphics
 pip install -r requirements.txt
