@@ -317,7 +317,7 @@ cp -r line_chart scatterplot
 
 Second, open the COPY Google Spreadsheet for the pre-existing graphic template ("line_chart" in the example above). Make a copy of this document and adjust the headline in the copy to match the new chart type. Be sure to make this new spreadsheet public. (Share > Get Shareable Link > Can View)
 
-Third, modify the new template to render your new chart type. You can test your graphic template using the local server, for instance: http://localhost:8000/templates/scatterplot/?refresh=1
+Third, modify the new template to render your new chart type. Be sure to remove any dependencies you don't need for this graphic type. You can test your graphic template using the local server, for instance: [http://localhost:8000/templates/scatterplot/?refresh=1](http://localhost:8000/templates/scatterplot/?refresh=1)
 
 Before you can use your new template you'll also need to add a fab command. In ``fabfile/__init__.py`` scroll down to the tasks for creating graphics and add a task for your new template, like this:
 
