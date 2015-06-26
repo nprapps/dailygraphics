@@ -68,7 +68,6 @@ What's in here?
 
 The project contains the following folders and important files:
 
-* ``data`` -- Place for downloaded COPY spreadsheets and other incidental data.
 * ``etc`` -- Miscellanous Python libraries.
 * ``fabfile`` -- [Fabric](http://docs.fabfile.org/en/latest/) commands for automating setup and deployment.
 * ``graphic_templates`` -- Folder templates for different graphic types.
