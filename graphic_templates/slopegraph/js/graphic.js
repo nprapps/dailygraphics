@@ -83,7 +83,8 @@ var render = function(containerWidth) {
     renderSlopegraph({
         container: '#graphic',
         width: containerWidth,
-        data: graphicData
+        data: graphicData,
+        metadata: GRAPHIC_METADATA
     });
 
     // Update iframe
@@ -103,8 +104,8 @@ var renderSlopegraph = function(config) {
     var startColumn = 'start';
     var endColumn = 'end';
 
-    var startLabel = '2007';
-    var endLabel = '2014';
+    var startLabel = config['metadata']['startLabel'];
+    var endLabel = config['metadata']['endLabel'];
 
     var aspectWidth = 5;
     var aspectHeight = 3;
@@ -231,6 +232,13 @@ var renderSlopegraph = function(config) {
             .style('stroke', function(d) {
                 return colorScale(d[labelColumn])
             });
+
+    /*
+     * Uncomment if needed:
+     * Move a particular line to the front of the stack
+     */
+    // svg.select('line.unaffiliated').moveToFront();
+
 
     /*
      * Render dots to chart.
@@ -399,6 +407,15 @@ var wrapText = function(texts, width, lineHeight) {
         }
     });
 }
+
+/*
+ * Select an element and move it to the front of the stack
+ */
+d3.selection.prototype.moveToFront = function() {
+    return this.each(function(){
+        this.parentNode.appendChild(this);
+    });
+};
 
 /*
  * Initially load the graphic
