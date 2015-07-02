@@ -233,7 +233,7 @@ var renderStackedBarChart = function(config) {
          .data(config['data'])
          .enter().append('g')
              .attr('class', function(d) {
-                 return 'group ' + classify(d[valueColumn]);
+                 return 'group ' + classify(d[labelColumn]);
              })
              .attr('transform', function(d,i) {
                  return 'translate(0,' + (i * (barHeight + barGap)) + ')';
