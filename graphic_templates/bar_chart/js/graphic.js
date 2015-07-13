@@ -195,8 +195,7 @@ var renderBarChart = function(config) {
     /*
      * Render bar labels.
      */
-    containerElement
-        .append('ul')
+    chartWrapper.append('ul')
         .attr('class', 'labels')
         .attr('style', formatStyle({
             'width': labelWidth + 'px',
