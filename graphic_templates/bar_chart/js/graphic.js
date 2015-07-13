@@ -185,7 +185,7 @@ var renderBarChart = function(config) {
                 return i * (barHeight + barGap);
             })
             .attr('width', function(d) {
-                return xScale(d['amt']);
+                return xScale(d[valueColumn]);
             })
             .attr('height', barHeight)
             .attr('class', function(d, i) {
