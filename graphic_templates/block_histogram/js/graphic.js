@@ -7,10 +7,8 @@ var COLOR_RANGE = [COLORS['red5'], '#ccc', COLORS['blue5'], COLORS['blue4'], COL
 // Global vars
 var pymChild = null;
 var isMobile = false;
-var binnedData = [];
 var graphicData = null;
-var largestBin = null;
-var xDomain = [];
+var binnedData = [];
 
 /*
  * Initialize the graphic.
@@ -59,34 +57,24 @@ var formatData = function() {
     var numBins = COLOR_BINS.length - 1;
 
     // init the bins
-    _.each(COLOR_BINS, function(d, i) {
-        if (i < numBins) {
-            binnedData[i] = [];
-            xDomain.push(d);
-        }
-    });
-    
+    for (var i = 0; i < numBins; i++) {
+        binnedData[i] = [];
+    }
+
     // put states in bins
-    _.each(graphicData, function(d, i) {
+    _.each(graphicData, function(d) {
         if (d['amt'] != null) {
             var amt = +d['amt'];
             var state = d['usps'];
-            
-            _.each(COLOR_BINS, function(v, k) {
-                if (k < numBins && amt >= COLOR_BINS[k] && amt < COLOR_BINS[k + 1]) {
-                    binnedData[k].unshift(state);
+
+            for (var i = 0; i < numBins; i++) {
+                if (amt >= COLOR_BINS[i] && amt < COLOR_BINS[i + 1]) {
+                    binnedData[i].unshift(state);
+                    break;
                 }
-            });
+            }
         }
     });
-    
-    // determine largest bin
-    largestBin = 0;
-    _.each(binnedData, function(d,i) {
-        if (d.length > largestBin) {
-            largestBin = d.length;
-        }
-    })
 }
 
 /*
@@ -107,7 +95,9 @@ var render = function(containerWidth) {
     renderBlockHistogram({
         container: '#graphic',
         width: containerWidth,
-        data: graphicData
+        data: binnedData,
+        bins: COLOR_BINS,
+        colors: COLOR_RANGE
     });
 
     // Update iframe
@@ -125,16 +115,12 @@ var renderBlockHistogram = function(config) {
      */
     var labelColumn = 'usps';
     var valueColumn = 'amt';
-    
+
     var blockHeight = 30;
     if (isMobile) {
         blockHeight = 18;
     }
     var blockGap = 1;
-
-    var colorScale = d3.scale.ordinal()
-        .domain(COLOR_BINS) // bins
-        .range(COLOR_RANGE);
 
     var margins = {
         top: 20,
@@ -145,10 +131,15 @@ var renderBlockHistogram = function(config) {
 
     var ticksY = 4;
 
+    // Determine largest bin
+    var largestBin = _.max(binnedData, function(bin) {
+        return bin.length;
+    }).length;
+
     // Calculate actual chart dimensions
     var chartWidth = config['width'] - margins['left'] - margins['right'];
     var chartHeight = ((blockHeight + blockGap) * largestBin);
-    
+
     // Clear existing graphic (for redraw)
     var containerElement = d3.select(config['container']);
     containerElement.html('');
@@ -169,12 +160,16 @@ var renderBlockHistogram = function(config) {
      * Create D3 scale objects.
      */
     var xScale = d3.scale.ordinal()
-        .domain(xDomain)
+        .domain(config['bins'].slice(0, -1))
         .rangeRoundBands([0, chartWidth], .1);
-    
+
     var yScale = d3.scale.linear()
         .domain([ 0, largestBin ])
         .rangeRound([ chartHeight, 0 ]);
+
+    var colorScale = d3.scale.ordinal()
+        .domain(config['bins'])
+        .range(config['colors']);
 
     /*
      * Create D3 axes.
@@ -190,7 +185,7 @@ var renderBlockHistogram = function(config) {
                 return d + '%';
             }
         });
-    
+
     var yAxis = d3.svg.axis()
         .scale(yScale)
         .orient('left')
@@ -238,7 +233,7 @@ var renderBlockHistogram = function(config) {
         .attr('transform', function() {
             var transform = d3.transform();
             var lastBin = xScale.domain()[xScale.domain().length - 1];
-            
+
             transform.translate[0] = xScale(lastBin) + xScale.rangeBand() + ((xScale.rangeBand() * .1) / 2);
             transform.translate[1] = 3;
 
@@ -257,7 +252,7 @@ var renderBlockHistogram = function(config) {
         .attr('y', 9)
         .attr('dy', '0.71em')
         .text(function() {
-            var t = COLOR_BINS[COLOR_BINS.length - 1];
+            var t = config['bins'][config['bins'].length - 1];
             if (t > 0) {
                 return '+' + t + '%';
             } else {
@@ -270,13 +265,13 @@ var renderBlockHistogram = function(config) {
      * Render bins to chart.
      */
     var bins = chartElement.selectAll('.bin')
-        .data(binnedData)
+        .data(config['data'])
         .enter().append('g')
             .attr('class', function(d,i) {
                 return 'bin bin-' + i;
             })
             .attr('transform', function(d, i) {
-                return 'translate(' + xScale(COLOR_BINS[i]) + ',0)';
+                return makeTranslate(xScale(COLOR_BINS[i]), 0);
             });
 
     bins.selectAll('rect')
@@ -294,7 +289,7 @@ var renderBlockHistogram = function(config) {
                 return classify(d['value']);
             });
 
-     
+
     /*
      * Render bin values.
      */
@@ -313,7 +308,7 @@ var renderBlockHistogram = function(config) {
             .text(function(d) {
                 return d['value'];
             });
-            
+
     /*
      * Render annotations
      */
@@ -335,7 +330,7 @@ var renderBlockHistogram = function(config) {
         .attr('text-anchor', 'begin')
         .attr('y', -10)
         .html(ANNOTATION_RIGHT);
-    
+
     annotations.append('line')
         .attr('class', 'axis-0')
         .attr('x1', xScale(0) - ((xScale.rangeBand() * .1) / 2))
