@@ -41,7 +41,7 @@ var loadLocalData = function(data) {
  * Load graphic data from a CSV.
  */
 var loadCSV = function(url) {
-    d3.csv(GRAPHIC_DATA_URL, function(error, data) {
+    d3.csv(url, function(error, data) {
         graphicData = data;
 
         formatData();
