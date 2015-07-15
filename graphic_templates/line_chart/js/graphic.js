@@ -103,8 +103,8 @@ var renderLineChart = function(config) {
     var dateColumn = 'date';
     var valueColumn = 'amt';
 
-    var aspectWidth = 4;
-    var aspectHeight = 3;
+    var aspectWidth = isMobile ? 4 : 16;
+    var aspectHeight = isMobile ? 3 : 9;
 
     var margins = {
         top: 5,
