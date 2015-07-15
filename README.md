@@ -178,6 +178,7 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Stacked bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-bar-chart.png) | Stacked bar chart | ```fab add_stacked_bar_chart:$SLUG``` |
 | ![Column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/column-chart.png) | Column chart | ```fab add_column_chart:$SLUG``` |
 | ![Stacked column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-column-chart.png) | Stacked column chart | ```fab add_stacked_column_chart:$SLUG``` |
+| ![Block histogram](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/block-histogram.png) | Block histogram | ```fab add_block_histogram:$SLUG``` |
 | ![Line chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/line-chart.png) | Line chart | ```fab add_line_chart:$SLUG``` |
 | ![Slopegraph](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/slopegraph.png) | Slopegraph | ```fab add_slopegraph:$SLUG``` |
 | ![Dot chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/dot-chart.png) | Dot chart | ```fab add_dot_chart:$SLUG``` |
