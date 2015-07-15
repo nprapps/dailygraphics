@@ -268,6 +268,13 @@ def add_stacked_column_chart(slug):
     _add_graphic(slug, 'stacked_column_chart')
 
 @task
+def add_block_histogram(slug):
+    """
+    Create a block histogram.
+    """
+    _add_graphic(slug, 'block_histogram')
+
+@task
 def add_grouped_bar_chart(slug):
     """
     Create a grouped bar chart.
