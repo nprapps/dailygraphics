@@ -74,8 +74,8 @@ def _graphics_child(slug):
         graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
         context.update(graphic_config.__dict__)
 
-        if hasattr(graphic_config, 'JINJA_FORMAT_FUNCTIONS'):
-            for func in graphic_config.JINJA_FORMAT_FUNCTIONS:
+        if hasattr(graphic_config, 'JINJA_FILTER_FUNCTIONS'):
+            for func in graphic_config.JINJA_FILTER_FUNCTIONS:
                 env.filters[func.__name__] = func
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:

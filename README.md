@@ -256,13 +256,13 @@ If you do **not** want want to use the copytext spreadsheet for a given project,
 Using custom Jinja filter functions
 -----------------------------------
 
-If you're graphic requires complex number formatting or any nuanced presentation, you may not to write a custom Jinja filter function. This is supported through each project's ``graphic_config.py`` file. To add a custom filter function, simply define it and add it to an array called ``JINJA_FORMAT_FUNCTIONS``, like so:
+If you're graphic requires complex number formatting or any nuanced presentation, you may not to write a custom Jinja filter function. This is supported through each project's ``graphic_config.py`` file. To add a custom filter function, simply define it and add it to an array called ``JINJA_FILTER_FUNCTIONS``, like so:
 
 ```python
 def comma_format(value):
     return locale.format('%d', float(value), grouping=True)
 
-JINJA_FORMAT_FUNCTIONS = [
+JINJA_FILTER_FUNCTIONS = [
     comma_format
 ]
 ```

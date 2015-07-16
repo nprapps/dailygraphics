@@ -14,6 +14,6 @@ USE_ASSETS = False
 def comma_format(value):
     return locale.format('%d', float(value), grouping=True)
 
-JINJA_FORMAT_FUNCTIONS = [
+JINJA_FILTER_FUNCTIONS = [
     comma_format
 ]
