@@ -11,6 +11,7 @@ dailygraphics
 * [Deploy to S3](#deploy-to-s3)
 * [Embedding](#embedding)
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+* [Using custom Jinja filter functions](#using-custom-jinja-filter-functions)
 * [Storing media assets](#storing-media-assets)
 * [Creating locator maps](#creating-locator-maps)
 * [Adding a new graphic template](#adding-a-new-graphic-template)
@@ -250,6 +251,29 @@ The deploy process will always pull down the latest spreadsheet and render the c
 Note: Your published graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
 
 If you do **not** want want to use the copytext spreadsheet for a given project, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
+
+
+Using custom Jinja filter functions
+-----------------------------------
+
+If you're graphic requires complex number formatting or any nuanced presentation, you may not to write a custom Jinja filter function. This is supported through each project's ``graphic_config.py`` file. To add a custom filter function, simply define it and add it to an array called ``JINJA_FORMAT_FUNCTIONS``, like so:
+
+```python
+def comma_format(value):
+    return locale.format('%d', float(value), grouping=True)
+
+JINJA_FORMAT_FUNCTIONS = [
+    comma_format
+]
+```
+
+Then you will be able to use it in your template like this:
+
+```html
+<td>{{ row.value|comma_format }}</td>
+```
+
+See the ``table`` graphic template for a complete example.
 
 
 Storing media assets
