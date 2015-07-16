@@ -104,9 +104,13 @@
             margin: 60px 10px 10px 10px;
         }
 
-        #preview {
-            border: 1px dashed #ddd;
+        #preview-wrapper {
+            border: 2px dashed #ddd;
             margin-bottom: 20px;
+        }
+
+        #preview {
+            width: 100%;
         }
 
         textarea {
@@ -172,7 +176,9 @@
 
     <div class="content">
 
-        <div id='preview'>
+        <div id="preview-wrapper">
+            <div id='preview'>
+            </div>
         </div>
 
         <h2><span class="production">Production</span> embed code (for Seamus)</h2>
@@ -211,12 +217,12 @@ $(function() {
         var resizeMobileEl = document.querySelector('#resize-mobile');
         var resizeDesktopEl = document.querySelector('#resize-desktop');
         var resizeFluidEl = document.querySelector('#resize-fluid');
-        var previewEl = document.querySelector('#preview');
+        var previewWrapperEl = document.querySelector('#preview-wrapper');
 
         resizeSidebarEl.addEventListener('click', function(e) {
             e.preventDefault();
 
-            previewEl.style.width = '180px';
+            previewWrapperEl.style.width = '180px';
             pymParent.sendWidth();
 
             window.location.hash = 'sidebar';
@@ -225,7 +231,7 @@ $(function() {
         resizeMobileEl.addEventListener('click', function(e) {
             e.preventDefault();
 
-            previewEl.style.width = '300px';
+            previewWrapperEl.style.width = '300px';
             pymParent.sendWidth();
 
             window.location.hash = 'mobile';
@@ -233,7 +239,8 @@ $(function() {
 
         resizeDesktopEl.addEventListener('click', function(e) {
             e.preventDefault();
-            previewEl.style.width = '730px';
+
+            previewWrapperEl.style.width = '730px';
             pymParent.sendWidth();
 
             window.location.hash = 'desktop';
@@ -242,20 +249,20 @@ $(function() {
         resizeFluidEl.addEventListener('click', function(e) {
             e.preventDefault();
 
-            previewEl.style.width = '100%';
+            previewWrapperEl.style.width = '100%';
             pymParent.sendWidth();
 
             window.location.hash = 'fluid';
         });
 
         if (window.location.hash == '#sidebar') {
-            previewEl.style.width = '180px';
+            previewWrapperEl.style.width = '180px';
         } else if (window.location.hash == '#mobile') {
-            previewEl.style.width = '300px';
+            previewWrapperEl.style.width = '300px';
         } else if (window.location.hash == '#desktop') {
-            previewEl.style.width = '730px';
+            previewWrapperEl.style.width = '730px';
         } else if (window.location.hash == '#fluid') {
-            previewEl.style.width = '100%';
+            previewWrapperEl.style.width = '100%';
         }
 
         var pymParent = new pym.Parent('preview', 'child.html', {});
