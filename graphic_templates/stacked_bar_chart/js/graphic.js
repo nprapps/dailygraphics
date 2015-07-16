@@ -154,7 +154,7 @@ var renderStackedBarChart = function(config) {
 
      var colorScale = d3.scale.ordinal()
          .domain(d3.keys(config['data'][0]).filter(function(d) {
-             return d != 'label' && d != 'values';
+             return d != labelColumn && d != 'values';
          }))
          .range([ COLORS['teal3'], COLORS['orange3'], COLORS['blue3'], '#ccc' ]);
 
@@ -233,7 +233,7 @@ var renderStackedBarChart = function(config) {
          .data(config['data'])
          .enter().append('g')
              .attr('class', function(d) {
-                 return 'group ' + classify(d['label']);
+                 return 'group ' + classify(d[labelColumn]);
              })
              .attr('transform', function(d,i) {
                  return 'translate(0,' + (i * (barHeight + barGap)) + ')';

@@ -1,0 +1,8 @@
+0.1.0
+-----
+
+* Add .DS_Store to default assetsignore. (#129)
+* Fix issue where preview border messed with width calculation
+* Update pym to 0.4.5
+* Add block_histogram template
+* Start CHANGELOG (#132)

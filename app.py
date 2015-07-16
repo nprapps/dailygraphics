@@ -13,7 +13,6 @@ import graphic
 import graphic_templates
 import oauth
 from render_utils import make_context
-import static
 
 app = Flask(app_config.PROJECT_SLUG)
 app.debug = app_config.DEBUG

@@ -106,8 +106,8 @@ var renderLineChart = function(config) {
     var dateColumn = 'date';
     var valueColumn = 'amt';
 
-    var aspectWidth = 4;
-    var aspectHeight = 3;
+    var aspectWidth = isMobile ? 4 : 16;
+    var aspectHeight = isMobile ? 3 : 9;
 
     var margins = {
         top: 5,
@@ -136,11 +136,6 @@ var renderLineChart = function(config) {
     containerElement.html('');
 
     var formattedData = {};
-    var xScale = null;
-    var yScale = null;
-    var colorScale = null;
-    var chartWrapper = null;
-    var chartElement = null;
 
     /*
      * Restructure tabular data for easier charting.
@@ -174,7 +169,7 @@ var renderLineChart = function(config) {
         .domain([ 0, d3.max(d3.entries(formattedData), function(c) {
                 return d3.max(c['value'], function(v) {
                     var n = v[valueColumn];
-                    return Math.ceil(n / 5) * 5; // round to next 5
+                    return Math.ceil(n / roundTicksFactor) * roundTicksFactor;
                 });
             })
         ])

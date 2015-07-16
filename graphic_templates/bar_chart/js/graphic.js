@@ -187,14 +187,14 @@ var renderBarChart = function(config) {
     chartElement.append('g')
         .attr('class', 'bars')
         .selectAll('rect')
-        ['data'](config['data'])
+        .data(config['data'])
         .enter()
         .append('rect')
             .attr('y', function(d, i) {
                 return i * (barHeight + barGap);
             })
             .attr('width', function(d) {
-                return xScale(d['amt']);
+                return xScale(d[valueColumn]);
             })
             .attr('height', barHeight)
             .attr('class', function(d, i) {
@@ -204,8 +204,7 @@ var renderBarChart = function(config) {
     /*
      * Render bar labels.
      */
-    containerElement
-        .append('ul')
+    chartWrapper.append('ul')
         .attr('class', 'labels')
         .attr('style', formatStyle({
             'width': labelWidth + 'px',
@@ -213,7 +212,7 @@ var renderBarChart = function(config) {
             'left': '0'
         }))
         .selectAll('li')
-        ['data'](config['data'])
+        .data(config['data'])
         .enter()
         .append('li')
             .attr('style', function(d, i) {
@@ -238,7 +237,7 @@ var renderBarChart = function(config) {
     chartElement.append('g')
         .attr('class', 'value')
         .selectAll('text')
-        ['data'](config['data'])
+        .data(config['data'])
         .enter()
         .append('text')
             .attr('x', function(d) {

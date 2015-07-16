@@ -192,11 +192,18 @@
             this.el.appendChild(this.iframe);
 
             // Add an event listener that will handle redrawing the child on resize.
-            var that = this;
-            window.addEventListener('resize', function() {
-                that.sendWidth();
-            });
+            window.addEventListener('resize', this._onResize);
         };
+
+        /**
+         * Send width on resize.
+         *
+         * @memberof Parent.prototype
+         * @method _onResize
+         */
+        this._onResize = function() {
+            this.sendWidth();
+        }.bind(this);
 
         /**
          * Fire all event handlers for a given message type.
@@ -215,6 +222,19 @@
         };
 
         /**
+         * Remove this parent from the page and unbind it's event handlers.
+         *
+         * @memberof Parent.prototype
+         * @method remove
+         */
+        this.remove = function() {
+            window.removeEventListener('message', this._processMessage);
+            window.removeEventListener('resize', this._onResize);
+
+            this.el.removeChild(this.iframe);
+        };
+
+        /**
          * @callback Parent~onMessageCallback
          * @param {String} message The message data.
          */
@@ -227,7 +247,15 @@
          * @param {Event} e A message event.
          */
         this._processMessage = function(e) {
-            if (!_isSafeMessage(e, this.settings)) { return; }
+            // First, punt if this isn't from an acceptable xdomain.
+            if (!_isSafeMessage(e, this.settings)) {
+                return;
+            }
+
+            // Discard object messages, we only care about strings
+            if (typeof e.data !== 'string') {
+                return;
+            }
 
             // Grab the message from the child and parse it.
             var match = e.data.match(this.messageRegex);
@@ -241,7 +269,7 @@
             var message = match[2];
 
             this._fire(messageType, message);
-        };
+        }.bind(this);
 
         /**
          * Resize iframe in response to new height message from child.
@@ -327,10 +355,7 @@
         this.onMessage('navigateTo', this._onNavigateToMessage);
 
         // Add a listener for processing messages from the child.
-        var that = this;
-        window.addEventListener('message', function(e) {
-            return that._processMessage(e);
-        }, false);
+        window.addEventListener('message', this._processMessage, false);
 
         // Construct the iframe in the container element.
         this._constructIframe();
@@ -415,7 +440,14 @@
             * Process a new message from parent frame.
             */
             // First, punt if this isn't from an acceptable xdomain.
-            if (!_isSafeMessage(e, this.settings)) { return; }
+            if (!_isSafeMessage(e, this.settings)) {
+                return;
+            }
+
+            // Discard object messages, we only care about strings
+            if (typeof e.data !== 'string') {
+                return;
+            }
 
             // Get the message from the parent.
             var match = e.data.match(this.messageRegex);
@@ -427,7 +459,7 @@
             var message = match[2];
 
             this._fire(messageType, message);
-        };
+        }.bind(this);
 
         /**
          * Resize iframe in response to new width message from parent.
@@ -480,17 +512,12 @@
          * @method sendHeight
          */
         this.sendHeight = function() {
-            /*
-            * Transmit the current iframe height to the parent.
-            * Make this callable from external scripts in case they update the body out of sequence.
-            */
-
             // Get the child's height.
             var height = document.getElementsByTagName('body')[0].offsetHeight.toString();
 
             // Send the height to the parent.
-            that.sendMessage('height', height);
-        };
+            this.sendMessage('height', height);
+        }.bind(this);
 
         /**
          * Scroll parent to a given element id.
@@ -533,10 +560,7 @@
         }
 
         // Set up a listener to handle any incoming messages.
-        var that = this;
-        window.addEventListener('message', function(e) {
-            that._processMessage(e);
-        }, false);
+        window.addEventListener('message', this._processMessage, false);
 
         // If there's a callback function, call it.
         if (this.settings.renderCallback) {

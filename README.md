@@ -13,6 +13,8 @@ dailygraphics
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Storing media assets](#storing-media-assets)
 * [Creating locator maps](#creating-locator-maps)
+* [Adding a new graphic template](#adding-a-new-graphic-template)
+* [Keeping the graphics directory clean](#keeping-the-graphics-directory-clean)
 
 What is this?
 -------------
@@ -67,29 +69,32 @@ What's in here?
 
 The project contains the following folders and important files:
 
-* ``data`` -- Place for downloaded COPY spreadsheets and other incidental data.
 * ``etc`` -- Miscellanous Python libraries.
 * ``fabfile`` -- [Fabric](http://docs.fabfile.org/en/latest/) commands for automating setup and deployment.
-* ``new_graphic`` -- This directory is copied for each new graphic.
+* ``graphic_templates`` -- Folder templates for different graphic types.
 * ``templates`` -- HTML ([Jinja2](http://jinja.pocoo.org/docs/)) templates, to be compiled locally.
-* ``www`` -- Static assets to be deployed.
 * ``app.py`` -- A [Flask](http://flask.pocoo.org/) app for rendering the project locally.
 * ``app_config.py`` -- Global project configuration for scripts, deployment, etc.
+* ``graphic.py`` -- Flask views for rendering graphics.
+* ``graphic_templates.py`` -- Flask views for rendering graphics templates.
+* ``oauth.py`` -- Flask views for configuring OAuth (for Google Spreadsheets).
+* ``package.json`` -- Node requirements.
 * ``render_utils.py`` -- Code supporting template rendering.
 * ``requirements.txt`` -- Python requirements.
-* ``static.py`` -- Flask views for serving static files.
 
 Bootstrap the project
 ---------------------
 
-Node.js is required for the static asset pipeline. If you don't already have it, get it like this:
+Node.js is required for the static asset pipeline. If you don't already have it, get it like this (requires [brew](http://brew.sh/)):
 
 ```
 brew install node
-curl https://npmjs.org/install.sh | sh
 ```
 
+Then setup the project like this:
+
 ```
+git clone https://github.com/nprapps/dailygraphics.git
 cd dailygraphics
 mkvirtualenv --no-site-packages dailygraphics
 pip install -r requirements.txt
@@ -173,7 +178,10 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Stacked bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-bar-chart.png) | Stacked bar chart | ```fab add_stacked_bar_chart:$SLUG``` |
 | ![Column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/column-chart.png) | Column chart | ```fab add_column_chart:$SLUG``` |
 | ![Stacked column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-column-chart.png) | Stacked column chart | ```fab add_stacked_column_chart:$SLUG``` |
+| ![Block histogram](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/block-histogram.png) | Block histogram | ```fab add_block_histogram:$SLUG``` |
 | ![Line chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/line-chart.png) | Line chart | ```fab add_line_chart:$SLUG``` |
+| ![Slopegraph](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/slopegraph.png) | Slopegraph | ```fab add_slopegraph:$SLUG``` |
+| ![Dot chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/dot-chart.png) | Dot chart | ```fab add_dot_chart:$SLUG``` |
 | ![Locator map](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/locator-map.png) | [Locator map](#creating-locator-maps) | ```fab add_map:$SLUG``` |
 | ![State grid map](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/state-grid-map.png) | State grid map | ```fab add_state_grid_map:$SLUG``` |
 | ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
@@ -297,3 +305,45 @@ mapturner geodata.yaml data/geodata.json
 ```
 
 In your project ```js/graphic.js``` folder, change the ```PRIMARY_COUNTRY``` variable at the top from Nepal to the name of your featured country. You will also want to adjust the ```MAP_DEFAULT_SCALE``` and ```MAP_DEFAULT_HEIGHT``` variables so that your featured country fits onscreen.
+
+Adding a new graphic template
+-----------------------------
+
+To create and use a new graphic template, you will need to follow several steps. First, choose a suitable existing template and copy it's folder, for instance:
+
+```
+cd graphic_templates
+cp -r line_chart scatterplot
+```
+
+Second, open the COPY Google Spreadsheet for the pre-existing graphic template ("line_chart" in the example above). Make a copy of this document and adjust the headline in the copy to match the new chart type. Be sure to make this new spreadsheet public. (Share > Get Shareable Link > Can View). Copy the key for the new spreadsheet from the URL and paste it into the `graphic_config.py` for your new template.
+
+Third, modify the new template to render your new chart type. Be sure to remove any dependencies you don't need for this graphic type. You can test your graphic template using the local server, for instance: [http://localhost:8000/templates/scatterplot/?refresh=1](http://localhost:8000/templates/scatterplot/?refresh=1)
+
+Before you can use your new template you'll also need to add a fab command. In ``fabfile/__init__.py`` scroll down to the tasks for creating graphics and add a task for your new template, like this:
+
+```
+@task
+def add_scatterplot(slug):
+    """
+    Create a scatterplot.
+    """
+    _add_graphic(slug, 'scatterplot')
+```
+
+Lastly, commit your new graphic template and your fabfile changes. Your new graphic template is now ready to use.
+
+Keeping the graphics directory clean
+------------------------------------
+
+If you are working with multiple users who are creating/deleting graphics, you may find that you end up with folders for deleted graphics containing only their copytext and other, uncommitted files. If this is bothering you, run:
+
+```
+git clean -dn
+```
+
+This will list folders with no committed files. To permanantly delete those folders, run:
+
+```
+git clean -df
+```

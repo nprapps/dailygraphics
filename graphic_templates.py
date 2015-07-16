@@ -98,6 +98,8 @@ def _templates_less(slug, filename):
     """
     template_path = '%s/%s' % (app_config.TEMPLATES_PATH, slug)
     less_path = '%s/css/%s.less' % (template_path, filename)
+    base_less_path = '%s/_base/css/base.less' % app_config.TEMPLATES_PATH
+    temp_base_less_path = '%s/css/base.less' % template_path
 
     if not os.path.exists(less_path):
         less_path = '%s/_base/css/%s.less' % (app_config.TEMPLATES_PATH, filename)
@@ -105,7 +107,16 @@ def _templates_less(slug, filename):
         if not os.path.exists(less_path):
             abort(404)
 
+    if os.path.exists(temp_base_less_path):
+        os.remove(temp_base_less_path)
+
+    # Temp symlink base.less so it can be included by less compiler
+    os.symlink(base_less_path, temp_base_less_path)
+
     r = subprocess.check_output(['node_modules/less/bin/lessc', less_path])
+
+    # Remove temporary symlink
+    os.remove(temp_base_less_path)
 
     return make_response(r, 200, { 'Content-Type': 'text/css' })
 

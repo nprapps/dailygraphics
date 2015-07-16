@@ -94,10 +94,6 @@ def deploy(slug):
         print 'You must specify a project slug, like this: "deploy:slug"'
         return
 
-    update_copy(slug)
-    assets.sync(slug)
-    render.render(slug)
-
     graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     s3_root = '%s/graphics/%s' % (app_config.PROJECT_SLUG, slug)
     graphic_assets = '%s/assets' % graphic_root
@@ -105,8 +101,16 @@ def deploy(slug):
 
     graphic_config = _graphic_config(slug)
 
+    use_assets = getattr(graphic_config, 'USE_ASSETS', True)
     default_max_age = getattr(graphic_config, 'DEFAULT_MAX_AGE', None) or app_config.DEFAULT_MAX_AGE
     assets_max_age = getattr(graphic_config, 'ASSETS_MAX_AGE', None) or app_config.ASSETS_MAX_AGE
+
+    update_copy(slug)
+
+    if use_assets:
+        assets.sync(slug)
+
+    render.render(slug)
 
     flat.deploy_folder(
         graphic_root,
@@ -126,13 +130,14 @@ def deploy(slug):
         }
     )
 
-    flat.deploy_folder(
-        graphic_assets,
-        s3_assets,
-        headers={
-            'Cache-Control': 'max-age=%i' % assets_max_age
-        }
-    )
+    if use_assets:
+        flat.deploy_folder(
+            graphic_assets,
+            s3_assets,
+            headers={
+                'Cache-Control': 'max-age=%i' % assets_max_age
+            }
+        )
 
     print ''
     print '%s URL: %s/graphics/%s/' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug)
@@ -201,6 +206,10 @@ def _add_graphic(slug, template):
 
         if success:
             download_copy(slug)
+        else:
+            local('rm -r graphic_path')
+            print 'Failed to copy spreadsheet! Try again!'
+            return
     else:
         print 'No graphic_config.py found, not creating spreadsheet'
 
@@ -219,7 +228,7 @@ def _check_slug(slug):
         s3 = boto.connect_s3()
         bucket = s3.get_bucket(app_config.PRODUCTION_S3_BUCKET['bucket_name'])
         key = bucket.get_key('%s/graphics/%s/child.html' % (app_config.PROJECT_SLUG, slug))
-        
+
         if key:
             print 'Error: Slug exists on apps.npr.org'
             return True
@@ -259,6 +268,13 @@ def add_stacked_column_chart(slug):
     _add_graphic(slug, 'stacked_column_chart')
 
 @task
+def add_block_histogram(slug):
+    """
+    Create a block histogram.
+    """
+    _add_graphic(slug, 'block_histogram')
+
+@task
 def add_grouped_bar_chart(slug):
     """
     Create a grouped bar chart.
@@ -287,21 +303,31 @@ def add_line_chart(slug):
     _add_graphic(slug, 'line_chart')
 
 @task
-def add_locator_map(slug):
+def add_dot_chart(slug):
+    """
+    Create a dot chart with error bars
+    """
+    _add_graphic(slug, 'dot_chart')
+
+@task
+def add_slopegraph(slug):
+    """
+    Create a slopegraph (intended for narrow display)
+    """
+    _add_graphic(slug, 'slopegraph')
+
+@task
+def add_map(slug):
     """
     Create a locator map.
     """
     _add_graphic(slug, 'locator_map')
 
 @task
-def add_map(slug):
+def add_leaflet_map(slug):
     """
     Create a Leaflet map.
     """
-    _add_graphic(slug, 'map')
-    
-@task
-def add_leaflet_map(slug):
     _add_graphic(slug, 'map')
 
 @task

@@ -104,9 +104,13 @@
             margin: 60px 10px 10px 10px;
         }
 
-        #preview {
-            border: 1px dashed #ddd;
+        #preview-wrapper {
+            border: 2px dashed #ddd;
             margin-bottom: 20px;
+        }
+
+        #preview {
+            width: 100%;
         }
 
         textarea {
@@ -121,8 +125,9 @@
         <div class="segment">
             <h1 class="{{ DEPLOYMENT_TARGET or 'localhost' }}">{{ DEPLOYMENT_TARGET or 'localhost' }}</h1>
         </div>
+
         <div class="segment">
-            <h1>{{ slug }}</h1>
+            <a id="resize-sidebar" class="btn" href="#">Sidebar (180px)</a>
         </div>
 
         <div class="segment">
@@ -171,7 +176,9 @@
 
     <div class="content">
 
-        <div id='preview'>
+        <div id="preview-wrapper">
+            <div id='preview'>
+            </div>
         </div>
 
         <h2><span class="production">Production</span> embed code (for Seamus)</h2>
@@ -206,15 +213,25 @@ $(function() {
     <script type="text/javascript" src="js/lib/pym.js"></script>
 
     <script type="text/javascript">
+        var resizeSidebarEl = document.querySelector('#resize-sidebar');
         var resizeMobileEl = document.querySelector('#resize-mobile');
         var resizeDesktopEl = document.querySelector('#resize-desktop');
         var resizeFluidEl = document.querySelector('#resize-fluid');
-        var previewEl = document.querySelector('#preview');
+        var previewWrapperEl = document.querySelector('#preview-wrapper');
+
+        resizeSidebarEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            previewWrapperEl.style.width = '180px';
+            pymParent.sendWidth();
+
+            window.location.hash = 'sidebar';
+        });
 
         resizeMobileEl.addEventListener('click', function(e) {
             e.preventDefault();
 
-            previewEl.style.width = '300px';
+            previewWrapperEl.style.width = '300px';
             pymParent.sendWidth();
 
             window.location.hash = 'mobile';
@@ -222,7 +239,8 @@ $(function() {
 
         resizeDesktopEl.addEventListener('click', function(e) {
             e.preventDefault();
-            previewEl.style.width = '730px';
+
+            previewWrapperEl.style.width = '730px';
             pymParent.sendWidth();
 
             window.location.hash = 'desktop';
@@ -231,18 +249,20 @@ $(function() {
         resizeFluidEl.addEventListener('click', function(e) {
             e.preventDefault();
 
-            previewEl.style.width = '100%';
+            previewWrapperEl.style.width = '100%';
             pymParent.sendWidth();
 
             window.location.hash = 'fluid';
         });
 
-        if (window.location.hash == '#mobile') {
-            previewEl.style.width = '300px';
+        if (window.location.hash == '#sidebar') {
+            previewWrapperEl.style.width = '180px';
+        } else if (window.location.hash == '#mobile') {
+            previewWrapperEl.style.width = '300px';
         } else if (window.location.hash == '#desktop') {
-            previewEl.style.width = '730px';
+            previewWrapperEl.style.width = '730px';
         } else if (window.location.hash == '#fluid') {
-            previewEl.style.width = '100%';
+            previewWrapperEl.style.width = '100%';
         }
 
         var pymParent = new pym.Parent('preview', 'child.html', {});
