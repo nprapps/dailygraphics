@@ -68,6 +68,8 @@ def _templates_child(slug):
     context = make_context(asset_depth=2, root_path=template_path)
     context['slug'] = slug
 
+    env = Environment(loader=FileSystemLoader([template_path, '%s/_base' % app_config.TEMPLATES_PATH]))
+
     config_path = '%s/graphic_config.py' % template_path
 
     if not os.path.exists(config_path):
@@ -77,6 +79,10 @@ def _templates_child(slug):
         graphic_config = imp.load_source('graphic_config', config_path)
         context.update(graphic_config.__dict__)
 
+        if hasattr(graphic_config, 'JINJA_FORMAT_FUNCTIONS'):
+            for func in graphic_config.JINJA_FORMAT_FUNCTIONS:
+                env.filters[func.__name__] = func
+
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
             copy_path = '%s/%s.xlsx' % (template_path, slug)
 
@@ -84,7 +90,6 @@ def _templates_child(slug):
     except IOError:
         pass
 
-    env = Environment(loader=FileSystemLoader([template_path, '%s/_base' % app_config.TEMPLATES_PATH]))
     env.globals.update(render=render_with_context)
     template = env.get_template('child_template.html')
 

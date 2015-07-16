@@ -1,6 +1,8 @@
 0.1.0
 -----
 
+* Add support for custom Jinja filters specified in graphic_config.py. (#131)
+* Update Jinja to 2.7.3. (#127)
 * Add .DS_Store to default assetsignore. (#129)
 * Fix issue where preview border messed with width calculation
 * Update pym to 0.4.5
