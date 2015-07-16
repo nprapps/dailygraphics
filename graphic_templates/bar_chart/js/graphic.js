@@ -97,7 +97,6 @@ var renderBarChart = function(config) {
     var barGap = 5;
     var labelWidth = 85;
     var labelMargin = 6;
-    var valueMinWidth = 30;
     var valueGap = 6;
 
     var margins = {
