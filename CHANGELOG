@@ -1,6 +1,7 @@
 0.1.0
 -----
 
+* bar_chart template now supports negative numbers (#124)
 * Add support for custom Jinja filters specified in graphic_config.py. (#131)
 * Update Jinja to 2.7.3. (#127)
 * Add .DS_Store to default assetsignore. (#129)
