@@ -108,6 +108,27 @@ You'll now need to create a folder to hold the graphics created and deployed by 
 
 **All other users:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
 
+Using a stable version
+----------------------
+
+The master branch of project is in active usage and development by NPR at all times. If you would like to use a [more] stable version, we suggest checking out a tagged version (``0.1``, etc.). We will periodically tag releases, which will be synchronized to the ``CHANGELOG`` so you will know exactly what improvements you will get if you migrate to a new tagged version. To use a tagged version run, for example:
+
+```
+git checkout 0.1.0
+```
+
+To upgrade to a newer tagged version just check it out:
+
+```
+git checkout 0.2.0
+```
+
+When upgrading from one tagged version to another, please be sure to update your Python requirements:
+
+```
+pip install -Ur requirements.txt
+```
+
 Configuration
 -------------
 
