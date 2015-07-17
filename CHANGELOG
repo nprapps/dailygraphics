@@ -1,6 +1,9 @@
 0.1.0
 -----
 
+* stacked_bar_chart will now auto-hide labels that don't fit.
+* stacked_bar_chart now supports negative numbers.
+* Height-based label fitting for column_chart template
 * bar_chart template now supports negative numbers (#124)
 * Add support for custom Jinja filters specified in graphic_config.py. (#131)
 * Update Jinja to 2.7.3. (#127)
