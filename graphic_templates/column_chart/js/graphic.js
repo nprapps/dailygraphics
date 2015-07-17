@@ -254,25 +254,28 @@ var renderColumnChart = function(config) {
                 return yScale(d[valueColumn]);
             })
             .attr('dy', function(d) {
-                var bbox = d3.select(this).node().getBBox();
-                var y = bbox.y;
-                var height = bbox.height;
+                var textHeight = d3.select(this).node().getBBox().height;
+                var barHeight = 0;
 
                 if (d[valueColumn] < 0) {
-                    if (y + valueGap + height > chartHeight - valueGap * 2) {
+                    barHeight = yScale(d[valueColumn]) - yScale(0);
+
+                    if (textHeight + valueGap * 2 < barHeight) {
                         d3.select(this).classed('in', true);
-                        return -(height - valueGap / 2);
+                        return -(textHeight - valueGap / 2);
                     } else {
                         d3.select(this).classed('out', true)
-                        return height + valueGap;
+                        return textHeight + valueGap;
                     }
                 } else {
-                    if (y - (valueGap + height) < valueGap * 2) {
+                    barHeight = yScale(0) - yScale(d[valueColumn]);
+
+                    if (textHeight + valueGap * 2 < barHeight) {
                         d3.select(this).classed('in', true)
-                        return height + valueGap;
+                        return textHeight + valueGap;
                     } else {
                         d3.select(this).classed('out', true)
-                        return -(height - valueGap / 2);
+                        return -(textHeight - valueGap / 2);
                     }
                 }
             })
