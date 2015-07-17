@@ -139,11 +139,17 @@ var renderColumnChart = function(config) {
             return d[labelColumn];
         }));
 
+    var min = d3.min(config['data'], function(d) {
+        return Math.floor(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+    });
+
+    if (min > 0) {
+        min = 0;
+    }
+
     var yScale = d3.scale.linear()
         .domain([
-            d3.min(config['data'], function(d) {
-                return Math.floor(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
-            }),
+            min,
             d3.max(config['data'], function(d) {
                 return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
             })

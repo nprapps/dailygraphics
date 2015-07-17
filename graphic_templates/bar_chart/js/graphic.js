@@ -132,11 +132,17 @@ var renderBarChart = function(config) {
     /*
      * Create D3 scale objects.
      */
+    var min = d3.min(config['data'], function(d) {
+        return Math.floor(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+    });
+
+    if (min > 0) {
+        min = 0;
+    }
+
     var xScale = d3.scale.linear()
         .domain([
-            d3.min(config['data'], function(d) {
-                return Math.floor(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
-            }),
+            min,
             d3.max(config['data'], function(d) {
                 return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
             })
