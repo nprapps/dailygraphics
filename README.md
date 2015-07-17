@@ -5,6 +5,7 @@ dailygraphics
 * [Assumptions](#assumptions)
 * [What's in here?](#whats-in-here)
 * [Bootstrap the project](#bootstrap-the-project)
+* [Using a stable version](#using-a-stable-version)
 * [Configuration](#configuration)
 * [Run the project](#run-the-project)
 * [Add a new graphic](#add-a-new-graphic)
