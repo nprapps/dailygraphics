@@ -112,7 +112,7 @@ You'll now need to create a folder to hold the graphics created and deployed by 
 Using a stable version
 ----------------------
 
-The master branch of project is in active usage and development by NPR at all times. If you would like to use a [more] stable version, we suggest checking out a tagged version (``0.1``, etc.). We will periodically tag releases, which will be synchronized to the ``CHANGELOG`` so you will know exactly what improvements you will get if you migrate to a new tagged version. To use a tagged version run, for example:
+The master branch of project is in active development by NPR at all times. If you would like to use a [more] stable version, we suggest checking out a tagged version (``0.1``, etc.). We will periodically tag releases, which will be synchronized to the ``CHANGELOG`` so you will know exactly what improvements you will get if you migrate to a new tagged version. To use a tagged version run, for example:
 
 ```
 git checkout 0.1.0
