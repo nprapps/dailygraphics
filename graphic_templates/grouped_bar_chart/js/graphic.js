@@ -114,7 +114,7 @@ var renderGroupedBarChart = function(config) {
     var groupHeight =  (barHeight * numGroupBars) + (barGapInner * (numGroupBars - 1))
     var labelWidth = 85;
     var labelMargin = 6;
-    var valueMinWidth = 25;
+    var valueGap = 6;
 
     var margins = {
         top: 0,
@@ -137,12 +137,25 @@ var renderGroupedBarChart = function(config) {
     /*
      * Create D3 scale objects.
      */
+    var min = d3.min(config['data'], function(d) {
+        return d3.min(d['values'], function(v) {
+            return Math.floor(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
+        });
+    });
+
+    if (min > 0) {
+        min = 0;
+    }
+
     var xScale = d3.scale.linear()
-        .domain([0, d3.max(config['data'], function(d) {
-            return d3.max(d['values'], function(v) {
-                return Math.ceil(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
-            });
-        })])
+        .domain([
+            min,
+            d3.max(config['data'], function(d) {
+                return d3.max(d['values'], function(v) {
+                    return Math.ceil(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
+                });
+            })
+        ])
         .range([0, chartWidth]);
 
     var yScale = d3.scale.linear()
@@ -241,8 +254,13 @@ var renderGroupedBarChart = function(config) {
         })
         .enter()
         .append('rect')
-            .attr('height', barHeight)
-            .attr('x', 0)
+            .attr('x', function(d) {
+                if (d[valueColumn] >= 0) {
+                    return xScale(0);
+                }
+
+                return xScale(d[valueColumn]);
+            })
             .attr('y', function(d, i) {
                 if (i == 0) {
                     return 0;
@@ -251,8 +269,9 @@ var renderGroupedBarChart = function(config) {
                 return (barHeight * i) + (barGapInner * i);
             })
             .attr('width', function(d) {
-                return xScale(d[valueColumn]);
+                return Math.abs(xScale(0) - xScale(d[valueColumn]));
             })
+            .attr('height', barHeight)
             .style('fill', function(d) {
             	return colorScale(d[labelColumn]);
             })
@@ -307,6 +326,15 @@ var renderGroupedBarChart = function(config) {
         })
         .enter()
         .append('text')
+            .text(function(d) {
+                var v = d[valueColumn].toFixed(0);
+
+                if (d[valueColumn] > 0 && v == 0) {
+                    v = '<1';
+                }
+
+                return v + '%';
+            })
             .attr('x', function(d) {
                 return xScale(d[valueColumn]);
             })
@@ -318,40 +346,32 @@ var renderGroupedBarChart = function(config) {
                 return (barHeight * i) + barGapInner;
             })
             .attr('dx', function(d) {
-                if (xScale(d['amt']) > valueMinWidth) {
-                    return -6;
-                }
+                var xStart = xScale(d[valueColumn]);
+                var textWidth = this.getComputedTextLength()
 
-                return 6;
-            })
-            .attr('dy', (barHeight / 2) + 4)
-            .attr('text-anchor', function(d) {
-                if (xScale(d[valueColumn]) > valueMinWidth) {
-                    return 'end';
+                // Negative case
+                if (d[valueColumn] < 0) {
+                    var outsideOffset = -(valueGap + textWidth);
+
+                    if (xStart + outsideOffset < 0) {
+                        d3.select(this).classed('in', true)
+                        return valueGap;
+                    } else {
+                        d3.select(this).classed('out', true)
+                        return outsideOffset;
+                    }
+                // Positive case
                 } else {
-                    return 'begin';
+                    if (xStart + valueGap + textWidth > chartWidth) {
+                        d3.select(this).classed('in', true)
+                        return -(valueGap + textWidth);
+                    } else {
+                        d3.select(this).classed('out', true)
+                        return valueGap;
+                    }
                 }
             })
-            .attr('class', function(d) {
-                var c = classify(d[labelColumn]);
-
-                if (xScale(d[valueColumn]) > valueMinWidth) {
-                    c += ' in';
-                } else {
-                    c += ' out';
-                }
-
-                return c;
-            })
-            .text(function(d) {
-                var v = d[valueColumn].toFixed(0);
-
-                if (d[valueColumn] > 0 && v == 0) {
-                    v = '<1';
-                }
-
-                return v + '%';
-            });
+            .attr('dy', (barHeight / 2) + 4);
 }
 
 
