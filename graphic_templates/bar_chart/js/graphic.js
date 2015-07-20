@@ -95,15 +95,14 @@ var renderBarChart = function(config) {
 
     var barHeight = 30;
     var barGap = 5;
-    var labelWidth = 85;
-    var labelMargin = 6;
+    var labelGap = 6;
     var valueGap = 6;
 
     var margins = {
         top: 0,
         right: 15,
         bottom: 20,
-        left: (labelWidth + labelMargin)
+        left: 5
     };
 
     var ticksX = 4;
@@ -126,8 +125,46 @@ var renderBarChart = function(config) {
     var chartElement = chartWrapper.append('svg')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
-        .append('g')
-        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+        .attr('transform', makeTranslate(margins['left'], margins['top']));;
+
+    /*
+     * Render bar labels.
+     */
+    var labelsGroupElement = chartElement.append('g')
+        .attr('class', 'labels')
+        .selectAll('text')
+        .data(config['data'])
+        .enter()
+        .append('text')
+            .html(function(d) {
+                return d[labelColumn];
+            })
+            .attr('class', function(d) {
+                return classify(d[labelColumn]);
+            })
+            .attr('x', 0)
+            .attr('y', function(d, i) {
+                return (i + 0.5) * (barHeight + barGap);
+            });
+
+    var labelWidth = 0;
+
+    d3.selectAll('.labels text').each(function(d) {
+        var width = this.getBBox().width;
+
+        if (width > labelWidth) {
+            labelWidth = width;
+        }
+    });
+
+    /*
+     * Create the chart body element.
+     */
+    var bodyWidth = chartWidth - (labelWidth + labelGap);
+    var bodyHeight = chartHeight;
+
+    var chartBody = chartElement.append('g')
+        .attr('transform', makeTranslate(labelWidth + labelGap, 0));
 
     /*
      * Create D3 scale objects.
@@ -147,7 +184,7 @@ var renderBarChart = function(config) {
                 return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
             })
         ])
-        .range([0, chartWidth]);
+        .range([0, bodyWidth]);
 
     /*
      * Create D3 axes.
@@ -163,9 +200,9 @@ var renderBarChart = function(config) {
     /*
      * Render axes to chart.
      */
-    chartElement.append('g')
+    chartBody.append('g')
         .attr('class', 'x axis')
-        .attr('transform', makeTranslate(0, chartHeight))
+        .attr('transform', makeTranslate(0, bodyHeight))
         .call(xAxis);
 
     /*
@@ -175,18 +212,18 @@ var renderBarChart = function(config) {
         return xAxis;
     };
 
-    chartElement.append('g')
+    chartBody.append('g')
         .attr('class', 'x grid')
-        .attr('transform', makeTranslate(0, chartHeight))
+        .attr('transform', makeTranslate(0, bodyHeight))
         .call(xAxisGrid()
-            .tickSize(-chartHeight, 0, 0)
+            .tickSize(-bodyHeight, 0, 0)
             .tickFormat('')
         );
 
     /*
      * Render bars to chart.
      */
-    chartElement.append('g')
+    chartBody.append('g')
         .attr('class', 'bars')
         .selectAll('rect')
         .data(config['data'])
@@ -213,47 +250,17 @@ var renderBarChart = function(config) {
     /*
      * Render 0-line.
      */
-    chartElement.append('line')
+    chartBody.append('line')
         .attr('class', 'zero-line')
         .attr('x1', xScale(0))
         .attr('x2', xScale(0))
         .attr('y1', 0)
-        .attr('y2', chartHeight);
-
-    /*
-     * Render bar labels.
-     */
-    chartWrapper.append('ul')
-        .attr('class', 'labels')
-        .attr('style', formatStyle({
-            'width': labelWidth + 'px',
-            'top': margins['top'] + 'px',
-            'left': '0'
-        }))
-        .selectAll('li')
-        .data(config['data'])
-        .enter()
-        .append('li')
-            .attr('style', function(d, i) {
-                return formatStyle({
-                    'width': labelWidth + 'px',
-                    'height': barHeight + 'px',
-                    'left': '0px',
-                    'top': (i * (barHeight + barGap)) + 'px;'
-                });
-            })
-            .attr('class', function(d) {
-                return classify(d[labelColumn]);
-            })
-            .append('span')
-                .text(function(d) {
-                    return d[labelColumn];
-                });
+        .attr('y2', bodyHeight);
 
     /*
      * Render bar values.
      */
-    chartElement.append('g')
+    chartBody.append('g')
         .attr('class', 'value')
         .selectAll('text')
         .data(config['data'])
@@ -285,7 +292,7 @@ var renderBarChart = function(config) {
                     }
                 // Positive case
                 } else {
-                    if (xStart + valueGap + textWidth > chartWidth) {
+                    if (xStart + valueGap + textWidth > bodyWidth) {
                         d3.select(this).classed('in', true)
                         return -(valueGap + textWidth);
                     } else {
