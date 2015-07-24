@@ -1,7 +1,8 @@
 0.1.1
 -----
 
-
+* Created _base/base_filters.py, a library of default Jinja filters for common formatting tasks.
+* Made it possible for graphic_config.py to import other local modules (#133)
 
 0.1.0
 -----

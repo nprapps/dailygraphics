@@ -7,8 +7,11 @@ var COLORS = {
 };
 
 /*
- * Convert arbitrary strings to valid css classes
+ * Convert arbitrary strings to valid css classes.
  * via: https://gist.github.com/mathewbyrne/1280286
+ *
+ * NOTE: This implementation must be consistent with the Python classify
+ * function defined in base_filters.py.
  */
 var classify = function(str) {
     return str.toLowerCase()

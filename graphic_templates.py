@@ -12,7 +12,7 @@ from jinja2 import Environment, FileSystemLoader
 import app_config
 import copytext
 import oauth
-from render_utils import make_context, render_with_context
+from render_utils import load_graphic_config, make_context, render_with_context
 
 graphic_templates = Blueprint('graphic_templates', __name__)
 
@@ -32,15 +32,7 @@ def _templates_detail(slug):
     context['slug'] = slug
 
     try:
-        sys.path.insert(0, base_template_path)
-        sys.path.insert(0, template_path)
-
-        f, path, desc = imp.find_module('graphic_config', [template_path, base_template_path])
-        graphic_config = imp.load_module('graphic_config', f, path, desc)
-        f.close()
-
-        sys.path.pop(0)
-        sys.path.pop(0)
+        graphic_config = load_graphic_config(template_path, [base_template_path])
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
             copy_path = '%s/%s.xlsx' % (template_path, slug)
@@ -76,15 +68,7 @@ def _templates_child(slug):
     env = Environment(loader=FileSystemLoader([template_path, '%s/_base' % app_config.TEMPLATES_PATH]))
 
     try:
-        sys.path.insert(0, base_template_path)
-        sys.path.insert(0, template_path)
-
-        f, path, desc = imp.find_module('graphic_config', [template_path, base_template_path])
-        graphic_config = imp.load_module('graphic_config', f, path, desc)
-        f.close()
-
-        sys.path.pop(0)
-        sys.path.pop(0)
+        graphic_config = load_graphic_config(template_path, [base_template_path])
 
         context.update(graphic_config.__dict__)
 

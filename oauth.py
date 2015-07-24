@@ -1,5 +1,6 @@
+#!/usr/bin/env python
+
 import app_config
-import imp
 import os
 
 from app_config import authomatic
@@ -7,7 +8,7 @@ from authomatic.adapters import WerkzeugAdapter
 from exceptions import KeyError
 from flask import Blueprint, make_response, redirect, render_template, url_for
 from functools import wraps
-from render_utils import make_context
+from render_utils import load_graphic_config, make_context
 
 SPREADSHEET_URL_TEMPLATE = 'https://docs.google.com/feeds/download/spreadsheets/Export?exportFormat=xlsx&key=%s'
 
@@ -37,7 +38,7 @@ def authenticate():
     Run OAuth workflow.
     """
     from flask import request
-    
+
     response = make_response()
     context = make_context()
 
@@ -66,10 +67,10 @@ def oauth_required(f):
 
         if request.path.startswith('/graphics/'):
             slug = request.path[1:-1].split('/')[-1]
-            post_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+            graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
             try:
-                graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % post_path)
+                graphic_config = load_graphic_config(graphic_path)
             except IOError:
                 return f(*args, **kwargs)
 

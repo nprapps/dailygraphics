@@ -5,6 +5,7 @@ import imp
 import json
 import os
 import subprocess
+import sys
 import webbrowser
 
 from distutils.spawn import find_executable
@@ -35,7 +36,13 @@ def _graphic_config(slug):
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
     try:
-        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
+        sys.path.insert(0, graphic_path)
+
+        f, path, desc = imp.find_module('graphic_config', [graphic_path])
+        graphic_config = imp.load_module('graphic_config', f, path, desc)
+        f.close()
+
+        sys.path.pop(0)
     except IOError:
         print '%s/graphic_config.py does not exist.' % slug
 
