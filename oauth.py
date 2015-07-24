@@ -66,7 +66,7 @@ def oauth_required(f):
         from flask import request
 
         if request.path.startswith('/graphics/'):
-            slug = request.path[1:-1].split('/')[-1]
+            slug = request.path.split('/')[-2]
             graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
             try:

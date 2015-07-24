@@ -21,6 +21,8 @@ import flat
 import render
 import utils
 
+from render_utils import load_graphic_config
+
 SPREADSHEET_COPY_URL_TEMPLATE = 'https://www.googleapis.com/drive/v2/files/%s/copy'
 SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=1'
 
@@ -28,27 +30,6 @@ SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=
 Base configuration
 """
 env.settings = None
-
-def _graphic_config(slug):
-    """
-    Load and the graphic config for a graphic.
-    """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-
-    try:
-        sys.path.insert(0, graphic_path)
-
-        f, path, desc = imp.find_module('graphic_config', [graphic_path])
-        graphic_config = imp.load_module('graphic_config', f, path, desc)
-        f.close()
-
-        sys.path.pop(0)
-    except IOError:
-        print '%s/graphic_config.py does not exist.' % slug
-
-        raise
-
-    return graphic_config
 
 """
 Environments
@@ -106,7 +87,7 @@ def deploy(slug):
     graphic_assets = '%s/assets' % graphic_root
     s3_assets = '%s/assets' % s3_root
 
-    graphic_config = _graphic_config(slug)
+    graphic_config = load_graphic_config(graphic_root)
 
     use_assets = getattr(graphic_config, 'USE_ASSETS', True)
     default_max_age = getattr(graphic_config, 'DEFAULT_MAX_AGE', None) or app_config.DEFAULT_MAX_AGE
@@ -156,7 +137,7 @@ def download_copy(slug):
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
     try:
-        graphic_config = _graphic_config(slug)
+        graphic_config = load_graphic_config(graphic_path)
     except IOError:
         print '%s/graphic_config.py does not exist.' % slug
         return
@@ -368,8 +349,8 @@ def copy_spreadsheet(slug):
     """
     _check_credentials()
 
-    config_path = '%s/%s/graphic_config.py' % (app_config.GRAPHICS_PATH, slug)
-    graphic_config = _graphic_config(slug)
+    config_path = '%s/%s/' % (app_config.GRAPHICS_PATH, slug)
+    graphic_config = load_graphic_config(config_path)
 
     if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
         print 'Skipping spreadsheet creation. (COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.)' % slug
