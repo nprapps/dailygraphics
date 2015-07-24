@@ -12,7 +12,7 @@ dailygraphics
 * [Deploy to S3](#deploy-to-s3)
 * [Embedding](#embedding)
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
-* [Using custom Jinja filter functions](#using-custom-jinja-filter-functions)
+* [Using Jinja filter functions](#using-jinja-filter-functions)
 * [Storing media assets](#storing-media-assets)
 * [Creating locator maps](#creating-locator-maps)
 * [Adding a new graphic template](#adding-a-new-graphic-template)
@@ -283,27 +283,27 @@ Note: Your published graphic **will not** automatically update every time your s
 If you do **not** want want to use the copytext spreadsheet for a given project, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
 
 
-Using custom Jinja filter functions
------------------------------------
+Using Jinja filter functions
+----------------------------
 
-If you're graphic requires complex number formatting or other nuanced presentation, you may need to write a custom Jinja filter function. This is supported through each project's ``graphic_config.py`` file. To add a custom filter function, simply define it and add it to an list called ``JINJA_FILTER_FUNCTIONS``, like so:
+A [library of Jinja filter functions](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/_base/base_filters.py) for common tasks (ordinal, AP date format, etc.) is included with each graphic.
+
+If you're graphic requires complex number formatting or other nuanced presentation, you may need to write a custom filter function. This is supported through each project's ``graphic_config.py`` file. To add a custom filter function, simply define it and add it to the list called ``JINJA_FILTER_FUNCTIONS``, like so:
 
 ```python
-def comma_format(value):
-    return locale.format('%d', float(value), grouping=True)
+def percent(value):
+    return unicode(float(value * 100)) + '%'
 
-JINJA_FILTER_FUNCTIONS = [
-    comma_format
-]
+    JINJA_FILTER_FUNCTIONS = base_filters.FILTERS + [percent]
 ```
 
 Then you will be able to use it in your template like this:
 
 ```html
-<td>{{ row.value|comma_format }}</td>
+<td>{{ row.value|percent }}</td>
 ```
 
-See the ``table`` graphic template for a complete example.
+See the ``table`` graphic template for a more complete example.
 
 
 Storing media assets
