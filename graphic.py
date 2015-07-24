@@ -35,8 +35,13 @@ def _graphics_detail(slug):
         template = 'parent_old.html'
 
     try:
-        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
-        context.update(graphic_config.__dict__)
+        sys.path.insert(0, graphic_path)
+
+        f, path, desc = imp.find_module('graphic_config', [graphic_path])
+        graphic_config = imp.load_module('graphic_config', f, path, desc)
+        f.close()
+
+        sys.path.pop(0)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
             copy_path = '%s/%s.xlsx' % (graphic_path, slug)

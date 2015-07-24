@@ -21,7 +21,7 @@
                 <td data-title="{{ COPY.labels.hdr_state }}">{{ row.name }}</td>
                 <td data-title="{{ COPY.labels.hdr_usps }}">{{ row.usps }}</td>
                 <td data-title="{{ COPY.labels.hdr_ap }}">{{ row.ap }}</td>
-                <td data-title="{{ COPY.labels.hdr_value }}" class="amt">{{ row.value|comma_format }}</td>
+                <td data-title="{{ COPY.labels.hdr_value }}" class="amt">{{ row.value|comma }}</td>
             </tr>
             {% endfor %}
 

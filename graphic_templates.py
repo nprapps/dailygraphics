@@ -4,6 +4,7 @@ import imp
 from mimetypes import guess_type
 import os
 import subprocess
+import sys
 
 from flask import Blueprint, abort, make_response, render_template, render_template_string
 from jinja2 import Environment, FileSystemLoader
@@ -24,19 +25,22 @@ def _templates_detail(slug):
     from flask import request
 
     template_path = '%s/%s' % (app_config.TEMPLATES_PATH, slug)
+    base_template_path = '%s/%s' % (app_config.TEMPLATES_PATH, '_base')
 
     # NOTE: Parent must load pym.js from same source as child to prevent version conflicts!
     context = make_context(asset_depth=2, root_path=template_path)
     context['slug'] = slug
 
     try:
-        graphic_config_path = '%s/graphic_config.py' % template_path
+        sys.path.insert(0, base_template_path)
+        sys.path.insert(0, template_path)
 
-        if not os.path.exists(graphic_config_path):
-            graphic_config_path = '%s/%s' % (app_config.TEMPLATES_PATH, '_base')
+        f, path, desc = imp.find_module('graphic_config', [template_path, base_template_path])
+        graphic_config = imp.load_module('graphic_config', f, path, desc)
+        f.close()
 
-        graphic_config = imp.load_source('graphic_config', graphic_config_path)
-        context.update(graphic_config.__dict__)
+        sys.path.pop(0)
+        sys.path.pop(0)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
             copy_path = '%s/%s.xlsx' % (template_path, slug)
@@ -57,6 +61,7 @@ def _templates_child(slug):
     Renders a child.html for embedding.
     """
     template_path = '%s/%s' % (app_config.TEMPLATES_PATH, slug)
+    base_template_path = '%s/%s' % (app_config.TEMPLATES_PATH, '_base')
 
     # Fallback for legacy projects w/o child templates
     if not os.path.exists('%s/child_template.html' % template_path):
@@ -70,13 +75,17 @@ def _templates_child(slug):
 
     env = Environment(loader=FileSystemLoader([template_path, '%s/_base' % app_config.TEMPLATES_PATH]))
 
-    config_path = '%s/graphic_config.py' % template_path
-
-    if not os.path.exists(config_path):
-        config_path = '%s/_base/graphic_config.py' % app_config.TEMPLATES_PATH
-
     try:
-        graphic_config = imp.load_source('graphic_config', config_path)
+        sys.path.insert(0, base_template_path)
+        sys.path.insert(0, template_path)
+
+        f, path, desc = imp.find_module('graphic_config', [template_path, base_template_path])
+        graphic_config = imp.load_module('graphic_config', f, path, desc)
+        f.close()
+
+        sys.path.pop(0)
+        sys.path.pop(0)
+
         context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'JINJA_FILTER_FUNCTIONS'):
