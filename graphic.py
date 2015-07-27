@@ -35,6 +35,7 @@ def _graphics_detail(slug):
 
     try:
         graphic_config = load_graphic_config(graphic_path)
+        context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
             copy_path = '%s/%s.xlsx' % (graphic_path, slug)
@@ -71,7 +72,6 @@ def _graphics_child(slug):
 
     try:
         graphic_config = load_graphic_config(graphic_path)
-
         context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'JINJA_FILTER_FUNCTIONS'):

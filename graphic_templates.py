@@ -33,6 +33,7 @@ def _templates_detail(slug):
 
     try:
         graphic_config = load_graphic_config(template_path, [base_template_path])
+        context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
             copy_path = '%s/%s.xlsx' % (template_path, slug)
@@ -69,7 +70,6 @@ def _templates_child(slug):
 
     try:
         graphic_config = load_graphic_config(template_path, [base_template_path])
-
         context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'JINJA_FILTER_FUNCTIONS'):
