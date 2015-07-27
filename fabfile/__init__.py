@@ -373,7 +373,7 @@ def copy_spreadsheet(slug):
         spreadsheet_url = SPREADSHEET_VIEW_TEMPLATE % spreadsheet_key
         print 'New spreadsheet created successfully!'
         print 'View it online at %s' % spreadsheet_url
-        utils.replace_in_file(config_path, graphic_config.COPY_GOOGLE_DOC_KEY, spreadsheet_key)
+        utils.replace_in_file('%s/graphic_config.py' % config_path , graphic_config.COPY_GOOGLE_DOC_KEY, spreadsheet_key)
 
         return True
 
