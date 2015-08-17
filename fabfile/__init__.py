@@ -5,6 +5,7 @@ import imp
 import json
 import os
 import subprocess
+import sys
 import webbrowser
 
 from distutils.spawn import find_executable
@@ -20,6 +21,8 @@ import flat
 import render
 import utils
 
+from render_utils import load_graphic_config
+
 SPREADSHEET_COPY_URL_TEMPLATE = 'https://www.googleapis.com/drive/v2/files/%s/copy'
 SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=1'
 
@@ -27,21 +30,6 @@ SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=
 Base configuration
 """
 env.settings = None
-
-def _graphic_config(slug):
-    """
-    Load and the graphic config for a graphic.
-    """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-
-    try:
-        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
-    except IOError:
-        print '%s/graphic_config.py does not exist.' % slug
-
-        raise
-
-    return graphic_config
 
 """
 Environments
@@ -99,7 +87,7 @@ def deploy(slug):
     graphic_assets = '%s/assets' % graphic_root
     s3_assets = '%s/assets' % s3_root
 
-    graphic_config = _graphic_config(slug)
+    graphic_config = load_graphic_config(graphic_root)
 
     use_assets = getattr(graphic_config, 'USE_ASSETS', True)
     default_max_age = getattr(graphic_config, 'DEFAULT_MAX_AGE', None) or app_config.DEFAULT_MAX_AGE
@@ -149,7 +137,7 @@ def download_copy(slug):
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
     try:
-        graphic_config = _graphic_config(slug)
+        graphic_config = load_graphic_config(graphic_path)
     except IOError:
         print '%s/graphic_config.py does not exist.' % slug
         return
@@ -368,8 +356,8 @@ def copy_spreadsheet(slug):
     """
     _check_credentials()
 
-    config_path = '%s/%s/graphic_config.py' % (app_config.GRAPHICS_PATH, slug)
-    graphic_config = _graphic_config(slug)
+    config_path = '%s/%s/' % (app_config.GRAPHICS_PATH, slug)
+    graphic_config = load_graphic_config(config_path)
 
     if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
         print 'Skipping spreadsheet creation. (COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.)' % slug
@@ -392,7 +380,7 @@ def copy_spreadsheet(slug):
         spreadsheet_url = SPREADSHEET_VIEW_TEMPLATE % spreadsheet_key
         print 'New spreadsheet created successfully!'
         print 'View it online at %s' % spreadsheet_url
-        utils.replace_in_file(config_path, graphic_config.COPY_GOOGLE_DOC_KEY, spreadsheet_key)
+        utils.replace_in_file('%s/graphic_config.py' % config_path , graphic_config.COPY_GOOGLE_DOC_KEY, spreadsheet_key)
 
         return True
 

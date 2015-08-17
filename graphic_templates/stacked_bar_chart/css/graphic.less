@@ -1,6 +1,18 @@
 @import "base";
 
-.value text { fill: #fff; }
+.value text {
+    fill: #fff;
+
+    &.hidden {
+        display: none;
+    }
+}
+
+.zero-line  {
+    stroke: #666;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
 
 .labels {
     position: absolute;
@@ -28,8 +40,4 @@
             vertical-align: middle;
         }
     }
-}
-
-@media screen and (max-width: 500px) {
-    .value { display: none; }
 }

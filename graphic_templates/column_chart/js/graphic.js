@@ -98,7 +98,7 @@ var renderColumnChart = function(config) {
 
     var aspectWidth = isMobile ? 4 : 16;
     var aspectHeight = isMobile ? 3 : 9;
-    var valueMinHeight = 30;
+    var valueGap = 6;
 
     var margins = {
         top: 5,
@@ -139,10 +139,21 @@ var renderColumnChart = function(config) {
             return d[labelColumn];
         }));
 
+    var min = d3.min(config['data'], function(d) {
+        return Math.floor(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+    });
+
+    if (min > 0) {
+        min = 0;
+    }
+
     var yScale = d3.scale.linear()
-        .domain([0, d3.max(config['data'], function(d) {
-            return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
-        })])
+        .domain([
+            min,
+            d3.max(config['data'], function(d) {
+                return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+            })
+        ])
         .range([chartHeight, 0]);
 
     /*
@@ -224,7 +235,7 @@ var renderColumnChart = function(config) {
      * Render 0 value line.
      */
     chartElement.append('line')
-        .attr('class', 'y grid grid-0')
+        .attr('class', 'zero-line')
         .attr('x1', 0)
         .attr('x2', chartWidth)
         .attr('y1', yScale(0))
@@ -239,33 +250,42 @@ var renderColumnChart = function(config) {
         .data(config['data'])
         .enter()
         .append('text')
+            .text(function(d) {
+                return d[valueColumn].toFixed(0);
+            })
             .attr('x', function(d, i) {
                 return xScale(d[labelColumn]) + (xScale.rangeBand() / 2);
             })
             .attr('y', function(d) {
-                var y = yScale(d[valueColumn]);
+                return yScale(d[valueColumn]);
+            })
+            .attr('dy', function(d) {
+                var textHeight = d3.select(this).node().getBBox().height;
+                var barHeight = 0;
 
-                if (chartHeight - y > valueMinHeight) {
-                    return y + 15;
+                if (d[valueColumn] < 0) {
+                    barHeight = yScale(d[valueColumn]) - yScale(0);
+
+                    if (textHeight + valueGap * 2 < barHeight) {
+                        d3.select(this).classed('in', true);
+                        return -(textHeight - valueGap / 2);
+                    } else {
+                        d3.select(this).classed('out', true)
+                        return textHeight + valueGap;
+                    }
+                } else {
+                    barHeight = yScale(0) - yScale(d[valueColumn]);
+
+                    if (textHeight + valueGap * 2 < barHeight) {
+                        d3.select(this).classed('in', true)
+                        return textHeight + valueGap;
+                    } else {
+                        d3.select(this).classed('out', true)
+                        return -(textHeight - valueGap / 2);
+                    }
                 }
-
-                return y - 6;
             })
             .attr('text-anchor', 'middle')
-            .attr('class', function(d) {
-                var c = 'y-' + classify(d[labelColumn]);
-
-                if (chartHeight - yScale(d[valueColumn]) > valueMinHeight) {
-                    c += ' in';
-                } else {
-                    c += ' out';
-                }
-
-                return c;
-            })
-            .text(function(d) {
-                return d[valueColumn].toFixed(0);
-            });
 }
 
 /*

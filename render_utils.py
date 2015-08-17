@@ -2,10 +2,12 @@
 
 import codecs
 from datetime import datetime
+import imp
 import json
 import time
 import urllib
 import subprocess
+import sys
 
 from flask import Markup, g, render_template, request
 from slimit import minify
@@ -149,6 +151,28 @@ class CSSIncluder(Includer):
         context['paths'] = src_paths
 
         return '\n'.join(output)
+
+def load_graphic_config(graphic_path, base_paths=[]):
+    """
+    Load the Python configuration module for a graphic.
+    """
+    for path in base_paths:
+        sys.path.insert(0, path)
+
+    sys.path.insert(0, graphic_path)
+
+    paths = [graphic_path] + base_paths
+
+    f, path, desc = imp.find_module('graphic_config', paths)
+    graphic_config = imp.load_module('graphic_config', f, path, desc)
+    f.close()
+
+    sys.path.pop(0)
+
+    for path in base_paths:
+        sys.path.pop(0)
+
+    return graphic_config
 
 def flatten_app_config():
     """

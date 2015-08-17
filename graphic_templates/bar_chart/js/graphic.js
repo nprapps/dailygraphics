@@ -106,7 +106,7 @@ var renderBarChart = function(config) {
     var barGap = 5;
     var labelWidth = 85;
     var labelMargin = 6;
-    var valueMinWidth = 30;
+    var valueGap = 6;
 
     var margins = {
         top: 0,
@@ -141,10 +141,21 @@ var renderBarChart = function(config) {
     /*
      * Create D3 scale objects.
      */
+    var min = d3.min(config['data'], function(d) {
+        return Math.floor(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+    });
+
+    if (min > 0) {
+        min = 0;
+    }
+
     var xScale = d3.scale.linear()
-        .domain([0, d3.max(config['data'], function(d) {
-            return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
-        })])
+        .domain([
+            min,
+            d3.max(config['data'], function(d) {
+                return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+            })
+        ])
         .range([0, chartWidth]);
 
     /*
@@ -190,16 +201,33 @@ var renderBarChart = function(config) {
         .data(config['data'])
         .enter()
         .append('rect')
-            .attr('y', function(d, i) {
-                return i * (barHeight + barGap);
+            .attr('x', function(d) {
+                if (d[valueColumn] >= 0) {
+                    return xScale(0);
+                }
+
+                return xScale(d[valueColumn]);
             })
             .attr('width', function(d) {
-                return xScale(d[valueColumn]);
+                return Math.abs(xScale(0) - xScale(d[valueColumn]));
+            })
+            .attr('y', function(d, i) {
+                return i * (barHeight + barGap);
             })
             .attr('height', barHeight)
             .attr('class', function(d, i) {
                 return 'bar-' + i + ' ' + classify(d[labelColumn]);
             });
+
+    /*
+     * Render 0-line.
+     */
+    chartElement.append('line')
+        .attr('class', 'zero-line')
+        .attr('x1', xScale(0))
+        .attr('x2', xScale(0))
+        .attr('y1', 0)
+        .attr('y2', chartHeight);
 
     /*
      * Render bar labels.
@@ -240,6 +268,9 @@ var renderBarChart = function(config) {
         .data(config['data'])
         .enter()
         .append('text')
+            .text(function(d) {
+                return d[valueColumn].toFixed(0) + '%';
+            })
             .attr('x', function(d) {
                 return xScale(d[valueColumn]);
             })
@@ -247,32 +278,32 @@ var renderBarChart = function(config) {
                 return i * (barHeight + barGap);
             })
             .attr('dx', function(d) {
-                if (xScale(d[valueColumn]) > valueMinWidth) {
-                    return -6;
+                var xStart = xScale(d[valueColumn]);
+                var textWidth = this.getComputedTextLength()
+
+                // Negative case
+                if (d[valueColumn] < 0) {
+                    var outsideOffset = -(valueGap + textWidth);
+
+                    if (xStart + outsideOffset < 0) {
+                        d3.select(this).classed('in', true)
+                        return valueGap;
+                    } else {
+                        d3.select(this).classed('out', true)
+                        return outsideOffset;
+                    }
+                // Positive case
                 } else {
-                    return 6;
+                    if (xStart + valueGap + textWidth > chartWidth) {
+                        d3.select(this).classed('in', true)
+                        return -(valueGap + textWidth);
+                    } else {
+                        d3.select(this).classed('out', true)
+                        return valueGap;
+                    }
                 }
             })
             .attr('dy', (barHeight / 2) + 3)
-            .attr('text-anchor', function(d) {
-                if (xScale(d[valueColumn]) > valueMinWidth) {
-                    return 'end';
-                } else {
-                    return 'begin';
-                }
-            })
-            .attr('class', function(d) {
-                var c = classify(d[labelColumn]);
-                if (xScale(d[valueColumn]) > valueMinWidth) {
-                    c += ' in';
-                } else {
-                    c += ' out';
-                }
-                return c;
-            })
-            .text(function(d) {
-                return d[valueColumn].toFixed(0) + '%';
-            });
 }
 
 /*

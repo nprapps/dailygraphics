@@ -1,7 +1,7 @@
 Authomatic==0.0.13
 Fabric==1.4.3
 Flask==0.9
-Jinja2==2.6
+Jinja2==2.7.3
 Werkzeug==0.8.3
 awscli==1.2.10
 bcdoc==0.12.0

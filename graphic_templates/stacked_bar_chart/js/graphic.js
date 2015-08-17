@@ -117,7 +117,7 @@ var renderStackedBarChart = function(config) {
     var barGap = 5;
     var labelWidth = 60;
     var labelMargin = 6;
-    var valueMinWidth = 30;
+    var valueGap = 6;
 
     var margins = {
         top: 0,
@@ -144,12 +144,25 @@ var renderStackedBarChart = function(config) {
     /*
      * Create D3 scale objects.
      */
-     var xScale = d3.scale.linear()
-         .domain([0, d3.max(config['data'], function(d) {
-             var lastValue = d['values'][d3['values'].length - 1];
+     var min = d3.min(config['data'], function(d) {
+         var lastValue = d['values'][d['values'].length - 1];
 
-             return Math.ceil(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
-         })])
+         return Math.floor(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
+     });
+
+     if (min > 0) {
+         min = 0;
+     }
+
+     var xScale = d3.scale.linear()
+         .domain([
+             min,
+             d3.max(config['data'], function(d) {
+                 var lastValue = d['values'][d['values'].length - 1];
+
+                 return Math.ceil(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
+             })
+         ])
          .rangeRound([0, chartWidth]);
 
      var colorScale = d3.scale.ordinal()
@@ -244,13 +257,17 @@ var renderStackedBarChart = function(config) {
              return d['values'];
          })
          .enter().append('rect')
-             .attr('height', barHeight)
              .attr('x', function(d) {
-                 return xScale(d['x0']);
+                 if (d['x0'] < d['x1']) {
+                     return xScale(d['x0']);
+                 }
+
+                 return xScale(d['x1']);
              })
              .attr('width', function(d) {
-                 return xScale(d['x1']) - xScale(d['x0']);
+                 return Math.abs(xScale(d['x1']) - xScale(d['x0']));
              })
+             .attr('height', barHeight)
              .style('fill', function(d) {
                  return colorScale(d['name']);
              })
@@ -262,31 +279,49 @@ var renderStackedBarChart = function(config) {
       * Render bar values.
       */
      group.append('g')
-         .attr('class', 'value')
-         .selectAll('text')
-             .data(function(d) {
-                 return d['values'];
-             })
-         .enter().append('text')
-             .attr('x', function(d, i) {
+        .attr('class', 'value')
+        .selectAll('text')
+        .data(function(d) {
+            return d['values'];
+        })
+        .enter().append('text')
+            .text(function(d) {
+                if (d['val'] != 0) {
+                    return d['val'] + '%';
+                }
+            })
+            .attr('class', function(d) {
+                return classify(d['name']);
+            })
+            .attr('x', function(d) {
  				return xScale(d['x1']);
-             })
-             .attr('dx', function(d, i) {
- 				return -6;
-             })
-             .attr('dy', (barHeight / 2) + 4)
-             .attr('text-anchor', function(d, i) {
- 				return 'end';
-             })
-             .attr('class', function(d) {
-                 return classify(d['name']);
-             })
-             .text(function(d) {
-                 if (d['val'] > 0) {
-                     var v = d['val'] + '%';
-                     return v;
-                 }
-             });
+            })
+            .attr('dx', function(d) {
+                var textWidth = this.getComputedTextLength();
+                var barWidth = Math.abs(xScale(d['x1']) - xScale(d['x0']));
+
+                // Hide labels that don't fit
+                if (textWidth + valueGap * 2 > barWidth) {
+                    d3.select(this).classed('hidden', true)
+                }
+
+                if (d['x1'] < 0) {
+                    return valueGap;
+                }
+
+                return -(valueGap + textWidth);
+            })
+            .attr('dy', (barHeight / 2) + 4)
+
+     /*
+      * Render 0-line.
+      */
+     chartElement.append('line')
+         .attr('class', 'zero-line')
+         .attr('x1', xScale(0))
+         .attr('x2', xScale(0))
+         .attr('y1', 0)
+         .attr('y2', chartHeight);
 
     /*
      * Render bar labels.

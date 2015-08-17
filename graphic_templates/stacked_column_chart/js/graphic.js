@@ -117,6 +117,7 @@ var renderStackedColumnChart = function(config) {
 
     var aspectWidth = 16;
     var aspectHeight = 9;
+    var valueGap = 6;
 
     var margins = {
         top: 5,
@@ -148,10 +149,21 @@ var renderStackedColumnChart = function(config) {
         .domain(_.pluck(config['data'], labelColumn))
         .rangeRoundBands([0, chartWidth], .1)
 
+    var min = d3.min(config['data'], function(d) {
+        return Math.floor(d['total'] / roundTicksFactor) * roundTicksFactor;
+    });
+
+    if (min > 0) {
+        min = 0;
+    }
+
     var yScale = d3.scale.linear()
-        .domain([0, d3.max(config['data'], function(d) {
-            return Math.ceil(d['total'] / roundTicksFactor) * roundTicksFactor;
-        })])
+        .domain([
+            min,
+            d3.max(config['data'], function(d) {
+                return Math.ceil(d['total'] / roundTicksFactor) * roundTicksFactor;
+            })
+        ])
         .rangeRound([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
@@ -254,12 +266,16 @@ var renderStackedColumnChart = function(config) {
             return d['values'];
         })
         .enter().append('rect')
-            .attr('width', xScale.rangeBand())
             .attr('y', function(d) {
+                if (d['y1'] < d['y0']) {
+                    return yScale(d['y0']);
+                }
+
                 return yScale(d['y1']);
             })
+            .attr('width', xScale.rangeBand())
             .attr('height', function(d) {
-                return yScale(d['y0']) - yScale(d['y1']);
+                return Math.abs(yScale(d['y0']) - yScale(d['y1']));
             })
             .style('fill', function(d) {
                 return colorScale(d['name']);
@@ -268,24 +284,36 @@ var renderStackedColumnChart = function(config) {
                 return classify(d['name']);
             });
 
+    /*
+     * Render values to chart.
+     */
     bars.selectAll('text')
         .data(function(d) {
             return d['values'];
         })
         .enter().append('text')
-            .attr('x', function(d) {
-                return xScale.rangeBand() / 2;
-            })
-            .attr('y', function(d) {
-                return yScale(d['y1']) + ((yScale(d['y0']) - yScale(d['y1'])) / 2);
+            .text(function(d) {
+                return d['val'];
             })
             .attr('class', function(d) {
                 return classify(d['name']);
             })
-            .attr('text-anchor', 'middle')
-            .text(function(d) {
-                return d['val'];
+            .attr('x', function(d) {
+                return xScale.rangeBand() / 2;
             })
+            .attr('y', function(d) {
+                var textHeight = d3.select(this).node().getBBox().height;
+                var barHeight = Math.abs(yScale(d['y0']) - yScale(d['y1']));
+
+                if (textHeight + valueGap * 2 > barHeight) {
+                    d3.select(this).classed('hidden', true);
+                }
+
+                var barCenter = yScale(d['y1']) + ((yScale(d['y0']) - yScale(d['y1'])) / 2);
+
+                return barCenter + textHeight / 2;
+            })
+            .attr('text-anchor', 'middle');
 }
 
 /*

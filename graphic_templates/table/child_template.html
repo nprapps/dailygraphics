@@ -12,16 +12,16 @@
                     <th>{{ COPY.labels.hdr_state }}</th>
                     <th>{{ COPY.labels.hdr_usps }}</th>
                     <th>{{ COPY.labels.hdr_ap }}</th>
-                    <th>{{ COPY.labels.hdr_display }}</th>
+                    <th class="amt">{{ COPY.labels.hdr_value }}</th>
                 </tr>
             </thead>
 
             {% for row in COPY.data %}
-            <tr class="{{ row.usps }}">
+            <tr class="state-{{ row.usps|classify }}">
                 <td data-title="{{ COPY.labels.hdr_state }}">{{ row.name }}</td>
                 <td data-title="{{ COPY.labels.hdr_usps }}">{{ row.usps }}</td>
-                <td data-title="{{ COPY.labels.hdr_ap }}">{{ row.ap }}</td>
-                <td data-title="{{ COPY.labels.hdr_display }}">{{ row.display }}</td>
+                <td data-title="{{ COPY.labels.hdr_ap }}">{{ row.usps|ap_state }}</td>
+                <td data-title="{{ COPY.labels.hdr_value }}" class="amt">{{ row.value|comma }}</td>
             </tr>
             {% endfor %}
 

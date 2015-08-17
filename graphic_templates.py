@@ -4,6 +4,7 @@ import imp
 from mimetypes import guess_type
 import os
 import subprocess
+import sys
 
 from flask import Blueprint, abort, make_response, render_template, render_template_string
 from jinja2 import Environment, FileSystemLoader
@@ -11,7 +12,7 @@ from jinja2 import Environment, FileSystemLoader
 import app_config
 import copytext
 import oauth
-from render_utils import make_context, render_with_context
+from render_utils import load_graphic_config, make_context, render_with_context
 
 graphic_templates = Blueprint('graphic_templates', __name__)
 
@@ -24,18 +25,14 @@ def _templates_detail(slug):
     from flask import request
 
     template_path = '%s/%s' % (app_config.TEMPLATES_PATH, slug)
+    base_template_path = '%s/%s' % (app_config.TEMPLATES_PATH, '_base')
 
     # NOTE: Parent must load pym.js from same source as child to prevent version conflicts!
     context = make_context(asset_depth=2, root_path=template_path)
     context['slug'] = slug
 
     try:
-        graphic_config_path = '%s/graphic_config.py' % template_path
-
-        if not os.path.exists(graphic_config_path):
-            graphic_config_path = '%s/%s' % (app_config.TEMPLATES_PATH, '_base')
-
-        graphic_config = imp.load_source('graphic_config', graphic_config_path)
+        graphic_config = load_graphic_config(template_path, [base_template_path])
         context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
@@ -57,6 +54,7 @@ def _templates_child(slug):
     Renders a child.html for embedding.
     """
     template_path = '%s/%s' % (app_config.TEMPLATES_PATH, slug)
+    base_template_path = '%s/%s' % (app_config.TEMPLATES_PATH, '_base')
 
     # Fallback for legacy projects w/o child templates
     if not os.path.exists('%s/child_template.html' % template_path):
@@ -68,14 +66,15 @@ def _templates_child(slug):
     context = make_context(asset_depth=2, root_path=template_path)
     context['slug'] = slug
 
-    config_path = '%s/graphic_config.py' % template_path
-
-    if not os.path.exists(config_path):
-        config_path = '%s/_base/graphic_config.py' % app_config.TEMPLATES_PATH
+    env = Environment(loader=FileSystemLoader([template_path, '%s/_base' % app_config.TEMPLATES_PATH]))
 
     try:
-        graphic_config = imp.load_source('graphic_config', config_path)
+        graphic_config = load_graphic_config(template_path, [base_template_path])
         context.update(graphic_config.__dict__)
+
+        if hasattr(graphic_config, 'JINJA_FILTER_FUNCTIONS'):
+            for func in graphic_config.JINJA_FILTER_FUNCTIONS:
+                env.filters[func.__name__] = func
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
             copy_path = '%s/%s.xlsx' % (template_path, slug)
@@ -84,7 +83,6 @@ def _templates_child(slug):
     except IOError:
         pass
 
-    env = Environment(loader=FileSystemLoader([template_path, '%s/_base' % app_config.TEMPLATES_PATH]))
     env.globals.update(render=render_with_context)
     template = env.get_template('child_template.html')
 

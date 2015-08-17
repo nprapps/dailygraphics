@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import imp
 from mimetypes import guess_type
 import os
 import subprocess
@@ -11,7 +10,7 @@ from jinja2 import Environment, FileSystemLoader
 import app_config
 import copytext
 import oauth
-from render_utils import make_context, render_with_context
+from render_utils import load_graphic_config, make_context, render_with_context
 
 graphic = Blueprint('graphic', __name__)
 
@@ -35,7 +34,7 @@ def _graphics_detail(slug):
         template = 'parent_old.html'
 
     try:
-        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
+        graphic_config = load_graphic_config(graphic_path)
         context.update(graphic_config.__dict__)
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
@@ -57,6 +56,7 @@ def _graphics_child(slug):
     Renders a child.html for embedding.
     """
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    print graphic_path
 
     # Fallback for legacy projects w/o child templates
     if not os.path.exists('%s/child_template.html' % graphic_path):
@@ -68,9 +68,15 @@ def _graphics_child(slug):
     context = make_context(asset_depth=2, root_path=graphic_path)
     context['slug'] = slug
 
+    env = Environment(loader=FileSystemLoader(graphic_path))
+
     try:
-        graphic_config = imp.load_source('graphic_config', '%s/graphic_config.py' % graphic_path)
+        graphic_config = load_graphic_config(graphic_path)
         context.update(graphic_config.__dict__)
+
+        if hasattr(graphic_config, 'JINJA_FILTER_FUNCTIONS'):
+            for func in graphic_config.JINJA_FILTER_FUNCTIONS:
+                env.filters[func.__name__] = func
 
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
             copy_path = '%s/%s.xlsx' % (graphic_path, slug)
@@ -79,7 +85,6 @@ def _graphics_child(slug):
     except IOError:
         pass
 
-    env = Environment(loader=FileSystemLoader(graphic_path))
     env.globals.update(render=render_with_context)
     template = env.get_template('child_template.html')
 

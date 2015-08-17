@@ -1,8 +1,19 @@
+0.1.1
+-----
+
+* Created _base/base_filters.py, a library of default Jinja filters for common formatting tasks.
+* Made it possible for graphic_config.py to import other local modules (#133)
+
 0.1.0
 -----
 
+* stacked_bar_chart and stacked_column_chart will now auto-hide labels that don't fit.
+* Height-based label fitting for column_chart template.
+* bar_chart, column_chart, grouped_bar_chart, stacked_bar_chart and stacked_column_chart templates now supports negative numbers. (#124)
+* Add support for custom Jinja filters specified in graphic_config.py. (#131)
+* Update Jinja to 2.7.3. (#127)
 * Add .DS_Store to default assetsignore. (#129)
-* Fix issue where preview border messed with width calculation
-* Update pym to 0.4.5
-* Add block_histogram template
-* Start CHANGELOG (#132)
+* Fix issue where preview border messed with width calculation.
+* Update pym to 0.4.5.
+* Add block_histogram template.
+* Start CHANGELOG. (#132)

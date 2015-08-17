@@ -5,12 +5,14 @@ dailygraphics
 * [Assumptions](#assumptions)
 * [What's in here?](#whats-in-here)
 * [Bootstrap the project](#bootstrap-the-project)
+* [Using a stable version](#using-a-stable-version)
 * [Configuration](#configuration)
 * [Run the project](#run-the-project)
 * [Add a new graphic](#add-a-new-graphic)
 * [Deploy to S3](#deploy-to-s3)
 * [Embedding](#embedding)
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+* [Using Jinja filter functions](#using-jinja-filter-functions)
 * [Storing media assets](#storing-media-assets)
 * [Creating locator maps](#creating-locator-maps)
 * [Adding a new graphic template](#adding-a-new-graphic-template)
@@ -106,6 +108,35 @@ You'll now need to create a folder to hold the graphics created and deployed by 
 **NPR users:** Graphics are stored in a separate, private repository, and `app_config.GRAPHICS_PATH` points to that folder. You will need to separately `git clone` that repository.
 
 **All other users:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
+
+Using a stable version
+----------------------
+
+The master branch of project is in active development by NPR at all times. If you would like to use a [more] stable version, we suggest checking out a tagged version (``0.1``, etc.). We will periodically tag releases, which will be synchronized to the ``CHANGELOG`` so you will know exactly what improvements you will get if you migrate to a new tagged version.
+
+To see available tagged versions, run:
+
+```
+git tag -l
+```
+
+To use a tagged version run, for example:
+
+```
+git checkout 0.1.0
+```
+
+To upgrade to a newer tagged version just check it out:
+
+```
+git checkout 0.2.0
+```
+
+When upgrading from one tagged version to another, please be sure to update your Python requirements:
+
+```
+pip install -Ur requirements.txt
+```
 
 Configuration
 -------------
@@ -250,6 +281,29 @@ The deploy process will always pull down the latest spreadsheet and render the c
 Note: Your published graphic **will not** automatically update every time your spreadsheet updates. It will only update when you deploy (or redeploy) it. For projects that seldom change, this is usually fine. Consider another solution if you need dynamic updates.
 
 If you do **not** want want to use the copytext spreadsheet for a given project, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
+
+
+Using Jinja filter functions
+----------------------------
+
+A [library of Jinja filter functions](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/_base/base_filters.py) for common tasks (ordinal, AP date format, etc.) is included with each graphic.
+
+If you're graphic requires complex number formatting or other nuanced presentation, you may need to write a custom filter function. This is supported through each project's ``graphic_config.py`` file. To add a custom filter function, simply define it and add it to the list called ``JINJA_FILTER_FUNCTIONS``, like so:
+
+```python
+def percent(value):
+    return unicode(float(value * 100)) + '%'
+
+    JINJA_FILTER_FUNCTIONS = base_filters.FILTERS + [percent]
+```
+
+Then you will be able to use it in your template like this:
+
+```html
+<td>{{ row.value|percent }}</td>
+```
+
+See the ``table`` graphic template for a more complete example.
 
 
 Storing media assets
