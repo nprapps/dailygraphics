@@ -6,13 +6,7 @@
 /* global module */
 
 (function(factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(factory);
-    } else if (typeof module !== 'undefined' && module.exports) {
-        module.exports = factory();
-    } else {
-        window.pym = factory.call(this);
-    }
+  window.pym = factory.call(this);
 })(function() {
     var MESSAGE_DELIMITER = 'xPYMx';
 
