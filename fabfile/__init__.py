@@ -8,6 +8,7 @@ import subprocess
 import sys
 import webbrowser
 
+from boto.s3.connection import OrdinaryCallingFormat
 from distutils.spawn import find_executable
 from fabric.api import local, prompt, require, settings, task
 from fabric.state import env
@@ -213,7 +214,7 @@ def _check_slug(slug):
         return True
 
     try:
-        s3 = boto.connect_s3()
+        s3 = boto.connect_s3(calling_format=OrdinaryCallingFormat())
         bucket = s3.get_bucket(app_config.PRODUCTION_S3_BUCKET['bucket_name'])
         key = bucket.get_key('%s/graphics/%s/child.html' % (app_config.PROJECT_SLUG, slug))
 
