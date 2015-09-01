@@ -24,7 +24,7 @@ class FakeTime:
 # See: http://stackoverflow.com/questions/264224/setting-the-gzip-timestamp-from-python
 gzip.time = FakeTime()
 
-def deploy_file(connection, src, dst, headers={}):
+def deploy_file(src, dst, headers={}):
     """
     Deploy a single file to S3, if the local version is different.
     """
@@ -111,7 +111,7 @@ def deploy_folder(src, dst, headers={}, ignore=[]):
             to_deploy.append((src_path, dst_path))
 
     for src, dst in to_deploy:
-        deploy_file(s3, src, dst, headers)
+        deploy_file(src, dst, headers)
 
 def delete_folder(dst):
     """
