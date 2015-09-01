@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import boto
+from boto.s3.connection import OrdinaryCallingFormat
 from fabric.api import prompt
 
 def confirm(message):
@@ -19,3 +21,15 @@ def replace_in_file(filename, find, replace):
 
     with open(filename, 'w') as f:
         f.write(contents)
+
+def get_bucket(bucket_name):
+    """
+    Established a connection and gets s3 bucket
+    """
+
+    if '.' in bucket_name:
+        s3 = boto.connect_s3(calling_format=OrdinaryCallingFormat())
+    else:
+        s3 = boto.connect_s3()
+
+    return s3.get_bucket(bucket_name)

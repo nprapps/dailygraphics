@@ -213,8 +213,7 @@ def _check_slug(slug):
         return True
 
     try:
-        s3 = boto.connect_s3()
-        bucket = s3.get_bucket(app_config.PRODUCTION_S3_BUCKET['bucket_name'])
+        bucket = utils.get_bucket(app_config.PRODUCTION_S3_BUCKET['bucket_name'])
         key = bucket.get_key('%s/graphics/%s/child.html' % (app_config.PROJECT_SLUG, slug))
 
         if key:
