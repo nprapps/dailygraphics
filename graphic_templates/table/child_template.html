@@ -18,22 +18,10 @@
 
             {% for row in COPY.data %}
             <tr class="state-{{ row.usps|classify }}">
-                <td>
-                    <div class="title">{{ COPY.labels.hdr_state }}</div>
-                    <div class="value">{{ row.name }}</div>
-                </td>
-                <td>
-                    <div class="title">{{ COPY.labels.hdr_usps }}</div>
-                    <div class="value">{{ row.usps }}</div>
-                </td>
-                <td>
-                    <div class="title">{{ COPY.labels.hdr_ap }}</div>
-                    <div class="value">{{ row.usps|ap_state }}</div>
-                </td>
-                <td>
-                    <div class="title">{{ COPY.labels.hdr_value }}</div>
-                    <div class="value">{{ row.value|comma }}</div>
-                </td>
+                <td data-title="{{ COPY.labels.hdr_state }}">{{ row.name }}</td>
+                <td data-title="{{ COPY.labels.hdr_usps }}">{{ row.usps }}</td>
+                <td data-title="{{ COPY.labels.hdr_ap }}">{{ row.usps|ap_state }}</td>
+                <td data-title="{{ COPY.labels.hdr_value }}" class="amt">{{ row.value|comma }}</td>
             </tr>
             {% endfor %}
 
