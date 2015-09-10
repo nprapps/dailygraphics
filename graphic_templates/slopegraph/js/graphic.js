@@ -300,10 +300,10 @@ var renderSlopegraph = function(config) {
             })
             .text(function(d) {
                 if (isSidebar) {
-                    return d[endColumn].toFixed(0) + '%';
+                    return d[startColumn].toFixed(0) + '%';
                 }
 
-                return d[startColumn] + '%';
+                return d[startColumn].toFixed(1) + '%';
             });
 
     chartElement.append('g')
@@ -327,7 +327,7 @@ var renderSlopegraph = function(config) {
                     return d[endColumn].toFixed(0) + '%';
                 }
 
-                return d[endColumn] + '%';
+                return d[endColumn].toFixed(1) + '%';
             });
 
     /*
