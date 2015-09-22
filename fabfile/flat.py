@@ -8,6 +8,7 @@ import hashlib
 import mimetypes
 import os
 
+import boto
 from boto.s3.key import Key
 
 import app_config
@@ -23,10 +24,12 @@ class FakeTime:
 # See: http://stackoverflow.com/questions/264224/setting-the-gzip-timestamp-from-python
 gzip.time = FakeTime()
 
-def deploy_file(bucket, src, dst, headers={}):
+def deploy_file(src, dst, headers={}):
     """
     Deploy a single file to S3, if the local version is different.
     """
+    bucket = utils.get_bucket(app_config.S3_BUCKET['bucket_name'])
+
     k = bucket.get_key(dst)
     s3_md5 = None
 
@@ -75,7 +78,7 @@ def deploy_file(bucket, src, dst, headers={}):
             print 'Uploading %s --> %s' % (src, dst)
             k.set_contents_from_filename(src, file_headers, policy='public-read')
 
-def deploy_folder(bucket_name, src, dst, headers={}, ignore=[]):
+def deploy_folder(src, dst, headers={}, ignore=[]):
     """
     Deploy a folder to S3, checking each file to see if it has changed.
     """
@@ -107,16 +110,14 @@ def deploy_folder(bucket_name, src, dst, headers={}, ignore=[]):
 
             to_deploy.append((src_path, dst_path))
 
-    bucket = utils.get_bucket(bucket_name)
-
     for src, dst in to_deploy:
-        deploy_file(bucket, src, dst, headers)
+        deploy_file(src, dst, headers)
 
-def delete_folder(bucket_name, dst):
+def delete_folder(dst):
     """
     Delete a folder from S3.
     """
-    bucket = utils.get_bucket(bucket_name)
+    bucket = utils.get_bucket(app_config.S3_BUCKET['bucket_name'])
 
     for key in bucket.list(prefix='%s/' % dst):
         print 'Deleting %s' % (key.key)
