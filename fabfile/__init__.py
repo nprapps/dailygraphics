@@ -309,6 +309,13 @@ def add_map(slug):
     Create a locator map.
     """
     _add_graphic(slug, 'locator_map')
+    
+@task
+def add_leaflet_map(slug):
+    """
+    Create a Leaflet map.
+    """
+    _add_graphic(slug, 'map')
 
 @task
 def add_table(slug):
