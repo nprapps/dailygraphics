@@ -86,10 +86,18 @@ function render(width) {
 					 info.update();
 				 }
 				 
+                 function clickHighlight(e) {
+                     geojson.eachLayer( function (layer) {
+                         geojson.resetStyle(layer);
+                     });
+                     highlightFeature(e)
+                 }
+
 				 function onEachFeature(feature, layer) {
 				     layer.on({
-				         mouseover: highlightFeature,
-				         mouseout: resetHighlight
+                         mouseover: highlightFeature,
+                         mouseout: resetHighlight,
+                         click: clickHighlight
 				     });
 				 }
 				 
