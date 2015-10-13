@@ -56,7 +56,7 @@ var loadCSV = function(url) {
  */
 var formatData = function() {
     graphicData.forEach(function(d) {
-        d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
+        d['date'] = d3.time.format('%Y').parse(d['date']);
 
         for (var key in d) {
             if (key != 'date') {
