@@ -27,6 +27,7 @@ def _graphics_detail(slug):
     # NOTE: Parent must load pym.js from same source as child to prevent version conflicts!
     context = make_context(asset_depth=2, root_path=graphic_path)
     context['slug'] = slug
+    context['var_name'] = slug.replace('-', '_')
 
     template = 'parent.html'
 
@@ -67,6 +68,7 @@ def _graphics_child(slug):
 
     context = make_context(asset_depth=2, root_path=graphic_path)
     context['slug'] = slug
+    context['var_name'] = slug.replace('-', '_')
 
     env = Environment(loader=FileSystemLoader(graphic_path))
 
