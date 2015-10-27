@@ -115,8 +115,8 @@ var renderLocatorMap = function(config) {
      * Create the map projection.
      */
     var centroid = [((bbox[0] + bbox[2]) / 2), ((bbox[1] + bbox[3]) / 2)];
-    var mapScale = (mapWidth / GRAPHIC_DEFAULT_WIDTH) * defaultScale;
-    var scaleFactor = mapWidth / GRAPHIC_DEFAULT_WIDTH;
+    var mapScale = (mapWidth / DEFAULT_WIDTH) * defaultScale;
+    var scaleFactor = mapWidth / DEFAULT_WIDTH;
 
     projection = d3.geo.mercator()
         .center(centroid)
