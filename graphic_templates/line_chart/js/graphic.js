@@ -1,6 +1,7 @@
 // Global vars
 var pymChild = null;
 var isMobile = false;
+var dataSeries = [];
 
 /*
  * Initialize graphic
@@ -30,6 +31,28 @@ var formatData = function() {
             }
         }
     });
+
+    /*
+     * Restructure tabular data for easier charting.
+     */
+    for (var column in GRAPHIC_DATA[0]) {
+        if (column == 'date') {
+            continue;
+        }
+
+        dataSeries.push({
+            'name': column,
+            'values': GRAPHIC_DATA.map(function(d) {
+                return {
+                    'date': d['date'],
+                    'amt': d[column]
+                };
+    // filter out empty data. uncomment this if you have inconsistent data.
+    //        }).filter(function(d) {
+    //            return d['amt'].length > 0;
+            })
+        });
+    }
 }
 
 /*
@@ -50,7 +73,7 @@ var render = function(containerWidth) {
     renderLineChart({
         container: '#graphic',
         width: containerWidth,
-        data: GRAPHIC_DATA
+        data: dataSeries
     });
 
     // Update iframe
@@ -98,39 +121,18 @@ var renderLineChart = function(config) {
     var containerElement = d3.select(config['container']);
     containerElement.html('');
 
-    var formattedData = {};
-
-    /*
-     * Restructure tabular data for easier charting.
-     */
-    for (var column in config['data'][0]) {
-        if (column == dateColumn) {
-            continue;
-        }
-
-        formattedData[column] = config['data'].map(function(d) {
-            return {
-                'date': d[dateColumn],
-                'amt': d[column]
-            };
-// filter out empty data. uncomment this if you have inconsistent data.
-//        }).filter(function(d) {
-//            return d['amt'].length > 0;
-        });
-    }
-
     /*
      * Create D3 scale objects.
      */
     var xScale = d3.time.scale()
-        .domain(d3.extent(config['data'], function(d) {
-            return d[dateColumn];
+        .domain(d3.extent(config['data'][0]['values'], function(d) {
+            return d['date'];
         }))
         .range([ 0, chartWidth ])
 
     var yScale = d3.scale.linear()
-        .domain([ 0, d3.max(d3.entries(formattedData), function(c) {
-                return d3.max(c['value'], function(v) {
+        .domain([ 0, d3.max(config['data'], function(c) {
+                return d3.max(c['values'], function(v) {
                     var n = v[valueColumn];
                     return Math.ceil(n / roundTicksFactor) * roundTicksFactor;
                 });
@@ -139,9 +141,7 @@ var renderLineChart = function(config) {
         .range([ chartHeight, 0 ]);
 
     var colorScale = d3.scale.ordinal()
-        .domain(d3.keys(config['data'][0]).filter(function(key) {
-            return key !== dateColumn;
-        }))
+        .domain(_.pluck(config['data'], 'name'))
         .range([ COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3'] ]);
 
     /*
@@ -150,20 +150,20 @@ var renderLineChart = function(config) {
     var legend = containerElement.append('ul')
         .attr('class', 'key')
         .selectAll('g')
-            .data(d3.entries(formattedData))
+        .data(config['data'])
         .enter().append('li')
             .attr('class', function(d, i) {
-                return 'key-item key-' + i + ' ' + classify(d['key']);
+                return 'key-item ' + classify(d['name']);
             });
 
     legend.append('b')
         .style('background-color', function(d) {
-            return colorScale(d['key']);
+            return colorScale(d['name']);
         });
 
     legend.append('label')
         .text(function(d) {
-            return d['key'];
+            return d['name'];
         });
 
     /*
@@ -251,48 +251,47 @@ var renderLineChart = function(config) {
     chartElement.append('g')
         .attr('class', 'lines')
         .selectAll('path')
-        .data(d3.entries(formattedData))
+        .data(config['data'])
         .enter()
         .append('path')
             .attr('class', function(d, i) {
-                return 'line line-' + i + ' ' + classify(d['key']);
+                return 'line ' + classify(d['name']);
             })
             .attr('stroke', function(d) {
-                return colorScale(d['key']);
+                return colorScale(d['name']);
             })
             .attr('d', function(d) {
-                return line(d['value']);
+                return line(d['values']);
             });
 
     chartElement.append('g')
         .attr('class', 'value')
         .selectAll('text')
-        .data(d3.entries(formattedData))
+        .data(config['data'])
         .enter().append('text')
             .attr('x', function(d, i) {
-                var last = d['value'][d['value'].length - 1];
+                var last = d['values'][d['values'].length - 1];
 
                 return xScale(last[dateColumn]) + 5;
             })
             .attr('y', function(d) {
-                var last = d['value'][d['value'].length - 1];
+                var last = d['values'][d['values'].length - 1];
 
                 return yScale(last[valueColumn]) + 3;
             })
             .text(function(d) {
-                var last = d['value'][d['value'].length - 1];
+                var last = d['values'][d['values'].length - 1];
                 var value = last[valueColumn];
 
                 var label = last[valueColumn].toFixed(1);
 
                 if (!isMobile) {
-                    label = d['key'] + ': ' + label;
+                    label = d['name'] + ': ' + label;
                 }
 
                 return label;
             });
 }
-
 
 /*
  * Initially load the graphic
