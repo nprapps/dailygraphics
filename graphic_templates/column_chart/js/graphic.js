@@ -2,9 +2,6 @@
 var pymChild = null;
 var isMobile = false;
 
-// D3 formatters
-var fmtComma = d3.format(',');
-
 /*
  * Initialize the graphic.
  */
