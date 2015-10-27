@@ -21,8 +21,7 @@
 
     <script type="text/javascript">
         var DATA = {{ COPY.data.json() }};
-        var ANNOTATION_LEFT = '{{ COPY.labels.annotation_left }}';
-        var ANNOTATION_RIGHT = '{{ COPY.labels.annotation_right }}';
+        var LABELS = {{ COPY.labels.json() }};
     </script>
 
 {% endblock content %}

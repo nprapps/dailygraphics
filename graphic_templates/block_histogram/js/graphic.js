@@ -293,7 +293,7 @@ var renderBlockHistogram = function(config) {
         .attr('dx', -15)
         .attr('text-anchor', 'end')
         .attr('y', -10)
-        .html(ANNOTATION_LEFT);
+        .html(LABELS['annotation_left']);
 
     annotations.append('text')
         .attr('class', 'label-top')
@@ -301,7 +301,7 @@ var renderBlockHistogram = function(config) {
         .attr('dx', 5)
         .attr('text-anchor', 'begin')
         .attr('y', -10)
-        .html(ANNOTATION_RIGHT);
+        .html(LABELS['annotation_right']);
 
     annotations.append('line')
         .attr('class', 'axis-0')
