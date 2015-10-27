@@ -26,7 +26,7 @@ var formatData = function() {
         d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
 
         for (var key in d) {
-            if (key != 'date') {
+            if (key != 'date' && d[key] != null && d[key].length > 0) {
                 d[key] = +d[key];
             }
         }
