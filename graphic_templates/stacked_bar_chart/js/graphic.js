@@ -124,15 +124,14 @@ var renderStackedBarChart = function(config) {
          min = 0;
      }
 
-     var xScale = d3.scale.linear()
-         .domain([
-             min,
-             d3.max(config['data'], function(d) {
-                 var lastValue = d['values'][d['values'].length - 1];
+     var max = d3.max(config['data'], function(d) {
+         var lastValue = d['values'][d['values'].length - 1];
 
-                 return Math.ceil(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
-             })
-         ])
+         return Math.ceil(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
+     });
+
+     var xScale = d3.scale.linear()
+         .domain([min, max])
          .rangeRound([0, chartWidth]);
 
      var colorScale = d3.scale.ordinal()
@@ -283,15 +282,17 @@ var renderStackedBarChart = function(config) {
             })
             .attr('dy', (barHeight / 2) + 4)
 
-     /*
-      * Render 0-line.
-      */
-     chartElement.append('line')
-         .attr('class', 'zero-line')
-         .attr('x1', xScale(0))
-         .attr('x2', xScale(0))
-         .attr('y1', 0)
-         .attr('y2', chartHeight);
+    /*
+     * Render 0-line.
+     */
+    if (min < 0) {
+        chartElement.append('line')
+            .attr('class', 'zero-line')
+            .attr('x1', xScale(0))
+            .attr('x2', xScale(0))
+            .attr('y1', 0)
+            .attr('y2', chartHeight);
+    }
 
     /*
      * Render bar labels.

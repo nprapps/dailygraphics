@@ -123,15 +123,16 @@ var renderSlopegraph = function(config) {
         .domain([startLabel, endLabel])
         .range([0, chartWidth])
 
+    var min = d3.min(config['data'], function(d) {
+        return Math.floor(d[startColumn] / roundTicksFactor) * roundTicksFactor;
+    });
+
+    var max = d3.max(config['data'], function(d) {
+        return Math.ceil(d[endColumn] / roundTicksFactor) * roundTicksFactor;
+    });
+
     var yScale = d3.scale.linear()
-        .domain([
-            d3.min(config['data'], function(d) {
-                return Math.floor(d[startColumn] / roundTicksFactor) * roundTicksFactor;
-            }),
-            d3.max(config['data'], function(d) {
-                return Math.ceil(d[endColumn] / roundTicksFactor) * roundTicksFactor;
-            })
-        ])
+        .domain([min, max])
         .range([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()

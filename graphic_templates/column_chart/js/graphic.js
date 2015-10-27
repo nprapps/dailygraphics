@@ -117,13 +117,12 @@ var renderColumnChart = function(config) {
         min = 0;
     }
 
+    var max = d3.max(config['data'], function(d) {
+        return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+    });
+
     var yScale = d3.scale.linear()
-        .domain([
-            min,
-            d3.max(config['data'], function(d) {
-                return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
-            })
-        ])
+        .domain([min, max])
         .range([chartHeight, 0]);
 
     /*
@@ -204,12 +203,14 @@ var renderColumnChart = function(config) {
     /*
      * Render 0 value line.
      */
-    chartElement.append('line')
-        .attr('class', 'zero-line')
-        .attr('x1', 0)
-        .attr('x2', chartWidth)
-        .attr('y1', yScale(0))
-        .attr('y2', yScale(0));
+    if (min < 0) {
+        chartElement.append('line')
+            .attr('class', 'zero-line')
+            .attr('x1', 0)
+            .attr('x2', chartWidth)
+            .attr('y1', yScale(0))
+            .attr('y2', yScale(0));
+    }
 
     /*
      * Render bar values.

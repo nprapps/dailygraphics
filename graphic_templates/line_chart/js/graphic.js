@@ -147,12 +147,12 @@ var renderLineChart = function(config) {
     });
 
     var yScale = d3.scale.linear()
-        .domain([ min, max ])
-        .range([ chartHeight, 0 ]);
+        .domain([min, max])
+        .range([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
         .domain(_.pluck(config['data'], 'name'))
-        .range([ COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3'] ]);
+        .range([COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3']]);
 
     /*
      * Render the HTML legend.

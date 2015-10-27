@@ -127,13 +127,12 @@ var renderStackedColumnChart = function(config) {
         min = 0;
     }
 
+    var max = d3.max(config['data'], function(d) {
+        return Math.ceil(d['total'] / roundTicksFactor) * roundTicksFactor;
+    });
+
     var yScale = d3.scale.linear()
-        .domain([
-            min,
-            d3.max(config['data'], function(d) {
-                return Math.ceil(d['total'] / roundTicksFactor) * roundTicksFactor;
-            })
-        ])
+        .domain([min, max])
         .rangeRound([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
@@ -253,6 +252,18 @@ var renderStackedColumnChart = function(config) {
             .attr('class', function(d) {
                 return classify(d['name']);
             });
+
+    /*
+     * Render 0 value line.
+     */
+    if (min < 0) {
+        chartElement.append('line')
+            .attr('class', 'zero-line')
+            .attr('x1', 0)
+            .attr('x2', chartWidth)
+            .attr('y1', yScale(0))
+            .attr('y2', yScale(0));
+    }
 
     /*
      * Render values to chart.

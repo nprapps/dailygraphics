@@ -112,10 +112,13 @@ var renderDotChart = function(config) {
     /*
      * Create D3 scale objects.
      */
+    var min = 0;
+    var max = d3.max(config['data'], function(d) {
+        return Math.ceil(d[maxColumn] / roundTicksFactor) * roundTicksFactor;
+    });
+
     var xScale = d3.scale.linear()
-        .domain([0, d3.max(config['data'], function(d) {
-            return Math.ceil(d[maxColumn] / roundTicksFactor) * roundTicksFactor;
-        })])
+        .domain([min, max])
         .range([0, chartWidth]);
 
     /*

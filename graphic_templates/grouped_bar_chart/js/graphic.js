@@ -117,15 +117,14 @@ var renderGroupedBarChart = function(config) {
         min = 0;
     }
 
+    var max = d3.max(config['data'], function(d) {
+        return d3.max(d['values'], function(v) {
+            return Math.ceil(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
+        });
+    });
+
     var xScale = d3.scale.linear()
-        .domain([
-            min,
-            d3.max(config['data'], function(d) {
-                return d3.max(d['values'], function(v) {
-                    return Math.ceil(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
-                });
-            })
-        ])
+        .domain([min, max])
         .range([0, chartWidth]);
 
     var yScale = d3.scale.linear()
@@ -248,6 +247,18 @@ var renderGroupedBarChart = function(config) {
             .attr('class', function(d) {
                 return 'y-' + d[labelColumn];
             });
+
+    /*
+     * Render 0-line.
+     */
+    if (min < 0) {
+        chartElement.append('line')
+            .attr('class', 'zero-line')
+            .attr('x1', xScale(0))
+            .attr('x2', xScale(0))
+            .attr('y1', 0)
+            .attr('y2', chartHeight);
+    }
 
     /*
      * Render bar labels.
