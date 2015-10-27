@@ -56,7 +56,7 @@ var render = function(containerWidth) {
         container: '#graphic',
         width: containerWidth,
         data: DATA,
-        metadata: METADATA
+        labels: LABELS
     });
 
     // Update iframe
@@ -76,8 +76,8 @@ var renderSlopegraph = function(config) {
     var startColumn = 'start';
     var endColumn = 'end';
 
-    var startLabel = config['metadata']['startLabel'];
-    var endLabel = config['metadata']['endLabel'];
+    var startLabel = config['labels']['start_label'];
+    var endLabel = config['labels']['end_label'];
 
     var aspectWidth = 5;
     var aspectHeight = 3;
