@@ -130,14 +130,24 @@ var renderLineChart = function(config) {
         }))
         .range([ 0, chartWidth ])
 
+    var min = d3.min(config['data'], function(d) {
+        return d3.min(d['values'], function(v) {
+            return Math.floor(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
+        })
+    });
+
+    if (min > 0) {
+        min = 0;
+    }
+
+    var max = d3.max(config['data'], function(d) {
+        return d3.max(d['values'], function(v) {
+            return Math.ceil(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
+        })
+    });
+
     var yScale = d3.scale.linear()
-        .domain([ 0, d3.max(config['data'], function(c) {
-                return d3.max(c['values'], function(v) {
-                    var n = v[valueColumn];
-                    return Math.ceil(n / roundTicksFactor) * roundTicksFactor;
-                });
-            })
-        ])
+        .domain([ min, max ])
         .range([ chartHeight, 0 ]);
 
     var colorScale = d3.scale.ordinal()
