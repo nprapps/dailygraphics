@@ -1,6 +1,4 @@
 // Global config
-var GRAPHIC_DEFAULT_WIDTH = 600;
-var MOBILE_THRESHOLD = 500;
 var GEO_DATA_URL = 'data/geodata.json';
 
 var LABEL_DEFAULTS = {

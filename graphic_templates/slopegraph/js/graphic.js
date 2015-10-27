@@ -1,6 +1,4 @@
 // Global config
-var GRAPHIC_DEFAULT_WIDTH = 600;
-var MOBILE_THRESHOLD = 500;
 var SIDEBAR_THRESHOLD = 280;
 
 // Global vars

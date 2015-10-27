@@ -1,15 +1,7 @@
-// Global config
-var GRAPHIC_DEFAULT_WIDTH = 600;
-var MOBILE_THRESHOLD = 500;
-
 // Global vars
 var pymChild = null;
 var isMobile = false;
 var graphicData = null;
-
-// D3 formatters
-var fmtYearAbbrev = d3.time.format('%y');
-var fmtYearFull = d3.time.format('%Y');
 
 /*
  * Initialize graphic
