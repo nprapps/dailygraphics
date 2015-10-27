@@ -34,7 +34,7 @@ var formatData = function() {
     }
 
     // put states in bins
-    _.each(GRAPHIC_DATA, function(d) {
+    _.each(DATA, function(d) {
         if (d['amt'] != null) {
             var amt = +d['amt'];
             var state = d['usps'];
@@ -54,7 +54,7 @@ var formatData = function() {
  */
 var render = function(containerWidth) {
     if (!containerWidth) {
-        containerWidth = GRAPHIC_DEFAULT_WIDTH;
+        containerWidth = DEFAULT_WIDTH;
     }
 
     if (containerWidth <= MOBILE_THRESHOLD) {

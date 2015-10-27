@@ -20,8 +20,8 @@ var onWindowLoaded = function() {
 /*
  * Format data for D3.
  */
-var formatData = function() {    
-    GRAPHIC_DATA.forEach(function(d) {
+var formatData = function() {
+    DATA.forEach(function(d) {
         d['amt'] = +d['amt'];
     });
 }
@@ -31,7 +31,7 @@ var formatData = function() {
  */
 var render = function(containerWidth) {
     if (!containerWidth) {
-        containerWidth = GRAPHIC_DEFAULT_WIDTH;
+        containerWidth = DEFAULT_WIDTH;
     }
 
     if (containerWidth <= MOBILE_THRESHOLD) {
@@ -44,7 +44,7 @@ var render = function(containerWidth) {
     renderBarChart({
         container: '#graphic',
         width: containerWidth,
-        data: GRAPHIC_DATA
+        data: DATA
     });
 
     // Update iframe
@@ -110,13 +110,12 @@ var renderBarChart = function(config) {
         min = 0;
     }
 
+    var max = d3.max(config['data'], function(d) {
+        return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
+    })
+
     var xScale = d3.scale.linear()
-        .domain([
-            min,
-            d3.max(config['data'], function(d) {
-                return Math.ceil(d[valueColumn] / roundTicksFactor) * roundTicksFactor;
-            })
-        ])
+        .domain([min, max])
         .range([0, chartWidth]);
 
     /*
@@ -183,12 +182,14 @@ var renderBarChart = function(config) {
     /*
      * Render 0-line.
      */
-    chartElement.append('line')
-        .attr('class', 'zero-line')
-        .attr('x1', xScale(0))
-        .attr('x2', xScale(0))
-        .attr('y1', 0)
-        .attr('y2', chartHeight);
+    if (min < 0) {
+        chartElement.append('line')
+            .attr('class', 'zero-line')
+            .attr('x1', xScale(0))
+            .attr('x2', xScale(0))
+            .attr('y1', 0)
+            .attr('y2', chartHeight);
+    }
 
     /*
      * Render bar labels.

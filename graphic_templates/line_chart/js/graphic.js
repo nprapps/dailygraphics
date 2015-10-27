@@ -22,7 +22,7 @@ var onWindowLoaded = function() {
  * Format graphic data for processing by D3.
  */
 var formatData = function() {
-    GRAPHIC_DATA.forEach(function(d) {
+    DATA.forEach(function(d) {
         d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
 
         for (var key in d) {
@@ -35,14 +35,14 @@ var formatData = function() {
     /*
      * Restructure tabular data for easier charting.
      */
-    for (var column in GRAPHIC_DATA[0]) {
+    for (var column in DATA[0]) {
         if (column == 'date') {
             continue;
         }
 
         dataSeries.push({
             'name': column,
-            'values': GRAPHIC_DATA.map(function(d) {
+            'values': DATA.map(function(d) {
                 return {
                     'date': d['date'],
                     'amt': d[column]
@@ -60,7 +60,7 @@ var formatData = function() {
  */
 var render = function(containerWidth) {
     if (!containerWidth) {
-        containerWidth = GRAPHIC_DEFAULT_WIDTH;
+        containerWidth = DEFAULT_WIDTH;
     }
 
     if (containerWidth <= MOBILE_THRESHOLD) {
