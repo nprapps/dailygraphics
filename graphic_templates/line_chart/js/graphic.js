@@ -1,37 +1,27 @@
 // Global vars
 var pymChild = null;
 var isMobile = false;
-var graphicData = null;
 
 /*
  * Initialize graphic
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        loadLocalData(GRAPHIC_DATA);
+        formatData();
+
+        pymChild = new pym.Child({
+            renderCallback: render
+        });
     } else {
         pymChild = new pym.Child({});
     }
 }
 
 /*
- * Load graphic data from a local source.
- */
-var loadLocalData = function(data) {
-    graphicData = data;
-
-    formatData();
-
-    pymChild = new pym.Child({
-        renderCallback: render
-    });
-}
-
-/*
  * Format graphic data for processing by D3.
  */
 var formatData = function() {
-    graphicData.forEach(function(d) {
+    GRAPHIC_DATA.forEach(function(d) {
         d['date'] = d3.time.format('%m/%d/%y').parse(d['date']);
 
         for (var key in d) {
@@ -60,7 +50,7 @@ var render = function(containerWidth) {
     renderLineChart({
         container: '#graphic',
         width: containerWidth,
-        data: graphicData
+        data: GRAPHIC_DATA
     });
 
     // Update iframe
@@ -113,12 +103,12 @@ var renderLineChart = function(config) {
     /*
      * Restructure tabular data for easier charting.
      */
-    for (var column in graphicData[0]) {
+    for (var column in config['data'][0]) {
         if (column == dateColumn) {
             continue;
         }
 
-        formattedData[column] = graphicData.map(function(d) {
+        formattedData[column] = config['data'].map(function(d) {
             return {
                 'date': d[dateColumn],
                 'amt': d[column]

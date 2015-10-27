@@ -1,37 +1,27 @@
 // Global vars
 var pymChild = null;
 var isMobile = false;
-var graphicData = null;
 
 /*
  * Initialize the graphic.
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        loadLocalData(GRAPHIC_DATA);
+        formatData();
+
+        pymChild = new pym.Child({
+            renderCallback: render
+        });
     } else {
         pymChild = new pym.Child({});
     }
 }
 
 /*
- * Load graphic data from a local source.
- */
-var loadLocalData = function(data) {
-    graphicData = data;
-
-    formatData();
-
-    pymChild = new pym.Child({
-        renderCallback: render
-    });
-}
-
-/*
  * Format graphic data for processing by D3.
  */
 var formatData = function() {
-    graphicData.forEach(function(d) {
+    GRAPHIC_DATA.forEach(function(d) {
         d['key'] = d['Group'];
         d['values'] = [];
 
@@ -66,7 +56,7 @@ var render = function(containerWidth) {
     renderGroupedBarChart({
         container: '#graphic',
         width: containerWidth,
-        data: graphicData
+        data: GRAPHIC_DATA
     });
 
     // Update iframe

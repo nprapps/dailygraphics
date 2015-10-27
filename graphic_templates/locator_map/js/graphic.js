@@ -31,7 +31,7 @@ var geoData = null;
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        loadJSON('data/geodata.json')
+        loadJSON()
     } else {
         pymChild = new pym.Child({});
     }
@@ -40,8 +40,8 @@ var onWindowLoaded = function() {
 /*
  * Load graphic data from a CSV.
  */
-var loadJSON = function(url) {
-    d3.json(url, function(error, data) {
+var loadJSON = function() {
+    d3.json(GEO_DATA_URL, function(error, data) {
         geoData = data;
 
         pymChild = new pym.Child({

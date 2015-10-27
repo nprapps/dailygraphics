@@ -4,7 +4,6 @@ var MAP_TEMPLATE_ID = '#map-template';
 // Global vars
 var pymChild = null;
 var isMobile = false;
-var graphicData = null;
 
 /*
  * Initialize the graphic.
