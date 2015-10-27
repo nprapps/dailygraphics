@@ -65,21 +65,22 @@ USPS_TO_AP_STATE = {
 }
 
 def classify(text):
-    """
-    Convert arbitrary strings to valid css classes.
+	"""
+	Convert arbitrary strings to valid css classes.
 
-    NOTE: This implementation must be consistent with the Javascript classify
-    function defined in base.js.
-    """
-    text = unicode(text).lower()
+	NOTE: This implementation must be consistent with the Javascript classify
+	function defined in base.js.
+	"""
+	text = unicode(text)					# Always start with unicode
+	text = text.encode('ascii', 'ignore')	# Convert to ascii
+	text = text.lower()						# Lowercase
+	text = re.sub('\s+', '-', text)         # Replace spaces with -
+	text = re.sub('[^\w\-]+', '', text)     # Remove all non-word chars
+	text = re.sub('\-\-+', '-', text)       # Replace multiple - with single -
+	text = re.sub('^-+', '', text)          # Trim - from start of text
+	text = re.sub('-+$', '', text)          # Trim - from end of text
 
-    text = re.sub('\s+', '-', text)         # Replace spaces with -
-    text = re.sub('[^\w\-]+', '-', text)    # Remove all non-word chars
-    text = re.sub('\-\-+', '-', text)       # Replace multiple - with single -
-    text = re.sub('^-+', '-', text)         # Trim - from start of text
-    text = re.sub('-+$', '-', text)         # Trim - from end of text
-
-    return text
+	return text
 
 def comma(value):
     """
