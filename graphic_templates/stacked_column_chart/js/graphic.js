@@ -9,7 +9,6 @@ var graphicData = null;
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
         loadLocalData(GRAPHIC_DATA);
-        //loadCSV('data.csv')
     } else {
         pymChild = new pym.Child({});
     }
@@ -25,21 +24,6 @@ var loadLocalData = function(data) {
 
     pymChild = new pym.Child({
         renderCallback: render
-    });
-}
-
-/*
- * Load graphic data from a CSV.
- */
-var loadCSV = function(url) {
-    d3.csv(GRAPHIC_DATA_URL, function(error, data) {
-        graphicData = data;
-
-        formatData();
-
-        pymChild = new pym.Child({
-            renderCallback: render
-        });
     });
 }
 
