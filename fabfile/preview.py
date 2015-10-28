@@ -18,7 +18,7 @@ def png(slug):
     graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     preview_path = '%s/preview.png' % graphic_root
 
-    local('phantomjs preview.js %s %s' % (slug, temp_path))
+    local('slimerjs preview.js %s %s' % (slug, temp_path))
 
     original = Image.open(temp_path)
 

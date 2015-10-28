@@ -91,7 +91,18 @@ Node.js is required for the static asset pipeline. If you don't already have it,
 
 ```
 brew install node
-brew install phantomjs
+```
+
+In order to render preview images you're also going to need [slimerjs](https://slimerjs.org/). (You'll need to have Firefox installed.) Sadly the current release version of Slimer has some issues, so you'll to clone master:
+
+```
+git clone https://github.com/laurentj/slimerjs
+```
+
+And then you'll need to add it to your shell profile (`.zshrc`, `.bash_profile`) manually:
+
+```
+export PATH=$PATH:~/src/slimerjs/src
 ```
 
 Then setup the project like this:
