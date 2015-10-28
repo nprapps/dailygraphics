@@ -100,6 +100,7 @@ def deploy(slug):
         assets.sync(slug)
 
     render.render(slug)
+    preview.png(slug)
 
     flat.deploy_folder(
         graphic_root,
@@ -130,6 +131,7 @@ def deploy(slug):
 
     print ''
     print '%s URL: %s/graphics/%s/' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug)
+    print '%s Preview: %s/graphics/%s/preview.png' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug)
 
 def download_copy(slug):
     """
