@@ -16,6 +16,7 @@ jmespath==0.2.1
 nose==1.2.1
 odict==1.5.1
 openpyxl==2.0.3
+Pillow==3.0.0
 ply==3.4
 pyasn1==0.1.7
 pycrypto==2.6

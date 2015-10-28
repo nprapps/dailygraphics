@@ -91,6 +91,7 @@ Node.js is required for the static asset pipeline. If you don't already have it,
 
 ```
 brew install node
+brew install phantomjs
 ```
 
 Then setup the project like this:
