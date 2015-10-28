@@ -9,15 +9,18 @@ if (system.args.length < 3 || system.args.length > 3) {
     var output = system.args[2];
 
     page.viewportSize = {
-        width: 1024
+        width: 730,
+        height: 600
     };
 
     page.open('http://localhost:8000/graphics/' + slug + '/child.html', function() {
-        page.evaluate(function() {
-            document.body.bgColor = 'white';
-        });
+        window.setTimeout(function() {
+            page.evaluate(function() {
+                document.body.bgColor = 'white';
+            });
 
-        page.render(output);
-        phantom.exit();
+            page.render(output);
+            phantom.exit();
+        }, 2000);
     });
 }
