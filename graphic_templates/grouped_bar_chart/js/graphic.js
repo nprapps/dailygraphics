@@ -54,7 +54,7 @@ var render = function(containerWidth) {
 
     // Render the chart!
     renderGroupedBarChart({
-        container: '#graphic',
+        container: '#grouped-bar-chart',
         width: containerWidth,
         data: DATA
     });
