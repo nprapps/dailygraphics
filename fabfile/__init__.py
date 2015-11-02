@@ -234,6 +234,13 @@ def add_graphic(slug):
     _add_graphic(slug, 'graphic')
 
 @task
+def add_archive_graphic(slug):
+    """
+    Create a shell to archive an old project.
+    """
+    _add_graphic(slug, 'archive_graphic')
+
+@task
 def add_bar_chart(slug):
     """
     Create a bar chart.
