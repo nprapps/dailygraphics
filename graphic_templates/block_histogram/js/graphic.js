@@ -65,7 +65,7 @@ var render = function(containerWidth) {
 
     // Render the chart!
     renderBlockHistogram({
-        container: '#graphic',
+        container: '#block-histogram',
         width: containerWidth,
         data: binnedData,
         bins: COLOR_BINS,

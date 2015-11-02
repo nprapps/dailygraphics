@@ -71,7 +71,7 @@ var render = function(containerWidth) {
 
     // Render the chart!
     renderLineChart({
-        container: '#graphic',
+        container: '#line-chart',
         width: containerWidth,
         data: dataSeries
     });

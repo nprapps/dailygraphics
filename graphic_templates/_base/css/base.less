@@ -1,6 +1,6 @@
-// Colors
-// -------------------------
-
+/*
+ * Colors
+ */
 @red1       : #6C2315;
 @red2       : #A23520;
 @red3       : #D8472B;
@@ -36,9 +36,11 @@
 @blue5      : #A8D5EF;
 @blue6      : #D3EAF7;
 
-
-/* base styles */
+/*
+ * Base styles
+ */
 html { -webkit-text-size-adjust: none; }
+
 body {
     margin: 0;
     padding: 33px 0;
@@ -86,6 +88,7 @@ h2 {
     line-height: 1.7;
     color: #999;
 }
+
 .footer p { font-style: italic; }
 .footer p em { font-style: normal; }
 .footnotes p strong { color: #666; }
@@ -94,10 +97,17 @@ a, a:link, a:visited {
     color: #4774CC;
     text-decoration: none;
 }
+
 a:hover, a:active { color: #bccae5; }
 
+/*
+ * Standard graphic styles
+ */
+.graphic-wrapper {
+    position: relative;
+}
 
-#graphic {
+.graphic {
     position: relative;
     margin-bottom: 11px;
 
@@ -106,6 +116,7 @@ a:hover, a:active { color: #bccae5; }
         content: ' ';
         display: table;
     }
+
     &:after { clear: both; }
 
     img {
@@ -114,10 +125,6 @@ a:hover, a:active { color: #bccae5; }
     }
 }
 
-.graphic-wrapper { position: relative; }
-
-
-/* key */
 .key {
     margin: -11px 0 33px 0;
     padding: 0;
@@ -147,15 +154,6 @@ a:hover, a:active { color: #bccae5; }
     }
 }
 
-
-/* chart styles */
-.chart { position: relative; }
-
-line,
-rect {
-    shape-rendering: crispEdges;
-}
-
 .axis {
     font-size: 11px;
     -webkit-font-smoothing: antialiased;
@@ -176,6 +174,7 @@ rect {
 
 .grid {
     path { display: none; }
+
     .tick {
         stroke: #eee;
         stroke-width: 1px;
@@ -187,11 +186,46 @@ rect {
     }
 }
 
+.zero-line  {
+    stroke: #666;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+
+line,
+rect {
+    shape-rendering: crispEdges;
+}
+
+.bars rect { fill: @teal3; }
+
+.labels {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    border: none;
+
+    li {
+        position: absolute;
+        text-align: right;
+        font-size: 12px;
+        line-height: 1.3;
+        color: #666;
+        display: table;
+        -webkit-font-smoothing: antialiased;
+
+        span {
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
+}
+
 .value text {
     font-size: 10px;
     -webkit-font-smoothing: antialiased;
 
     &.in { fill: #fff; }
     &.out { fill: #999; }
-    &.other { display: none; }
 }

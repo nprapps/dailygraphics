@@ -65,7 +65,7 @@ var render = function(containerWidth) {
 
     // Render the chart!
     renderStackedColumnChart({
-        container: '#graphic',
+        container: '#stacked-column-chart',
         width: containerWidth,
         data: DATA
     });

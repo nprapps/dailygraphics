@@ -63,7 +63,7 @@ var render = function(containerWidth) {
 
     // Render the chart!
     renderStackedBarChart({
-        container: '#graphic',
+        container: '#stacked-bar-chart',
         width: containerWidth,
         data: DATA
     });
