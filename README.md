@@ -217,6 +217,7 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Locator map](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/locator-map.png) | [Locator map](#creating-locator-maps) | ```fab add_map:$SLUG``` |
 | ![State grid map](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/state-grid-map.png) | State grid map | ```fab add_state_grid_map:$SLUG``` |
 | ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
+| ![Animated photo](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/animated-photo.gif) | Animated photo (GIF alternative) | ```fab add_animated_photo:$SLUG``` |
 
 **Note**: `$SLUG` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
@@ -375,7 +376,7 @@ Benefits of this approach:
 
 Since it's code-based, it's not quite as portable as a GIF. (So you might still want to create a GIF version of your animation for social media.) But in the context of a web page that you otherwise control, the benefits are pretty great. (A similar but more code-intensive approach: [Filmstrip animations with CSS/JS](http://blog.apps.npr.org/2014/01/08/animation-with-filmstrips.html).)
 
-This template relies on ImageMagick to create the filmstrip image. If you don't have it, install it with:
+This template relies on [ImageMagick](http://www.imagemagick.org/script/montage.php)'s montage function to create the filmstrip image. If you don't have it, install it with:
 
 ```
 brew install imagemagick
