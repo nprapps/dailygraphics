@@ -41,8 +41,8 @@ var render = function(containerWidth) {
             photo: { src: sprite, frames: 8, cols: 8, fps: 2 }
         },
         width: containerWidth,
-        // multiply by height, width of original image
-        height: Math.floor(containerWidth * 1614/1500),
+            // multiply by height, width of original image
+            height: Math.floor(containerWidth * 1614/1500),
         loaded: function() {
             canvidControl.play('photo');
 
