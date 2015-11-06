@@ -234,6 +234,13 @@ def add_graphic(slug):
     _add_graphic(slug, 'graphic')
 
 @task
+def add_animated_photo(slug):
+    """
+    Create a new animated photo (GIF alternative).
+    """
+    _add_graphic(slug, 'animated_photo')
+
+@task
 def add_archive_graphic(slug):
     """
     Create a shell to archive an old project.
