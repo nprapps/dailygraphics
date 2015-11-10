@@ -1,13 +1,10 @@
 // Global config
-var GRAPHIC_DEFAULT_WIDTH = 600;
-var MOBILE_THRESHOLD = 500;
 var COLOR_BINS = [ -4, -2, 0, 2, 4, 6, 8, 10 ];
 var COLOR_RANGE = ['#cc203b', '#e8604d', '#f6883e', '#f1bb4f', '#449970', '#70a99a', '#31716e'];
 
 // Global vars
 var pymChild = null;
 var isMobile = false;
-var graphicData = null;
 var binnedData = [];
 
 /*
@@ -15,39 +12,14 @@ var binnedData = [];
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        loadLocalData(GRAPHIC_DATA);
-        //loadCSV('data.csv')
-    } else {
-        pymChild = new pym.Child({});
-    }
-}
-
-/*
- * Load graphic data from a local source.
- */
-var loadLocalData = function(data) {
-    graphicData = data;
-
-    formatData();
-
-    pymChild = new pym.Child({
-        renderCallback: render
-    });
-}
-
-/*
- * Load graphic data from a CSV.
- */
-var loadCSV = function(url) {
-    d3.csv(url, function(error, data) {
-        graphicData = data;
-
         formatData();
 
         pymChild = new pym.Child({
             renderCallback: render
         });
-    });
+    } else {
+        pymChild = new pym.Child({});
+    }
 }
 
 /*
@@ -62,7 +34,7 @@ var formatData = function() {
     }
 
     // put states in bins
-    _.each(graphicData, function(d) {
+    _.each(DATA, function(d) {
         if (d['amt'] != null) {
             var amt = +d['amt'];
             var state = d['usps'];
@@ -82,7 +54,7 @@ var formatData = function() {
  */
 var render = function(containerWidth) {
     if (!containerWidth) {
-        containerWidth = GRAPHIC_DEFAULT_WIDTH;
+        containerWidth = DEFAULT_WIDTH;
     }
 
     if (containerWidth <= MOBILE_THRESHOLD) {
@@ -93,7 +65,7 @@ var render = function(containerWidth) {
 
     // Render the chart!
     renderBlockHistogram({
-        container: '#graphic',
+        container: '#block-histogram',
         width: containerWidth,
         data: binnedData,
         bins: COLOR_BINS,
@@ -321,7 +293,7 @@ var renderBlockHistogram = function(config) {
         .attr('dx', -15)
         .attr('text-anchor', 'end')
         .attr('y', -10)
-        .html(ANNOTATION_LEFT);
+        .html(LABELS['annotation_left']);
 
     annotations.append('text')
         .attr('class', 'label-top')
@@ -329,7 +301,7 @@ var renderBlockHistogram = function(config) {
         .attr('dx', 5)
         .attr('text-anchor', 'begin')
         .attr('y', -10)
-        .html(ANNOTATION_RIGHT);
+        .html(LABELS['annotation_right']);
 
     annotations.append('line')
         .attr('class', 'axis-0')

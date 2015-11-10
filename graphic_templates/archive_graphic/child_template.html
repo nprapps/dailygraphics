@@ -1,0 +1,29 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+
+    <h1>Headline</h1>
+    <h2>Subhed</h2>
+
+    <div id="graphic"><img src="fallback.png" alt="[Chart]" class="fallback" /></div>
+
+    <!-- <div class="footnotes">
+        <h4>Notes</h4>
+        <p>Footnote</p>
+    </div> -->
+
+    <div class="footer">
+        <p>Source: TK TK TK</p>
+        <p>Credit: TK TK TK</p>
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+
+    {{ JS.push('js/lib/jquery-1.11.3.min.js') }}
+    {{ JS.push('js/lib/pym.js') }}
+    {{ JS.push('js/graphic.js') }}
+    {{ JS.render('js/graphic-footer.js') }}
+
+{% endblock js %}

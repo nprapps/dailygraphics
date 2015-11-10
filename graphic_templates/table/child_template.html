@@ -5,14 +5,26 @@
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed) }}</h2>{% endif %}
 
-    <div id="graphic">
-        <table>
+    <div class="graphic">
+        <table id="state-table">
             <thead>
                 <tr>
-                    <th>{{ COPY.labels.hdr_state }}</th>
-                    <th>{{ COPY.labels.hdr_usps }}</th>
-                    <th>{{ COPY.labels.hdr_ap }}</th>
-                    <th class="amt">{{ COPY.labels.hdr_value }}</th>
+                    <th>
+                        <div class="sorter"><div class="icon"></div></div>
+                        <div class="header">{{ COPY.labels.hdr_state }}</div>
+                    </th>
+                    <th>
+                        <div class="sorter"><div class="icon"></div></div>
+                        <div class="header">{{ COPY.labels.hdr_usps }}</div>
+                    </th>
+                    <th>
+                        <div class="sorter"><div class="icon"></div></div>
+                        <div class="header">{{ COPY.labels.hdr_ap }}</div>
+                    </th>
+                    <th class="amt">
+                        <div class="sorter"><div class="icon"></div></div>
+                        <div class="header">{{ COPY.labels.hdr_value }}</div>
+                    </th>
                 </tr>
             </thead>
 
@@ -44,6 +56,8 @@
 
 {% block js %}
 
+    {{ JS.push('js/lib/tablesort.js') }}
+    {{ JS.push('js/lib/tablesort.numeric.js') }}
     {{ JS.push('js/lib/pym.js') }}
     {{ JS.push('js/graphic.js') }}
     {{ JS.render('js/graphic-footer.js') }}

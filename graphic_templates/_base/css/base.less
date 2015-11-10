@@ -20,7 +20,9 @@
 @import url(http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Titillium+Web:700,400,300);
 
 /* base styles */
+
 html { -webkit-text-size-adjust: none; }
+
 body {
     margin: 0;
     padding: 33px 0;
@@ -72,6 +74,7 @@ h3 {
     line-height: 1.7;
     color: #999;
 }
+
 .footer p { font-style: italic; }
 .footer p em { font-style: normal; }
 .footnotes p strong { color: #666; }
@@ -80,10 +83,17 @@ a, a:link, a:visited {
     color: #4774CC;
     text-decoration: none;
 }
+
 a:hover, a:active { color: #bccae5; }
 
+/*
+ * Standard graphic styles
+ */
+.graphic-wrapper {
+    position: relative;
+}
 
-#graphic {
+.graphic {
     position: relative;
     margin-bottom: 11px;
 
@@ -92,6 +102,7 @@ a:hover, a:active { color: #bccae5; }
         content: ' ';
         display: table;
     }
+
     &:after { clear: both; }
 
     img {
@@ -100,10 +111,6 @@ a:hover, a:active { color: #bccae5; }
     }
 }
 
-.graphic-wrapper { position: relative; }
-
-
-/* key */
 .key {
     margin: -11px 0 33px 0;
     padding: 0;
@@ -133,14 +140,7 @@ a:hover, a:active { color: #bccae5; }
     }
 }
 
-
-/* chart styles */
-.chart { position: relative; }
-
-line,
-rect {
-    shape-rendering: crispEdges;
-}
+svg { overflow: hidden; }
 
 .axis {
     font-size: 11px;
@@ -162,6 +162,7 @@ rect {
 
 .grid {
     path { display: none; }
+
     .tick {
         stroke: #eee;
         stroke-width: 1px;
@@ -173,24 +174,59 @@ rect {
     }
 }
 
+.zero-line  {
+    stroke: #666;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+
+line,
+rect {
+    shape-rendering: crispEdges;
+}
+
+.bars rect { fill: @teal3; }
+
+.labels {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    border: none;
+
+    li {
+        position: absolute;
+        text-align: right;
+        font-size: 12px;
+        line-height: 1.3;
+        color: #666;
+        display: table;
+        -webkit-font-smoothing: antialiased;
+
+        span {
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
+}
+
 .value text {
     font-size: 10px;
     -webkit-font-smoothing: antialiased;
 
     &.in { fill: #fff; }
     &.out { fill: #999; }
-    &.other { display: none; }
 }
 
 /* Size "Full" divs in Core Publisher correctly — add div.full inside body tags */
-		@media screen and (max-width: 641px) { 
-			div.full { 
-				margin-right: 8.75%; 
-			} 
+		@media screen and (max-width: 641px) {
+			div.full {
+				margin-right: 8.75%;
+			}
 		}
 		@media screen and (min-width: 642px) and (max-width: 1009px) {
 			div.full {
-				margin-right: 8.3%; 
+				margin-right: 8.3%;
 			}
 		}
 		@media screen and (min-width: 1011px) and (max-width: 1025px) {

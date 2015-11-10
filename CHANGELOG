@@ -1,6 +1,20 @@
+0.1.2
+-----
+
+
 0.1.1
 -----
 
+* New animated_photo graphic template.
+* CSS to address SVG overflow quirk in IE11.
+* Add tablesort to table template. (#57)
+* Add smarty filter. (#139)
+* Remove commented-out JS data loader in existing graphics templates. (#147)
+* Reorganize base JS and add some frequently-used D3 date/number formatters. (#137)
+* Clean up CSS and JS in existing graphics templates. (#126, #140, #141, #145, #146, #148)
+* Update boilerplate embed code to match what's needed for NPR's CMS, Seamus.
+* Fix issue with creating a new graphic.
+* Fix S3 SSL certificate issue.
 * Created _base/base_filters.py, a library of default Jinja filters for common formatting tasks.
 * Made it possible for graphic_config.py to import other local modules (#133)
 

@@ -5,7 +5,9 @@
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed) }}</h2>{% endif %}
 
-    <div id="graphic"><img src="fallback.png" alt="[Chart]" class="fallback" /></div>
+    <div id="locator-map" class="graphic">
+        <img src="fallback.png" alt="[Chart]" class="fallback" />
+    </div>
 
     {% if COPY.labels.footnote %}
     <div class="footnotes">
@@ -34,6 +36,7 @@
     {{ JS.push('js/lib/topojson.v1.min.js') }}
     {{ JS.push('js/lib/modernizr.svg.min.js') }}
     {{ JS.push('js/lib/pym.js') }}
+    {{ JS.push('js/base.js') }}
     {{ JS.push('js/geomath.js') }}
     {{ JS.push('js/graphic.js') }}
     {{ JS.render('js/graphic-footer.js') }}

@@ -5,7 +5,9 @@
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed) }}</h2>{% endif %}
 
-    <div id="graphic"><img src="fallback.png" alt="[Chart]" class="fallback" /></div>
+    <div id="column-chart" class="graphic">
+        <img src="fallback.png" alt="[Chart]" class="fallback" />
+    </div>
 
     {% if COPY.labels.footnote %}
     <div class="footnotes">
@@ -20,7 +22,7 @@
     </div>
 
     <script type="text/javascript">
-        var GRAPHIC_DATA = {{ COPY.data.json() }};
+        var DATA = {{ COPY.data.json() }};
     </script>
 
 {% endblock content %}

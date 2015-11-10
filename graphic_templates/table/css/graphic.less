@@ -1,95 +1,143 @@
 @import "base";
 
-/* table */
+// Base table styles
 table {
     border-collapse: collapse;
     padding: 0;
     width: 100%;
     font-size: 12px;
     color: #666;
-}
-table th,
-table td {
-    padding: 10px;
-    text-align: left;
-}
-table th {
-    border-bottom: 2px solid #eee;
-    vertical-align: bottom;
-    font-family: 'Knockout 31 4r';
-    font-weight: normal;
-    text-transform: uppercase;
-    padding-top: 0;
-    line-height: 1.2;
-    letter-spacing: 0.05em;
-    -webkit-font-smoothing: antialiased;
-}
-table td {
-    border-bottom: 1px solid #eee;
-    vertical-align: top;
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        border-bottom: 2px solid #eee;
+        vertical-align: bottom;
+        font-family: 'Knockout 31 4r';
+        font-weight: normal;
+        text-transform: uppercase;
+        padding-top: 0;
+        line-height: 1.2;
+        letter-spacing: 0.05em;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    td {
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+    }
+
+    th.amt, td.amt {
+        text-align: right;
+    }
+
+    tr.shadedrow {
+        background-color: #f1f1f1;
+        color: #333;
+        font-weight: bold;
+    }
 }
 
-table th.amt,
-table td.amt {
-    text-align: right;
+// Tablesorter styles
+table {
+    th {
+        &.sort-header {
+            cursor: pointer;
+
+            &::-moz-selection,
+            &::selection {
+                background: transparent;
+            }
+
+            .sorter {
+                border-top: 2px solid #404040;
+                visibility: hidden;
+
+                .icon {
+                    content: '';
+                    width: 1px;
+                    margin: 3px auto 7px auto;
+                    border-width: 0 4px 4px;
+                    border-style: solid;
+                    border-color: #404040 transparent;
+                }
+            }
+
+            &:hover .sorter {
+                visibility: visible;
+            }
+        }
+
+        &.sort-up .sorter,
+        &.sort-down .sorter,
+        &.sort-down:hover .sorter {
+            visibility: visible;
+            opacity: 0.4;
+        }
+
+        &.sort-up .sorter .icon {
+            border-bottom: none;
+            border-width: 4px 4px 0;
+        }
+    }
 }
 
-table tr.shadedrow {
-    background-color: #f1f1f1;
-    color: #333;
-    font-weight: bold;
-}
-
-/* responsive table */
+// Mobile styles
 @media screen and (max-width: 500px) {
-    table,
+    table {}
     tbody {
         display: block;
         width: 100%;
     }
-    thead { display: none; }
-    table tr,
-    table th,
-    table td,
-    table td.amt {
-        display: block;
-        padding: 0;
-        text-align: left;
-        white-space: normal;
-    }
-    table td,
-    table td.amt {
-        border: none;
-        margin-bottom: 6px;
-    }
-    table td:empty { display: none; }
 
-    table tr {
-        border-bottom: 1px solid #eee;
-        padding: 10px;
-    }
-    table tr:first-child { border-top: 1px solid #eee; }
+    table {
+        thead { display: none; }
 
-    table th[data-title]:before,
-    table td[data-title]:before {
-        content: attr(data-title) ":\00A0";
-        display: inline-block;
-        width: 75%;
-        min-width: 220px;
-        width: 220px;
-    }
+        tr, th, td, td.amt {
+            display: block;
+            padding: 0;
+            text-align: left;
+            white-space: normal;
+        }
 
-    table tr td:first-child {
-        font-size: 14px;
-        margin-bottom: 6px;
-        color: #333;
-        font-family: 'Knockout 31 4r', Helvetica, Arial, sans-serif;
-        font-weight: 500;
-        letter-spacing: 0.02em;
-        text-transform: uppercase;
-    }
-    table tr td:first-child:before {
-        content: '';
-        display: none;
+        td, td.amt {
+            border: none;
+            margin-bottom: 6px;
+        }
+
+        td:empty { display: none; }
+
+        tr {
+            border-bottom: 1px solid #eee;
+            padding: 10px;
+        }
+
+        tr:first-child { border-top: 1px solid #eee; }
+
+        th[data-title]:before,
+        td[data-title]:before {
+            content: attr(data-title) ":\00A0";
+            display: inline-block;
+            width: 75%;
+            min-width: 220px;
+            width: 220px;
+        }
+
+        tr td:first-child {
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #333;
+            font-family: 'Knockout 31 4r', Helvetica, Arial, sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        tr td:first-child:before {
+            content: '';
+            display: none;
+        }
     }
 }

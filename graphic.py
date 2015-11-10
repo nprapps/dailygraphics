@@ -10,7 +10,7 @@ from jinja2 import Environment, FileSystemLoader
 import app_config
 import copytext
 import oauth
-from render_utils import load_graphic_config, make_context, render_with_context
+from render_utils import load_graphic_config, make_context, render_with_context, smarty_filter
 
 graphic = Blueprint('graphic', __name__)
 
@@ -27,6 +27,7 @@ def _graphics_detail(slug):
     # NOTE: Parent must load pym.js from same source as child to prevent version conflicts!
     context = make_context(asset_depth=2, root_path=graphic_path)
     context['slug'] = slug
+    context['var_name'] = slug.replace('-', '_')
 
     template = 'parent.html'
 
@@ -67,6 +68,7 @@ def _graphics_child(slug):
 
     context = make_context(asset_depth=2, root_path=graphic_path)
     context['slug'] = slug
+    context['var_name'] = slug.replace('-', '_')
 
     env = Environment(loader=FileSystemLoader(graphic_path))
 
@@ -86,6 +88,7 @@ def _graphics_child(slug):
         pass
 
     env.globals.update(render=render_with_context)
+    env.filters['smarty'] = smarty_filter
     template = env.get_template('child_template.html')
 
     return make_response(template.render(**context))

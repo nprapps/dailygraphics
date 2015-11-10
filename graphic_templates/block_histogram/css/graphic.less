@@ -1,5 +1,12 @@
 @import "base";
 
+.label-top {
+    font-style: italic;
+    fill: #999;
+    font-size: 11px;
+    -webkit-font-smoothing: antialiased;
+}
+
 .bin {
     &.bin-0 rect { fill: #e68c31; }
     &.bin-1 rect { fill: #eba934; }
@@ -18,17 +25,9 @@
     -webkit-font-smoothing: antialiased;
 }
 
-.label-top {
-    font-style: italic;
-    fill: #999;
-    font-size: 11px;
-    -webkit-font-smoothing: antialiased;
-}
-
 line.axis-0 {
     stroke: #999;
 }
-
 
 @media screen and (max-width: 480px) {
     .value text { font-size: 10px; }

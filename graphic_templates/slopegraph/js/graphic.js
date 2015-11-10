@@ -1,59 +1,31 @@
 // Global config
-var GRAPHIC_DEFAULT_WIDTH = 600;
-var MOBILE_THRESHOLD = 500;
 var SIDEBAR_THRESHOLD = 280;
 
 // Global vars
 var pymChild = null;
 var isMobile = false;
 var isSidebar = false;
-var graphicData = null;
 
 /*
  * Initialize graphic
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        loadLocalData(GRAPHIC_DATA);
-        //loadCSV('data.csv')
+        formatData();
+
+        pymChild = new pym.Child({
+            renderCallback: render
+        });
     } else {
         pymChild = new pym.Child({});
     }
 }
 
 /*
- * Load graphic data from a local source.
- */
-var loadLocalData = function(data) {
-    graphicData = data;
-
-    formatData();
-
-    pymChild = new pym.Child({
-        renderCallback: render
-    });
-}
-
-/*
- * Load graphic data from a CSV.
- */
-var loadCSV = function(url) {
-    d3.csv(GRAPHIC_DATA_URL, function(error, data) {
-        graphicData = data;
-
-        formatData();
-
-        pymChild = new pym.Child({
-            renderCallback: render
-        });
-    });
-}
-
-/*
  * Format graphic data for processing by D3.
  */
 var formatData = function() {
-    graphicData.forEach(function(d) {
+    DATA.forEach(function(d) {
         d['start'] = +d['start'];
         d['end'] = +d['end'];
     });
@@ -64,7 +36,7 @@ var formatData = function() {
  */
 var render = function(containerWidth) {
     if (!containerWidth) {
-        containerWidth = GRAPHIC_DEFAULT_WIDTH;
+        containerWidth = DEFAULT_WIDTH;
     }
 
     if (containerWidth <= MOBILE_THRESHOLD) {
@@ -81,10 +53,10 @@ var render = function(containerWidth) {
 
     // Render the chart!
     renderSlopegraph({
-        container: '#graphic',
+        container: '#slopegraph',
         width: containerWidth,
-        data: graphicData,
-        metadata: GRAPHIC_METADATA
+        data: DATA,
+        labels: LABELS
     });
 
     // Update iframe
@@ -104,8 +76,8 @@ var renderSlopegraph = function(config) {
     var startColumn = 'start';
     var endColumn = 'end';
 
-    var startLabel = config['metadata']['startLabel'];
-    var endLabel = config['metadata']['endLabel'];
+    var startLabel = config['labels']['start_label'];
+    var endLabel = config['labels']['end_label'];
 
     var aspectWidth = 5;
     var aspectHeight = 3;
@@ -151,15 +123,16 @@ var renderSlopegraph = function(config) {
         .domain([startLabel, endLabel])
         .range([0, chartWidth])
 
+    var min = d3.min(config['data'], function(d) {
+        return Math.floor(d[startColumn] / roundTicksFactor) * roundTicksFactor;
+    });
+
+    var max = d3.max(config['data'], function(d) {
+        return Math.ceil(d[endColumn] / roundTicksFactor) * roundTicksFactor;
+    });
+
     var yScale = d3.scale.linear()
-        .domain([
-            d3.min(config['data'], function(d) {
-                return Math.floor(d[startColumn] / roundTicksFactor) * roundTicksFactor;
-            }),
-            d3.max(config['data'], function(d) {
-                return Math.ceil(d[endColumn] / roundTicksFactor) * roundTicksFactor;
-            })
-        ])
+        .domain([min, max])
         .range([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
