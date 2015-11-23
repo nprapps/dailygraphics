@@ -6,8 +6,8 @@
 
     {% if COPY.labels.caption %}
     <div class="caption">
-        <p>{{ render(COPY.labels.caption) }}</p>
-        <p class="credit">{{ COPY.labels.credit }}</p>
+        <p>{{ render(COPY.labels.caption)|smarty }}</p>
+        <p class="credit">{{ COPY.labels.credit|smarty }}</p>
     </div>
     {% endif %}
 
