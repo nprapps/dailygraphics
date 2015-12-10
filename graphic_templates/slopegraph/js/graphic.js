@@ -124,11 +124,13 @@ var renderSlopegraph = function(config) {
         .range([0, chartWidth])
 
     var min = d3.min(config['data'], function(d) {
-        return Math.floor(d[startColumn] / roundTicksFactor) * roundTicksFactor;
+        var rowMin = d3.min([d[startColumn], d[endColumn]]);
+        return Math.floor(rowMin / roundTicksFactor) * roundTicksFactor;
     });
 
     var max = d3.max(config['data'], function(d) {
-        return Math.ceil(d[endColumn] / roundTicksFactor) * roundTicksFactor;
+        var rowMax = d3.max([d[startColumn], d[endColumn]]);
+        return Math.ceil(rowMax / roundTicksFactor) * roundTicksFactor;
     });
 
     var yScale = d3.scale.linear()
