@@ -1,0 +1,139 @@
+@import "base";
+
+/* table */
+table {
+    border-collapse: collapse;
+    padding: 0;
+    width: 100%;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 22px;
+}
+table th,
+table td {
+    padding: 10px;
+    text-align: left;
+}
+table th {
+    border-bottom: 2px solid #eee;
+    vertical-align: bottom;
+    font-family: 'Knockout 31 4r';
+    font-weight: normal;
+    text-transform: uppercase;
+    padding-top: 0;
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+    -webkit-font-smoothing: antialiased;
+}
+table td {
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+}
+
+table th.amt,
+table td.amt {
+    text-align: right;
+}
+
+table tr.shadedrow {
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: bold;
+}
+
+table td.issue {
+    span {
+        -webkit-font-smoothing: antialiased;
+        color: #999;
+
+        &.yes   {
+            color: @teal3;
+            font-weight: bold;
+        }
+        &.no    {
+            color: @orange3;
+            font-weight: bold;
+        }
+    }
+
+    a span {
+        padding-bottom: 1px;
+        border-bottom: 1px solid #ddd;
+
+        &:hover { opacity: 0.7; }
+    }
+
+    sup {
+        line-height: 0;
+        color: #aaa;
+    }
+}
+
+@media screen and (min-width: 651px) {
+    &.name { white-space: nowrap; }
+}
+
+@media screen and (min-width: 551px) {
+    table th,
+    table td {
+        width: 14%;
+
+        &.issue { text-align: center; }
+    }
+}
+
+/* responsive table */
+@media screen and (max-width: 550px) {
+    table,
+    tbody {
+        display: block;
+        width: 100%;
+    }
+    thead { display: none; }
+    table tr,
+    table th,
+    table td,
+    table td.amt {
+        display: block;
+        padding: 0;
+        text-align: left;
+        white-space: normal;
+    }
+    table td,
+    table td.amt {
+        border: none;
+        margin-bottom: 6px;
+    }
+    table td:empty { display: none; }
+
+    table tr {
+        border-bottom: 1px solid #eee;
+        padding: 10px;
+    }
+    table tr:first-child { border-top: 1px solid #eee; }
+
+    table th[data-title]:before,
+    table td[data-title]:before {
+        content: attr(data-title) ":\00A0";
+        display: inline-block;
+        width: 50%;
+        min-width: 175px;
+        padding-right: 11px;
+        text-align: left;
+    }
+
+    table tr td:first-child {
+        font-size: 14px;
+        margin-bottom: 6px;
+        color: #333;
+        font-family: 'Knockout 31 4r', Helvetica, Arial, sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+
+        &:before {
+            content: '';
+            display: none;
+        }
+    }
+}

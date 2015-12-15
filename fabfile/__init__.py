@@ -338,6 +338,13 @@ def add_table(slug):
     """
     _add_graphic(slug, 'table')
 
+@task
+def add_issue_matrix(slug):
+    """
+    Create a table comparing positions on an issue.
+    """
+    _add_graphic(slug, 'issue_matrix')
+
 def _check_credentials():
     """
     Check credentials and spawn server and browser if not
