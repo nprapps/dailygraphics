@@ -236,7 +236,7 @@ When you create a new project, dailygraphics will check against your local proje
 Deploy to S3
 ------------
 
-When it's time to publish your graphic, it's better to deploy a single graphic rather than the entire repo, to minimize the risk of publishing edits that aren't yet ready to go live.
+When it's time to publish your graphic, it's better to deploy a specific graphic rather than the entire repo, to minimize the risk of publishing edits that aren't yet ready to go live.
 
 To deploy a specific graphic:
 
@@ -247,13 +247,14 @@ fab staging deploy:$SLUG
 fab production deploy:$SLUG
 ```
 
-To deploy multiple graphics at once:
+You can deploy multiple graphics with a single command by passing the
+slugs as a comma-separated list (no spaces). To deploy multiple graphics at once:
 
 ```
-fab staging deploy_bulk:$SLUG1,$SLUG2
+fab staging deploy:$SLUG1,$SLUG2
 ```
 ```
-fab production deploy_bulk:$SLUG1,$SLUG2
+fab production deploy:$SLUG1,$SLUG2
 ```
 
 
@@ -300,7 +301,7 @@ Using Jinja filter functions
 
 A [library of Jinja filter functions](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/_base/base_filters.py) for common tasks (ordinal, AP date format, etc.) is included with each graphic.
 
-If you're graphic requires complex number formatting or other nuanced presentation, you may need to write a custom filter function. This is supported through each project's ``graphic_config.py`` file. To add a custom filter function, simply define it and add it to the list called ``JINJA_FILTER_FUNCTIONS``, like so:
+If your graphic requires complex number formatting or other nuanced presentation, you may need to write a custom filter function. This is supported through each project's ``graphic_config.py`` file. To add a custom filter function, simply define it and add it to the list called ``JINJA_FILTER_FUNCTIONS``, like so:
 
 ```python
 def percent(value):

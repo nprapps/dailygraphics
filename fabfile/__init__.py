@@ -74,74 +74,68 @@ code to a remote server if required.
 @task
 def deploy(*slugs):
     """
-    Deploy the latest app to S3 and, if configured, to our servers.
+    Deploy the latest app(s) to S3 and, if configured, to our servers.
+    """
+    if slugs[0] == '':
+        print 'You must specify at least one slug, like this: "deploy:slug" or "deploy:slug,slug"'
+        return
+
+    for slug in slugs:
+        deploy_single(slug)
+
+def deploy_single(slug):
+    """
+    Deploy a single project to S3 and, if configured, to our servers.
     """
     require('settings', provided_by=[production, staging])
 
-    if slugs[0] == '':
-        print 'You must specify at least one slug, like this: "deploy:slug"'
-        return
+    graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    s3_root = '%s/graphics/%s' % (app_config.PROJECT_SLUG, slug)
+    graphic_assets = '%s/assets' % graphic_root
+    s3_assets = '%s/assets' % s3_root
 
-    for slug in slugs:
-        graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-        s3_root = '%s/graphics/%s' % (app_config.PROJECT_SLUG, slug)
-        graphic_assets = '%s/assets' % graphic_root
-        s3_assets = '%s/assets' % s3_root
+    graphic_config = load_graphic_config(graphic_root)
 
-        graphic_config = load_graphic_config(graphic_root)
+    use_assets = getattr(graphic_config, 'USE_ASSETS', True)
+    default_max_age = getattr(graphic_config, 'DEFAULT_MAX_AGE', None) or app_config.DEFAULT_MAX_AGE
+    assets_max_age = getattr(graphic_config, 'ASSETS_MAX_AGE', None) or app_config.ASSETS_MAX_AGE
 
-        use_assets = getattr(graphic_config, 'USE_ASSETS', True)
-        default_max_age = getattr(graphic_config, 'DEFAULT_MAX_AGE', None) or app_config.DEFAULT_MAX_AGE
-        assets_max_age = getattr(graphic_config, 'ASSETS_MAX_AGE', None) or app_config.ASSETS_MAX_AGE
+    update_copy(slug)
 
-        update_copy(slug)
+    if use_assets:
+        assets.sync(slug)
 
-        if use_assets:
-            assets.sync(slug)
+    render.render(slug)
 
-        render.render(slug)
+    flat.deploy_folder(
+        graphic_root,
+        s3_root,
+        headers={
+            'Cache-Control': 'max-age=%i' % default_max_age
+        },
+        ignore=['%s/*' % graphic_assets]
+    )
 
+    # Deploy parent assets
+    flat.deploy_folder(
+        'www',
+        app_config.PROJECT_SLUG,
+        headers={
+            'Cache-Control': 'max-age=%i' % default_max_age
+        }
+    )
+
+    if use_assets:
         flat.deploy_folder(
-            graphic_root,
-            s3_root,
+            graphic_assets,
+            s3_assets,
             headers={
-                'Cache-Control': 'max-age=%i' % default_max_age
-            },
-            ignore=['%s/*' % graphic_assets]
-        )
-
-        # Deploy parent assets
-        flat.deploy_folder(
-            'www',
-            app_config.PROJECT_SLUG,
-            headers={
-                'Cache-Control': 'max-age=%i' % default_max_age
+                'Cache-Control': 'max-age=%i' % assets_max_age
             }
         )
 
-        if use_assets:
-            flat.deploy_folder(
-                graphic_assets,
-                s3_assets,
-                headers={
-                    'Cache-Control': 'max-age=%i' % assets_max_age
-                }
-            )
-
-        print ''
-        print '%s URL: %s/graphics/%s/' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug)
-
-@task
-def deploy_bulk(*slugs):
-    """
-    Deploy multiple projects from a comma-separated list of slugs.
-    """
-    if slugs[0] == '':
-        print 'You must specify a comma-separated list of slugs, like this: "deploy_bulk:slug,slug"'
-        return
-
-    for slug in slugs:
-        deploy(slug)
+    print ''
+    print '%s URL: %s/graphics/%s/' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug)
 
 def download_copy(slug):
     """
