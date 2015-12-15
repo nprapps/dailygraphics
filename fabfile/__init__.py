@@ -135,6 +135,10 @@ def deploy_bulk(*slugs):
     """
     Deploy multiple projects from a comma-separated list of slugs.
     """
+    if slugs[0] == '':
+        print 'You must specify a comma-separated list of slugs, like this: "deploy_bulk:slug,slug"'
+        return
+
     for slug in slugs:
         deploy(slug)
 

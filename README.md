@@ -247,6 +247,15 @@ fab staging deploy:$SLUG
 fab production deploy:$SLUG
 ```
 
+To deploy multiple graphics at once:
+
+```
+fab staging deploy_bulk:$SLUG1,$SLUG2
+```
+```
+fab production deploy_bulk:$SLUG1,$SLUG2
+```
+
 
 Embedding
 ---------
