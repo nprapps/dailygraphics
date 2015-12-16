@@ -385,9 +385,9 @@ Benefits of this approach:
 * You can control playback -- play, pause, reverse, etc.
 * It will autoplay on iOS (unlike a video).
 
-Since it's code-based, it's not quite as portable as a GIF. (So you might still want to create a GIF version of your animation for social media.) But in the context of a web page that you otherwise control, the benefits are pretty great. (A similar but more code-intensive approach: [Filmstrip animations with CSS/JS](http://blog.apps.npr.org/2014/01/08/animation-with-filmstrips.html).)
+Since it's code-based, it's not quite as portable as a GIF. (So our script that creates the filmstrips also [generates a GIF version](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/animated_photo/process.sh#L12-L15) for social media.) But in the context of a web page that you otherwise control, the benefits are pretty great. (A similar but more code-intensive approach: [Filmstrip animations with CSS/JS](http://blog.apps.npr.org/2014/01/08/animation-with-filmstrips.html).)
 
-This template relies on [ImageMagick](http://www.imagemagick.org/script/montage.php)'s montage function to create the filmstrip image. If you don't have it, install it with:
+This template relies on [ImageMagick](http://www.imagemagick.org/script/montage.php)'s montage function to create the filmstrip image and animated GIF. If you don't have it, install it with:
 
 ```
 brew install imagemagick
