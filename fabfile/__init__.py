@@ -72,15 +72,22 @@ has two primary functions: Pushing flat files to S3 and deploying
 code to a remote server if required.
 """
 @task
-def deploy(slug):
+def deploy(*slugs):
     """
-    Deploy the latest app to S3 and, if configured, to our servers.
+    Deploy the latest app(s) to S3 and, if configured, to our servers.
+    """
+    if slugs[0] == '':
+        print 'You must specify at least one slug, like this: "deploy:slug" or "deploy:slug,slug"'
+        return
+
+    for slug in slugs:
+        deploy_single(slug)
+
+def deploy_single(slug):
+    """
+    Deploy a single project to S3 and, if configured, to our servers.
     """
     require('settings', provided_by=[production, staging])
-
-    if not slug:
-        print 'You must specify a project slug, like this: "deploy:slug"'
-        return
 
     graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     s3_root = '%s/graphics/%s' % (app_config.PROJECT_SLUG, slug)
