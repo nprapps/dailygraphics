@@ -1,6 +1,7 @@
 0.1.2
 -----
 
+* deploy task accepts multiple project slugs (#155)
 * animated_photo process script also outputs a gif (#152)
 * New issue matrix graphic template.
 
