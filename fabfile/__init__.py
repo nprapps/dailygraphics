@@ -332,6 +332,13 @@ def add_map(slug):
     _add_graphic(slug, 'locator_map')
 
 @task
+def add_world_map(slug):
+    """
+    Create a world map.
+    """
+    _add_graphic(slug, 'world_map')
+
+@task
 def add_table(slug):
     """
     Create a data table.
