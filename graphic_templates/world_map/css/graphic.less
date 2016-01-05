@@ -17,44 +17,16 @@ h3 {
     stroke: #fff;
 }
 
-.populations {
+.bubbles {
     circle {
         fill: #bbb;
         fill-opacity: .5;
         stroke: #f1f1f1;
         stroke-width: .5;
-
-        &.positive {
-            fill: @teal4;
-            stroke: #fff;
-            stroke-width: .5;
-        }
-
-        &.negative {
-            fill: @red4;
-            stroke: #fff;
-            stroke-width: .5;
-        }
-    }
-    text {
-        fill: #333;
-        font-size: 9px;
-        font-weight: 700;
-        text-anchor: middle;
-        -webkit-font-smoothing: antialiased;
-        font-family: 'Gotham SSm',Helvetica,Arial,sans-serif;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
     }
 }
 
 .key {
-    margin-bottom: 8px;
-
-    b { border-radius: 20px; }
-    .positive b { background-color: @teal4; }
-    .negative b { background-color: @red4; }
-
     circle {
         fill: none;
         stroke: #ddd;

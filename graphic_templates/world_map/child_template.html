@@ -1,4 +1,4 @@
-{% extends 'base_template.html' %}
+{% extends "base_template.html" %}
 
 {% block content %}
 
@@ -22,21 +22,28 @@
     </div>
 
     <script type="text/javascript">
-        var DATA = {{ COPY.data.json() }};
+        var DATA_POSITIONING = '{{ COPY.labels.data_positioning }}';
+        var DATA_DISPLAY = '{{ COPY.labels.data_display }}';
+
+        {% if COPY.labels.data_positioning|string() == "country" %}
+            var DATA = {{ COPY.data_country.json() }};
+        {% elif COPY.labels.data_positioning|string() == "latlon" %}
+            var DATA = {{ COPY.data_latlon.json() }};
+        {% endif %}
     </script>
 
 {% endblock content %}
 
 {% block js %}
 
-    {{ JS.push('js/lib/underscore.js') }}
-    {{ JS.push('js/lib/d3.min.js') }}
-    {{ JS.push('js/lib/d3.geo.projection.v0.min.js') }}
-    {{ JS.push('js/lib/topojson.v1.min.js') }}
-    {{ JS.push('js/lib/modernizr.svg.min.js') }}
-    {{ JS.push('js/lib/pym.js') }}
-    {{ JS.push('js/base.js') }}
-    {{ JS.push('js/graphic.js') }}
-    {{ JS.render('js/graphic-footer.js') }}
+    {{ JS.push("js/lib/underscore.js") }}
+    {{ JS.push("js/lib/d3.min.js") }}
+    {{ JS.push("js/lib/d3.geo.projection.v0.min.js") }}
+    {{ JS.push("js/lib/topojson.v1.min.js") }}
+    {{ JS.push("js/lib/modernizr.svg.min.js") }}
+    {{ JS.push("js/lib/pym.js") }}
+    {{ JS.push("js/base.js") }}
+    {{ JS.push("js/graphic.js") }}
+    {{ JS.render("js/graphic-footer.js") }}
 
 {% endblock js %}

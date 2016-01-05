@@ -5,22 +5,43 @@ var GEO_DATA_URL = 'data/world-110m.json';
 var pymChild = null;
 var isMobile = false;
 var geoData = null;
+var dataIndexed = [];
 
 /*
  * Initialize the graphic.
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
-        loadJSON()
+        formatData();
+        loadGeoData();
     } else {
         pymChild = new pym.Child({});
     }
 }
 
 /*
+ * Format data for D3.
+ */
+var formatData = function() {
+    DATA.forEach(function(d) {
+        var id = d['id'];
+        if (d['amt'] != null) {
+            d['amt'] = +d['amt'];
+        }
+        if (d['lat'] != null) {
+            d['lat'] = +d['lat'];
+        }
+        if (d['lon'] != null) {
+            d['lon'] = +d['lon'];
+        }
+        dataIndexed[id] = d;
+    });
+}
+
+/*
  * Load graphic data from a CSV.
  */
-var loadJSON = function() {
+var loadGeoData = function() {
     d3.json(GEO_DATA_URL, function(error, data) {
         geoData = data;
 
@@ -48,7 +69,9 @@ var render = function(containerWidth) {
     renderLocatorMap({
         container: '#world-map',
         width: containerWidth,
-        geoData: geoData
+        geoData: geoData,
+        data: DATA,
+        dataIndexed: dataIndexed
     });
 
     // Update iframe
@@ -61,6 +84,8 @@ var renderLocatorMap = function(config) {
     /*
      * Setup
      */
+    var dataColumn = 'amt';
+
     var aspectWidth = 1.92;
     var aspectHeight = 1;
     var defaultScale = 95;
@@ -77,10 +102,10 @@ var renderLocatorMap = function(config) {
     /*
      * Extract topo data.
      */
-    var mapData = {};
+    var topoData = {};
 
     for (var key in config['geoData']['objects']) {
-        mapData[key] = topojson.feature(config['geoData'], config['geoData']['objects'][key]);
+        topoData[key] = topojson.feature(config['geoData'], config['geoData']['objects'][key]);
     }
 
     /*
@@ -119,13 +144,103 @@ var renderLocatorMap = function(config) {
     chartElement.append('g')
         .attr('class', 'countries')
         .selectAll('path')
-            .data(mapData['countries']['features'])
+            .data(topoData['countries']['features'])
             .enter()
                 .append('path')
                 .attr('d', path)
                 .attr('class', function(d) {
+                    var id = d['id'];
+                    if (typeof config['dataIndexed'][id] != 'undefined') {
+                        console.log(d['id'], config['dataIndexed'][id]['name'], config['dataIndexed'][id][dataColumn]);
+                    } else {
+                        console.log(d['id'], typeof(config['dataIndexed'][id]));
+                    }
                     return 'country-' + d['id'];
                 });
+
+    if (DATA_DISPLAY == 'bubble' && DATA_POSITIONING == 'country') {
+        // define scale
+        var radiusMax = 25 * scaleFactor;
+        var rounding = 100;
+        var scaleMax = d3.max(config['data'], function(d) {
+            return Math.ceil(d[dataColumn] / rounding) * rounding;
+        });
+        var scaleMin = Math.floor(scaleMax / 3);
+
+        var radius = d3.scale.sqrt()
+            .domain([0, scaleMax])
+            .range([0, radiusMax]);
+
+        var scaleKey = [ scaleMin, scaleMax ];
+
+        // draw bubbles
+        var bubbles = chartElement.append('g')
+            .attr('class', 'bubbles');
+
+        bubbles.selectAll('circle')
+            // TODO: SORT ASCENDING
+            .data(config['data'].filter(function(d, i) {
+                var country = d3.select('.country-' + d['id']);
+//                return d[dataColumn] != null && country[0][0] != null;
+                return d[dataColumn] != null;
+            }))
+            .enter()
+                .append('circle')
+                    .attr('transform', function(d,i) {
+                        var id = d['id'];
+                        var country = d3.select('.country-' + id);
+                        var centroid = [ 0, 0 ];
+
+                        // check for an override
+                        if (d['lat'] != null && d['lon'] != null) {
+                            centroid = [ d['lon'], d['lat'] ];
+                        // otherwise use country centroid
+                        } else if (country[0][0] != null) {
+                            centroid = d3.geo.centroid(country[0][0]['__data__']);
+                        // or maybe the centroid doesn't exist
+                        } else {
+                            console.log('no centroid for: ' + d['name']);
+                        }
+
+                        return 'translate(' + projection(centroid) + ')'; }
+                    )
+                    .attr('r', function(d, i) {
+                        if (d[dataColumn] != null) {
+                            return radius(d[dataColumn]);
+                        } else {
+                            return radius(0);
+                        }
+                    })
+                    .attr('class', function(d, i) {
+                        return classify(d['name']);
+                    });
+
+        // add scale
+        var scaleDots = chartElement.append('g')
+            .attr('class', 'key');
+
+        scaleKey.forEach(function(d, i) {
+            scaleDots.append('circle')
+                .attr('r', radius(d))
+                .attr('cx', radius(scaleKey[1]) + 1)
+                .attr('cy', mapHeight - radius(d) - 1);
+
+            scaleDots.append('text')
+                .attr('x', radius(scaleKey[1]))
+                .attr('y', mapHeight - (radius(d) * 2))
+                .attr('dy', function() {
+                    if (isMobile) {
+                        return 9;
+                    } else {
+                        return 12;
+                    }
+                })
+                .text(function() {
+                    var amt = d;
+                    return fmtComma(amt.toFixed(0));
+                });
+        })
+    }
 }
 
 /*
