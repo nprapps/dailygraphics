@@ -183,6 +183,8 @@ var renderLocatorMap = function(config) {
                 var country = d3.select('.country-' + d['id']);
 //                return d[dataColumn] != null && country[0][0] != null;
                 return d[dataColumn] != null;
+            }).sort(function(a, b) {
+                return d3.descending(a[dataColumn], b[dataColumn]);
             }))
             .enter()
                 .append('circle')
