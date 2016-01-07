@@ -142,7 +142,7 @@ var renderLocatorMap = function(config) {
      */
     // Land outlines
     chartElement.append('g')
-        .attr('class', 'countries')
+        .attr('class', 'countries background')
         .selectAll('path')
             .data(topoData['countries']['features'])
             .enter()
@@ -150,15 +150,89 @@ var renderLocatorMap = function(config) {
                 .attr('d', path)
                 .attr('class', function(d) {
                     var id = d['id'];
-                    if (typeof config['dataIndexed'][id] != 'undefined') {
-                        console.log(d['id'], config['dataIndexed'][id]['name'], config['dataIndexed'][id][dataColumn]);
-                    } else {
-                        console.log(d['id'], typeof(config['dataIndexed'][id]));
-                    }
                     return 'country-' + d['id'];
                 });
 
-    if (DATA_DISPLAY == 'bubble' && DATA_POSITIONING == 'country') {
+    /*
+     * Display data on the map
+     */
+    if (DATA_DISPLAY == 'choropleth') {
+        if (DATA_POSITIONING == 'country') {
+            // Define color bins
+            // You'll probabaly want to change the bins, but here's a starting point.
+            var maxValue = d3.max(config['data'], function(d) {
+                return d[dataColumn];
+            });
+            // var colorBins = [ 1, 500, 5000, 10000, 50000 ];
+            var colorBins = [ 1,
+                              Math.floor(maxValue/3),
+                              Math.floor(maxValue/3) * 2,
+                              maxValue + 1 ];
+            var colorRange = [ '#DDD', COLORS['teal5'], COLORS['teal3'], COLORS['teal1'] ];
+            var colorNoData = '#EEE';
+            var colorBinsCount = colorBins.length;
+            var colorScale = d3.scale.threshold()
+                .domain(colorBins)
+                .range(colorRange);
+
+            // Render legend
+            var legend = containerElement.insert('ul', ':first-child')
+                .attr('class', 'key');
+
+            var legendBins = legend.selectAll('li')
+                .data(colorBins)
+                .enter().append('li')
+                    .attr('class', function(d, i) {
+                        return 'key-item key-' + i;
+                    });
+            legendBins.append('b')
+                .style('background-color', function(d,i) {
+                    return colorRange[i];
+                });
+            legendBins.append('label')
+                .html(function(d, i) {
+                    if (i == 0) {
+                        return 'None';
+                    } else if (i == (colorBinsCount - 1)) {
+                        return '&ge;&nbsp;' + fmtComma(colorBins[i-1]);
+                    } else {
+                        return fmtComma(colorBins[i-1]) + '-' + fmtComma((colorBins[i] - 1));
+                    }
+                    return d['key'];
+                });
+
+            var legendNoData = legend.append('li')
+                .attr('class', 'key-item key-' + colorBinsCount);
+            legendNoData.append('b')
+                .style('background-color', colorNoData);
+            legendNoData.append('label')
+                .text('Data not available');
+
+            // Fill in the countries
+            var countryWrapper = chartElement.select('.countries')
+                .classed('background', false);
+
+            var countries = countryWrapper.selectAll('path')
+                .attr('fill', function(d) {
+                    var id = d['id'];
+                    // Does this country exist in the spreadsheet?
+                    if (typeof config['dataIndexed'][id] == 'undefined') {
+                        console.log('no data for: ' + id);
+                        return colorNoData;
+                    // Is it null in the spreadsheet?
+                    } else if (config['dataIndexed'][id][dataColumn] == null) {
+                        console.log('no data for: ' + config['dataIndexed'][id]['name']);
+                        return colorNoData;
+                    // Or does it have actual data?
+                    } else {
+                        return colorScale(config['dataIndexed'][id][dataColumn]);
+                    }
+                });
+        } else {
+            console.warn('WARNING: If you want to display data on the map as a choropleth (rather than as a bubble map), data_display must be set to \'country\' in the content spreadsheet. Choropleth display will not work with \'latlon\' data.');
+        }
+    }
+    if (DATA_DISPLAY == 'bubble') {
         // define scale
         var radiusMax = 25 * scaleFactor;
         var rounding = 100;
@@ -178,10 +252,7 @@ var renderLocatorMap = function(config) {
             .attr('class', 'bubbles');
 
         bubbles.selectAll('circle')
-            // TODO: SORT ASCENDING
             .data(config['data'].filter(function(d, i) {
-                var country = d3.select('.country-' + d['id']);
-//                return d[dataColumn] != null && country[0][0] != null;
                 return d[dataColumn] != null;
             }).sort(function(a, b) {
                 return d3.descending(a[dataColumn], b[dataColumn]);
@@ -190,18 +261,24 @@ var renderLocatorMap = function(config) {
                 .append('circle')
                     .attr('transform', function(d,i) {
                         var id = d['id'];
-                        var country = d3.select('.country-' + id);
                         var centroid = [ 0, 0 ];
 
                         // check for an override
                         if (d['lat'] != null && d['lon'] != null) {
                             centroid = [ d['lon'], d['lat'] ];
-                        // otherwise use country centroid
-                        } else if (country[0][0] != null) {
-                            centroid = d3.geo.centroid(country[0][0]['__data__']);
-                        // or maybe the centroid doesn't exist
+                        // or, if this is a country map, use country centroid
+                        } else if (DATA_POSITIONING == 'country') {
+                            var country = d3.select('.country-' + id);
+                            // find the country centroid
+                            if (country[0][0] != null) {
+                                centroid = d3.geo.centroid(country[0][0]['__data__']);
+                            // or maybe the point doesn't exist
+                            } else {
+                                console.log('no centroid for: ' + d['name']);
+                            }
+                        // or maybe the point doesn't exist
                         } else {
-                            console.log('no centroid for: ' + d['name']);
+                            console.log('no lat/lon info for: ' + d['name']);
                         }
 
                         return 'translate(' + projection(centroid) + ')'; }
@@ -219,7 +296,7 @@ var renderLocatorMap = function(config) {
 
         // add scale
         var scaleDots = chartElement.append('g')
-            .attr('class', 'key');
+            .attr('class', 'key-scale');
 
         scaleKey.forEach(function(d, i) {
             scaleDots.append('circle')

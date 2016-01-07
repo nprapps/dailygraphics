@@ -12,9 +12,10 @@ h3 {
 }
 
 .countries path {
-    stroke-width: 0.3;
-    fill: #ddd;
     stroke: #fff;
+    stroke-width: 0.3;
+
+    .background& { fill: #ddd; }
 }
 
 .bubbles {
@@ -27,7 +28,7 @@ h3 {
     }
 }
 
-.key {
+.key-scale {
     circle {
         fill: none;
         stroke: #ddd;
@@ -40,8 +41,13 @@ h3 {
     }
 }
 
+.key {
+    margin-top: 0;
+    margin-bottom: 11px;
+}
+
 
 @media screen and (max-width: 500px) {
-    .key text { font-size: 7px; }
+    .key-scale text { font-size: 7px; }
     .populations text { font-size: 8px; }
 }
