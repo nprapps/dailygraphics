@@ -194,15 +194,16 @@
         var require_{{ var_name }} = requirejs.config({
             context: '{{ slug }}',
             paths: {
-                'pym': 'http://apps.npr.org/dailygraphics/graphics/{{ slug }}/js/lib/pym'
+                'pym': 'http://apps.npr.org/dailygraphics/graphics/{{ slug }}/js/lib/pym',
+                'CarebotTracker': '//apps.npr.org/dailygraphics/graphics/{{ slug }}/js/lib/carebot-tracker'
             },
-    		shim: {
-    			'pym': { exports: 'pym' }
-    		}
+            shim: {
+                'pym': { exports: 'pym' }
+            }
         });
 
         // Load pym into locale namespace
-        require_{{ var_name }}(['require', 'pym'], function (require, Pym) {
+        require_{{ var_name }}(['require', 'pym', 'CarebotTracker'], function (require, Pym, CarebotTracker) {
             // Create pym parent
             var pymParent = new Pym.Parent(
                 'responsive-embed-{{ slug }}',
@@ -229,6 +230,11 @@
                 require_{{ var_name }}.undef('pym');
                 require_{{ var_name }} = null;
             })
+
+            // Add Carebot tracker
+            var tracker = new CarebotTracker.VisibilityTracker('responsive-embed-{{ slug }}', function(result) {
+              pymParent.sendMessage('on-screen', result.bucket);
+            });
         });
     // Require.js is not on the page, but jQuery is (old Seamus)
     } else if (typeof $ !== 'undefined' && typeof $.getScript === 'function') {
@@ -242,6 +248,16 @@
                     'http://apps.npr.org/dailygraphics/graphics/{{ slug }}/child.html',
                     {}
                 );
+
+                // Load carebot and add tracker
+                // Separate from pym so that any failures do not affect loading
+                // the actual graphic.
+                $.getScript('http://apps.npr.org/dailygraphics/graphics/{{ slug }}/js/lib/pym.js').done(function () {
+                    // Add Carebot tracker
+                    var tracker = new CarebotTracker.VisibilityTracker('responsive-embed-{{ slug }}', function(result) {
+                      pymParent.sendMessage('on-screen', result.bucket);
+                    });
+                });
             });
         });
     // Neither require.js nor jQuery are on the page
@@ -263,6 +279,7 @@
     </div>
 
     <script type="text/javascript" src="js/lib/pym.js"></script>
+    <script type="text/javascript" src="js/lib/carebot-tracker.js"></script>
 
     <script type="text/javascript">
         var resizeSidebarEl = document.querySelector('#resize-sidebar');
@@ -318,6 +335,10 @@
         }
 
         var pymParent = new pym.Parent('preview', 'child.html', {});
+        var tracker = new CarebotTracker.VisibilityTracker('preview', function(result) {
+          pymParent.sendMessage('on-screen', result.bucket);
+        });
+
     </script>
 </body>
 </html>

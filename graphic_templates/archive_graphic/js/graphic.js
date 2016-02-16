@@ -8,6 +8,10 @@ var isMobile = false;
 var onWindowLoaded = function() {
     pymChild = new pym.Child({});
 
+    pymChild.onMessage('on-screen', function(bucket) {
+        ANALYTICS.trackEvent('on-screen', bucket);
+    });
+
     // Update iframe
     /*
     if (pymChild) {
