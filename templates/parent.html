@@ -231,9 +231,14 @@
                 require_{{ var_name }} = null;
             })
 
-            // Add Carebot tracker
-            var tracker = new CarebotTracker.VisibilityTracker('responsive-embed-{{ slug }}', function(result) {
+            // Add Carebot linger time tracker
+            var lingerTracker = new CarebotTracker.VisibilityTracker('responsive-embed-{{ slug }}', function(result) {
               pymParent.sendMessage('on-screen', result.bucket);
+            });
+
+            // Add Carebot scroll depth tracker
+            var scrollTracker = new CarebotTracker.ScrollTracker('storytext', function(percent) {
+              pymParent.sendMessage('scroll-depth', percent);
             });
         });
     // Require.js is not on the page, but jQuery is (old Seamus)
