@@ -64,6 +64,15 @@ var ANALYTICS = (function () {
             eventData['eventValue'] = value
         }
 
+        // Track details about the parent with each event
+        var parentUrl = getParameterByName('parentUrl') || '';
+        var parentHostname = '';
+        if (parentUrl) {
+            parentHostname = urlToLocation(parentUrl).hostname;
+        }
+        eventData[DIMENSION_PARENT_URL] = parentUrl;
+        eventData[DIMENSION_PARENT_HOSTNAME] = parentHostname;
+        
         ga('send', eventData);
     }
 
