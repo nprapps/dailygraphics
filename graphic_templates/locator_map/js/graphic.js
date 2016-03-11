@@ -34,11 +34,11 @@ var onWindowLoaded = function() {
         loadJSON()
     } else {
         pymChild = new pym.Child({});
-    }
 
-    pymChild.onMessage('on-screen', function(bucket) {
-        ANALYTICS.trackEvent('on-screen', bucket);
-    });
+        pymChild.onMessage('on-screen', function(bucket) {
+            ANALYTICS.trackEvent('on-screen', bucket);
+        });
+    }
 }
 
 /*
@@ -50,6 +50,10 @@ var loadJSON = function() {
 
         pymChild = new pym.Child({
             renderCallback: render
+        });
+
+        pymChild.onMessage('on-screen', function(bucket) {
+            ANALYTICS.trackEvent('on-screen', bucket);
         });
     });
 }
