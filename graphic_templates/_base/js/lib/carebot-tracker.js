@@ -1,4 +1,4 @@
-/*! carebot-tracker - v0.1.1 - 2016-02-16 */
+/*! carebot-tracker - v0.5.0 - 2016-03-03 */
 /*
 * carebot-tracker.js is library that checks if an element is visible on the page
 * and reports it to pym.js.
@@ -19,6 +19,7 @@
 })(function() {
     var lib = {};
 
+
     /**
      * Timer
      * @param {Function} callback Called every time a new time bucket is reached
@@ -27,7 +28,9 @@
      *
      */
     lib.Timer = function(callback) {
-        // From https://github.com/nprapps/elections16/blob/master/www/js/app.js#L298-L335
+        // Adapted from
+        // https://github.com/nprapps/elections16/blob/master/www/js/app.js#L298-L335
+        var MAX_SECONDS = 60 * 20 + 1; // 20 minutes 1 second
         var startTime;
         var previousTotalSeconds = 0;
         var previousBucket;
@@ -78,6 +81,11 @@
         function reportBucket() {
             var results = calculateTimeBucket(startTime);
             if (results.bucket !== previousBucket) {
+                // Don't report forever
+                if (results.seconds >= MAX_SECONDS) {
+                    return;
+                }
+
                 callback(results);
                 previousBucket = results.bucket;
             }
@@ -113,7 +121,7 @@
      * @param {Object} config Configuration to override the default settings.
      */
     lib.VisibilityTracker = function(id, callback, config) {
-        var WAIT_TO_ENSURE_SCROLLING_IS_DONE = 50; //
+        var WAIT_TO_ENSURE_SCROLLING_IS_DONE = 50;
 
         var el = document.getElementById(id);
         var isVisible = false;
@@ -127,29 +135,29 @@
         function isElementInViewport(el) {
             // Adapted from http://stackoverflow.com/a/15203639/117014
             //
-            // Returns true if any part of the element is in the viewport
+            // Returns true only if the WHOLE element is in the viewport
             var rect     = el.getBoundingClientRect();
             var vWidth   = window.innerWidth || document.documentElement.clientWidth;
             var vHeight  = window.innerHeight || document.documentElement.clientHeight;
 
             // Core tests: are all sides of the rectangle in the viewport?
-            // var leftIsOffScreen = rect.left < 0;
-            // var rightIsOffScreen = rect.right > vWidth;
-            // var bottomIsOffScreen = rect.bottom > vHeight;
-            // var topIsOffScreen = rect.top < 0;
-
-            // console.log("Element and window information", rect.top, rect.right, rect.bottom, rect.left, vWidth, vHeight);
+            var leftIsOffScreen = rect.left < 0;
+            var rightIsOffScreen = rect.right > vWidth;
+            var bottomIsOffScreen = rect.bottom > vHeight;
+            var topIsOffScreen = rect.top < 0;
 
             // These are not necessary, but kept if we want to track partial visibility.
+            /*
             var leftSideIsToRightOfWindow = rect.left > vWidth;
             var rightSideIsToLeftOfWindow = rect.right < 0;
             var topIsBelowVisibleWindow = rect.top > vHeight;
             var botomIsAboveVisibleWindow = rect.bottom < 0;
+            */
 
-            if (leftSideIsToRightOfWindow  ||
-                rightSideIsToLeftOfWindow  ||
-                topIsBelowVisibleWindow    ||
-                botomIsAboveVisibleWindow) {
+            if (leftIsOffScreen  ||
+                rightIsOffScreen ||
+                topIsOffScreen   ||
+                bottomIsOffScreen) {
                 return false;
             }
 
@@ -194,6 +202,113 @@
         }
 
         checkIfVisible();
+    };
+
+
+    /**
+     * Tracks scroll depth
+     */
+    lib.ScrollTracker = function(id, callback, config) {
+        var WAIT_TO_ENSURE_SCROLLING_IS_DONE = 100;
+        var elt = document.getElementById(id);
+
+        if (!elt) {
+            return;
+        }
+
+        var previousBucket = 0;
+        var timeout;
+
+        function getPageScroll() {
+            var body = document.body;
+            var docEl = document.documentElement;
+
+
+            var scrollTop;
+            var scrollLeft;
+
+            if (window.hasOwnProperty('pageYOffset')) {
+                scrollTop = window.pageYOffset;
+                scrollLeft = window.pageXOffset;
+            } else if (docEl.hasOwnProperty('scrollTop')) {
+                scrollTop = docEl.scrollTop;
+                scrollLeft = docEl.scrollLeft;
+            } else {
+                scrollTop = body.scrollTop;
+                scrollLeft = body.scrollLeft;
+            }
+
+            return {
+                scrollTop: scrollTop,
+                scrollLeft: scrollLeft
+            };
+        }
+
+        function getCoords(elem) {
+            // via http://stackoverflow.com/a/26230989/117014
+            var box = elem.getBoundingClientRect();
+
+            var body = document.body;
+            var docEl = document.documentElement;
+
+            var scroll = getPageScroll();
+            var scrollTop = scroll.scrollTop;
+            var scrollLeft = scroll.scrollLeft;
+
+            if (window.hasOwnProperty('pageYOffset')) {
+                scrollTop = window.pageYOffset;
+                scrollLeft = window.pageXOffset;
+            } else if (docEl.hasOwnProperty('scrollTop')) {
+                scrollTop = docEl.scrollTop;
+                scrollLeft = docEl.scrollLeft;
+            } else {
+                scrollTop = body.scrollTop;
+                scrollLeft = body.scrollLeft;
+            }
+
+            var clientTop = docEl.clientTop || body.clientTop || 0;
+            var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+            var top  = box.top +  scrollTop - clientTop;
+            var left = box.left + scrollLeft - clientLeft;
+
+            return {
+                top: Math.round(top),
+                left: Math.round(left)
+            };
+        }
+
+        function depthPercent() {
+            var eltTopPosition = getCoords(elt).top;
+            var articleHeight = elt.offsetHeight;
+            var eltBottomPosition = eltTopPosition + articleHeight;
+            var scrollTop = getPageScroll().scrollTop;
+            var scrollBottom = scrollTop + window.innerHeight;
+            var percent = (scrollBottom - eltTopPosition) / articleHeight;
+
+            return percent;
+        }
+
+        function percentBucket(n) {
+            return Math.round(n * 10) * 10;
+        }
+
+        function trackDepth() {
+            var percent = depthPercent();
+            var bucket = percentBucket(percent);
+            if (bucket > previousBucket) {
+                previousBucket = bucket;
+                callback(bucket);
+            }
+        }
+
+        window.addEventListener('scroll', function(event) {
+            if (timeout) {
+                window.clearTimeout(timeout);
+            }
+            timeout = window.setTimeout(trackDepth, WAIT_TO_ENSURE_SCROLLING_IS_DONE);
+        });
+
     };
 
     return lib;
