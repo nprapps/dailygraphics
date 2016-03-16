@@ -11,6 +11,9 @@ var onWindowLoaded = function() {
     pymChild.onMessage('on-screen', function(bucket) {
         ANALYTICS.trackEvent('on-screen', bucket);
     });
+    pymChild.onMessage('scroll-depth', function(percent) {
+        ANALYTICS.trackEvent('scroll-depth', percent);
+    });
 
     // Update iframe
     /*

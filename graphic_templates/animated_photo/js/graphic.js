@@ -7,13 +7,16 @@ var BREAKPOINTS = [ 375, 600, 1000 ];
  * Initialize the graphic.
  */
 var onWindowLoaded = function() {
-     pymChild = new pym.Child({
-         renderCallback: render
-     });
+    pymChild = new pym.Child({
+        renderCallback: render
+    });
 
-     pymChild.onMessage('on-screen', function(bucket) {
-         ANALYTICS.trackEvent('on-screen', bucket);
-     });
+    pymChild.onMessage('on-screen', function(bucket) {
+        ANALYTICS.trackEvent('on-screen', bucket);
+    });
+    pymChild.onMessage('scroll-depth', function(percent) {
+        ANALYTICS.trackEvent('scroll-depth', percent);
+    });
 }
 
 /*
