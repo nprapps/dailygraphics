@@ -8,9 +8,10 @@ table {
     font-size: 12px;
     color: #666;
 
-    th, td {
-        padding: 10px;
-        text-align: left;
+    tr.shadedrow {
+        background-color: #f1f1f1;
+        color: #333;
+        font-weight: bold;
     }
 
     th {
@@ -19,6 +20,8 @@ table {
         font-family: 'Knockout 31 4r', Helvetica, Arial, sans-serif;
         font-weight: normal;
         text-transform: uppercase;
+        text-align: left;
+        padding: 0 10px 10px 10px;
         padding-top: 0;
         line-height: 1.2;
         letter-spacing: 0.05em;
@@ -26,18 +29,16 @@ table {
     }
 
     td {
+        padding: 10px;
         border-bottom: 1px solid #eee;
         vertical-align: top;
     }
 
-    th.amt, td.amt {
-        text-align: right;
-    }
-
-    tr.shadedrow {
-        background-color: #f1f1f1;
-        color: #333;
-        font-weight: bold;
+    th,
+    td {
+        &.amt {
+            text-align: right;
+        }
     }
 }
 
@@ -87,7 +88,6 @@ table {
 
 // Mobile styles
 @media screen and (max-width: 500px) {
-    table {}
     tbody {
         display: block;
         width: 100%;
@@ -96,34 +96,37 @@ table {
     table {
         thead { display: none; }
 
-        tr, th, td, td.amt {
+        tr,
+        th,
+        th.amt,
+        td,
+        td.amt {
             display: block;
             padding: 0;
-            text-align: left;
             white-space: normal;
         }
 
-        td, td.amt {
-            border: none;
-            margin-bottom: 6px;
-        }
-
-        td:empty { display: none; }
-
         tr {
             border-bottom: 1px solid #eee;
-            padding: 10px;
+            padding: 10px 0;
+
+            &:first-child { border-top: 1px solid #eee; }
         }
 
-        tr:first-child { border-top: 1px solid #eee; }
+        td,
+        td.amt {
+            border: none;
+            margin-bottom: 6px;
+            text-align: left;
+
+            &:empty { display: none; }
+        }
 
         th[data-title]:before,
         td[data-title]:before {
             content: attr(data-title) ":\00A0";
             display: inline-block;
-            width: 75%;
-            min-width: 220px;
-            width: 220px;
+            width: 70%;
         }
 
         tr td:first-child {
@@ -134,10 +137,11 @@ table {
             font-weight: 500;
             letter-spacing: 0.02em;
             text-transform: uppercase;
-        }
-        tr td:first-child:before {
-            content: '';
-            display: none;
+
+            &:before {
+                content: '';
+                display: none;
+            }
         }
     }
 }
