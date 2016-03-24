@@ -237,9 +237,11 @@
             });
 
             // Add Carebot scroll depth tracker
-            // var scrollTracker = new CarebotTracker.ScrollTracker('storytext', function(percent) {
-            //   pymParent.sendMessage('scroll-depth', percent);
-            // });
+            // var scrollTracker = new CarebotTracker.ScrollTracker('storytext', function(percent, seconds) {
+            //   pymParent.sendMessage('scroll-depth', {
+            //     percent: percent,
+            //     seconds: seconds
+            //   });
         });
     // Require.js is not on the page, but jQuery is (old Seamus)
     } else if (typeof $ !== 'undefined' && typeof $.getScript === 'function') {
