@@ -1,4 +1,4 @@
-/*! carebot-tracker - v0.5.0 - 2016-03-03 */
+/*! carebot-tracker - v0.6.0 - 2016-03-24 */
 /*
 * carebot-tracker.js is library that checks if an element is visible on the page
 * and reports it to pym.js.
@@ -22,9 +22,8 @@
 
     /**
      * Timer
-     * @param {Function} callback Called every time a new time bucket is reached
-     *
-     * Interface:
+     * @param {Function} callback Optional.
+     *                            Called every time a new time bucket is reached
      *
      */
     lib.Timer = function(callback) {
@@ -79,6 +78,10 @@
         }
 
         function reportBucket() {
+            if (!callback) {
+                return;
+            }
+
             var results = calculateTimeBucket(startTime);
             if (results.bucket !== previousBucket) {
                 // Don't report forever
@@ -93,6 +96,7 @@
 
         function start() {
             startTime = new Date();
+            reportBucket();
 
             if (callback) {
                 alerter = setInterval(reportBucket, 10000);
@@ -216,6 +220,10 @@
             return;
         }
 
+        // Start tracking the time on page.
+        var timer = new lib.Timer();
+        timer.start();
+
         var previousBucket = 0;
         var timeout;
 
@@ -297,8 +305,11 @@
             var percent = depthPercent();
             var bucket = percentBucket(percent);
             if (bucket > previousBucket) {
+                var seconds = timer.check().seconds;
+                callback(bucket, seconds);
+            } else {
+                // The user is scrolling back up.
                 previousBucket = bucket;
-                callback(bucket);
             }
         }
 
