@@ -434,7 +434,7 @@ Working With Carebot
 
 **This section is relevant to NPR users of the dailygraphics rig.**
 
-[Carebot](https://thecarebot.github.io) is a grant-funded project to measure and report more meaningful analytics around stories and story elements (like graphics). This branch of dailygraphics includes test code that the Carebot team has developed to measure 1) how long a dailygraphics embedded project is visible onscreen and 2) how far down users have scrolled down the length of a story. Carebot is still a work in progress, and the code we've implemented so far is likely to change.
+[Carebot](https://thecarebot.github.io) is a grant-funded project to measure and report more meaningful analytics around stories and story elements (like graphics). This branch of dailygraphics includes test code that the Carebot team has developed to measure 1) how long a dailygraphics embedded project is visible onscreen and 2) how far users have scrolled down the length of a story. Carebot is still a work in progress, and the code we've implemented so far is likely to change.
 
 New graphics created using the usual `fab add[type of graphic]:$slug` process will have the latest Carebot code. However, older graphics may need to be retrofitted as needed before being published.
 
