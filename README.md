@@ -1,23 +1,24 @@
 dailygraphics
 =============
 
-* [What is this?](#what-is-this)
+* [What Is This?](#what-is-this)
 * [Assumptions](#assumptions)
-* [What's in here?](#whats-in-here)
-* [Bootstrap the project](#bootstrap-the-project)
-* [Using a stable version](#using-a-stable-version)
+* [What's In Here?](#whats-in-here)
+* [Bootstrap The Project](#bootstrap-the-project)
+* [Using A Stable Version](#using-a-stable-version)
 * [Configuration](#configuration)
-* [Run the project](#run-the-project)
-* [Add a new graphic](#add-a-new-graphic)
-* [Deploy to S3](#deploy-to-s3)
+* [Run The Project](#run-the-project)
+* [Add A New Graphic](#add-a-new-graphic)
+* [Deploy To S3](#deploy-to-s3)
 * [Embedding](#embedding)
-* [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
-* [Using Jinja filter functions](#using-jinja-filter-functions)
-* [Storing media assets](#storing-media-assets)
-* [Creating locator maps](#creating-locator-maps)
-* [Creating animated photos](#creating-animated-photos)
-* [Adding a new graphic template](#adding-a-new-graphic-template)
-* [Keeping the graphics directory clean](#keeping-the-graphics-directory-clean)
+* [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+* [Using Jinja Filter Functions](#using-jinja-filter-functions)
+* [Storing Media Assets](#storing-media-assets)
+* [Creating Locator Maps](#creating-locator-maps)
+* [Creating Animated Photos](#creating-animated-photos)
+* [Working With Carebot](#working-with-carebot)
+* [Adding A New Graphic Template](#adding-a-new-graphic-template)
+* [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
 
 What is this?
 -------------
@@ -67,7 +68,7 @@ The following things are assumed to be true in this documentation.
 
 For more details on the technology stack used with this project, see our [development environment blog post](http://blog.apps.npr.org/2013/06/06/how-to-setup-a-developers-environment.html).
 
-What's in here?
+What's In Here?
 ---------------
 
 The project contains the following folders and important files:
@@ -85,7 +86,7 @@ The project contains the following folders and important files:
 * ``render_utils.py`` -- Code supporting template rendering.
 * ``requirements.txt`` -- Python requirements.
 
-Bootstrap the project
+Bootstrap The Project
 ---------------------
 
 Node.js is required for the static asset pipeline. If you don't already have it, get it like this (requires [brew](http://brew.sh/)):
@@ -94,7 +95,7 @@ Node.js is required for the static asset pipeline. If you don't already have it,
 brew install node
 ```
 
-Then setup the project like this:
+Then set up the project like this:
 
 ```
 git clone https://github.com/nprapps/dailygraphics.git
@@ -110,7 +111,7 @@ You'll now need to create a folder to hold the graphics created and deployed by 
 
 **All other users:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
 
-Using a stable version
+Using A Stable Version
 ----------------------
 
 The master branch of project is in active development by NPR at all times. If you would like to use a [more] stable version, we suggest checking out a tagged version (``0.1``, etc.). We will periodically tag releases, which will be synchronized to the ``CHANGELOG`` so you will know exactly what improvements you will get if you migrate to a new tagged version.
@@ -162,7 +163,7 @@ You should only need to do this once.
 **NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson, David or Chris for more information.
 
 
-Run the project
+Run The Project
 ---------------
 
 A Flask app is used to run the project locally. It will automatically recompile templates on-demand.
@@ -195,7 +196,7 @@ Aborting.
 It's possible that the webserver is already running silently in the background. [Here's how to fix it.](https://github.com/nprapps/dailygraphics/issues/74)
 
 
-Add a new graphic
+Add A New Graphic
 -----------------
 
 dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go). Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic. It also will clone a new Google Spreadsheet for you to use for text and data.
@@ -233,7 +234,7 @@ Here are some examples:
 When you create a new project, dailygraphics will check against your local projects and the projects published to production to make sure that the ```$SLUG``` you've chosen does not already exist.
 
 
-Deploy to S3
+Deploy To S3
 ------------
 
 When it's time to publish your graphic, it's better to deploy a specific graphic rather than the entire repo, to minimize the risk of publishing edits that aren't yet ready to go live.
@@ -264,7 +265,7 @@ Embedding
 Deploy the project to production. Visit ```http://apps.npr.org/dailygraphics/graphics/$SLUG```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into your page. (Some CMSes treat code snippets like this as a separate "HTML asset.")
 
 
-Connecting to a Google Spreadsheet
+Connecting To A Google Spreadsheet
 ----------------------------------
 
 This section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet.
@@ -296,7 +297,7 @@ Note: Your published graphic **will not** automatically update every time your s
 If you do **not** want want to use the copytext spreadsheet for a given project, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
 
 
-Using Jinja filter functions
+Using Jinja Filter Functions
 ----------------------------
 
 A [library of Jinja filter functions](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/_base/base_filters.py) for common tasks (ordinal, AP date format, etc.) is included with each graphic.
@@ -319,7 +320,7 @@ Then you will be able to use it in your template like this:
 See the ``table`` graphic template for a more complete example.
 
 
-Storing media assets
+Storing Media Assets
 --------------------
 
 (Note: this section describes usage of NPR's assets rig. This is optional and you don't need to use it in order to use dailygraphics.)
@@ -373,7 +374,7 @@ mapturner geodata.yaml data/geodata.json
 
 In your project ```js/graphic.js``` folder, change the ```PRIMARY_COUNTRY``` variable at the top from Nepal to the name of your featured country. You will also want to adjust the ```MAP_DEFAULT_SCALE``` and ```MAP_DEFAULT_HEIGHT``` variables so that your featured country fits onscreen.
 
-Creating animated photos
+Creating Animated Photos
 ------------------------
 
 The animated photo template uses the [canvid](https://github.com/gka/canvid) JavaScript library as an alternative to GIFs. With this solution, you composite a "filmstrip" of all the frames in your animation, and canvid plays them back in sequence on a canvas element. [See an example on NPR.org.](http://www.npr.org/2015/11/05/453239276/in-the-amazons-fire-season-you-either-burn-or-you-starve#res454735072)
@@ -426,6 +427,52 @@ Second, adjust the image aspect ratio (so it scales correctly in the browser). I
 // multiply by height, width of original image
 height: Math.floor(containerWidth * 1614/1500),
 ```
+
+
+Working With Carebot
+--------------------
+
+**This section is relevant to NPR users of the dailygraphics rig.**
+
+[Carebot](https://thecarebot.github.io) is a grant-funded project to measure and report more meaningful analytics around stories and story elements (like graphics). This branch of dailygraphics includes test code that the Carebot team has developed to measure 1) how long a dailygraphics embedded project is visible onscreen and 2) how far down users have scrolled down the length of a story. Carebot is still a work in progress, and the code we've implemented so far is likely to change.
+
+New graphics created using the usual `fab add[type of graphic]:$slug` process will have the latest Carebot code. However, older graphics may need to be retrofitted as needed before being published.
+
+#### How To Add/Update Carebot Code In An Existing Graphic
+
+Make sure you're working in the `carebot` branch.
+
+Copy `carebot-tracker.js` from `dailygraphics/graphic_templates/_base/js/lib/` to the `js/lib/` folder of your project.
+
+Copy the [pymChild analytics code](https://github.com/nprapps/dailygraphics/blob/carebot/graphic_templates/graphic/js/graphic.js#L17-L22) from the `onWindowLoaded` function of `dailygraphics/graphic_templates/graphic/js/graphic.js` to the same spot in the `js/graphic.js` file for your project.
+
+```
+pymChild.onMessage('on-screen', function(bucket) {
+    ANALYTICS.trackEvent('on-screen', bucket);
+});
+pymChild.onMessage('scroll-depth', function(data) {
+    ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
+});
+```
+
+#### Scroll Depth Tracking
+
+The embed code that we paste into Seamus includes a [commented-out section of code](https://github.com/nprapps/dailygraphics/blob/carebot/templates/parent.html#L239-L244) that enables scroll depth tracking. This is commented out by default to prevent accidental double-counting in cases where more than one graphic appears on a page.
+
+To enable scroll depth tracking, uncomment the following lines of code in **ONE** of the graphics that appear on the page.
+
+```
+// Add Carebot scroll depth tracker
+// var scrollTracker = new CarebotTracker.ScrollTracker('storytext', function(percent, seconds) {
+//   pymParent.sendMessage('scroll-depth', {
+//     percent: percent,
+//     seconds: seconds
+//   });
+```
+
+Hopefully this won’t be a necessary step long-term, but it’s what we’ve got for now.
+
+If you forget to uncomment the scroll depth code for a given graphic, don't worry: Nothing will break. We just won’t have that bit of data for that story. But where we do remember to do it, the Carebot team will have a little more data to work with.
 
 
 Adding a new graphic template
