@@ -468,6 +468,7 @@ To enable scroll depth tracking, uncomment the following lines of code in **ONE*
 //     percent: percent,
 //     seconds: seconds
 //   });
+// });
 ```
 
 Hopefully this won’t be a necessary step long-term, but it’s what we’ve got for now.
