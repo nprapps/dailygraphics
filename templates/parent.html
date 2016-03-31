@@ -260,7 +260,7 @@
                 // Load carebot and add tracker
                 // Separate from pym so that any failures do not affect loading
                 // the actual graphic.
-                $.getScript('http://apps.npr.org/dailygraphics/graphics/{{ slug }}/js/lib/pym.js').done(function () {
+                $.getScript('http://apps.npr.org/dailygraphics/graphics/{{ slug }}/js/lib/carebot-tracker.js').done(function () {
                     // Add Carebot tracker
                     var tracker = new CarebotTracker.VisibilityTracker('responsive-embed-{{ slug }}', function(result) {
                       pymParent.sendMessage('on-screen', result.bucket);
