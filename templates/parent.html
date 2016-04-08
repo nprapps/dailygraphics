@@ -265,6 +265,15 @@
                     var tracker = new CarebotTracker.VisibilityTracker('responsive-embed-{{ slug }}', function(result) {
                       pymParent.sendMessage('on-screen', result.bucket);
                     });
+
+                    // Add Carebot scroll depth tracker
+                    // Uncomment on one graphic per story
+                    // var scrollTracker = new CarebotTracker.ScrollTracker('storytext', function(percent, seconds) {
+                    //   pymParent.sendMessage('scroll-depth', {
+                    //     percent: percent,
+                    //     seconds: seconds
+                    //   });
+                    // });
                 });
             });
         });
