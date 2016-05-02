@@ -432,6 +432,35 @@ Second, adjust the image aspect ratio (so it scales correctly in the browser). I
 height: Math.floor(containerWidth * 1614/1500),
 ```
 
+Creating An ai2html Graphic
+---------------------------
+
+The ai2html template uses an open-source script called [ai2html](http://ai2html.org/) to convert Illustrator graphics to HTML and CSS and display them in our responsive dailygraphics template.
+
+To use this template, you'll need to install ai2html by [following these
+directions] (http://ai2html.org/#how-to-install-ai2html). **You only
+need to install the script once on your machine.** To check whether you
+have it installed, open Adobe Illustrator and look for the "ai2html"
+command in File >> Scripts.
+
+To create a new ai2html graphic, run:
+
+```
+fab add_ai2html_graphic:$slug
+```
+
+The basic project includes an Illustrator file in `assets`, which you'll
+use to create your graphic. The three artboards in the file are the
+three breakpoints for your graphic, allowing you to create custom
+versions for mobile, tablet and desktop-sized screens. (If you want to
+change the width of these artboards, you'll need to adjust the media
+queries in `css/graphic.less`.)
+
+Create your graphic within Illustrator, referring to the [ai2html
+documentation](http://ai2html.org/#how-to-use-ai2html) for help. When
+you're ready to export, run File >> Scripts >> ai2html. The resulting
+graphic will appear within the base template when you load your graphic!
+
 
 Adding a new graphic template
 -----------------------------
