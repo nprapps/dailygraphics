@@ -37,6 +37,20 @@
 @blue6      : #D3EAF7;
 
 /*
+ * Mixins
+ */
+.clearfix() {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+/*
  * Base styles
  */
 html { -webkit-text-size-adjust: none; }
