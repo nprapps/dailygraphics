@@ -11,6 +11,7 @@ dailygraphics
 * [Add a new graphic](#add-a-new-graphic)
 * [Deploy to S3](#deploy-to-s3)
 * [Embedding](#embedding)
+<<<<<<< HEAD
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Using Jinja filter functions](#using-jinja-filter-functions)
 * [Storing media assets](#storing-media-assets)
@@ -18,6 +19,17 @@ dailygraphics
 * [Creating animated photos](#creating-animated-photos)
 * [Adding a new graphic template](#adding-a-new-graphic-template)
 * [Keeping the graphics directory clean](#keeping-the-graphics-directory-clean)
+=======
+* [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+* [Using Jinja Filter Functions](#using-jinja-filter-functions)
+* [Storing Media Assets](#storing-media-assets)
+* [Creating Locator Maps](#creating-locator-maps)
+* [Creating Animated Photos](#creating-animated-photos)
+* [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
+* [Working With Carebot](#working-with-carebot)
+* [Adding A New Graphic Template](#adding-a-new-graphic-template)
+* [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
+>>>>>>> 81f2d85... Add ai2html script to repo, update documentation with install instructions
 
 What is this?
 -------------
@@ -437,9 +449,13 @@ Creating An ai2html Graphic
 
 The ai2html template uses an open-source script called [ai2html](http://ai2html.org/) to convert Illustrator graphics to HTML and CSS and display them in our responsive dailygraphics template.
 
-To use this template, you'll need to install ai2html by [following these
-directions] (http://ai2html.org/#how-to-install-ai2html). **You only
-need to install the script once on your machine.** To check whether you
+To use this template, you'll need to install ai2html as an Illustrator
+script. Copy [the latest version of the script here](etc/ai2html.jsx)
+into the Illustrator folder where scripts are located.
+For example, on Mac OS X running Adobe Illustrator CC 2015, the path would be:
+`/Applications/Adobe Illustrator CC 2015/Presets.localized/en_US/Scripts/ai2html.jsx`
+
+**You only need to install the script once on your machine.** To check whether you
 have it installed, open Adobe Illustrator and look for the "ai2html"
 command in File >> Scripts.
 
