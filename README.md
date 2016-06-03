@@ -177,7 +177,12 @@ Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo
 
 #### Terminal shortcut
 
-Do you use [iTerm2](http://iterm2.com)? Here's [a sample AppleScript](https://gist.github.com/alykat/debf281765db3a0c2e88) to automatically launch a three-paned terminal window (one for the dailygraphics machine, one for the local webserver, and another for the separate graphics repo). You can save this locally, customize it to match your own configuration and add an alias for it to your `.bash_profile`.
+Do you use [iTerm2](http://iterm2.com)? Here's [a sample AppleScript](https://gist.github.com/alykat/debf281765db3a0c2e88) to automatically launch a three-paned terminal window (one for the dailygraphics machine, one for the local webserver, and another for the separate graphics repo).
+
+*June 3rd, 2016*: If you are using iTerm v3 then use this updated [AppleScript](https://gist.github.com/jjelosua/53b416bd6655605846264eb9378e9c0e). iTerm has made a [non-backwards compatible](https://iterm2.com/version3.html?src=4) change to their Applescript syntax
+
+
+You can save this locally, customize it to match your own configuration and add an alias for it to your `.bash_profile`.
 
 ```
 alias dailygraphics="osascript ~/PATH-TO-FILE/iterm_dailygraphics.scpt"
