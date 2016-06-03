@@ -4,6 +4,7 @@
 * deploy task accepts multiple project slugs (#155)
 * animated_photo process script also outputs a gif (#152)
 * New issue matrix graphic template.
+* Add a new iTerm v3 configuration applescript
 
 0.1.1
 -----
