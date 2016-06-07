@@ -16,7 +16,7 @@ dailygraphics
 * [Storing media assets](#storing-media-assets)
 * [Creating locator maps](#creating-locator-maps)
 * [Creating animated photos](#creating-animated-photos)
-* [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
+* [Creating an ai2html graphic](#creating-an-ai2html-graphic)
 * [Adding a new graphic template](#adding-a-new-graphic-template)
 * [Keeping the graphics directory clean](#keeping-the-graphics-directory-clean)
 
