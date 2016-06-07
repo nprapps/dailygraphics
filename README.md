@@ -461,6 +461,10 @@ versions for mobile, tablet and desktop-sized screens. (If you want to
 change the width of these artboards, you'll need to adjust the media
 queries in `css/graphic.less`.)
 
+You can only use fonts that are supported on our website, so make sure
+you are using the correct typeface and weight. [Here's a list of
+supported fonts](https://github.com/nprapps/dailygraphics/blob/ai2html/etc/ai2html.jsx#L593-L605).
+
 Create your graphic within Illustrator, referring to the [ai2html
 documentation](http://ai2html.org/#how-to-use-ai2html) for help. When
 you're ready to export, run File >> Scripts >> ai2html. The resulting
