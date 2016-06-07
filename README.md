@@ -11,25 +11,14 @@ dailygraphics
 * [Add a new graphic](#add-a-new-graphic)
 * [Deploy to S3](#deploy-to-s3)
 * [Embedding](#embedding)
-<<<<<<< HEAD
 * [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Using Jinja filter functions](#using-jinja-filter-functions)
 * [Storing media assets](#storing-media-assets)
 * [Creating locator maps](#creating-locator-maps)
 * [Creating animated photos](#creating-animated-photos)
+* [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
 * [Adding a new graphic template](#adding-a-new-graphic-template)
 * [Keeping the graphics directory clean](#keeping-the-graphics-directory-clean)
-=======
-* [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
-* [Using Jinja Filter Functions](#using-jinja-filter-functions)
-* [Storing Media Assets](#storing-media-assets)
-* [Creating Locator Maps](#creating-locator-maps)
-* [Creating Animated Photos](#creating-animated-photos)
-* [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
-* [Working With Carebot](#working-with-carebot)
-* [Adding A New Graphic Template](#adding-a-new-graphic-template)
-* [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
->>>>>>> 81f2d85... Add ai2html script to repo, update documentation with install instructions
 
 What is this?
 -------------
