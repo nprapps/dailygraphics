@@ -9,6 +9,13 @@ var onWindowLoaded = function() {
     pymChild = new pym.Child({});
 
     //artboardResizer();
+
+    pymChild.onMessage('on-screen', function(bucket) {
+        ANALYTICS.trackEvent('on-screen', bucket);
+    });
+    pymChild.onMessage('scroll-depth', function(data) {
+        ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
+    });
 }
 
 /*
