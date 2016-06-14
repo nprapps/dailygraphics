@@ -18,10 +18,7 @@
     {% endblock %}
 
     <!-- Configuration -->
-    <script type="text/javascript">
-        GOOGLE_ANALYTICS_ACCOUNT_ID = '{{ GOOGLE_ANALYTICS.ACCOUNT_ID }}';
-        GOOGLE_ANALYTICS_PROJECT_SLUG = '{{ slug }}';
-    </script>
+
 
     <!-- CSS + LESS -->
     {% block extra_css %}
@@ -33,7 +30,6 @@
 <body>
     <!-- Analytics -->
     {{ JS.push('js/helpers.js') }}
-    {{ JS.push('js/analytics.js') }}
     {{ JS.render('js/graphic-header.js') }}
 
     {% block content %}
