@@ -9,6 +9,7 @@ dailygraphics
 * [Configuration](#configuration)
 * [Run The Project](#run-the-project)
 * [Add A New Graphic](#add-a-new-graphic)
+* [Clone Old Graphic](#clone-old-graphic)
 * [Deploy To S3](#deploy-to-s3)
 * [Embedding](#embedding)
 * [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
@@ -239,6 +240,40 @@ Here are some examples:
 
 When you create a new project, dailygraphics will check against your local projects and the projects published to production to make sure that the ```$SLUG``` you've chosen does not already exist.
 
+
+Clone Old Graphic
+-----------------
+Sometimes we just want to reuse an old graphic but we want to profit from the dailygraphics rig to create the associated spreadsheet just like it would do with a new graphic from its template.
+
+We have created a Fabric task for this precise purpose it will search for a given slug in our graphics and graphics-archive repositories and clone it creating a new ready to work on graphic.
+
+```
+fab clone_graphic:$OLD_SLUG,$NEW_SLUG
+```
+
+It requires one parameter: ```$OLD_SLUG``` the graphic slug we are trying to clone. The second parameter is optional if given it will be used to generate the new graphic slug if it is not provided the new graphic slug will be derived from the ```$OLD_SLUG``` replacing the date at the end with today's date or appending the current date in case it was not found on the old ```$OLD_SLUG```
+
+
+Examples if today was ```20160705``:
+```
+fab clone_graphic:my-project-name-20150415,my-new-project-20160706
+// Results in my-new-project-20160706
+```
+
+```
+fab clone_graphic:my-project-name
+// Results in my-project-name-20160705
+```
+
+```
+fab clone_graphic:my-project-name-20150415
+// Results in my-project-name-20160705
+```
+
+```
+fab clone_graphic:my-wrong-project-name-20150415
+// Results in an error if not found in graphics or graphics-archive repos
+```
 
 Deploy To S3
 ------------
