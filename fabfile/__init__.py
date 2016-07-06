@@ -1,4 +1,4 @@
- #!/usr/bin/env python
+#!/usr/bin/env python
 
 import boto
 import imp
@@ -7,6 +7,7 @@ import os
 import subprocess
 import sys
 import webbrowser
+from datetime import datetime
 
 from distutils.spawn import find_executable
 from fabric.api import local, prompt, require, settings, task
@@ -232,6 +233,86 @@ def _check_slug(slug):
         print 'Could not access S3 bucket, skipping Amazon S3 check'
 
     return False
+
+
+def _create_slug(old_slug):
+    """
+    create a new slug based on an older one
+    """
+    today = datetime.today().strftime('%Y%m%d')
+    # create a new slug based on the old one
+    bits = old_slug.split('-')
+    try:
+        datetime.strptime(bits[len(bits) - 1], '%Y%m%d')
+        bits = bits[:-1]
+    except ValueError:
+        # Add today's date to old slug
+        pass
+    bits.extend([today])
+    return "-".join(bits)
+
+
+def _search_graphic_slug(slug):
+    """
+    searches a given slug in graphics and graphics-archive repos
+    """
+    path = None
+    IGNORE_LIST = ['js', 'css', 'assets', 'lib', '.git']
+    # Limit the search to grahics and graphics-archive repos
+    # searching graphics first
+    search_scope = [app_config.GRAPHICS_PATH, app_config.ARCHIVE_GRAPHICS_PATH]
+
+    for d in search_scope:
+        for local_path, subdirs, filenames in os.walk(d, topdown=True):
+            bits = local_path.split(os.path.sep)
+            if bits[len(bits) - 1] in IGNORE_LIST:
+                continue
+            if slug in subdirs:
+                path = os.path.join(local_path, slug)
+    return path
+
+
+@task
+def clone_graphic(old_slug, slug=None):
+    """
+    Clone an existing graphic creating a new spreadsheet
+    """
+
+    if not slug:
+        slug = _create_slug(old_slug)
+
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+
+    if _check_slug(slug):
+        return
+
+    # First search over the graphics repo
+    clone_path = _search_graphic_slug(old_slug)
+    if not clone_path:
+        print 'Did not find %s on graphics repos...skipping' % (old_slug)
+        return
+
+    local('cp -r %s %s' % (clone_path, graphic_path))
+
+    config_path = os.path.join(graphic_path, 'graphic_config.py')
+
+    if os.path.isfile(config_path):
+        print 'Creating spreadsheet...'
+
+        success = copy_spreadsheet(slug)
+
+        if success:
+            download_copy(slug)
+        else:
+            local('rm -r graphic_path')
+            print 'Failed to copy spreadsheet! Try again!'
+            return
+    else:
+        print 'No graphic_config.py found, not creating spreadsheet'
+
+    print 'Run `fab app` and visit http://127.0.0.1:8000/graphics/%s to view' % slug
+
+
 
 @task
 def add_graphic(slug):

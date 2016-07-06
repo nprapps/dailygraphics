@@ -27,6 +27,9 @@ REPOSITORY_URL = 'git@github.com:stlpublicradio/%s.git' % REPOSITORY_NAME
 # Path to the folder containing the graphics
 GRAPHICS_PATH = os.path.abspath('../graphics')
 
+# Path to the folder containing the graphics
+ARCHIVE_GRAPHICS_PATH = os.path.abspath('../graphics-archive')
+
 # Path to the graphic templates
 TEMPLATES_PATH = os.path.abspath('graphic_templates')
 
