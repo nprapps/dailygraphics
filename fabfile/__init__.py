@@ -1,18 +1,15 @@
 #!/usr/bin/env python
 
 import boto
-import imp
 import json
 import os
 import subprocess
-import sys
 import webbrowser
 from datetime import datetime
 
 from distutils.spawn import find_executable
-from fabric.api import local, prompt, require, settings, task
+from fabric.api import local, require, task
 from fabric.state import env
-from glob import glob
 from oauth import get_document, get_credentials
 from time import sleep
 
@@ -457,6 +454,28 @@ def _check_credentials():
         except KeyboardInterrupt:
             print '\nCtrl-c pressed. Later, skater!'
             exit()
+
+
+@task
+def open_spreadsheet(slug):
+    """
+    Open the spreadsheet associated with a given slug
+    """
+
+    config_path = _search_graphic_slug(slug)
+    try:
+        graphic_config = load_graphic_config(config_path)
+    except ImportError:
+        print 'graphic_config.py not found for %s on graphics or graphics-archive repos' % slug
+        return
+
+    if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
+        print 'There seems to be no spreadsheet linked to that slug. (COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.)' % slug
+        return
+
+    spreadsheet_url = SPREADSHEET_VIEW_TEMPLATE % graphic_config.COPY_GOOGLE_DOC_KEY
+    webbrowser.open_new(spreadsheet_url)
+
 
 def copy_spreadsheet(slug):
     """

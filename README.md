@@ -12,14 +12,16 @@ dailygraphics
 * [Clone Old Graphic](#clone-old-graphic)
 * [Deploy To S3](#deploy-to-s3)
 * [Embedding](#embedding)
-* [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
-* [Using Jinja filter functions](#using-jinja-filter-functions)
-* [Storing media assets](#storing-media-assets)
-* [Creating locator maps](#creating-locator-maps)
-* [Creating animated photos](#creating-animated-photos)
-* [Creating an ai2html graphic](#creating-an-ai2html-graphic)
-* [Adding a new graphic template](#adding-a-new-graphic-template)
-* [Keeping the graphics directory clean](#keeping-the-graphics-directory-clean)
+* [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+* [Open Linked Google Spreadsheet](#open-linked-google-spreadsheet)
+* [Using Jinja Filter Functions](#using-jinja-filter-functions)
+* [Storing Media Assets](#storing-media-assets)
+* [Creating Locator Maps](#creating-locator-maps)
+* [Creating Animated Photos](#creating-animated-photos)
+* [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
+* [Working With Carebot](#working-with-carebot)
+* [Adding A New Graphic Template](#adding-a-new-graphic-template)
+* [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
 
 What is this?
 -------------
@@ -336,8 +338,17 @@ Note: Your published graphic **will not** automatically update every time your s
 
 If you do **not** want want to use the copytext spreadsheet for a given project, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
 
+Open Linked Google Spreadsheet
+------------------------------
+Want to edit/view a graphic's linked google spreadsheet, we got you covered.
 
-Using Jinja filter functions
+We have created a simple Fabric task ```open_spreadsheet``` that requires a graphic slug. It will try to find and open the graphic's linked google spreadsheet on your default browser. In order to find the graphic it will first try on the graphics path defined in ```app_config.GRAPHICS_PATH``` and then on the graphics-archive path defined in ```app_config.ARCHIVE_GRAPHICS_PATH```
+
+```
+fab open_spreadsheet:$SLUG
+```
+
+Using Jinja Filter Functions
 ----------------------------
 
 A [library of Jinja filter functions](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/_base/base_filters.py) for common tasks (ordinal, AP date format, etc.) is included with each graphic.
