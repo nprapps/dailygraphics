@@ -13,6 +13,7 @@ dailygraphics
 * [Deploy To S3](#deploy-to-s3)
 * [Embedding](#embedding)
 * [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+* [Open Linked Google Spreadsheet](#open-linked-google-spreadsheet)
 * [Using Jinja Filter Functions](#using-jinja-filter-functions)
 * [Storing Media Assets](#storing-media-assets)
 * [Creating Locator Maps](#creating-locator-maps)
@@ -338,6 +339,16 @@ Note: Your published graphic **will not** automatically update every time your s
 
 If you do **not** want want to use the copytext spreadsheet for a given project, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
 
+
+Open Linked Google Spreadsheet
+------------------------------
+Want to edit/view a graphic's linked google spreadsheet, we got you covered.
+
+We have created a simple Fabric task ```open_spreadsheet``` that requires a graphic slug. It will try to find and open the graphic's linked google spreadsheet on your default browser. In order to find the graphic it will first try on the graphics path defined in ```app_config.GRAPHICS_PATH``` and then on the graphics-archive path defined in ```app_config.ARCHIVE_GRAPHICS_PATH```
+
+```
+fab open_spreadsheet:$SLUG
+```
 
 Using Jinja Filter Functions
 ----------------------------
