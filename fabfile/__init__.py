@@ -259,14 +259,15 @@ def _search_graphic_slug(slug):
     # searching graphics first
     search_scope = [app_config.GRAPHICS_PATH, app_config.ARCHIVE_GRAPHICS_PATH]
 
-    for d in search_scope:
+    for idx, d in enumerate(search_scope):
+        old_graphic_warning = True if (idx > 0) else False
         for local_path, subdirs, filenames in os.walk(d, topdown=True):
             bits = local_path.split(os.path.sep)
             if bits[len(bits) - 1] in IGNORE_LIST:
                 continue
             if slug in subdirs:
                 path = os.path.join(local_path, slug)
-    return path
+    return path, old_graphic_warning
 
 
 @task
@@ -284,7 +285,7 @@ def clone_graphic(old_slug, slug=None):
         return
 
     # First search over the graphics repo
-    clone_path = _search_graphic_slug(old_slug)
+    clone_path, old_graphic_warning = _search_graphic_slug(old_slug)
     if not clone_path:
         print 'Did not find %s on graphics repos...skipping' % (old_slug)
         return
@@ -307,9 +308,15 @@ def clone_graphic(old_slug, slug=None):
     else:
         print 'No graphic_config.py found, not creating spreadsheet'
 
+    # Force render to clean up old graphic generated files
+    render.render(slug)
+
     print 'Run `fab app` and visit http://127.0.0.1:8000/graphics/%s to view' % slug
 
-
+    if old_graphic_warning:
+        print "WARNING: %s was found in old & dusty graphic archives\n"\
+              "WARNING: Please ensure that graphic is up-to-date"\
+              " with your current graphic libs & best-practices" % (old_slug)
 
 @task
 def add_graphic(slug):
@@ -462,7 +469,7 @@ def open_spreadsheet(slug):
     Open the spreadsheet associated with a given slug
     """
 
-    config_path = _search_graphic_slug(slug)
+    config_path, _ = _search_graphic_slug(slug)
     try:
         graphic_config = load_graphic_config(config_path)
     except ImportError:
