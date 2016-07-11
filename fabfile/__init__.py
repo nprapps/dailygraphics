@@ -253,7 +253,6 @@ def _search_graphic_slug(slug):
     """
     searches a given slug in graphics and graphics-archive repos
     """
-    path = None
     IGNORE_LIST = ['js', 'css', 'assets', 'lib', '.git']
     # Limit the search to grahics and graphics-archive repos
     # searching graphics first
@@ -267,7 +266,8 @@ def _search_graphic_slug(slug):
                 continue
             if slug in subdirs:
                 path = os.path.join(local_path, slug)
-    return path, old_graphic_warning
+                return path, old_graphic_warning
+    return None
 
 
 @task
