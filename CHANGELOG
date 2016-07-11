@@ -2,6 +2,8 @@
 -----
 
 * New template: Stacked grouped column chart (#181)
+* New open_spreadsheet task
+* New clone_graphic task
 * deploy task accepts multiple project slugs (#155)
 * animated_photo process script also outputs a gif (#152)
 * New issue matrix graphic template.
