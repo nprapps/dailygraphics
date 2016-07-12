@@ -41,6 +41,7 @@ var onNewsletterSubmit = function(e) {
 
     var $el = $(this);
     var email = $el.find('#newsletter-email').val();
+    var newsletter_endpoint;
 
     var clearStatusMessage = function() {
         var statusMsgExists = $el.find('.message').length;
@@ -51,6 +52,13 @@ var onNewsletterSubmit = function(e) {
 
     if (!email) {
         return;
+    }
+
+    if (isProduction()) {
+        newsletter_endpoint = COPY.newsletter.prod_post_url;
+    }
+    else {
+        newsletter_endpoint = COPY.newsletter.test_post_url;
     }
 
     // wait state
@@ -64,8 +72,8 @@ var onNewsletterSubmit = function(e) {
     sendPymHeight();
 
     $.ajax({
-        url: COPY.config.post_url,
-        timeout: COPY.config.post_timeout,
+        url: newsletter_endpoint,
+        timeout: COPY.newsletter.post_timeout,
         method: 'POST',
         data: {
             email: email,

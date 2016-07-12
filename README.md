@@ -19,6 +19,7 @@ dailygraphics
 * [Creating Locator Maps](#creating-locator-maps)
 * [Creating Animated Photos](#creating-animated-photos)
 * [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
+* [Creating Newsletters](#creating-newsletters)
 * [Working With Carebot](#working-with-carebot)
 * [Adding A New Graphic Template](#adding-a-new-graphic-template)
 * [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
@@ -229,7 +230,7 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
 | ![Issue Matrix](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/issue-matrix.png) | A table comparing a list of candidates' positions on various issues | ```fab add_issue_matrix:$SLUG``` |
 | ![Animated photo](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/animated-photo.gif) | Animated photo (GIF alternative) | ```fab add_animated_photo:$SLUG``` |
-| ![Newsletter](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/newsletter.png) | Newsletter | ```fab add_newsletter:$SLUG``` |
+| ![Newsletter](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/newsletter.png) | [Newsletter](#creating-newsletters) | ```fab add_newsletter:$SLUG``` |
 
 **Note**: `$SLUG` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
@@ -521,6 +522,15 @@ documentation](http://ai2html.org/#how-to-use-ai2html) for help. When
 you're ready to export, run File >> Scripts >> ai2html. The resulting
 graphic will appear within the base template when you load your graphic!
 
+
+Creating Newsletters
+--------------------
+
+This task will create a newsletter signup widget that will integrate with [NPR.org](http://www.npr.org/)’s newsletter signup system. The widget will not work on non-NPR domains, but can be easily modified to support other systems that allow an email address to be POSTed to some subscription endpoint.
+
+All widget configuration is handled by “newsletter” sheet in the spreadsheet created when you use this task. There are fields for each piece of copy in the widget, including success and error text.
+
+There are also several configuration fields. The most important are the `prod_post_url` and `test_post_url` fields. When previewing locally or on a staging server, the `test_post_url` is used to POST the email address. When deployed to production, the `prod_post_url` is used. This allows developers to test signup responses and error codes without actually signing up for real newsletters.
 
 Working With Carebot
 --------------------
