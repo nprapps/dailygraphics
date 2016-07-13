@@ -12,14 +12,16 @@ dailygraphics
 * [Clone Old Graphic](#clone-old-graphic)
 * [Deploy To S3](#deploy-to-s3)
 * [Embedding](#embedding)
-* [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
-* [Using Jinja filter functions](#using-jinja-filter-functions)
-* [Storing media assets](#storing-media-assets)
-* [Creating locator maps](#creating-locator-maps)
-* [Creating animated photos](#creating-animated-photos)
-* [Creating an ai2html graphic](#creating-an-ai2html-graphic)
-* [Adding a new graphic template](#adding-a-new-graphic-template)
-* [Keeping the graphics directory clean](#keeping-the-graphics-directory-clean)
+* [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+* [Open Linked Google Spreadsheet](#open-linked-google-spreadsheet)
+* [Using Jinja Filter Functions](#using-jinja-filter-functions)
+* [Storing Media Assets](#storing-media-assets)
+* [Creating Locator Maps](#creating-locator-maps)
+* [Creating Animated Photos](#creating-animated-photos)
+* [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
+* [Creating Newsletters](#creating-newsletters)
+* [Adding A New Graphic Template](#adding-a-new-graphic-template)
+* [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
 
 What is this?
 -------------
@@ -217,6 +219,7 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Stacked bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-bar-chart.png) | Stacked bar chart | ```fab add_stacked_bar_chart:$SLUG``` |
 | ![Column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/column-chart.png) | Column chart | ```fab add_column_chart:$SLUG``` |
 | ![Stacked column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-column-chart.png) | Stacked column chart | ```fab add_stacked_column_chart:$SLUG``` |
+| ![Stacked grouped column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-grouped-column-chart.png) | Stacked grouped column chart | ```fab add_stacked_grouped_column_chart:$SLUG``` |
 | ![Block histogram](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/block-histogram.png) | Block histogram | ```fab add_block_histogram:$SLUG``` |
 | ![Line chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/line-chart.png) | Line chart | ```fab add_line_chart:$SLUG``` |
 | ![Slopegraph](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/slopegraph.png) | Slopegraph | ```fab add_slopegraph:$SLUG``` |
@@ -226,6 +229,7 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
 | ![Issue Matrix](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/issue-matrix.png) | A table comparing a list of candidates' positions on various issues | ```fab add_issue_matrix:$SLUG``` |
 | ![Animated photo](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/animated-photo.gif) | Animated photo (GIF alternative) | ```fab add_animated_photo:$SLUG``` |
+| ![Newsletter](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/newsletter.png) | [Newsletter](#creating-newsletters) | ```fab add_newsletter:$SLUG``` |
 
 **Note**: `$SLUG` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
@@ -336,8 +340,17 @@ Note: Your published graphic **will not** automatically update every time your s
 
 If you do **not** want want to use the copytext spreadsheet for a given project, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
 
+Open Linked Google Spreadsheet
+------------------------------
+Want to edit/view a graphic's linked google spreadsheet, we got you covered.
 
-Using Jinja filter functions
+We have created a simple Fabric task ```open_spreadsheet``` that requires a graphic slug. It will try to find and open the graphic's linked google spreadsheet on your default browser. In order to find the graphic it will first try on the graphics path defined in ```app_config.GRAPHICS_PATH``` and then on the graphics-archive path defined in ```app_config.ARCHIVE_GRAPHICS_PATH```
+
+```
+fab open_spreadsheet:$SLUG
+```
+
+Using Jinja Filter Functions
 ----------------------------
 
 A [library of Jinja filter functions](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/_base/base_filters.py) for common tasks (ordinal, AP date format, etc.) is included with each graphic.
@@ -505,6 +518,16 @@ Create your graphic within Illustrator, referring to the [ai2html
 documentation](http://ai2html.org/#how-to-use-ai2html) for help. When
 you're ready to export, run File >> Scripts >> ai2html. The resulting
 graphic will appear within the base template when you load your graphic!
+
+
+Creating Newsletters
+--------------------
+
+This task will create a newsletter signup widget that will integrate with [NPR.org](http://www.npr.org/)’s newsletter signup system. The widget will not work on non-NPR domains, but can be easily modified to support other systems that allow an email address to be POSTed to some subscription endpoint.
+
+All widget configuration is handled by “newsletter” sheet in the spreadsheet created when you use this task. There are fields for each piece of copy in the widget, including success and error text.
+
+There are also several configuration fields. The most important are the `prod_post_url` and `test_post_url` fields. When previewing locally or on a staging server, the `test_post_url` is used to POST the email address. When deployed to production, the `prod_post_url` is used. This allows developers to test signup responses and error codes without actually signing up for real newsletters.
 
 
 Adding a new graphic template

@@ -1,18 +1,15 @@
 #!/usr/bin/env python
 
 import boto
-import imp
 import json
 import os
 import subprocess
-import sys
 import webbrowser
 from datetime import datetime
 
 from distutils.spawn import find_executable
-from fabric.api import local, prompt, require, settings, task
+from fabric.api import local, require, task
 from fabric.state import env
-from glob import glob
 from oauth import get_document, get_credentials
 from time import sleep
 
@@ -256,20 +253,21 @@ def _search_graphic_slug(slug):
     """
     searches a given slug in graphics and graphics-archive repos
     """
-    path = None
     IGNORE_LIST = ['js', 'css', 'assets', 'lib', '.git']
     # Limit the search to grahics and graphics-archive repos
     # searching graphics first
     search_scope = [app_config.GRAPHICS_PATH, app_config.ARCHIVE_GRAPHICS_PATH]
 
-    for d in search_scope:
+    for idx, d in enumerate(search_scope):
+        old_graphic_warning = True if (idx > 0) else False
         for local_path, subdirs, filenames in os.walk(d, topdown=True):
             bits = local_path.split(os.path.sep)
             if bits[len(bits) - 1] in IGNORE_LIST:
                 continue
             if slug in subdirs:
                 path = os.path.join(local_path, slug)
-    return path
+                return path, old_graphic_warning
+    return None
 
 
 @task
@@ -287,7 +285,7 @@ def clone_graphic(old_slug, slug=None):
         return
 
     # First search over the graphics repo
-    clone_path = _search_graphic_slug(old_slug)
+    clone_path, old_graphic_warning = _search_graphic_slug(old_slug)
     if not clone_path:
         print 'Did not find %s on graphics repos...skipping' % (old_slug)
         return
@@ -310,9 +308,15 @@ def clone_graphic(old_slug, slug=None):
     else:
         print 'No graphic_config.py found, not creating spreadsheet'
 
+    # Force render to clean up old graphic generated files
+    render.render(slug)
+
     print 'Run `fab app` and visit http://127.0.0.1:8000/graphics/%s to view' % slug
 
-
+    if old_graphic_warning:
+        print "WARNING: %s was found in old & dusty graphic archives\n"\
+              "WARNING: Please ensure that graphic is up-to-date"\
+              " with your current graphic libs & best-practices" % (old_slug)
 
 @task
 def add_graphic(slug):
@@ -362,6 +366,13 @@ def add_stacked_column_chart(slug):
     Create a stacked column chart.
     """
     _add_graphic(slug, 'stacked_column_chart')
+
+@task
+def add_stacked_grouped_column_chart(slug):
+    """
+    Create a stacked grouped column chart.
+    """
+    _add_graphic(slug, 'stacked_grouped_column_chart')
 
 @task
 def add_block_histogram(slug):
@@ -427,6 +438,13 @@ def add_leaflet_map(slug):
     _add_graphic(slug, 'map')
 
 @task
+def add_newsletter(slug):
+    """
+    Create a locator map.
+    """
+    _add_graphic(slug, 'newsletter')
+
+@task
 def add_table(slug):
     """
     Create a data table.
@@ -464,6 +482,28 @@ def _check_credentials():
         except KeyboardInterrupt:
             print '\nCtrl-c pressed. Later, skater!'
             exit()
+
+
+@task
+def open_spreadsheet(slug):
+    """
+    Open the spreadsheet associated with a given slug
+    """
+
+    config_path, _ = _search_graphic_slug(slug)
+    try:
+        graphic_config = load_graphic_config(config_path)
+    except ImportError:
+        print 'graphic_config.py not found for %s on graphics or graphics-archive repos' % slug
+        return
+
+    if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
+        print 'There seems to be no spreadsheet linked to that slug. (COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.)' % slug
+        return
+
+    spreadsheet_url = SPREADSHEET_VIEW_TEMPLATE % graphic_config.COPY_GOOGLE_DOC_KEY
+    webbrowser.open_new(spreadsheet_url)
+
 
 def copy_spreadsheet(slug):
     """
