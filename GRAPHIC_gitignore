@@ -1,0 +1,14 @@
+*.py[co]
+*.sw[op]
+.DS_Store
+.gzip
+
+dailygraphics.sublime-*
+graphics.sublime-*
+assetsignore
+*.xlsx
+child.html
+js/parent-header.js
+js/parent-footer.js
+js/graphic-header.js
+js/graphic-footer.js

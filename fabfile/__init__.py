@@ -10,14 +10,16 @@ from datetime import datetime
 from distutils.spawn import find_executable
 from fabric.api import local, require, task
 from fabric.state import env
-from oauth import get_document, get_credentials
+from oauth import get_credentials
 from time import sleep
 
 import app_config
 import assets
 import flat
 import render
+import subtree
 import utils
+from data import download_copy
 
 from render_utils import load_graphic_config
 
@@ -134,25 +136,6 @@ def deploy_single(slug):
 
     print ''
     print '%s URL: %s/graphics/%s/' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug)
-
-def download_copy(slug):
-    """
-    Downloads a Google Doc as an .xlsx file.
-    """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-
-    try:
-        graphic_config = load_graphic_config(graphic_path)
-    except IOError:
-        print '%s/graphic_config.py does not exist.' % slug
-        return
-
-    if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
-        print 'COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.' % slug
-        return
-
-    copy_path = os.path.join(graphic_path, '%s.xlsx' % slug)
-    get_document(graphic_config.COPY_GOOGLE_DOC_KEY, copy_path)
 
 @task
 def update_copy(slug=None):

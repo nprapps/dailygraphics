@@ -80,7 +80,15 @@ class Includer(object):
 
             markup = Markup(self.tag_string % self._relativize_path(timestamp_path))
         else:
-            response = ','.join(self.includes)
+            # If there is a force_compile_less flag, used to externalize a graphic repo
+            if getattr(g, 'force_compile_less', False):
+                if path.endswith(".css"):
+                    out_path = '%s/%s' % (self.root_path, path)
+                    with codecs.open(out_path, 'w', encoding='utf-8') as f:
+                        f.write(self._compile())
+                    markup = Markup(self.tag_string % self._relativize_path(path))
+                    del self.includes[:]
+                    return markup
 
             response = '\n'.join([
                 self.tag_string % self._relativize_path(src) for src in self.includes
@@ -142,6 +150,28 @@ class CSSIncluder(Includer):
 
             try:
                 compressed_src = subprocess.check_output(["node_modules/less/bin/lessc", "-x", css_path])
+                output.append(compressed_src)
+            except:
+                print 'It looks like "lessc" isn\'t installed. Try running: "npm install"'
+                raise
+
+        context = make_context()
+        context['paths'] = src_paths
+
+        return '\n'.join(output)
+
+    def _compile(self):
+        output = []
+
+        src_paths = []
+
+        for src in self.includes:
+            css_path = '%s/%s' % (self.root_path, src)
+
+            src_paths.append(css_path)
+
+            try:
+                compressed_src = subprocess.check_output(["node_modules/less/bin/lessc", css_path])
                 output.append(compressed_src)
             except:
                 print 'It looks like "lessc" isn\'t installed. Try running: "npm install"'
