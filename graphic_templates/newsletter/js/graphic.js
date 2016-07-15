@@ -1,3 +1,7 @@
+// Global config
+var DEFAULT_WIDTH = 600;
+var MOBILE_THRESHOLD = 500;
+
 // Global vars
 var pymChild = null;
 var isMobile = false;
