@@ -531,7 +531,7 @@ def copy_spreadsheet(slug):
         utils.replace_in_file('%s/graphic_config.py' % config_path , graphic_config.COPY_GOOGLE_DOC_KEY, spreadsheet_key)
 
         return True
-
+    else:
         utils.replace_in_file(config_path, graphic_config.COPY_GOOGLE_DOC_KEY, '')
 
     print 'Error creating spreadsheet (status code %s) with message %s' % (resp.status, resp.reason)
