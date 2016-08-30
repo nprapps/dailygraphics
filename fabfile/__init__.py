@@ -267,7 +267,7 @@ def _search_graphic_slug(slug):
             if slug in subdirs:
                 path = os.path.join(local_path, slug)
                 return path, old_graphic_warning
-    return None
+    return None, None
 
 
 @task
@@ -279,8 +279,11 @@ def clone_graphic(old_slug, slug=None):
     if not slug:
         slug = _create_slug(old_slug)
 
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    if slug == old_slug:
+        print "%(slug)s already has today's date, please specify a new slug to clone into, i.e.: fab clone_graphic:%(slug)s,NEW_SLUG" % {'slug': old_slug}
+        return
 
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     if _check_slug(slug):
         return
 
