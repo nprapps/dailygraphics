@@ -1,6 +1,7 @@
 0.1.2
 -----
 
+* Integrate new centralized pym v1
 * New template: Newsletter template
 * New template: Stacked grouped column chart (#181)
 * New open_spreadsheet task

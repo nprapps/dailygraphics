@@ -34,6 +34,15 @@ ARCHIVE_GRAPHICS_PATH = os.path.abspath('../graphics-archive')
 TEMPLATES_PATH = os.path.abspath('graphic_templates')
 
 """
+PYM
+"""
+
+PYM = {
+    'pym_url': '//pym.nprapps.org/pym.v1.min.js',
+    'pym_loader_url': '//pym.nprapps.org/pym-loader.v1.min.js',
+}
+
+"""
 OAUTH
 """
 
