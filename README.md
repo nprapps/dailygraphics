@@ -1,11 +1,11 @@
 dailygraphics
 =============
 
-* [What is this?](#what-is-this)
+* [What Is This?](#what-is-this)
 * [Assumptions](#assumptions)
-* [What's in here?](#whats-in-here)
-* [Bootstrap the project](#bootstrap-the-project)
-* [Using a stable version](#using-a-stable-version)
+* [What's In Here?](#whats-in-here)
+* [Bootstrap The Project](#bootstrap-the-project)
+* [Using A Stable Version](#using-a-stable-version)
 * [Configuration](#configuration)
 * [Run The Project](#run-the-project)
 * [Add A New Graphic](#add-a-new-graphic)
@@ -19,7 +19,7 @@ dailygraphics
 * [Creating Locator Maps](#creating-locator-maps)
 * [Creating Animated Photos](#creating-animated-photos)
 * [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
-* [Creating Newsletters](#creating-newsletters)
+* [Working With Carebot](#working-with-carebot)
 * [Adding A New Graphic Template](#adding-a-new-graphic-template)
 * [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
 
@@ -71,7 +71,7 @@ The following things are assumed to be true in this documentation.
 
 For more details on the technology stack used with this project, see our [development environment blog post](http://blog.apps.npr.org/2013/06/06/how-to-setup-a-developers-environment.html).
 
-What's in here?
+What's In Here?
 ---------------
 
 The project contains the following folders and important files:
@@ -89,7 +89,7 @@ The project contains the following folders and important files:
 * ``render_utils.py`` -- Code supporting template rendering.
 * ``requirements.txt`` -- Python requirements.
 
-Bootstrap the project
+Bootstrap The Project
 ---------------------
 
 Node.js is required for the static asset pipeline. If you don't already have it, get it like this (requires [brew](http://brew.sh/)):
@@ -98,7 +98,7 @@ Node.js is required for the static asset pipeline. If you don't already have it,
 brew install node
 ```
 
-Then setup the project like this:
+Then set up the project like this:
 
 ```
 git clone https://github.com/nprapps/dailygraphics.git
@@ -114,7 +114,7 @@ You'll now need to create a folder to hold the graphics created and deployed by 
 
 **All other users:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
 
-Using a stable version
+Using A Stable Version
 ----------------------
 
 The master branch of project is in active development by NPR at all times. If you would like to use a [more] stable version, we suggest checking out a tagged version (``0.1``, etc.). We will periodically tag releases, which will be synchronized to the ``CHANGELOG`` so you will know exactly what improvements you will get if you migrate to a new tagged version.
@@ -166,7 +166,7 @@ You should only need to do this once.
 **NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson, David or Chris for more information.
 
 
-Run the project
+Run The Project
 ---------------
 
 A Flask app is used to run the project locally. It will automatically recompile templates on-demand.
@@ -204,7 +204,7 @@ Aborting.
 It's possible that the webserver is already running silently in the background. [Here's how to fix it.](https://github.com/nprapps/dailygraphics/issues/74)
 
 
-Add a new graphic
+Add A New Graphic
 -----------------
 
 dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go). Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic. It also will clone a new Google Spreadsheet for you to use for text and data.
@@ -229,7 +229,6 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
 | ![Issue Matrix](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/issue-matrix.png) | A table comparing a list of candidates' positions on various issues | ```fab add_issue_matrix:$SLUG``` |
 | ![Animated photo](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/animated-photo.gif) | Animated photo (GIF alternative) | ```fab add_animated_photo:$SLUG``` |
-| ![Newsletter](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/newsletter.png) | [Newsletter](#creating-newsletters) | ```fab add_newsletter:$SLUG``` |
 
 **Note**: `$SLUG` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
@@ -309,7 +308,7 @@ Embedding
 Deploy the project to production. Visit ```http://apps.npr.org/dailygraphics/graphics/$SLUG```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into your page. (Some CMSes treat code snippets like this as a separate "HTML asset.")
 
 
-Connecting to a Google Spreadsheet
+Connecting To A Google Spreadsheet
 ----------------------------------
 
 This section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet.
@@ -373,7 +372,7 @@ Then you will be able to use it in your template like this:
 See the ``table`` graphic template for a more complete example.
 
 
-Storing media assets
+Storing Media Assets
 --------------------
 
 (Note: this section describes usage of NPR's assets rig. This is optional and you don't need to use it in order to use dailygraphics.)
@@ -427,7 +426,7 @@ mapturner geodata.yaml data/geodata.json
 
 In your project ```js/graphic.js``` folder, change the ```PRIMARY_COUNTRY``` variable at the top from Nepal to the name of your featured country. You will also want to adjust the ```MAP_DEFAULT_SCALE``` and ```MAP_DEFAULT_HEIGHT``` variables so that your featured country fits onscreen.
 
-Creating animated photos
+Creating Animated Photos
 ------------------------
 
 The animated photo template uses the [canvid](https://github.com/gka/canvid) JavaScript library as an alternative to GIFs. With this solution, you composite a "filmstrip" of all the frames in your animation, and canvid plays them back in sequence on a canvas element. [See an example on NPR.org.](http://www.npr.org/2015/11/05/453239276/in-the-amazons-fire-season-you-either-burn-or-you-starve#res454735072)
@@ -520,15 +519,33 @@ you're ready to export, run File >> Scripts >> ai2html. The resulting
 graphic will appear within the base template when you load your graphic!
 
 
-Creating Newsletters
+Working With Carebot
 --------------------
 
-This task will create a newsletter signup widget that will integrate with [NPR.org](http://www.npr.org/)’s newsletter signup system. The widget will not work on non-NPR domains, but can be easily modified to support other systems that allow an email address to be POSTed to some subscription endpoint.
+**This section is relevant to NPR users of the dailygraphics rig.**
 
-All widget configuration is handled by “newsletter” sheet in the spreadsheet created when you use this task. There are fields for each piece of copy in the widget, including success and error text.
+[Carebot](https://thecarebot.github.io) is a grant-funded project to measure and report more meaningful analytics around stories and story elements (like graphics). This branch of dailygraphics includes test code that the Carebot team has developed to measure 1) how long a dailygraphics embedded project is visible onscreen and 2) how far users have scrolled down the length of a story. Carebot is still a work in progress, and the code we've implemented so far is likely to change.
 
-There are also several configuration fields. The most important are the `prod_post_url` and `test_post_url` fields. When previewing locally or on a staging server, the `test_post_url` is used to POST the email address. When deployed to production, the `prod_post_url` is used. This allows developers to test signup responses and error codes without actually signing up for real newsletters.
+We have created a `CAREBOT_ENABLED` configuration option on dailygraphics `app_config.py`. It allows you to switch `Carebot` on or off on your graphics. Since `carebot-tracker` is being served directly by NPR from a CDN you do not need to add any new javascript files to this repo.
 
+**`CAREBOT_ENABLED` is set to `True` by default on `app_config.py`, change it to `False` on your fork to disable `Carebot`.**
+
+If `CAREBOT_ENABLED` is set to `True`, new graphics created using the usual `fab add[type of graphic]:$slug` process will have the latest Carebot code. However, older graphics may need to be retrofitted as needed before being published.
+
+#### How To Add/Update Carebot Code In An Existing Graphic
+
+Copy the [pymChild analytics code](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/graphic/js/graphic.js#L17-L22) from the `onWindowLoaded` function of `dailygraphics/graphic_templates/graphic/js/graphic.js` to the same spot in the `js/graphic.js` file for your project.
+
+```
+pymChild.onMessage('on-screen', function(bucket) {
+    ANALYTICS.trackEvent('on-screen', bucket);
+});
+pymChild.onMessage('scroll-depth', function(data) {
+    ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
+});
+```
+
+These are the two custom messages that `carebot-tracker` will fire on the parent page. If `CAREBOT_ENABLED` is `False` this code on your graphic will not be executed.
 
 Adding a new graphic template
 -----------------------------

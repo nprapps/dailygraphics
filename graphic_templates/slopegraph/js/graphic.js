@@ -19,6 +19,14 @@ var onWindowLoaded = function() {
     } else {
         pymChild = new pym.Child({});
     }
+
+    pymChild.onMessage('on-screen', function(bucket) {
+        ANALYTICS.trackEvent('on-screen', bucket);
+    });
+    pymChild.onMessage('scroll-depth', function(data) {
+        data = JSON.parse(data);
+        ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
+    });
 }
 
 /*
@@ -332,55 +340,6 @@ var renderSlopegraph = function(config) {
                 return d[labelColumn];
             })
             .call(wrapText, (margins['right'] - labelGap), 16);
-}
-
-/*
- * Wrap a block of text to a given width
- * via http://bl.ocks.org/mbostock/7555321
- */
-var wrapText = function(texts, width, lineHeight) {
-    texts.each(function() {
-        var text = d3.select(this);
-        var words = text.text().split(/\s+/).reverse();
-
-        var word = null;
-        var line = [];
-        var lineNumber = 0;
-
-        var x = text.attr('x');
-        var y = text.attr('y');
-
-        var dx = parseFloat(text.attr('dx'));
-        var dy = parseFloat(text.attr('dy'));
-
-        var tspan = text.text(null)
-            .append('tspan')
-            .attr('x', x)
-            .attr('y', y)
-            .attr('dx', dx + 'px')
-            .attr('dy', dy + 'px');
-
-        while (word = words.pop()) {
-            line.push(word);
-            tspan.text(line.join(' '));
-
-            if (tspan.node().getComputedTextLength() > width) {
-                line.pop();
-                tspan.text(line.join(' '));
-                line = [word];
-
-                lineNumber += 1;
-
-                tspan = text.append('tspan')
-                    .attr('x', x)
-                    .attr('y', y)
-                    .attr('dx', dx + 'px')
-                    .attr('dy', lineNumber * lineHeight)
-                    .attr('text-anchor', 'begin')
-                    .text(word);
-            }
-        }
-    });
 }
 
 /*

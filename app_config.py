@@ -43,6 +43,13 @@ PYM = {
 }
 
 """
+CAREBOT
+"""
+
+CAREBOT_ENABLED = True
+CAREBOT_URL = '//carebot.nprapps.org/carebot-tracker.v0.min.js'
+
+"""
 OAUTH
 """
 

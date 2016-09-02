@@ -200,6 +200,26 @@
                         'http://apps.npr.org/dailygraphics/graphics/{{ slug }}/child.html',
                         {}
                     );
+{% if CAREBOT_ENABLED %}
+                    jQuery.getScript("{{ CAREBOT_URL }}").done(function () {
+                        var tracker = new CarebotTracker.VisibilityTracker(el.id, function(result) {
+                            // Ignore Carebot events to empty embeds, keeps listening after unloading the page
+                            if (pymParent.el.getElementsByTagName('iframe').length !== 0) {
+                                pymParent.sendMessage('on-screen', result.bucket);
+                            }
+                        });
+                        // Check if there is already an scroll tracker somewhere on the page
+                        if (!document.querySelector("[data-carebot-scroll]")) {
+                            pymParent.el.setAttribute("data-carebot-scroll", "");
+                            var scrollTracker = new CarebotTracker.ScrollTracker('storytext', function(percent, seconds) {
+                                // Ignore Carebot events to empty embeds, keeps listening after unloading the page
+                                if (pymParent.el.getElementsByTagName('iframe').length !== 0) {
+                                    pymParent.sendMessage('scroll-depth', JSON.stringify({percent: percent,seconds: seconds}));
+                                }
+                            });
+                        }
+                    });
+{% endif %}
                 });
             });
         } else {
@@ -221,6 +241,9 @@
     </div>
 
     <script type="text/javascript" src="{{ PYM['pym_url'] }}"></script>
+{% if CAREBOT_ENABLED %}
+    <script type="text/javascript" src="{{ CAREBOT_URL }}"></script>
+{% endif %}
 
     <script type="text/javascript">
         var resizeSidebarEl = document.querySelector('#resize-sidebar');
@@ -276,6 +299,11 @@
         }
 
         var pymParent = new pym.Parent('preview', 'child.html', {});
+{% if CAREBOT_ENABLED %}
+        var tracker = new CarebotTracker.VisibilityTracker('preview', function(result) {
+            pymParent.sendMessage('on-screen', result.bucket);
+        });
+{% endif %}
     </script>
 </body>
 </html>
