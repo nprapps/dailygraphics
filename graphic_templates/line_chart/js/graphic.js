@@ -57,7 +57,7 @@ var formatData = function() {
                 };
     // filter out empty data. uncomment this if you have inconsistent data.
     //        }).filter(function(d) {
-    //            return d['amt'].length > 0;
+    //            return d['amt'] != null;
             })
         });
     }
