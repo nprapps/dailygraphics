@@ -1,6 +1,7 @@
 // Global vars
 var pymChild = null;
 var isMobile = false;
+var skipLabels = [ 'label', 'values' ];
 
 /*
  * Initialize the graphic.
@@ -35,7 +36,7 @@ var formatData = function() {
         d['values'] = [];
 
         for (var key in d) {
-            if (key == 'label' || key == 'values') {
+            if (_.contains(skipLabels, key)) {
                 continue;
             }
 
@@ -122,31 +123,31 @@ var renderStackedBarChart = function(config) {
     /*
      * Create D3 scale objects.
      */
-     var min = d3.min(config['data'], function(d) {
-         var lastValue = d['values'][d['values'].length - 1];
-
-         return Math.floor(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
+    var min = d3.min(config['data'], function(d) {
+        var lastValue = d['values'][d['values'].length - 1];
+        return Math.floor(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
      });
 
-     if (min > 0) {
-         min = 0;
-     }
+    if (min > 0) {
+        min = 0;
+    }
 
-     var max = d3.max(config['data'], function(d) {
-         var lastValue = d['values'][d['values'].length - 1];
+    var max = d3.max(config['data'], function(d) {
+        var lastValue = d['values'][d['values'].length - 1];
+        return Math.ceil(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
+    });
 
-         return Math.ceil(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
-     });
+    var xScale = d3.scale.linear()
+        .domain([min, max])
+        .rangeRound([0, chartWidth]);
 
-     var xScale = d3.scale.linear()
-         .domain([min, max])
-         .rangeRound([0, chartWidth]);
-
-     var colorScale = d3.scale.ordinal()
-         .domain(d3.keys(config['data'][0]).filter(function(d) {
-             return d != labelColumn && d != 'values';
-         }))
-         .range([ COLORS['teal3'], COLORS['orange3'], COLORS['blue3'], '#ccc' ]);
+    var colorScale = d3.scale.ordinal()
+        .domain(d3.keys(config['data'][0]).filter(function(d) {
+            if (!_.contains(skipLabels, d)) {
+                return d;
+            }
+        }))
+        .range([ COLORS['teal3'], COLORS['orange3'], COLORS['blue3'], '#ccc' ]);
 
     /*
      * Render the legend.
