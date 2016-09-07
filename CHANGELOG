@@ -1,6 +1,7 @@
 0.1.4
 -----
 
+* State grid map: Define data column as a variable (#176)
 * Animated photo: Check for credit OR caption when displaying caption area (#174)
 * Standardize use of _.contains to filter data columns in stacked bar/column chart templates (#183)
 * Add AP-style month formatter (#190)

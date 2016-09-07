@@ -58,6 +58,8 @@ var render = function(containerWidth) {
  * Render a state grid map.
  */
 var renderStateGridMap = function(config) {
+    var valueColumn = 'category';
+
     // Clear existing graphic (for redraw)
     var containerElement = d3.select(config['container']);
     containerElement.html('');
@@ -70,8 +72,8 @@ var renderStateGridMap = function(config) {
     var categories = [];
 
     _.each(config['data'], function(state) {
-        if (state['category'] != null) {
-            categories.push(state['category']);
+        if (state[valueColumn] != null) {
+            categories.push(state[valueColumn]);
         }
     });
 
@@ -101,12 +103,12 @@ var renderStateGridMap = function(config) {
 
     // Set state colors
     _.each(config['data'], function(state) {
-        if (state['category'] !== null) {
+        if (state[valueColumn] !== null) {
             var stateClass = 'state-' + classify(state['state_name']);
 
             chartElement.select('.' + stateClass)
                 .attr('class', stateClass + ' state-active')
-                .attr('fill', colorScale(state['category']));
+                .attr('fill', colorScale(state[valueColumn]));
         }
     });
 
@@ -122,7 +124,7 @@ var renderStateGridMap = function(config) {
                 return isMobile ? state['usps'] : state['ap'];
             })
             .attr('class', function(d) {
-                return d['category'] !== null ? 'label label-active' : 'label';
+                return d[valueColumn] !== null ? 'label label-active' : 'label';
             })
             .attr('x', function(d) {
                 var className = '.state-' + classify(d['state_name']);
