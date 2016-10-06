@@ -1,6 +1,7 @@
 // Global vars
 var pymChild = null;
 var isMobile = false;
+var skipLabels = [ 'Group', 'key', 'values' ];
 
 /*
  * Initialize the graphic.
@@ -15,6 +16,14 @@ var onWindowLoaded = function() {
     } else {
         pymChild = new pym.Child({});
     }
+
+    pymChild.onMessage('on-screen', function(bucket) {
+        ANALYTICS.trackEvent('on-screen', bucket);
+    });
+    pymChild.onMessage('scroll-depth', function(data) {
+        data = JSON.parse(data);
+        ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
+    });
 }
 
 /*
@@ -26,7 +35,7 @@ var formatData = function() {
         d['values'] = [];
 
         _.each(d, function(v, k) {
-            if (_.contains(['Group', 'key', 'values'], k)) {
+            if (_.contains(skipLabels, k)) {
                 return;
             }
 
@@ -131,7 +140,11 @@ var renderGroupedBarChart = function(config) {
         .range([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
-    .domain(_.pluck(config['data'][0]['values'], labelColumn))
+        .domain(d3.keys(config['data'][0]['values']).filter(function(d) {
+            if (!_.contains(skipLabels, d)) {
+                return d;
+            }
+        }))
         .range([COLORS['teal3'], COLORS['teal5']]);
     /*
      * Render a color legend.

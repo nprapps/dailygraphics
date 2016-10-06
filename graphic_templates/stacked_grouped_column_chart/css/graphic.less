@@ -1,0 +1,28 @@
+@import "base";
+
+.bar text {
+    fill: #fff;
+    font-size: 11px;
+    text-anchor: middle;
+
+    &.hidden { display: none; }
+}
+
+.x.axis.category {
+    text {
+        font-weight: bold;
+        fill: #454545;
+        text-anchor: middle;
+    }
+}
+
+.x.axis.bars {
+    path, line {
+        display: none;
+    }
+}
+
+// mobile styles
+@media screen and (max-width: 500px){
+    .bar text { font-size: 10px; }
+}

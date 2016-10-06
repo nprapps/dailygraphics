@@ -4,10 +4,10 @@
 
     <div id="graphic" class="photo"></div>
 
-    {% if COPY.labels.caption %}
+    {% if COPY.labels.caption or COPY.labels.credit %}
     <div class="caption">
-        <p>{{ render(COPY.labels.caption)|smarty }}</p>
-        <p class="credit">{{ COPY.labels.credit|smarty }}</p>
+        {% if COPY.labels.caption %}<p>{{ render(COPY.labels.caption)|smarty }}</p>{% endif %}
+        {% if COPY.labels.credit %}<p class="credit">{{ COPY.labels.credit|smarty }}</p>{% endif %}
     </div>
     {% endif %}
 
@@ -17,7 +17,6 @@
 
     {{ JS.push('js/lib/d3.min.js') }}
     {{ JS.push('js/lib/canvid.js') }}
-    {{ JS.push('js/lib/pym.js') }}
     {{ JS.push('js/graphic.js') }}
     {{ JS.render('js/graphic-footer.js') }}
 

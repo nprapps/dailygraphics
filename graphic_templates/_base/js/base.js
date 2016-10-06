@@ -10,3 +10,4 @@ var MOBILE_THRESHOLD = 500;
 var fmtComma = d3.format(',');
 var fmtYearAbbrev = d3.time.format('%y');
 var fmtYearFull = d3.time.format('%Y');
+var fmtMonthNum = d3.time.format('%m');

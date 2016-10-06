@@ -1,23 +1,27 @@
 dailygraphics
 =============
 
-* [What is this?](#what-is-this)
+* [What Is This?](#what-is-this)
 * [Assumptions](#assumptions)
-* [What's in here?](#whats-in-here)
-* [Bootstrap the project](#bootstrap-the-project)
-* [Using a stable version](#using-a-stable-version)
+* [What's In Here?](#whats-in-here)
+* [Bootstrap The Project](#bootstrap-the-project)
+* [Using A Stable Version](#using-a-stable-version)
 * [Configuration](#configuration)
-* [Run the project](#run-the-project)
-* [Add a new graphic](#add-a-new-graphic)
-* [Deploy to S3](#deploy-to-s3)
+* [Run The Project](#run-the-project)
+* [Add A New Graphic](#add-a-new-graphic)
+* [Clone Old Graphic](#clone-old-graphic)
+* [Deploy To S3](#deploy-to-s3)
 * [Embedding](#embedding)
-* [Connecting to a Google Spreadsheet](#connecting-to-a-google-spreadsheet)
-* [Using Jinja filter functions](#using-jinja-filter-functions)
-* [Storing media assets](#storing-media-assets)
-* [Creating locator maps](#creating-locator-maps)
-* [Creating animated photos](#creating-animated-photos)
-* [Adding a new graphic template](#adding-a-new-graphic-template)
-* [Keeping the graphics directory clean](#keeping-the-graphics-directory-clean)
+* [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
+* [Open Linked Google Spreadsheet](#open-linked-google-spreadsheet)
+* [Using Jinja Filter Functions](#using-jinja-filter-functions)
+* [Storing Media Assets](#storing-media-assets)
+* [Creating Locator Maps](#creating-locator-maps)
+* [Creating Animated Photos](#creating-animated-photos)
+* [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
+* [Working With Carebot](#working-with-carebot)
+* [Adding A New Graphic Template](#adding-a-new-graphic-template)
+* [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
 
 What is this?
 -------------
@@ -67,7 +71,7 @@ The following things are assumed to be true in this documentation.
 
 For more details on the technology stack used with this project, see our [development environment blog post](http://blog.apps.npr.org/2013/06/06/how-to-setup-a-developers-environment.html).
 
-What's in here?
+What's In Here?
 ---------------
 
 The project contains the following folders and important files:
@@ -85,7 +89,7 @@ The project contains the following folders and important files:
 * ``render_utils.py`` -- Code supporting template rendering.
 * ``requirements.txt`` -- Python requirements.
 
-Bootstrap the project
+Bootstrap The Project
 ---------------------
 
 Node.js is required for the static asset pipeline. If you don't already have it, get it like this (requires [brew](http://brew.sh/)):
@@ -94,7 +98,7 @@ Node.js is required for the static asset pipeline. If you don't already have it,
 brew install node
 ```
 
-Then setup the project like this:
+Then set up the project like this:
 
 ```
 git clone https://github.com/nprapps/dailygraphics.git
@@ -110,7 +114,7 @@ You'll now need to create a folder to hold the graphics created and deployed by 
 
 **All other users:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
 
-Using a stable version
+Using A Stable Version
 ----------------------
 
 The master branch of project is in active development by NPR at all times. If you would like to use a [more] stable version, we suggest checking out a tagged version (``0.1``, etc.). We will periodically tag releases, which will be synchronized to the ``CHANGELOG`` so you will know exactly what improvements you will get if you migrate to a new tagged version.
@@ -162,7 +166,7 @@ You should only need to do this once.
 **NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson, David or Chris for more information.
 
 
-Run the project
+Run The Project
 ---------------
 
 A Flask app is used to run the project locally. It will automatically recompile templates on-demand.
@@ -176,7 +180,12 @@ Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo
 
 #### Terminal shortcut
 
-Do you use [iTerm2](http://iterm2.com)? Here's [a sample AppleScript](https://gist.github.com/alykat/debf281765db3a0c2e88) to automatically launch a three-paned terminal window (one for the dailygraphics machine, one for the local webserver, and another for the separate graphics repo). You can save this locally, customize it to match your own configuration and add an alias for it to your `.bash_profile`.
+Do you use [iTerm2](http://iterm2.com)? Here's [a sample AppleScript](https://gist.github.com/alykat/debf281765db3a0c2e88) to automatically launch a three-paned terminal window (one for the dailygraphics machine, one for the local webserver, and another for the separate graphics repo).
+
+*June 3rd, 2016*: If you are using iTerm v3 then use this updated [AppleScript](https://gist.github.com/jjelosua/53b416bd6655605846264eb9378e9c0e). iTerm has made a [non-backwards compatible](https://iterm2.com/version3.html?src=4) change to their Applescript syntax
+
+
+You can save this locally, customize it to match your own configuration and add an alias for it to your `.bash_profile`.
 
 ```
 alias dailygraphics="osascript ~/PATH-TO-FILE/iterm_dailygraphics.scpt"
@@ -195,7 +204,7 @@ Aborting.
 It's possible that the webserver is already running silently in the background. [Here's how to fix it.](https://github.com/nprapps/dailygraphics/issues/74)
 
 
-Add a new graphic
+Add A New Graphic
 -----------------
 
 dailygraphics includes starter code for a few different types of graphics (and we're slowly adding more as we go). Running any of these commands will create the folder ```$SLUG``` within your ```app_config.GRAPHICS_PATH``` folder. Within the new folder will be a ```child_template.html``` file and some boilerplate javascript files. ```child_template.html``` is a Jinja template that will be rendered with a context containing the contents of ```app_config.py```, ```graphic_config.py``` and the ```COPY``` document for that graphic. It also will clone a new Google Spreadsheet for you to use for text and data.
@@ -210,6 +219,7 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Stacked bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-bar-chart.png) | Stacked bar chart | ```fab add_stacked_bar_chart:$SLUG``` |
 | ![Column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/column-chart.png) | Column chart | ```fab add_column_chart:$SLUG``` |
 | ![Stacked column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-column-chart.png) | Stacked column chart | ```fab add_stacked_column_chart:$SLUG``` |
+| ![Stacked grouped column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-grouped-column-chart.png) | Stacked grouped column chart | ```fab add_stacked_grouped_column_chart:$SLUG``` |
 | ![Block histogram](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/block-histogram.png) | Block histogram | ```fab add_block_histogram:$SLUG``` |
 | ![Line chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/line-chart.png) | Line chart | ```fab add_line_chart:$SLUG``` |
 | ![Slopegraph](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/slopegraph.png) | Slopegraph | ```fab add_slopegraph:$SLUG``` |
@@ -232,8 +242,42 @@ Here are some examples:
 
 When you create a new project, dailygraphics will check against your local projects and the projects published to production to make sure that the ```$SLUG``` you've chosen does not already exist.
 
+Clone Old Graphic
+-----------------
+Sometimes we just want to reuse an old graphic but we want to profit from the dailygraphics rig to create the associated spreadsheet just like it would do with a new graphic from its template.
 
-Deploy to S3
+We have created a Fabric task for this precise purpose it will search for a given slug in our graphics and graphics-archive repositories and clone it creating a new ready-to-work-on graphic.
+
+```
+fab clone_graphic:$OLD_SLUG,$NEW_SLUG
+```
+
+It requires one parameter ```$OLD_SLUG```: the graphic slug we are trying to clone. The second parameter is optional, if given, it will be used to generate the new graphic slug, if it is not provided the new graphic slug will be derived from the ```$OLD_SLUG``` replacing the date at the end of the slug with the current date or appending the current date at the end, in case a date was not found at the end of ```$OLD_SLUG```
+
+
+Examples if today was ```20160705```:
+
+```
+fab clone_graphic:my-project-name-20150415,my-new-project-20160706
+// Results in my-new-project-20160706
+```
+
+```
+fab clone_graphic:my-project-name
+// Results in my-project-name-20160705
+```
+
+```
+fab clone_graphic:my-project-name-20150415
+// Results in my-project-name-20160705
+```
+
+```
+fab clone_graphic:my-wrong-project-name-20150415
+// Results in an error if not found in graphics or graphics-archive repos
+```
+
+Deploy To S3
 ------------
 
 When it's time to publish your graphic, it's better to deploy a specific graphic rather than the entire repo, to minimize the risk of publishing edits that aren't yet ready to go live.
@@ -264,7 +308,7 @@ Embedding
 Deploy the project to production. Visit ```http://apps.npr.org/dailygraphics/graphics/$SLUG```, and on that page should be an ```iframe``` with your graphic inside of it, and an embed code below the graphic. Paste the embed code into your page. (Some CMSes treat code snippets like this as a separate "HTML asset.")
 
 
-Connecting to a Google Spreadsheet
+Connecting To A Google Spreadsheet
 ----------------------------------
 
 This section describes usage of NPR's copytext rig for syncing text from a Google Spreadsheet.
@@ -295,8 +339,17 @@ Note: Your published graphic **will not** automatically update every time your s
 
 If you do **not** want want to use the copytext spreadsheet for a given project, you can either set ``COPY_GOOGLE_DOC_KEY`` to ``None`` or delete the ``graphic_config.py`` file entirely.
 
+Open Linked Google Spreadsheet
+------------------------------
+Want to edit/view a graphic's linked google spreadsheet, we got you covered.
 
-Using Jinja filter functions
+We have created a simple Fabric task ```open_spreadsheet``` that requires a graphic slug. It will try to find and open the graphic's linked google spreadsheet on your default browser. In order to find the graphic it will first try on the graphics path defined in ```app_config.GRAPHICS_PATH``` and then on the graphics-archive path defined in ```app_config.ARCHIVE_GRAPHICS_PATH```
+
+```
+fab open_spreadsheet:$SLUG
+```
+
+Using Jinja Filter Functions
 ----------------------------
 
 A [library of Jinja filter functions](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/_base/base_filters.py) for common tasks (ordinal, AP date format, etc.) is included with each graphic.
@@ -319,7 +372,7 @@ Then you will be able to use it in your template like this:
 See the ``table`` graphic template for a more complete example.
 
 
-Storing media assets
+Storing Media Assets
 --------------------
 
 (Note: this section describes usage of NPR's assets rig. This is optional and you don't need to use it in order to use dailygraphics.)
@@ -373,7 +426,7 @@ mapturner geodata.yaml data/geodata.json
 
 In your project ```js/graphic.js``` folder, change the ```PRIMARY_COUNTRY``` variable at the top from Nepal to the name of your featured country. You will also want to adjust the ```MAP_DEFAULT_SCALE``` and ```MAP_DEFAULT_HEIGHT``` variables so that your featured country fits onscreen.
 
-Creating animated photos
+Creating Animated Photos
 ------------------------
 
 The animated photo template uses the [canvid](https://github.com/gka/canvid) JavaScript library as an alternative to GIFs. With this solution, you composite a "filmstrip" of all the frames in your animation, and canvid plays them back in sequence on a canvas element. [See an example on NPR.org.](http://www.npr.org/2015/11/05/453239276/in-the-amazons-fire-season-you-either-burn-or-you-starve#res454735072)
@@ -427,6 +480,72 @@ Second, adjust the image aspect ratio (so it scales correctly in the browser). I
 height: Math.floor(containerWidth * 1614/1500),
 ```
 
+Creating An ai2html Graphic
+---------------------------
+
+The ai2html template uses an open-source script called [ai2html](http://ai2html.org/) to convert Illustrator graphics to HTML and CSS and display them in our responsive dailygraphics template.
+
+To use this template, you'll need to install ai2html as an Illustrator
+script. Copy [the latest version of the script here](etc/ai2html.jsx)
+into the Illustrator folder where scripts are located.
+For example, on Mac OS X running Adobe Illustrator CC 2015, the path would be:
+`/Applications/Adobe Illustrator CC 2015/Presets.localized/en_US/Scripts/ai2html.jsx`
+
+**You only need to install the script once on your machine.** To check whether you
+have it installed, open Adobe Illustrator and look for the "ai2html"
+command in File >> Scripts.
+
+To create a new ai2html graphic, run:
+
+```
+fab add_ai2html_graphic:$slug
+```
+
+The basic project includes an Illustrator file in `assets`, which you'll
+use to create your graphic. The three artboards in the file are the
+three breakpoints for your graphic, allowing you to create custom
+versions for mobile, tablet and desktop-sized screens. (If you want to
+change the width of these artboards, you'll need to adjust the media
+queries in `css/graphic.less`.)
+
+You can only use fonts that are supported on our website, so make sure
+you are using the correct typeface and weight. [Here's a list of
+supported fonts](https://github.com/nprapps/dailygraphics/blob/ai2html/etc/ai2html.jsx#L593-L605).
+(For users outside of NPR, refer to the [ai2html docs](http://ai2html.org/#using-fonts-other-than-arial-and-georgia) to learn how to customize your fonts.)
+
+Create your graphic within Illustrator, referring to the [ai2html
+documentation](http://ai2html.org/#how-to-use-ai2html) for help. When
+you're ready to export, run File >> Scripts >> ai2html. The resulting
+graphic will appear within the base template when you load your graphic!
+
+
+Working With Carebot
+--------------------
+
+**This section is relevant to NPR users of the dailygraphics rig.**
+
+[Carebot](https://thecarebot.github.io) is a grant-funded project to measure and report more meaningful analytics around stories and story elements (like graphics). This branch of dailygraphics includes test code that the Carebot team has developed to measure 1) how long a dailygraphics embedded project is visible onscreen and 2) how far users have scrolled down the length of a story. Carebot is still a work in progress, and the code we've implemented so far is likely to change.
+
+We have created a `CAREBOT_ENABLED` configuration option on dailygraphics `app_config.py`. It allows you to switch `Carebot` on or off on your graphics. Since `carebot-tracker` is being served directly by NPR from a CDN you do not need to add any new javascript files to this repo.
+
+**`CAREBOT_ENABLED` is set to `True` by default on `app_config.py`, change it to `False` on your fork to disable `Carebot`.**
+
+If `CAREBOT_ENABLED` is set to `True`, new graphics created using the usual `fab add[type of graphic]:$slug` process will have the latest Carebot code. However, older graphics may need to be retrofitted as needed before being published.
+
+#### How To Add/Update Carebot Code In An Existing Graphic
+
+Copy the [pymChild analytics code](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/graphic/js/graphic.js#L17-L22) from the `onWindowLoaded` function of `dailygraphics/graphic_templates/graphic/js/graphic.js` to the same spot in the `js/graphic.js` file for your project.
+
+```
+pymChild.onMessage('on-screen', function(bucket) {
+    ANALYTICS.trackEvent('on-screen', bucket);
+});
+pymChild.onMessage('scroll-depth', function(data) {
+    ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
+});
+```
+
+These are the two custom messages that `carebot-tracker` will fire on the parent page. If `CAREBOT_ENABLED` is `False` this code on your graphic will not be executed.
 
 Adding a new graphic template
 -----------------------------
