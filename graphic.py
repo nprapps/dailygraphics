@@ -31,9 +31,6 @@ def _graphics_detail(slug):
 
     template = 'parent.html'
 
-    if not os.path.exists('%s/%s/js/lib/pym.js' % (app_config.GRAPHICS_PATH, slug)):
-        template = 'parent_old.html'
-
     try:
         graphic_config = load_graphic_config(graphic_path)
         context.update(graphic_config.__dict__)

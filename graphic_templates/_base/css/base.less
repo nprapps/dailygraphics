@@ -21,6 +21,23 @@
 
 /* base styles */
 
+/*
+ * Mixins
+ */
+.clearfix() {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+/*
+ * Base styles
+ */
 html { -webkit-text-size-adjust: none; }
 
 body {
@@ -109,14 +126,7 @@ a:hover, a:active { color: #bccae5; }
 .graphic {
     position: relative;
     margin-bottom: 11px;
-
-    &:before,
-    &:after {
-        content: ' ';
-        display: table;
-    }
-
-    &:after { clear: both; }
+    .clearfix();
 
     img {
         max-width: 100%;

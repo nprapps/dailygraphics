@@ -72,6 +72,15 @@ var urlToLocation = function(url) {
 }
 
 /*
+ * format month abbrs in AP style
+ */
+var getAPMonth = function(dateObj) {
+    var apMonths = [ 'Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.' ];
+    var thisMonth = +fmtMonthNum(dateObj) - 1;
+    return apMonths[thisMonth];
+}
+
+/*
  * Wrap a block of SVG text to a given width
  * adapted from http://bl.ocks.org/mbostock/7555321
  */

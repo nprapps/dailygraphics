@@ -1,6 +1,7 @@
 // Global vars
 var pymChild = null;
 var isMobile = false;
+var skipLabels = [ 'label', 'values', 'total' ];
 
 /*
  * Initialize the graphic.
@@ -15,6 +16,14 @@ var onWindowLoaded = function() {
     } else {
         pymChild = new pym.Child({});
     }
+
+    pymChild.onMessage('on-screen', function(bucket) {
+        ANALYTICS.trackEvent('on-screen', bucket);
+    });
+    pymChild.onMessage('scroll-depth', function(data) {
+        data = JSON.parse(data);
+        ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
+    });
 }
 
 /*
@@ -28,7 +37,7 @@ var formatData = function() {
         d['total'] = 0;
 
         for (var key in d) {
-            if (key == 'label' || key == 'values' || key == 'total') {
+            if (_.contains(skipLabels, key)) {
                 continue;
             }
 
@@ -137,7 +146,9 @@ var renderStackedColumnChart = function(config) {
 
     var colorScale = d3.scale.ordinal()
         .domain(d3.keys(config['data'][0]).filter(function(d) {
-            return d != labelColumn && d != 'values' && d != 'total';
+            if (!_.contains(skipLabels, d)) {
+                return d;
+            }
         }))
         .range([ COLORS['teal2'], COLORS['teal5'] ]);
 

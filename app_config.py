@@ -34,6 +34,22 @@ ARCHIVE_GRAPHICS_PATH = os.path.abspath('../graphics-archive')
 TEMPLATES_PATH = os.path.abspath('graphic_templates')
 
 """
+PYM
+"""
+
+PYM = {
+    'pym_url': '//pym.nprapps.org/pym.v1.min.js',
+    'pym_loader_url': '//pym.nprapps.org/pym-loader.v1.min.js',
+}
+
+"""
+CAREBOT
+"""
+
+CAREBOT_ENABLED = True
+CAREBOT_URL = '//carebot.nprapps.org/carebot-tracker.v0.min.js'
+
+"""
 OAUTH
 """
 

@@ -91,6 +91,7 @@ def deploy_single(slug):
     s3_root = '%s/graphics/%s' % (app_config.PROJECT_SLUG, slug)
     graphic_assets = '%s/assets' % graphic_root
     s3_assets = '%s/assets' % s3_root
+    graphic_node_modules = '%s/node_modules' % graphic_root
 
     graphic_config = load_graphic_config(graphic_root)
 
@@ -111,7 +112,7 @@ def deploy_single(slug):
         headers={
             'Cache-Control': 'max-age=%i' % default_max_age
         },
-        ignore=['%s/*' % graphic_assets]
+        ignore=['%s/*' % graphic_assets, '%s/*' % graphic_node_modules]
     )
 
     # Deploy parent assets
@@ -267,7 +268,7 @@ def _search_graphic_slug(slug):
             if slug in subdirs:
                 path = os.path.join(local_path, slug)
                 return path, old_graphic_warning
-    return None
+    return None, None
 
 
 @task
@@ -279,8 +280,11 @@ def clone_graphic(old_slug, slug=None):
     if not slug:
         slug = _create_slug(old_slug)
 
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    if slug == old_slug:
+        print "%(slug)s already has today's date, please specify a new slug to clone into, i.e.: fab clone_graphic:%(slug)s,NEW_SLUG" % {'slug': old_slug}
+        return
 
+    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     if _check_slug(slug):
         return
 
@@ -438,13 +442,6 @@ def add_leaflet_map(slug):
     _add_graphic(slug, 'map')
 
 @task
-def add_newsletter(slug):
-    """
-    Create a locator map.
-    """
-    _add_graphic(slug, 'newsletter')
-
-@task
 def add_table(slug):
     """
     Create a data table.
@@ -538,7 +535,7 @@ def copy_spreadsheet(slug):
         utils.replace_in_file('%s/graphic_config.py' % config_path , graphic_config.COPY_GOOGLE_DOC_KEY, spreadsheet_key)
 
         return True
-
+    else:
         utils.replace_in_file(config_path, graphic_config.COPY_GOOGLE_DOC_KEY, '')
 
     print 'Error creating spreadsheet (status code %s) with message %s' % (resp.status, resp.reason)
