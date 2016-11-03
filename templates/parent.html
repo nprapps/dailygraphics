@@ -262,6 +262,7 @@
 
             previewWrapperEl.style.width = '180px';
             pymParent.sendWidth();
+            pymParent.sendMessage('liveblog');
 
             window.location.hash = 'sidebar';
         });
@@ -271,6 +272,7 @@
 
             previewWrapperEl.style.width = '300px';
             pymParent.sendWidth();
+            pymParent.sendMessage('liveblog');
 
             window.location.hash = 'mobile';
         });
@@ -280,6 +282,7 @@
 
             previewWrapperEl.style.width = '400px';
             pymParent.sendWidth();
+            pymParent.sendMessage('liveblog', true);
 
             window.location.hash = 'liveblog';
         });
@@ -289,6 +292,7 @@
 
             previewWrapperEl.style.width = '730px';
             pymParent.sendWidth();
+            pymParent.sendMessage('liveblog');
 
             window.location.hash = 'desktop';
         });
@@ -298,6 +302,7 @@
 
             previewWrapperEl.style.width = '100%';
             pymParent.sendWidth();
+            pymParent.sendMessage('liveblog');
 
             window.location.hash = 'fluid';
         });
@@ -320,6 +325,12 @@
             pymParent.sendMessage('on-screen', result.bucket);
         });
 {% endif %}
+
+        if (window.location.hash == '#liveblog') {
+            window.setTimeout(function() {
+                pymParent.sendMessage('liveblog', true);
+            }, 1000);
+        }
     </script>
 </body>
 </html>

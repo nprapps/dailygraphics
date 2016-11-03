@@ -7,6 +7,14 @@ var onWindowLoaded = function() {
 
     pymChild = new pym.Child({});
 
+    pymChild.onMessage('liveblog', function(isLiveblog) {
+        if (isLiveblog == 'true') {
+            d3.select('body').classed('liveblog', true);
+        } else {
+            d3.select('body').classed('liveblog', false);
+        }
+    });
+
     pymChild.onMessage('on-screen', function(bucket) {
         ANALYTICS.trackEvent('on-screen', bucket);
     });
