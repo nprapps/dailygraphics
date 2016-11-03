@@ -136,6 +136,10 @@
         </div>
 
         <div class="segment">
+            <a id="resize-liveblog" class="btn" href="#">Liveblog (400px)</a>
+        </div>
+
+        <div class="segment">
             <a id="resize-desktop" class="btn" href="#">Desktop (730px)</a>
         </div>
 
@@ -248,6 +252,7 @@
     <script type="text/javascript">
         var resizeSidebarEl = document.querySelector('#resize-sidebar');
         var resizeMobileEl = document.querySelector('#resize-mobile');
+        var resizeLiveblogEl = document.querySelector('#resize-liveblog');
         var resizeDesktopEl = document.querySelector('#resize-desktop');
         var resizeFluidEl = document.querySelector('#resize-fluid');
         var previewWrapperEl = document.querySelector('#preview-wrapper');
@@ -268,6 +273,15 @@
             pymParent.sendWidth();
 
             window.location.hash = 'mobile';
+        });
+
+        resizeLiveblogEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            previewWrapperEl.style.width = '400px';
+            pymParent.sendWidth();
+
+            window.location.hash = 'liveblog';
         });
 
         resizeDesktopEl.addEventListener('click', function(e) {
@@ -292,6 +306,8 @@
             previewWrapperEl.style.width = '180px';
         } else if (window.location.hash == '#mobile') {
             previewWrapperEl.style.width = '300px';
+        } else if (window.location.hash == '#liveblog') {
+            previewWrapperEl.style.width = '400px';
         } else if (window.location.hash == '#desktop') {
             previewWrapperEl.style.width = '730px';
         } else if (window.location.hash == '#fluid') {
