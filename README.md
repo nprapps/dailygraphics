@@ -1,4 +1,40 @@
-dailygraphics
+Retrofitting graphics for the liveblog
+=============
+If you want to display an older graphic in the liveblog, you'll just need to make two small additions to your CSS and Javascript.
+
+#### Add this to your graphic's CSS
+
+From [this reference file](https://github.com/nprapps/dailygraphics/blob/65e0a4ec3e312cb7262d2c86a59d4df6b17fd3cd/graphic_templates/_base/css/base.less#L255-L264):
+
+	/*
+    	LIVEBLOG CUSTOM STYLES
+	*/
+	body.liveblog {
+	    h1 {
+	        font-size: 15px;
+	        color: #333;
+	        font-weight: bold;
+	    }
+	}
+
+It's added in the `base.less` of new graphics created, but you can just put it in `graphic.less`.
+
+#### Add this to your graphic.js
+
+Add these lines of code in your `onWindowLoaded` function. [Here's an example.](https://github.com/nprapps/dailygraphics/blob/65e0a4ec3e312cb7262d2c86a59d4df6b17fd3cd/graphic_templates/bar_chart/js/graphic.js#L19-L25)
+
+    pymChild.onMessage('liveblog', function(isLiveblog) {
+        if (isLiveblog == 'true') {
+            d3.select('body').classed('liveblog', true);
+        } else {
+            d3.select('body').classed('liveblog', false);
+        }
+    });
+
+Then you should be ready to click the "Liveblog (400px)" button and screenshot away.
+
+
+Regular docs for dailygraphics
 =============
 
 * [What Is This?](#what-is-this)
