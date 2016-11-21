@@ -154,13 +154,13 @@
 
                 {% if DEPLOYMENT_TARGET != 'staging' %}
                 <div class="segment">
-                    <a class="btn staging" href="http://stage-apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">staging &raquo;</a>
+                    <a class="btn staging" href="//stage-apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">staging &raquo;</a>
                 </div>
                 {% endif %}
 
                 {% if DEPLOYMENT_TARGET != 'production' %}
                 <div class="segment">
-                    <a class="btn production" href="http://apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
+                    <a class="btn production" href="https://apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
                 </div>
                 {% endif %}
 
@@ -197,7 +197,7 @@
                 jQuery(function () { // Wait for page load
                     var pymParent = new pym.Parent(
                         el.id,
-                        'http://apps.npr.org/dailygraphics/graphics/{{ slug }}/child.html',
+                        '//apps.npr.org/dailygraphics/graphics/{{ slug }}/child.html',
                         {}
                     );
 {% if CAREBOT_ENABLED %}
@@ -234,7 +234,7 @@
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
-<p data-pym-src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
+<p data-pym-src="//{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
     </textarea>
 <!-- end textarea contents -->
 
