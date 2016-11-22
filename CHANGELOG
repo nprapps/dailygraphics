@@ -7,6 +7,7 @@
 * Add AP-style month formatter (#190)
 * Line chart template: Update filter for null values (#189)
 * Remove references to local copy of pym in a few graphics templates (#188)
+* Ensure support for https (#193)
 
 0.1.3
 -----
