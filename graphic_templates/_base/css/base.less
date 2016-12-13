@@ -45,14 +45,21 @@
     font-weight: 400;
 }
 
+// Normal Knockout
 .knockout() {
     font-family: 'Knockout 31 4r';
     font-weight: normal;
 }
 
+// Knockout, uppercased
 .knockout-upper() {
     .knockout();
     text-transform: uppercase;
+}
+
+// Knockout for headings
+.knockout-header() {
+    .knockout-upper();
     letter-spacing: 0.05em;
     -webkit-font-smoothing: antialiased;
 }
