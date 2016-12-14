@@ -11,3 +11,9 @@ var fmtComma = d3.format(',');
 var fmtYearAbbrev = d3.time.format('%y');
 var fmtYearFull = d3.time.format('%Y');
 var fmtMonthNum = d3.time.format('%m');
+
+var formatFullDate = function(d) {
+    // Output example: Dec. 23, 2014
+    var fmtDayYear = d3.time.format('%e, %Y');
+    return getAPMonth(d) + ' ' + fmtDayYear(d).trim();
+};
