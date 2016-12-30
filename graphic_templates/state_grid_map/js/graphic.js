@@ -44,7 +44,9 @@ var render = function(containerWidth) {
     renderStateGridMap({
         container: '#state-grid-map',
         width: containerWidth,
-        data: DATA
+        data: DATA,
+        // isNumeric will style the legend as a numeric scale
+        isNumeric: true
     });
 
     // Update iframe
@@ -79,13 +81,22 @@ var renderStateGridMap = function(config) {
 
     categories = d3.set(categories).values().sort();
 
-    // Define color scale
-    var colorScale = d3.scale.ordinal()
-        .domain(categories)
-        .range([COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3']]);
-
     // Create legend
+    var legendWrapper = containerElement.select('.key-wrap');
     var legendElement = containerElement.select('.key');
+
+    if (config['isNumeric']) {
+        legendWrapper.classed('numeric-scale', true);
+
+        var colorScale = d3.scale.ordinal()
+            .domain(categories)
+            .range([COLORS['teal6'], COLORS['teal5'], COLORS['teal4'], COLORS['teal3'], COLORS['teal2'], COLORS['teal1']]);
+    } else {
+        // Define color scale
+        var colorScale = d3.scale.ordinal()
+            .domain(categories)
+            .range([COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3']]);
+    }
 
     _.each(colorScale.domain(), function(key, i) {
         var keyItem = legendElement.append('li')
