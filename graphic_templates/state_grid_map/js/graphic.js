@@ -40,8 +40,6 @@ var render = function(containerWidth) {
         isMobile = false;
     }
 
-    console.log(LABELS);
-
     if (LABELS['is_numeric'] && LABELS['is_numeric'].toLowerCase() == 'true') {
         var isNumeric = true;
     } else {
@@ -98,8 +96,6 @@ var renderStateGridMap = function(config) {
         categories = d3.set(categories).values().sort();
     }
 
-    console.log(categories);
-
     // Create legend
     var legendWrapper = containerElement.select('.key-wrap');
     var legendElement = containerElement.select('.key');
@@ -126,6 +122,15 @@ var renderStateGridMap = function(config) {
 
         keyItem.append('label')
             .text(key);
+
+        // Add the optional upper bound label on numeric scale
+        if (config['isNumeric'] && i == categories.length - 1) {
+            if (LABELS['max_label'] && LABELS['max_label'] !== '') {
+                keyItem.append('label')
+                    .attr('class', 'end-label')
+                    .text(LABELS['max_label']);
+            }
+        }
     });
 
     // Select SVG element
