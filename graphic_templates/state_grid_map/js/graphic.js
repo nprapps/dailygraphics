@@ -40,13 +40,21 @@ var render = function(containerWidth) {
         isMobile = false;
     }
 
+    console.log(LABELS);
+
+    if (LABELS['is_numeric'] && LABELS['is_numeric'].toLowerCase() == 'true') {
+        var isNumeric = true;
+    } else {
+        var isNumeric = false;
+    }
+
     // Render the map!
     renderStateGridMap({
         container: '#state-grid-map',
         width: containerWidth,
         data: DATA,
         // isNumeric will style the legend as a numeric scale
-        isNumeric: true
+        isNumeric: isNumeric
     });
 
     // Update iframe
@@ -73,13 +81,24 @@ var renderStateGridMap = function(config) {
     // Extract categories from data
     var categories = [];
 
-    _.each(config['data'], function(state) {
-        if (state[valueColumn] != null) {
-            categories.push(state[valueColumn]);
-        }
-    });
+    if (LABELS['legend_labels'] && LABELS['legend_labels'] !== '') {
+        // If custom legend labels are specified
+        var legendLabels = LABELS['legend_labels'].split(',');
+        _.each(legendLabels, function(label) {
+            categories.push(label.trim());
+        });
+    } else {
+        // Default: Return sorted array of categories
+         _.each(config['data'], function(state) {
+            if (state[valueColumn] != null) {
+                categories.push(state[valueColumn]);
+            }
+        });
 
-    categories = d3.set(categories).values().sort();
+        categories = d3.set(categories).values().sort();
+    }
+
+    console.log(categories);
 
     // Create legend
     var legendWrapper = containerElement.select('.key-wrap');
