@@ -140,9 +140,10 @@ var renderStateGridMap = function(config) {
     _.each(config['data'], function(state) {
         if (state[valueColumn] !== null) {
             var stateClass = 'state-' + classify(state['state_name']);
+            var categoryClass = 'category-' + classify(state[valueColumn]);
 
             chartElement.select('.' + stateClass)
-                .attr('class', stateClass + ' state-active')
+                .attr('class', stateClass + ' state-active ' + categoryClass)
                 .attr('fill', colorScale(state[valueColumn]));
         }
     });
@@ -159,7 +160,7 @@ var renderStateGridMap = function(config) {
                 return isMobile ? state['usps'] : state['ap'];
             })
             .attr('class', function(d) {
-                return d[valueColumn] !== null ? 'label label-active' : 'label';
+                return d[valueColumn] !== null ? 'category-' + classify(d[valueColumn]) + ' label label-active' : 'label';
             })
             .attr('x', function(d) {
                 var className = '.state-' + classify(d['state_name']);
