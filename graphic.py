@@ -4,8 +4,9 @@ from mimetypes import guess_type
 import os
 import subprocess
 
-from flask import Blueprint, abort, make_response, render_template, render_template_string
+from flask import Blueprint, abort, make_response, render_template
 from jinja2 import Environment, FileSystemLoader
+from jinja2.exceptions import TemplateNotFound
 
 import app_config
 import copytext
@@ -45,7 +46,12 @@ def _graphics_detail(slug):
     except IOError:
         pass
 
-    return make_response(render_template(template, **context))
+    try:
+        env = Environment(loader=FileSystemLoader(graphic_path))
+        template = env.get_template('parent.html')
+        return make_response(template.render(**context))
+    except TemplateNotFound:
+        return make_response(render_template(template, **context))
 
 @graphic.route('/<slug>/child.html')
 @oauth.oauth_required
