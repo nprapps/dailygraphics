@@ -136,6 +136,14 @@ var renderStateGridMap = function(config) {
     // Select SVG element
     var chartElement = containerElement.select('svg');
 
+    // resize map (needs to be explicitly set for IE11)
+    chartElement.attr('width', config['width'])
+        .attr('height', function() {
+            var s = d3.select(this);
+            var viewBox = s.attr('viewBox').split(' ');
+            return Math.floor(config['width'] * parseInt(viewBox[3]) / parseInt(viewBox[2]));
+        });
+
     // Set state colors
     _.each(config['data'], function(state) {
         if (state[valueColumn] !== null) {
