@@ -1,22 +1,16 @@
 #!/usr/bin/env python
-# _*_ coding:utf-8 _*_
+
 import copy
 from cStringIO import StringIO
 from fnmatch import fnmatch
 import gzip
 import hashlib
-import logging
 import mimetypes
 import os
-
 from boto.s3.key import Key
 
 import app_config
 import utils
-
-logging.basicConfig(format=app_config.LOG_FORMAT)
-logger = logging.getLogger(__name__)
-logger.setLevel(app_config.LOG_LEVEL)
 
 GZIP_FILE_TYPES = ['.html', '.js', '.json', '.css', '.xml']
 
@@ -30,10 +24,12 @@ class FakeTime:
 gzip.time = FakeTime()
 
 
-def deploy_file(bucket, src, dst, headers={}, public=True):
+def deploy_file(src, dst, headers={}):
     """
     Deploy a single file to S3, if the local version is different.
     """
+    bucket = utils.get_bucket(app_config.S3_BUCKET['bucket_name'])
+
     k = bucket.get_key(dst)
     s3_md5 = None
 
@@ -45,14 +41,13 @@ def deploy_file(bucket, src, dst, headers={}, public=True):
 
     file_headers = copy.copy(headers)
 
+    if app_config.S3_BUCKET == app_config.STAGING_S3_BUCKET:
+        policy = 'private'
+    else:
+        policy = 'public-read'
+
     if 'Content-Type' not in headers:
         file_headers['Content-Type'] = mimetypes.guess_type(src)[0]
-
-    # Define policy
-    if public:
-        policy = 'public-read'
-    else:
-        policy = 'private'
 
     # Gzip file
     if os.path.splitext(src)[1].lower() in GZIP_FILE_TYPES:
@@ -71,9 +66,9 @@ def deploy_file(bucket, src, dst, headers={}, public=True):
         local_md5 = local_md5.hexdigest()
 
         if local_md5 == s3_md5:
-            logger.info('Skipping %s (has not changed)' % src)
+            print 'Skipping %s (has not changed)' % src
         else:
-            logger.info('Uploading %s --> %s (gzipped)' % (src, dst))
+            print 'Uploading %s --> %s (gzipped)' % (src, dst)
             k.set_contents_from_string(output.getvalue(), file_headers, policy=policy)
     # Non-gzip file
     else:
@@ -83,12 +78,12 @@ def deploy_file(bucket, src, dst, headers={}, public=True):
             local_md5 = local_md5.hexdigest()
 
         if local_md5 == s3_md5:
-            logger.info('Skipping %s (has not changed)' % src)
+            print 'Skipping %s (has not changed)' % src
         else:
-            logger.info('Uploading %s --> %s' % (src, dst))
+            print 'Uploading %s --> %s' % (src, dst)
             k.set_contents_from_filename(src, file_headers, policy=policy)
 
-def deploy_folder(bucket_name, src, dst, headers={}, ignore=[]):
+def deploy_folder(src, dst, headers={}, ignore=[]):
     """
     Deploy a folder to S3, checking each file to see if it has changed.
     """
@@ -120,23 +115,16 @@ def deploy_folder(bucket_name, src, dst, headers={}, ignore=[]):
 
             to_deploy.append((src_path, dst_path))
 
-    if bucket_name == app_config.STAGING_S3_BUCKET:
-        public = False
-    else:
-        public = True
-    bucket = utils.get_bucket(bucket_name)
-    logger.info(dst)
     for src, dst in to_deploy:
-        deploy_file(bucket, src, dst, headers, public=public)
+        deploy_file(src, dst, headers)
 
-
-def delete_folder(bucket_name, dst):
+def delete_folder(dst):
     """
     Delete a folder from S3.
     """
-    bucket = utils.get_bucket(bucket_name)
+    bucket = utils.get_bucket(app_config.S3_BUCKET['bucket_name'])
 
     for key in bucket.list(prefix='%s/' % dst):
-        logger.info('Deleting %s' % (key.key))
+        print 'Deleting %s' % (key.key)
 
         key.delete()
