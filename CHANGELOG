@@ -1,6 +1,8 @@
 0.1.4
 -----
 
+* State grid map: Fix sizing in IE11 (#170)
+* State grid map: Add sequential legend option (#191)
 * State grid map: Define data column as a variable (#176)
 * Animated photo: Check for credit OR caption when displaying caption area (#174)
 * Standardize use of _.contains to filter data columns in stacked bar/column chart templates (#183)
@@ -9,6 +11,7 @@
 * Remove references to local copy of pym in a few graphics templates (#188)
 * Ensure support for https (#193)
 * Add AP-style full date formatter (#198)
+* change flat to accomodate to new staging policy
 
 0.1.3
 -----

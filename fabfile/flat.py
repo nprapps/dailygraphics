@@ -7,14 +7,13 @@ import gzip
 import hashlib
 import mimetypes
 import os
-
-import boto
 from boto.s3.key import Key
 
 import app_config
 import utils
 
 GZIP_FILE_TYPES = ['.html', '.js', '.json', '.css', '.xml']
+
 
 class FakeTime:
     def time(self):
@@ -23,6 +22,7 @@ class FakeTime:
 # Hack to override gzip's time implementation
 # See: http://stackoverflow.com/questions/264224/setting-the-gzip-timestamp-from-python
 gzip.time = FakeTime()
+
 
 def deploy_file(src, dst, headers={}):
     """
@@ -40,6 +40,11 @@ def deploy_file(src, dst, headers={}):
         k.key = dst
 
     file_headers = copy.copy(headers)
+
+    if app_config.S3_BUCKET == app_config.STAGING_S3_BUCKET:
+        policy = 'private'
+    else:
+        policy = 'public-read'
 
     if 'Content-Type' not in headers:
         file_headers['Content-Type'] = mimetypes.guess_type(src)[0]
@@ -64,7 +69,7 @@ def deploy_file(src, dst, headers={}):
             print 'Skipping %s (has not changed)' % src
         else:
             print 'Uploading %s --> %s (gzipped)' % (src, dst)
-            k.set_contents_from_string(output.getvalue(), file_headers, policy='public-read')
+            k.set_contents_from_string(output.getvalue(), file_headers, policy=policy)
     # Non-gzip file
     else:
         with open(src, 'rb') as f:
@@ -76,7 +81,7 @@ def deploy_file(src, dst, headers={}):
             print 'Skipping %s (has not changed)' % src
         else:
             print 'Uploading %s --> %s' % (src, dst)
-            k.set_contents_from_filename(src, file_headers, policy='public-read')
+            k.set_contents_from_filename(src, file_headers, policy=policy)
 
 def deploy_folder(src, dst, headers={}, ignore=[]):
     """
