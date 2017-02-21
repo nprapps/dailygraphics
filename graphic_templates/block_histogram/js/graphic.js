@@ -243,17 +243,21 @@ var renderBlockHistogram = function(config) {
     var bins = chartElement.selectAll('.bin')
         .data(config['data'])
         .enter().append('g')
-            .attr('id', function(d,i) {
-                return 'bin-' + i;
+            .attr('class', function(d,i) {
+                return 'bin bin-' + i;
             })
-            .attr('class', 'bin')
             .attr('transform', function(d, i) {
                 return makeTranslate(xScale(COLOR_BINS[i]), 0);
             });
 
     bins.selectAll('rect')
-        .data(function(d) {
-            return d3.entries(d);
+        .data(function(d, i) {
+            // add the bin index to each row of data so we can assign the right color
+            var formattedData = [];
+            _.each(d, function(v,k) {
+                formattedData.push({ 'key': k, 'value': v, 'parentIndex': i });
+            })
+            return formattedData;
         })
         .enter().append('rect')
             .attr('width', xScale.rangeBand())
@@ -263,9 +267,7 @@ var renderBlockHistogram = function(config) {
             })
             .attr('height', blockHeight)
             .attr('fill', function(d) {
-                // pull bin index out of the parent id
-                var thisIdx = parseInt(d3.select(this.parentNode).attr('id').slice(4));
-                return config['colors'][thisIdx];
+                return config['colors'][d['parentIndex']];
             })
             .attr('class', function(d) {
                 return classify(d['value']);
