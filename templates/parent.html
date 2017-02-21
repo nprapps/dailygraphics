@@ -4,6 +4,7 @@
     <title>{% if DEPLOYMENT_TARGET %}{{ DEPLOYMENT_TARGET }} : {% endif %}{{ slug }}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="shortcut icon" href="https://media.npr.org/favicon.ico" />
     <style type="text/css">
         /* Basic styles */
         body {
@@ -154,7 +155,7 @@
 
                 {% if DEPLOYMENT_TARGET != 'staging' %}
                 <div class="segment">
-                    <a class="btn staging" href="//stage-apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">staging &raquo;</a>
+                    <a class="btn staging" href="https://s3.amazonaws.com/stage-apps.npr.org/dailygraphics/graphics/{{ slug }}/index.html" target="_blank">staging &raquo;</a>
                 </div>
                 {% endif %}
 
