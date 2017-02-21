@@ -1,6 +1,6 @@
 // Global config
 var COLOR_BINS = [ -4, -2, 0, 2, 4, 6, 8, 10 ];
-var COLOR_RANGE = [COLORS['red5'], '#ccc', COLORS['blue5'], COLORS['blue4'], COLORS['blue3'], COLORS['blue2']];
+var COLOR_RANGE = [ '#e68c31', '#eba934', '#efc637', '#c6b550', '#99a363', '#6a9171', '#17807e' ];
 
 // Global vars
 var pymChild = null;
@@ -147,10 +147,6 @@ var renderBlockHistogram = function(config) {
         .domain([ 0, largestBin ])
         .rangeRound([ chartHeight, 0 ]);
 
-    var colorScale = d3.scale.ordinal()
-        .domain(config['bins'])
-        .range(config['colors']);
-
     /*
      * Create D3 axes.
      */
@@ -247,9 +243,10 @@ var renderBlockHistogram = function(config) {
     var bins = chartElement.selectAll('.bin')
         .data(config['data'])
         .enter().append('g')
-            .attr('class', function(d,i) {
-                return 'bin bin-' + i;
+            .attr('id', function(d,i) {
+                return 'bin-' + i;
             })
+            .attr('class', 'bin')
             .attr('transform', function(d, i) {
                 return makeTranslate(xScale(COLOR_BINS[i]), 0);
             });
@@ -265,6 +262,11 @@ var renderBlockHistogram = function(config) {
                 return chartHeight - ((blockHeight + blockGap) * (i + 1));
             })
             .attr('height', blockHeight)
+            .attr('fill', function(d) {
+                // pull bin index out of the parent id
+                var thisIdx = parseInt(d3.select(this.parentNode).attr('id').slice(4));
+                return config['colors'][thisIdx];
+            })
             .attr('class', function(d) {
                 return classify(d['value']);
             });
