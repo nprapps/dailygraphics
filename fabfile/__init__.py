@@ -133,8 +133,13 @@ def deploy_single(slug):
             }
         )
 
+    # Need to explicitly point to index.html for the AWS staging link
+    file_suffix = ''
+    if env.settings == 'staging':
+        file_suffix = 'index.html'
+
     print ''
-    print '%s URL: %s/graphics/%s/' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug)
+    print '%s URL: %s/graphics/%s/%s' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug, file_suffix)
 
 def download_copy(slug):
     """
@@ -255,7 +260,7 @@ def _search_graphic_slug(slug):
     searches a given slug in graphics and graphics-archive repos
     """
     IGNORE_LIST = ['js', 'css', 'assets', 'lib', '.git']
-    # Limit the search to grahics and graphics-archive repos
+    # Limit the search to graphics and graphics-archive repos
     # searching graphics first
     search_scope = [app_config.GRAPHICS_PATH, app_config.ARCHIVE_GRAPHICS_PATH]
 
