@@ -155,13 +155,13 @@
 
                 {% if DEPLOYMENT_TARGET != 'staging' %}
                 <div class="segment">
-                    <a class="btn staging" href="https://s3.amazonaws.com/stage-apps.npr.org/dailygraphics/graphics/{{ slug }}/index.html" target="_blank">staging &raquo;</a>
+                    <a class="btn staging" href="https://s3.amazonaws.com/{{ STAGING_S3_BUCKET['bucket_name'] }}/dailygraphics/graphics/{{ slug }}/index.html" target="_blank">staging &raquo;</a>
                 </div>
                 {% endif %}
 
                 {% if DEPLOYMENT_TARGET != 'production' %}
                 <div class="segment">
-                    <a class="btn production" href="https://apps.npr.org/dailygraphics/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
+                    <a class="btn production" href="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/dailygraphics/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
                 </div>
                 {% endif %}
 
@@ -198,7 +198,7 @@
                 jQuery(function () { // Wait for page load
                     var pymParent = new pym.Parent(
                         el.id,
-                        'https://apps.npr.org/dailygraphics/graphics/{{ slug }}/child.html',
+                        'https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html',
                         {}
                     );
 {% if CAREBOT_ENABLED %}
