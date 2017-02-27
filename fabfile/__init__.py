@@ -110,7 +110,9 @@ def deploy_single(slug):
         graphic_root,
         s3_root,
         headers={
-            'Cache-Control': 'max-age=%i' % default_max_age
+            'Cache-Control': 'max-age=%i' % default_max_age,
+            'X-XSS-Protection' : '1; mode=block',
+            'X-Content-Type-Options': 'nosniff'
         },
         ignore=['%s/*' % graphic_assets, '%s/*' % graphic_node_modules]
     )
@@ -120,7 +122,11 @@ def deploy_single(slug):
         'www',
         app_config.PROJECT_SLUG,
         headers={
-            'Cache-Control': 'max-age=%i' % default_max_age
+            'Cache-Control': 'max-age=%i' % default_max_age,
+            'X-XSS-Protection' : '1; mode=block',
+            'X-Content-Type-Options': 'nosniff'
+
+
         }
     )
 
@@ -129,7 +135,11 @@ def deploy_single(slug):
             graphic_assets,
             s3_assets,
             headers={
-                'Cache-Control': 'max-age=%i' % assets_max_age
+                'Cache-Control': 'max-age=%i' % assets_max_age,
+                'X-XSS-Protection' : '1; mode=block',
+                'X-Content-Type-Options': 'nosniff'
+
+
             }
         )
 
