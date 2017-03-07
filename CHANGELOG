@@ -1,6 +1,8 @@
 0.1.4
 -----
 
+* Change http and // references to https. (#205)
+* Block histogram: Assign block colors via JS rather than CSS (#175)
 * State grid map: Fix sizing in IE11 (#170)
 * State grid map: Add sequential legend option (#191)
 * State grid map: Define data column as a variable (#176)

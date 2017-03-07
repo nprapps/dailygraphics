@@ -147,10 +147,6 @@ var renderBlockHistogram = function(config) {
         .domain([ 0, largestBin ])
         .rangeRound([ chartHeight, 0 ]);
 
-    var colorScale = d3.scale.ordinal()
-        .domain(config['bins'])
-        .range(config['colors']);
-
     /*
      * Create D3 axes.
      */
@@ -255,8 +251,13 @@ var renderBlockHistogram = function(config) {
             });
 
     bins.selectAll('rect')
-        .data(function(d) {
-            return d3.entries(d);
+        .data(function(d, i) {
+            // add the bin index to each row of data so we can assign the right color
+            var formattedData = [];
+            _.each(d, function(v,k) {
+                formattedData.push({ 'key': k, 'value': v, 'parentIndex': i });
+            })
+            return formattedData;
         })
         .enter().append('rect')
             .attr('width', xScale.rangeBand())
@@ -265,6 +266,9 @@ var renderBlockHistogram = function(config) {
                 return chartHeight - ((blockHeight + blockGap) * (i + 1));
             })
             .attr('height', blockHeight)
+            .attr('fill', function(d) {
+                return config['colors'][d['parentIndex']];
+            })
             .attr('class', function(d) {
                 return classify(d['value']);
             });
