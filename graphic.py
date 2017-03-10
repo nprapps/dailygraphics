@@ -21,9 +21,13 @@ def _graphics_detail(slug):
     """
     Renders a parent.html index with child.html embedded as iframe.
     """
-    from flask import request
+    from flask import request, g
 
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    alt_path = getattr(g, 'alt_path', None)
+    if alt_path:
+        graphic_path = alt_path
+    else:
+        graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
     # NOTE: Parent must load pym.js from same source as child to prevent version conflicts!
     context = make_context(asset_depth=2, root_path=graphic_path)
@@ -59,7 +63,12 @@ def _graphics_child(slug):
     """
     Renders a child.html for embedding.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    from flask import g
+    alt_path = getattr(g, 'alt_path', None)
+    if alt_path:
+        graphic_path = alt_path
+    else:
+        graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     print graphic_path
 
     # Fallback for legacy projects w/o child templates
@@ -102,7 +111,12 @@ def _graphic_less(slug, filename):
     """
     Compiles LESS for a graphic.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    from flask import g
+    alt_path = getattr(g, 'alt_path', None)
+    if alt_path:
+        graphic_path = alt_path
+    else:
+        graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     less_path = '%s/css/%s.less' % (graphic_path, filename)
 
     if not os.path.exists(less_path):
@@ -115,7 +129,13 @@ def _graphic_less(slug, filename):
 # Serve arbitrary static files on-demand
 @graphic.route('/<slug>/<path:path>')
 def _static(slug, path):
-    real_path = '%s/%s/%s' % (app_config.GRAPHICS_PATH, slug, path)
+    from flask import g
+    alt_path = getattr(g, 'alt_path', None)
+    if alt_path:
+        graphic_path = alt_path
+    else:
+        graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    real_path = '%s/%s' % (graphic_path, path)
 
     try:
         with open(real_path) as f:
