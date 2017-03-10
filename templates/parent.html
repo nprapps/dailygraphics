@@ -183,63 +183,33 @@
             </div>
         </div>
 
-        <h2><span class="production">Use this code:</span> (<a href="http://blog.apps.npr.org/2014/12/19/pym-core-publisher.html">for member stations</a>)</h2>
+        <h2>Main embed code (story-text width graphic)</h2>
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
-<div id="responsive-embed-{{ slug }}"></div>
-<script type=text/javascript>
-    (function(jQuery) {
-        if (typeof jQuery !== 'undefined' && typeof jQuery.getScript === 'function') {
-            // add randomness to id to support for multiple graphic instances in one story
-            var el = document.getElementById("responsive-embed-{{slug}}");
-            el.id = el.id + "-" + Math.random().toString(36).substr(2,5);
-            jQuery.getScript("{{ PYM['pym_url'] }}").done(function () {
-                jQuery(function () { // Wait for page load
-                    var pymParent = new pym.Parent(
-                        el.id,
-                        'https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html',
-                        {}
-                    );
-{% if CAREBOT_ENABLED %}
-                    jQuery.getScript("{{ CAREBOT_URL }}").done(function () {
-                        var tracker = new CarebotTracker.VisibilityTracker(el.id, function(result) {
-                            // Ignore Carebot events to empty embeds, keeps listening after unloading the page
-                            if (pymParent.el.getElementsByTagName('iframe').length !== 0) {
-                                pymParent.sendMessage('on-screen', result.bucket);
-                            }
-                        });
-                        // Check if there is already an scroll tracker somewhere on the page
-                        if (!document.querySelector("[data-carebot-scroll]")) {
-                            pymParent.el.setAttribute("data-carebot-scroll", "");
-                            var scrollTracker = new CarebotTracker.ScrollTracker('storytext', function(percent, seconds) {
-                                // Ignore Carebot events to empty embeds, keeps listening after unloading the page
-                                if (pymParent.el.getElementsByTagName('iframe').length !== 0) {
-                                    pymParent.sendMessage('scroll-depth', JSON.stringify({percent: percent,seconds: seconds}));
-                                }
-                            });
-                        }
-                    });
-{% endif %}
-                });
-            });
-        } else {
-            console.error('could not load graphic: jQuery is not on the page.');
-        }
-    })(window.jQuery);
-</script>
+<p data-pym-src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
     </textarea>
 <!-- end textarea contents -->
 
-        <h2><span class="production">Production</span> autoinit embed code (<a href="http://blog.apps.npr.org/2014/12/19/pym-core-publisher.html">for member stations</a>)</h2>
+<h2>Main embed code (offset-left)</h2>
 
 <!-- textarea contents -->
-    <textarea readonly="readonly" rows="10" cols="50">
-<p data-pym-src="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
-    </textarea>
+<textarea readonly="readonly" rows="10" cols="50">
+<p class="wysiwyg-asset-image-wrapper offset-left" data-pym-src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
+</textarea>
+<!-- end textarea contents -->
+
+<h2>Main embed code (offset-right)</h2>
+
+<!-- textarea contents -->
+<textarea readonly="readonly" rows="10" cols="50">
+<p class="wysiwyg-asset-image-wrapper offset-right" data-pym-src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
+</textarea>
 <!-- end textarea contents -->
 
     </div>
+
+
 
     <script type="text/javascript" src="{{ PYM['pym_url'] }}"></script>
 {% if CAREBOT_ENABLED %}
