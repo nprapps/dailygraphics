@@ -14,17 +14,17 @@ import app_config
 import utils
 
 @task
-def sync(slug):
+def sync(path):
     """
     Intelligently synchronize assets between S3 and local folder.
     """
     ignore_globs = []
-
-    if not os.path.exists('%s/%s' % (app_config.GRAPHICS_PATH, slug)):
+    slug, abspath = utils.parse_path(path)
+    if not os.path.exists('%s/%s' % (abspath, slug)):
         print 'Slug "%s" does not exist!' % slug
         return
 
-    assets_root = '%s/%s/assets' % (app_config.GRAPHICS_PATH, slug)
+    assets_root = '%s/%s/assets' % (abspath, slug)
     s3_root = '%s/%s' % (app_config.ASSETS_SLUG, slug)
 
     try:
