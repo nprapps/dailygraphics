@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# _*_ coding:utf-8 _*_
 import boto
 import json
 import os
@@ -112,16 +112,11 @@ def deploy_single(slug):
         headers={
             'Cache-Control': 'max-age=%i' % default_max_age
         },
-        ignore=['%s/*' % graphic_assets, '%s/*' % graphic_node_modules]
-    )
-
-    # Deploy parent assets
-    flat.deploy_folder(
-        'www',
-        app_config.PROJECT_SLUG,
-        headers={
-            'Cache-Control': 'max-age=%i' % default_max_age
-        }
+        ignore=['%s/*' % graphic_assets, '%s/*' % graphic_node_modules,
+                # Ignore files unused on static S3 server
+                '*.xls', '*.xlsx', '*.pyc', '*.py', '*.less',
+                '%s/base_template.html' % graphic_root,
+                '%s/child_template.html' % graphic_root]
     )
 
     if use_assets:
