@@ -11,6 +11,7 @@ dailygraphics
 * [Add A New Graphic](#add-a-new-graphic)
 * [Clone Old Graphic](#clone-old-graphic)
 * [Deploy To S3](#deploy-to-s3)
+* [Archived Graphics Deployment](#archived-graphics-deployment)
 * [Embedding](#embedding)
 * [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Open Linked Google Spreadsheet](#open-linked-google-spreadsheet)
@@ -300,6 +301,55 @@ fab staging deploy:$SLUG1,$SLUG2
 ```
 fab production deploy:$SLUG1,$SLUG2
 ```
+
+
+Archived Graphics Deployment
+----------------------------
+
+We have found the need to redeploy old archived graphics, so we have worked to allow that to happen by passing either a relative path to the graphic from dailygraphics or by passing an absolute path.
+
+```
+fab staging deploy:"$PATH"
+```
+
+```
+fab production deploy:"$PATH"
+```
+
+_Wrapping the path in quotes is needed if the path contains spaces_
+
+Let's see an example.
+
+To deploy a specific archived graphic:
+
+```
+fab staging deploy:"../graphics-archive/2016/01/100-words-20160122"
+```
+
+_Remember that you can also use an absolute path_
+
+```
+fab staging deploy:"/home/user/Projects/graphics-archive/2016/01/100-words-20160122"
+```
+
+Dependent fabric commands are also available `render` and `update_copy`. For example:
+
+```
+fab staging render:"../graphics-archive/2016/01/100-words-20160122"
+```
+
+```
+fab staging update_copy:"../graphics-archive/2016/01/100-words-20160122"
+```
+
+You can deploy multiple graphics with a single command by passing the
+slugs as a comma-separated list (no spaces). To deploy multiple graphics at once:
+
+```
+fab staging deploy:$PATH1,$PATH2
+```
+
+_Warning: There is no preview available for these changes and deployments. If you need to make a significant change or actively work on an archived graphic it may be better to clone the graphic and start fresh if that is an option obviously._
 
 
 Embedding

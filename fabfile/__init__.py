@@ -70,16 +70,16 @@ has two primary functions: Pushing flat files to S3 and deploying
 code to a remote server if required.
 """
 @task
-def deploy(*slugs):
+def deploy(*paths):
     """
     Deploy the latest app(s) to S3 and, if configured, to our servers.
     """
-    if slugs[0] == '':
+    if paths[0] == '':
         print 'You must specify at least one slug, like this: "deploy:slug" or "deploy:slug,slug"'
         return
 
-    for slug in slugs:
-        deploy_single(slug)
+    for path in paths:
+        deploy_single(path)
 
 def deploy_single(path):
     """

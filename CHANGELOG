@@ -17,6 +17,7 @@
 * Update awscli and Authomatic library requirements
 * Remove unused www deployment (#216)
 * Remove unused files for s3 deployment (#218)
+* Add deployment capabilities for graphics-archive
 
 
 0.1.3
