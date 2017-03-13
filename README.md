@@ -11,7 +11,7 @@ dailygraphics
 * [Add A New Graphic](#add-a-new-graphic)
 * [Clone Old Graphic](#clone-old-graphic)
 * [Deploy To S3](#deploy-to-s3)
-* [Archived Graphics Deployment](#archived-graphics-deployment)
+* [Arbitrary Location Graphics Deployment](#arbitrary-location-graphics-deployment)
 * [Embedding](#embedding)
 * [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Open Linked Google Spreadsheet](#open-linked-google-spreadsheet)
@@ -302,11 +302,12 @@ fab staging deploy:$SLUG1,$SLUG2
 fab production deploy:$SLUG1,$SLUG2
 ```
 
+Arbitrary Location Graphics Deployment
+--------------------------------------
 
-Archived Graphics Deployment
-----------------------------
+At NPR, We have found the need to redeploy old archived graphics, so we have worked on the dailygraphics rig to allow that to happen by passing either a relative path to the graphic from dailygraphics or by passing an absolute path.
 
-We have found the need to redeploy old archived graphics, so we have worked to allow that to happen by passing either a relative path to the graphic from dailygraphics or by passing an absolute path.
+This new functionality it is not restricted to archived graphics, it can be used to render and deploy graphics that are outside the `GRAPHICS_PATH` location in `app_config.py` as long as the graphic has the templates and files required for graphics created by `dailygraphics`.
 
 ```
 fab staging deploy:"$PATH"
@@ -316,11 +317,9 @@ fab staging deploy:"$PATH"
 fab production deploy:"$PATH"
 ```
 
-_Wrapping the path in quotes is needed if the path contains spaces_
+_Wrapping the path in quotes is needed if the path contains spaces._
 
-Let's see an example.
-
-To deploy a specific archived graphic:
+Let's see an example, To deploy a specific archived graphic:
 
 ```
 fab staging deploy:"../graphics-archive/2016/01/100-words-20160122"
@@ -349,7 +348,7 @@ slugs as a comma-separated list (no spaces). To deploy multiple graphics at once
 fab staging deploy:$PATH1,$PATH2
 ```
 
-_Warning: There is no preview available for these changes and deployments. If you need to make a significant change or actively work on an archived graphic it may be better to clone the graphic and start fresh if that is an option obviously._
+_Warning: There is no preview available for these changes and deployments. If you need to make a significant change or actively work on an arbitraty located graphic it may be better to clone the graphic and start fresh if that is an option obviously._
 
 
 Embedding
