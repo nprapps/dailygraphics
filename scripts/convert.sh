@@ -1,11 +1,11 @@
 #!/bin/bash
 
- find ../graphics -type f \( -name "*.html" -o -name "*.js" -o -name "*.less" -o -name "*.css" \) -not -path "*/lib/*" -exec sed -E -i.bak  "s/http:\/\/([A-Za-z0-9._-]*npr.org)/https:\/\/\1/g" {} \;
+find $1 -type f \( -name "*.html" -o \( -name "*.js" -a -not \( -name "graphic-footer.js" -o -name "graphic-header.js" \) \) -o -name "*.less" -o \( -name "*.css" -a -not -name "graphic-header.css" \) \) -not -path "*/lib/*" -exec sed -E -i.bak  "s/http:\/\/([A-Za-z0-9._-]*npr.org)/https:\/\/\1/g" {} \;
 
-cd ../graphics
+# cd $1
 
-git clean -d -f
+# git clean -d -f
 
-git commit -a -m "https all the things"
+# git commit -a -m "https all npr.org things"
 
-cd ../dailygraphics
+# cd ../dailygraphics
