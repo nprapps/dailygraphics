@@ -85,7 +85,8 @@ var render = function(containerWidth) {
         container: '#locator-map',
         width: containerWidth,
         data: geoData,
-        primaryCountry: 'Nepal'
+        primaryCountry: 'Nepal',
+        pixelOffset: [0, 0]
     });
 
     // Update iframe
@@ -133,11 +134,12 @@ var renderLocatorMap = function(config) {
     var centroid = [((bbox[0] + bbox[2]) / 2), ((bbox[1] + bbox[3]) / 2)];
     var mapScale = (mapWidth / DEFAULT_WIDTH) * defaultScale;
     var scaleFactor = mapWidth / DEFAULT_WIDTH;
+    var pixelOffset = config['pixelOffset'] || [0, 0];
 
     projection = d3.geo.mercator()
         .center(centroid)
         .scale(mapScale)
-        .translate([ mapWidth/2, mapHeight/2 ]);
+        .translate([ pixelOffset[0] + mapWidth/2, pixelOffset[1] + mapHeight/2 ]);
 
     path = d3.geo.path()
         .projection(projection)
