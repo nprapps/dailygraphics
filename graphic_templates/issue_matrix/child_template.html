@@ -39,7 +39,7 @@
 
     {% if COPY.footnotes[0] %}<sup>
     <div class="footnotes">
-        <h4>Notes</h4>
+        <h3>Notes</h3>
         <p>
         {% for row in COPY.footnotes %}
             {{ row.id }}. {{ row.description|smarty }}</br>
