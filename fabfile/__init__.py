@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# _*_ coding:utf-8 _*_
 import boto
 import json
 import os
@@ -70,24 +70,24 @@ has two primary functions: Pushing flat files to S3 and deploying
 code to a remote server if required.
 """
 @task
-def deploy(*slugs):
+def deploy(*paths):
     """
     Deploy the latest app(s) to S3 and, if configured, to our servers.
     """
-    if slugs[0] == '':
+    if paths[0] == '':
         print 'You must specify at least one slug, like this: "deploy:slug" or "deploy:slug,slug"'
         return
 
-    for slug in slugs:
-        deploy_single(slug)
+    for path in paths:
+        deploy_single(path)
 
-def deploy_single(slug):
+def deploy_single(path):
     """
     Deploy a single project to S3 and, if configured, to our servers.
     """
     require('settings', provided_by=[production, staging])
-
-    graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    slug, abspath = utils.parse_path(path)
+    graphic_root = '%s/%s' % (abspath, slug)
     s3_root = '%s/graphics/%s' % (app_config.PROJECT_SLUG, slug)
     graphic_assets = '%s/assets' % graphic_root
     s3_assets = '%s/assets' % s3_root
@@ -98,30 +98,22 @@ def deploy_single(slug):
     use_assets = getattr(graphic_config, 'USE_ASSETS', True)
     default_max_age = getattr(graphic_config, 'DEFAULT_MAX_AGE', None) or app_config.DEFAULT_MAX_AGE
     assets_max_age = getattr(graphic_config, 'ASSETS_MAX_AGE', None) or app_config.ASSETS_MAX_AGE
-
-    update_copy(slug)
-
+    update_copy(path)
     if use_assets:
-        assets.sync(slug)
+        assets.sync(path)
 
-    render.render(slug)
-
+    render.render(path)
     flat.deploy_folder(
         graphic_root,
         s3_root,
         headers={
             'Cache-Control': 'max-age=%i' % default_max_age
         },
-        ignore=['%s/*' % graphic_assets, '%s/*' % graphic_node_modules]
-    )
-
-    # Deploy parent assets
-    flat.deploy_folder(
-        'www',
-        app_config.PROJECT_SLUG,
-        headers={
-            'Cache-Control': 'max-age=%i' % default_max_age
-        }
+        ignore=['%s/*' % graphic_assets, '%s/*' % graphic_node_modules,
+                # Ignore files unused on static S3 server
+                '*.xls', '*.xlsx', '*.pyc', '*.py', '*.less', '*.bak',
+                '%s/base_template.html' % graphic_root,
+                '%s/child_template.html' % graphic_root]
     )
 
     if use_assets:
@@ -141,11 +133,12 @@ def deploy_single(slug):
     print ''
     print '%s URL: %s/graphics/%s/%s' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug, file_suffix)
 
-def download_copy(slug):
+def download_copy(path):
     """
     Downloads a Google Doc as an .xlsx file.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    slug, abspath = utils.parse_path(path)
+    graphic_path = '%s/%s' % (abspath, slug)
 
     try:
         graphic_config = load_graphic_config(graphic_path)
@@ -161,12 +154,12 @@ def download_copy(slug):
     get_document(graphic_config.COPY_GOOGLE_DOC_KEY, copy_path)
 
 @task
-def update_copy(slug=None):
+def update_copy(path=None):
     """
     Fetches the latest Google Doc and updates local JSON.
     """
-    if slug:
-        download_copy(slug)
+    if path:
+        download_copy(path)
         return
 
     slugs = os.listdir(app_config.GRAPHICS_PATH)

@@ -13,7 +13,12 @@
 * Remove references to local copy of pym in a few graphics templates (#188)
 * Ensure support for https (#193)
 * Add AP-style full date formatter (#198)
-* change flat to accomodate to new staging policy
+* Change flat to accomodate to new staging policy
+* Update awscli and Authomatic library requirements
+* Remove unused www deployment (#216)
+* Remove unused files for s3 deployment (#218)
+* Allow render/deploy from an arbitrary folder
+
 
 0.1.3
 -----

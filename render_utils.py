@@ -163,9 +163,14 @@ def load_graphic_config(graphic_path, base_paths=[]):
 
     paths = [graphic_path] + base_paths
 
-    f, path, desc = imp.find_module('graphic_config', paths)
-    graphic_config = imp.load_module('graphic_config', f, path, desc)
-    f.close()
+    try:
+        f, path, desc = imp.find_module('graphic_config', paths)
+        graphic_config = imp.load_module('graphic_config', f, path, desc)
+        f.close()
+    except ImportError:
+        class EmptyConfig:
+            pass
+        graphic_config = EmptyConfig()
 
     sys.path.pop(0)
 

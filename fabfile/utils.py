@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
+import os
 import boto
 from boto.s3.connection import OrdinaryCallingFormat
 from fabric.api import prompt
+import app_config
+
 
 def confirm(message):
     """
@@ -32,3 +35,18 @@ def get_bucket(bucket_name):
         s3 = boto.connect_s3()
 
     return s3.get_bucket(bucket_name)
+
+
+def parse_path(path):
+    """
+    Parse the path into abspath and slug
+    """
+    bits = path.split('/')
+    if len(bits) > 1:
+        slug = bits[-1]
+        path = '/'.join(bits[:-1])
+        abspath = os.path.abspath(path)
+    else:
+        slug = path
+        abspath = app_config.GRAPHICS_PATH
+    return slug, abspath
