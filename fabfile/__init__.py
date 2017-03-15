@@ -18,6 +18,7 @@ import assets
 import flat
 import render
 import utils
+import test
 
 from render_utils import load_graphic_config
 
