@@ -25,11 +25,6 @@ SPREADSHEET_COPY_URL_TEMPLATE = 'https://www.googleapis.com/drive/v2/files/%s/co
 SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=1'
 
 """
-Base configuration
-"""
-env.settings = None
-
-"""
 Environments
 
 Changing environment requires a full-stack test.
