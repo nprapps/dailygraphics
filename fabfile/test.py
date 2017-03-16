@@ -4,6 +4,7 @@ import os
 import logging
 import datetime
 import re
+import time
 from fabric.api import task, require
 from fabric.state import env
 import utils
@@ -23,10 +24,13 @@ cwd = os.path.dirname(__file__)
 logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger(__name__)
 logger.setLevel(LOG_LEVEL)
-LISTENER_SCRIPT = "window.addEventListener('message', function(e) {" \
-    "window.SELENIUM_TEST_PYM_HEIGHT = true;}, false);"
+RESET_SCRIPT = "window.pymParent = undefined; " \
+    "window.SELENIUM_TEST_PYM_HEIGHT = false;"
+CHECK_PYM_SCRIPT = "return typeof window.pymParent !== 'undefined';"
+COMUNICATION_SCRIPT = "window.pymParent.onMessage('height', function(e) { " \
+    "window.SELENIUM_TEST_PYM_HEIGHT = true;}, false); " \
+    "window.pymParent.sendWidth();"
 VALIDATION_SCRIPT = 'return window.SELENIUM_TEST_PYM_HEIGHT;'
-CLEAR_SCRIPT = 'window.SELENIUM_TEST_PYM_HEIGHT = false;'
 
 
 @task
@@ -52,12 +56,20 @@ def test_single(path):
     d['loggingPrefs'] = {'browser': 'ALL'}
     driver = webdriver.Chrome(desired_capabilities=d)
     try:
+        driver.execute_script(RESET_SCRIPT)
         driver.get(url)
+        # Wait for pym to be loaded
         # Execute a script that listens to the child message
         # and sets a global variable on the browser's window
         # Then make an explicit wait until the global var is set to true
-        driver.execute_script(LISTENER_SCRIPT)
-        WebDriverWait(driver, 30).until(
+        WebDriverWait(driver, 10).until(
+            lambda driver: driver.execute_script(CHECK_PYM_SCRIPT)
+        )
+        # Wait a configurable time for the page to load
+        time.sleep(app_config.TESTS_LOAD_WAIT_TIME)
+        # Force Pym Message communication
+        driver.execute_script(COMUNICATION_SCRIPT)
+        WebDriverWait(driver, 10).until(
             lambda driver: driver.execute_script(VALIDATION_SCRIPT)
         )
         driver.save_screenshot('%s/%s-%s.png' % (OUTPUT_PATH,
@@ -94,7 +106,6 @@ def test(path, batch=False):
     """
     require('settings', provided_by=['production', 'staging'])
     batch = utils.prep_bool_arg(batch)
-    logger.info(batch)
     if not batch:
         test_single(path)
         return
@@ -115,7 +126,6 @@ def test(path, batch=False):
     driver = webdriver.Chrome(desired_capabilities=d)
     try:
         for item in content:
-            logger.info(item)
             if re.match(r'^https?://', item):
                 slug = item
                 url = item
@@ -129,15 +139,22 @@ def test(path, batch=False):
                 url = '%s/graphics/%s/%s' % (app_config.S3_BASE_URL,
                                              slug, file_suffix)
             logger.info('url: %s' % url)
+            driver.execute_script(RESET_SCRIPT)
             driver.get(url)
+            # Wait for pym to be loaded
             # Execute a script that listens to the child message
             # and sets a global variable on the browser's window
             # Then make an explicit wait until the global var is set to true
-            driver.execute_script(LISTENER_SCRIPT)
-            WebDriverWait(driver, 30).until(
+            WebDriverWait(driver, 10).until(
+                lambda driver: driver.execute_script(CHECK_PYM_SCRIPT)
+            )
+            # Wait a configurable time for the page to load
+            time.sleep(app_config.TESTS_LOAD_WAIT_TIME)
+            # Force Pym Message communication
+            driver.execute_script(COMUNICATION_SCRIPT)
+            WebDriverWait(driver, 10).until(
                 lambda driver: driver.execute_script(VALIDATION_SCRIPT)
             )
-            driver.execute_script(CLEAR_SCRIPT)
             # Save screenshot
             driver.save_screenshot('%s/%s-%s.png' % (OUTPUT_PATH,
                                                      env.settings,
