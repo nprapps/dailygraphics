@@ -12,6 +12,7 @@ import app_config
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.common.exceptions import TimeoutException
 
 """
 Logging
@@ -32,6 +33,19 @@ COMUNICATION_SCRIPT = "window.pymParent.onMessage('height', function(e) { " \
     "window.pymParent.sendWidth();"
 VALIDATION_SCRIPT = 'return window.SELENIUM_TEST_PYM_HEIGHT;'
 
+
+@task(default=True)
+def test(*paths):
+    """
+    Test one or multiple graphics looking for browser warnings and errors
+    Using selenium & chrome webdriver
+    """
+    if paths[0] == '':
+        print 'You must specify at least one path, like this: "test:slug" or "test:path,path"'
+        return
+
+    for path in paths:
+        test_single(path)
 
 @task
 def test_single(path):
@@ -62,19 +76,16 @@ def test_single(path):
         # Execute a script that listens to the child message
         # and sets a global variable on the browser's window
         # Then make an explicit wait until the global var is set to true
-        WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, app_config.TEST_SCRIPTS_TIMEOUT).until(
             lambda driver: driver.execute_script(CHECK_PYM_SCRIPT)
         )
         # Wait a configurable time for the page to load
         time.sleep(app_config.TESTS_LOAD_WAIT_TIME)
         # Force Pym Message communication
         driver.execute_script(COMUNICATION_SCRIPT)
-        WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, app_config.TEST_SCRIPTS_TIMEOUT).until(
             lambda driver: driver.execute_script(VALIDATION_SCRIPT)
         )
-        driver.save_screenshot('%s/%s-%s.png' % (OUTPUT_PATH,
-                                                 env.settings,
-                                                 slug))
         log = driver.get_log('browser')
         if not log:
             logger.info("Test was successful. Screenshot in test folder")
@@ -89,7 +100,14 @@ def test_single(path):
                 else:
                     logger.info("Found some console.log output %s" % (
                         entry['message']))
+    except TimeoutException:
+        logger.warning("%s - Test did Timeout. Check log" % (slug))
+        line = '%s - %s\n' % ('ERROR', 'Test did Timeout')
+        log_content.append(line)
     finally:
+        driver.save_screenshot('%s/%s-%s.png' % (OUTPUT_PATH,
+                                                 env.settings,
+                                                 slug))
         driver.quit()
         if log_content:
             with open('%s/%s-%s.log' % (OUTPUT_PATH,
@@ -98,19 +116,14 @@ def test_single(path):
                 writefile.writelines(log_content)
 
 
-@task(default=True)
-def test(path, batch=False):
+@task
+def bulk_test(csvpath):
     """
     Test graphics browser warnings & errors -- use batch for multiple graphics
     Using selenium & chrome webdriver
     """
-    require('settings', provided_by=['production', 'staging'])
-    batch = utils.prep_bool_arg(batch)
-    if not batch:
-        test_single(path)
-        return
     # Assume that a filepath is given read contents and clean them
-    with open(path, 'r') as f:
+    with open(csvpath, 'r') as f:
         content = f.readlines()
     content = [x.strip() for x in content]
     # Timestamp of the test
@@ -130,6 +143,7 @@ def test(path, batch=False):
                 slug = item
                 url = item
             else:
+                require('settings', provided_by=['production', 'staging'])
                 slug, _ = utils.parse_path(item)
                 # Need to explicitly point to index.html
                 # for the AWS staging link
@@ -139,38 +153,47 @@ def test(path, batch=False):
                 url = '%s/graphics/%s/%s' % (app_config.S3_BASE_URL,
                                              slug, file_suffix)
             logger.info('url: %s' % url)
-            driver.execute_script(RESET_SCRIPT)
-            driver.get(url)
-            # Wait for pym to be loaded
-            # Execute a script that listens to the child message
-            # and sets a global variable on the browser's window
-            # Then make an explicit wait until the global var is set to true
-            WebDriverWait(driver, 10).until(
-                lambda driver: driver.execute_script(CHECK_PYM_SCRIPT)
-            )
-            # Wait a configurable time for the page to load
-            time.sleep(app_config.TESTS_LOAD_WAIT_TIME)
-            # Force Pym Message communication
-            driver.execute_script(COMUNICATION_SCRIPT)
-            WebDriverWait(driver, 10).until(
-                lambda driver: driver.execute_script(VALIDATION_SCRIPT)
-            )
-            # Save screenshot
-            driver.save_screenshot('%s/%s-%s.png' % (OUTPUT_PATH,
-                                                     env.settings,
-                                                     slug))
-            # Get browser log and parse output
-            log = driver.get_log('browser')
-            if not log:
-                logger.info("%s - Test was successful. Screenshot saved" % (
-                    slug))
-            else:
-                logger.warning("%s - Test found some issues. Check log" % (
-                    slug))
-                for entry in log:
-                    line = '%s,%s,"%s"\n' % (slug,
-                                             entry['level'], entry['message'])
-                    log_content.append(line)
+
+            try:
+                driver.execute_script(RESET_SCRIPT)
+                driver.get(url)
+                # Wait for pym to be loaded
+                # Execute a script that listens to the child message
+                # and sets a global variable on the browser's window
+                # Then make an explicit wait until global var is set to true
+                WebDriverWait(driver, app_config.TEST_SCRIPTS_TIMEOUT).until(
+                    lambda driver: driver.execute_script(CHECK_PYM_SCRIPT)
+                )
+                # Wait a configurable time for the page to load
+                time.sleep(app_config.TESTS_LOAD_WAIT_TIME)
+                # Force Pym Message communication
+                driver.execute_script(COMUNICATION_SCRIPT)
+                WebDriverWait(driver, app_config.TEST_SCRIPTS_TIMEOUT).until(
+                    lambda driver: driver.execute_script(VALIDATION_SCRIPT)
+                )
+
+                # Get browser log and parse output
+                log = driver.get_log('browser')
+                if not log:
+                    logger.info("%s - Test successful. Screenshot saved" % (
+                        slug))
+                else:
+                    logger.warning("%s - Test found issues. Check log" % (
+                        slug))
+                    for entry in log:
+                        line = '%s,%s,"%s"\n' % (slug,
+                                                 entry['level'],
+                                                 entry['message'])
+                        log_content.append(line)
+            except TimeoutException:
+                logger.warning("%s - Test did Timeout. Check log" % (slug))
+                line = '%s,%s,"%s"\n' % (slug, 'ERROR', 'Test did Timeout')
+                log_content.append(line)
+            finally:
+                # Save screenshot
+                driver.save_screenshot('%s/%s-%s.png' % (OUTPUT_PATH,
+                                                         env.settings,
+                                                         slug))
     finally:
         driver.quit()
         if log_content:
