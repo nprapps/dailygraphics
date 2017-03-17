@@ -18,6 +18,9 @@
 * Remove unused www deployment (#216)
 * Remove unused files for s3 deployment (#218)
 * Allow render/deploy from an arbitrary folder
+* Remove empty env.settings (#221)
+* Force utf-8 character set on html deployment to S3 (#215)
+* Add testing capabilities
 
 
 0.1.3

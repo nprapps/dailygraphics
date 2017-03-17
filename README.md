@@ -11,6 +11,8 @@ dailygraphics
 * [Add A New Graphic](#add-a-new-graphic)
 * [Clone Old Graphic](#clone-old-graphic)
 * [Deploy To S3](#deploy-to-s3)
+* [Install Test Capabilities](#install-test-capabilities)
+* [Test Deployment](#test-deployment)
 * [Arbitrary Location Graphics Deployment](#arbitrary-location-graphics-deployment)
 * [Embedding](#embedding)
 * [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
@@ -301,6 +303,67 @@ fab staging deploy:$SLUG1,$SLUG2
 ```
 fab production deploy:$SLUG1,$SLUG2
 ```
+
+Install Test Capabilities
+-------------------------
+
+At NPR, We have found the need to make an adjustment to our graphics and graphics-archive in order to faciltate the switch to `https`. In order to make this process less painful we have been working in including test capabilities so that we can trim down the review process. But this functionality can and probably should be a part of our deployment.
+
+We have built a basic test functionality that uses [selenium for python](http://selenium-python.readthedocs.io/) and [chrome webdriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) to launch and validate the deployment url for a graphic or multiple graphics making a screenshot of the chrome page and writing a log of the warnings, errors and even console.logs that we may find. you can also use [phamtomjs](http://phantomjs.org/) but we have found that the browser logging granularity is a bit worse.
+
+There are other drivers (see [here](http://selenium-python.readthedocs.io/installation.html#drivers))that you could use and should be quite straight forward to modify the code to do that, but since this is not intended as a cross-browser test, sticking to one browser serves our needs.
+
+Selenium is included on our `requirements.txt` so you should be able to install it via the usual
+
+```
+$ pip install -r requirements.txt
+```
+
+In order to be able to use the `chrome webdriver` you need to download and unzip the corresponding version for your platform and put it somewhere on the `$PATH` so that selenium can find it (you could include the path to the binary on the webdriver call but lets stick to only one approach).
+
+If you want to install phamtomjs:
+
+```
+brew install phamtomjs
+```
+
+Test Deployment
+---------------
+
+*Important:* _The testing functionality assumes that the deployment has already been done so the corresponding url should already be accesible._
+
+Once you have installed the needed binaries and libraries we are ready to start testing.
+
+The main entry point is a fabric task:
+
+```
+fab $ENV test:path
+```
+
+Where $ENV should be replaced by the desired environment `staging` or `production`
+
+You could do them on more than one graphic by separating paths with commas
+
+```
+fab $ENV test:path1,path2
+```
+
+If you need/want to run the test on more than a couple of graphics we have you covered, you can use the `bulk_test` fabric task
+
+```
+fab $ENV test.bulk_test:$CSVPATH
+```
+
+`$CSVPATH` is an absolute or relative path to the location of a csv file that will have either one path to a graphic per line or one url per line.
+
+If a path is given on each line the task will use the provided `$ENV` to calculate the deployed url and test it.
+
+If a url is given on each line you do not need to specify a `$ENV` since the url is already provided.
+
+As a result the test rig will create a screenshot and a logfile for each graphic inside `test` folder. If `bulk_test` is used it will create a subfolder with the timestamp and inside it it will create a logfile for all the process and a screenshot for each graphic.
+
+If there's an existing graphic report (screenshot + log) for a given graphic and environment and you run the test for that same configuration again the report will be overwritten, let's save some space right?
+
 
 Arbitrary Location Graphics Deployment
 --------------------------------------
