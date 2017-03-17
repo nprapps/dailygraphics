@@ -18,16 +18,12 @@ import assets
 import flat
 import render
 import utils
+import test
 
 from render_utils import load_graphic_config
 
 SPREADSHEET_COPY_URL_TEMPLATE = 'https://www.googleapis.com/drive/v2/files/%s/copy'
 SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=1'
-
-"""
-Base configuration
-"""
-env.settings = None
 
 """
 Environments
