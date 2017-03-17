@@ -17,6 +17,7 @@
 * Update awscli and Authomatic library requirements
 * Remove unused www deployment (#216)
 * Remove unused files for s3 deployment (#218)
+* Allow render/deploy from an arbitrary folder
 
 
 0.1.3
