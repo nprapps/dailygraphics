@@ -46,7 +46,7 @@ PYM = {
 CAREBOT
 """
 
-CAREBOT_ENABLED = True
+CAREBOT_ENABLED = False
 CAREBOT_URL = 'https://carebot.nprapps.org/carebot-tracker.v0.min.js'
 
 """

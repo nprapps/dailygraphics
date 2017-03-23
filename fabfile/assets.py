@@ -69,8 +69,8 @@ def sync(path):
     bucket = _assets_get_bucket()
     keys = bucket.list(s3_root)
 
-    which = None
-    always = False
+    which = 'local'
+    always = True
 
     for key in keys:
         download = False
@@ -121,7 +121,7 @@ def sync(path):
             _assets_upload(local_path, key)
 
     action = None
-    always = False
+    always = True
 
     # Iterate over files that didn't exist on S3
     for local_path in local_paths:
