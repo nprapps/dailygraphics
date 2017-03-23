@@ -295,15 +295,15 @@ fab staging deploy:$SLUG1,$SLUG2
 fab production deploy:$SLUG1,$SLUG2
 ```
 
-#### Deploy graphics in that exist in an arbitrary location
+#### Deploy graphics that exist in an arbitrary location
 
 At NPR, we occasionally need to redeploy old graphics in our `graphics-archive` repo. The deployment command supports passing either a relative path to the graphic from dailygraphics or by passing an absolute path. This functionality can be used to render and deploy graphics that are outside the `GRAPHICS_PATH` location in `app_config.py` as long as the graphic has the templates and files required for graphics created by `dailygraphics`.
 
 ```
-fab staging deploy:"$PATH"
+fab staging deploy:"path"
 ```
 ```
-fab production deploy:"$PATH"
+fab production deploy:"path"
 ```
 
 _Wrapping the path in quotes is needed if the path contains spaces._
@@ -329,13 +329,13 @@ fab staging update_copy:"../graphics-archive/2016/01/100-words-20160122"
 You can deploy multiple graphics with a single command by passing the slugs as a comma-separated list (no spaces). To deploy multiple graphics at once:
 
 ```
-fab staging deploy:$PATH1,$PATH2
+fab staging deploy:path1,path2
 ```
 
 _Warning: There is no preview available for these changes and deployments. If you need to make a significant change or actively work on a graphic outside of the primary graphics folder, it may be better to clone the graphic and start fresh._
 
 Test Capabilities
--------------------------
+-----------------
 
 #### Installation
 
@@ -345,7 +345,7 @@ Our basic test functionality uses [selenium for python](http://selenium-python.r
 
 * Selenium is included in our `requirements.txt`.
 
-* To use `chrome webdriver`, download and unzip the corresponding version for your platform and put it somewhere on the `$PATH` so that selenium can find it. (You could include the path to the binary on the webdriver call but let's stick to only one approach.)
+* To use [chrome webdriver](https://sites.google.com/a/chromium.org/chromedriver/downloads), download and unzip the corresponding version for your platform and put it somewhere on the `$PATH` so that selenium can find it. (You could include the path to the binary on the webdriver call but let's stick to only one approach.)
 
 As an alternative to `chrome-webdriver`, you can use [phantomjs](http://phantomjs.org/). However, we have found that the browser logging granularity is a bit worse. To install phantomjs:
 
@@ -395,9 +395,9 @@ If there's an existing graphic report (screenshot + log) for a given graphic and
 
 All the fabric tasks mentioned above have some behavior that can be customized:
 
-* use: Which webdriver to use on the tests, defaults to `Chrome`
-* screenshot: Whether to make a screenshot or not of the tested page, defaults to `True`
-* pymParent: Whether we want to reinforce a communication protocol on Pym
+* `use`: Which webdriver to use on the tests, defaults to `Chrome`
+* `screenshot`: Whether to make a screenshot or not of the tested page, defaults to `True`
+* `pymParent`: Whether we want to reinforce a communication protocol on Pym
  to ensure that the page has loaded correctly, defaults to `False`
 
 Let's say we have installed phantomjs and want to test using that webdriver, we could run:
@@ -412,7 +412,7 @@ Let's say we do not want a screenshot to be taken for one of our bulk tests:
 $ fab $ENV test.bulk_test:$CSVPATH,screenshot=False
 ```
 
-Let's say we are using the rendered index page for our graphic and want to enforce Pym communication prior to checking our page.
+Let's say we are using the rendered index page for our graphic and want to enforce `Pym.js` communication prior to checking our page.
 
 ```
 $ fab $ENV test:path,pymParent=True
