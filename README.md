@@ -310,9 +310,9 @@ Install Test Capabilities
 
 At NPR, We have found the need to make an adjustment to our graphics and graphics-archive in order to faciltate the switch to `https`. In order to make this process less painful we have been working in including test capabilities so that we can trim down the review process. But this functionality can and probably should be a part of our deployment.
 
-We have built a basic test functionality that uses [selenium for python](http://selenium-python.readthedocs.io/) and [chrome webdriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) to launch and validate the deployment url for a graphic or multiple graphics making a screenshot of the chrome page and writing a log of the warnings, errors and even console.logs that we may find. you can also use [phamtomjs](http://phantomjs.org/) but we have found that the browser logging granularity is a bit worse.
+We have built a basic test functionality that uses [selenium for python](http://selenium-python.readthedocs.io/) and [chrome webdriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) to launch and validate the deployment url for a graphic or multiple graphics making a screenshot of the chrome page and writing a log of the warnings, errors and even console.logs that we may find. you can also use [phantomjs](http://phantomjs.org/) but we have found that the browser logging granularity is a bit worse.
 
-There are other drivers (see [here](http://selenium-python.readthedocs.io/installation.html#drivers))that you could use and should be quite straight forward to modify the code to do that, but since this is not intended as a cross-browser test, sticking to one browser serves our needs.
+There are other drivers (see [here](http://selenium-python.readthedocs.io/installation.html#drivers)) that you could use and should be quite straight forward to modify the code to do that, but since this is not intended as a cross-browser test, sticking to one browser serves our needs.
 
 Selenium is included on our `requirements.txt` so you should be able to install it via the usual
 
@@ -378,7 +378,7 @@ All the fabric tasks mentioned above have some behavior that can be customized, 
 Let's say we have installed phantomjs and want to test using that webdriver, we could run:
 
 ```
-$ fab $ENV test:$PATH,use='phantom'
+$ fab $ENV test:path,use='phantom'
 ```
 
 Let's say we do not want a screenshot to be taken for one of our bulk tests:
@@ -390,7 +390,7 @@ $ fab $ENV test.bulk_test:$CSVPATH,screenshot=False
 Let's say we are using the rendered index page for our graphic and want to enforce Pym communication prior to checking our page.
 
 ```
-$ fab $ENV test:$PATH,pymParent=True
+$ fab $ENV test:path,pymParent=True
 ```
 
 Arbitrary Location Graphics Deployment
