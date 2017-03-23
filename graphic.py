@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# _*_ coding:utf-8 _*_
 from mimetypes import guess_type
 import os
 import subprocess
@@ -33,6 +33,13 @@ def _graphics_detail(slug):
     context = make_context(asset_depth=2, root_path=graphic_path)
     context['slug'] = slug
     context['var_name'] = slug.replace('-', '_')
+
+    # Use local_pym for legacy graphics
+    local_pym = getattr(g, 'local_pym', None)
+    context['LOCAL_PYM'] = local_pym
+    # warning message
+    custom_location = getattr(g, 'custom_location', None)
+    context['CUSTOM_LOCATION'] = custom_location
 
     template = 'parent.html'
 

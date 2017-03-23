@@ -184,6 +184,9 @@
         </div>
 
         <h2><span class="production">Production</span> embed code (for Seamus)</h2>
+{% if CUSTOM_LOCATION %}
+        <h2><span class="production">This has been redeployed from a custom location. Check thoroughly before using in a new graphic.</span></h2>
+{% endif %}
 
 <!-- textarea contents -->
     <textarea readonly="readonly" rows="10" cols="50">
@@ -194,7 +197,11 @@
             // add randomness to id to support for multiple graphic instances in one story
             var el = document.getElementById("responsive-embed-{{slug}}");
             el.id = el.id + "-" + Math.random().toString(36).substr(2,5);
+{% if LOCAL_PYM %}
+            jQuery.getScript("js/lib/pym.js").done(function () {
+{% else %}
             jQuery.getScript("{{ PYM['pym_url'] }}").done(function () {
+{% endif %}
                 jQuery(function () { // Wait for page load
                     var pymParent = new pym.Parent(
                         el.id,
@@ -240,8 +247,12 @@
 <!-- end textarea contents -->
 
     </div>
-
+{% if LOCAL_PYM %}
+    <script type="text/javascript" src="js/lib/pym.js"></script>
+{% else %}
     <script type="text/javascript" src="{{ PYM['pym_url'] }}"></script>
+{% endif %}
+
 {% if CAREBOT_ENABLED %}
     <script type="text/javascript" src="{{ CAREBOT_URL }}"></script>
 {% endif %}
