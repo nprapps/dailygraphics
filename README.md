@@ -13,6 +13,7 @@ dailygraphics
 * [Deploy To S3](#deploy-to-s3)
 * [Install Test Capabilities](#install-test-capabilities)
 * [Test Deployment](#test-deployment)
+* [Fine-Tuning Tests Deployment](#fine-tuning-tests-deployment)
 * [Arbitrary Location Graphics Deployment](#arbitrary-location-graphics-deployment)
 * [Embedding](#embedding)
 * [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
@@ -321,10 +322,10 @@ $ pip install -r requirements.txt
 
 In order to be able to use the `chrome webdriver` you need to download and unzip the corresponding version for your platform and put it somewhere on the `$PATH` so that selenium can find it (you could include the path to the binary on the webdriver call but lets stick to only one approach).
 
-If you want to install phamtomjs:
+If you want to install phantomjs:
 
 ```
-brew install phamtomjs
+$ brew install phantomjs
 ```
 
 Test Deployment
@@ -364,6 +365,33 @@ As a result the test rig will create a screenshot and a logfile for each graphic
 
 If there's an existing graphic report (screenshot + log) for a given graphic and environment and you run the test for that same configuration again the report will be overwritten, let's save some space right?
 
+Fine-Tuning Tests Deployment
+----------------------------
+
+All the fabric tasks mentioned above have some behavior that can be customized, let's look at the available options:
+
+* use: Which webdriver to use on the tests, defaults to `Chrome`
+* screenshot: Whether to make a screenshot or not of the tested page, defaults to `True`
+* pymParent: Whether we want to reinforce a communication protocol on Pym
+ to ensure that the page has loaded correctly, defaults to `False`
+
+Let's say we have installed phantomjs and want to test using that webdriver, we could run:
+
+```
+$ fab $ENV test:$PATH,use='phantom'
+```
+
+Let's say we do not want a screenshot to be taken for one of our bulk tests:
+
+```
+$ fab $ENV test.bulk_test:$CSVPATH,screenshot=False
+```
+
+Let's say we are using the rendered index page for our graphic and want to enforce Pym communication prior to checking our page.
+
+```
+$ fab $ENV test:$PATH,pymParent=True
+```
 
 Arbitrary Location Graphics Deployment
 --------------------------------------
