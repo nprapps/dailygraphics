@@ -96,7 +96,9 @@ def deploy_single(path):
     assets_max_age = getattr(graphic_config, 'ASSETS_MAX_AGE', None) or app_config.ASSETS_MAX_AGE
     update_copy(path)
     if use_assets:
-        assets.sync(path)
+        error = assets.sync(path)
+        if error:
+            return
 
     render.render(path)
     flat.deploy_folder(
@@ -118,7 +120,8 @@ def deploy_single(path):
             s3_assets,
             headers={
                 'Cache-Control': 'max-age=%i' % assets_max_age
-            }
+            },
+            ignore=['%s/private/*' % graphic_assets]
         )
 
     # Need to explicitly point to index.html for the AWS staging link

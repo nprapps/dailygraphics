@@ -21,6 +21,7 @@
 * Remove empty env.settings (#221)
 * Force utf-8 character set on html deployment to S3 (#215)
 * Add testing capabilities
+* Add private assets functionality
 
 
 0.1.3

@@ -508,6 +508,8 @@ Syncing these assets requires running a couple different commands at the right t
 
 Unfortunately, there is no automatic way to know when a file has been intentionally deleted from the server or your local directory. When you want to simultaneously remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets.rm:"$SLUG/assets/file_name_here.jpg"```
 
+There's a `private` subfolder inside `assets`. Files inside that `private` folder will be synced to the Amazon S3 bucket configured in ```app_config.ASSETS_S3_BUCKET``` but will not be pushed to the final graphic location and thus will not be publicly accesible. You can use the `assets/private` folder to share assets with your team but not expose them publicly.
+
 Creating Locator Maps
 ---------------------
 

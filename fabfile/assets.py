@@ -22,7 +22,7 @@ def sync(path):
     slug, abspath = utils.parse_path(path)
     if not os.path.exists('%s/%s' % (abspath, slug)):
         print 'Slug "%s" does not exist!' % slug
-        return
+        return True
 
     assets_root = '%s/%s/assets' % (abspath, slug)
     s3_root = '%s/%s' % (app_config.ASSETS_SLUG, slug)
@@ -64,7 +64,7 @@ def sync(path):
         for name in not_lowercase:
             print '    %s' % name
 
-        return
+        return True
 
     bucket = _assets_get_bucket()
     keys = bucket.list(s3_root)
@@ -105,7 +105,7 @@ def sync(path):
                 if not which:
                     print 'Cancelling!'
 
-                    return
+                    return True
 
                 if which == 'remote':
                     download = True
@@ -136,12 +136,14 @@ def sync(path):
         if not action:
             print 'Cancelling!'
 
-            return
+            return True
 
         if action == 'upload':
             _assets_upload(local_path, key)
         elif action == 'delete':
             _assets_delete(local_path, key)
+
+    return False
 
 @task
 def rm(path):
