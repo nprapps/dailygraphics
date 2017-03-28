@@ -57,13 +57,15 @@ def sync(path):
 
             local_paths.append(full_path)
 
-    # Prevent case sensitivity differences between OSX and S3 from screwing us up
+    # Prevent case sensitivity differences between OSX and S3
+    # from screwing us up
     if not_lowercase:
-        print 'The following filenames are not lowercase, please change them before running `assets.sync`:'
-
+        print 'The following filenames are not lowercase, ' \
+            'please change them before running `assets.sync`. '
         for name in not_lowercase:
             print '    %s' % name
 
+        print 'WARNING: This must be fixed before you can deploy.'
         return True
 
     bucket = _assets_get_bucket()
