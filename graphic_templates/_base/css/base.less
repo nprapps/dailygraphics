@@ -37,6 +37,38 @@
 @blue6      : #D3EAF7;
 
 /*
+ * Fonts
+ */
+.gotham() {
+    font-family: 'Gotham SSm',Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-weight: 400;
+}
+
+// Normal Knockout
+.knockout() {
+    font-family: 'Knockout 31 4r','Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-weight: normal;
+}
+
+// Knockout, uppercased
+.knockout-upper() {
+    .knockout();
+    text-transform: uppercase;
+}
+
+// Knockout for headings
+.knockout-header() {
+    .knockout-upper();
+    letter-spacing: 0.05em;
+    -webkit-font-smoothing: antialiased;
+}
+
+.sans-serif() {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+}
+
+/*
  * Mixins
  */
 .clearfix() {

@@ -14,17 +14,17 @@ import app_config
 import utils
 
 @task
-def sync(slug):
+def sync(path):
     """
     Intelligently synchronize assets between S3 and local folder.
     """
     ignore_globs = []
-
-    if not os.path.exists('%s/%s' % (app_config.GRAPHICS_PATH, slug)):
+    slug, abspath = utils.parse_path(path)
+    if not os.path.exists('%s/%s' % (abspath, slug)):
         print 'Slug "%s" does not exist!' % slug
-        return
+        return True
 
-    assets_root = '%s/%s/assets' % (app_config.GRAPHICS_PATH, slug)
+    assets_root = '%s/%s/assets' % (abspath, slug)
     s3_root = '%s/%s' % (app_config.ASSETS_SLUG, slug)
 
     try:
@@ -57,14 +57,16 @@ def sync(slug):
 
             local_paths.append(full_path)
 
-    # Prevent case sensitivity differences between OSX and S3 from screwing us up
+    # Prevent case sensitivity differences between OSX and S3
+    # from screwing us up
     if not_lowercase:
-        print 'The following filenames are not lowercase, please change them before running `assets.sync`:'
-
+        print 'The following filenames are not lowercase, ' \
+            'please change them before running `assets.sync`. '
         for name in not_lowercase:
             print '    %s' % name
 
-        return
+        print 'WARNING: This must be fixed before you can deploy.'
+        return True
 
     bucket = _assets_get_bucket()
     keys = bucket.list(s3_root)
@@ -105,7 +107,7 @@ def sync(slug):
                 if not which:
                     print 'Cancelling!'
 
-                    return
+                    return True
 
                 if which == 'remote':
                     download = True
@@ -136,12 +138,14 @@ def sync(slug):
         if not action:
             print 'Cancelling!'
 
-            return
+            return True
 
         if action == 'upload':
             _assets_upload(local_path, key)
         elif action == 'delete':
             _assets_delete(local_path, key)
+
+    return False
 
 @task
 def rm(path):

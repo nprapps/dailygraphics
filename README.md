@@ -11,6 +11,7 @@ dailygraphics
 * [Add A New Graphic](#add-a-new-graphic)
 * [Clone Old Graphic](#clone-old-graphic)
 * [Deploy To S3](#deploy-to-s3)
+* [Test Capabilities](#test-capabilities)
 * [Embedding](#embedding)
 * [Connecting To A Google Spreadsheet](#connecting-to-a-google-spreadsheet)
 * [Open Linked Google Spreadsheet](#open-linked-google-spreadsheet)
@@ -19,8 +20,8 @@ dailygraphics
 * [Creating Locator Maps](#creating-locator-maps)
 * [Creating Animated Photos](#creating-animated-photos)
 * [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
-* [Working With Carebot](#working-with-carebot)
 * [Adding A New Graphic Template](#adding-a-new-graphic-template)
+* [Working With Carebot](#working-with-carebot)
 * [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
 
 What is this?
@@ -65,7 +66,7 @@ Assumptions
 The following things are assumed to be true in this documentation.
 
 * You are running OSX.
-* You are using Python 2.7. (Probably the version that came OSX.)
+* You are using Python 2.7. (Probably the version that came with OSX.)
 * You have [virtualenv](https://pypi.python.org/pypi/virtualenv) and [virtualenvwrapper](https://pypi.python.org/pypi/virtualenvwrapper) installed and working.
 * You have your Amazon Web Services credentials stored as environment variables locally.
 
@@ -112,7 +113,7 @@ You'll now need to create a folder to hold the graphics created and deployed by 
 
 **NPR users:** Graphics are stored in a separate, private repository, and `app_config.GRAPHICS_PATH` points to that folder. You will need to separately `git clone` that repository.
 
-**All other users:** You can choose to keep your work in a separate version-controlled repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
+**All other users:** You can choose to keep your work in a separate repository, as we do, or you can change the `app_config.GRAPHICS_PATH` to point to a folder inside of `dailygraphics`.
 
 Using A Stable Version
 ----------------------
@@ -180,10 +181,7 @@ Visit [localhost:8000](http://localhost:8000) for a list of graphics in the repo
 
 #### Terminal shortcut
 
-Do you use [iTerm2](http://iterm2.com)? Here's [a sample AppleScript](https://gist.github.com/alykat/debf281765db3a0c2e88) to automatically launch a three-paned terminal window (one for the dailygraphics machine, one for the local webserver, and another for the separate graphics repo).
-
-*June 3rd, 2016*: If you are using iTerm v3 then use this updated [AppleScript](https://gist.github.com/jjelosua/53b416bd6655605846264eb9378e9c0e). iTerm has made a [non-backwards compatible](https://iterm2.com/version3.html?src=4) change to their Applescript syntax
-
+Do you use [iTerm2](http://iterm2.com) as your terminal app? Here's [a sample AppleScript](https://gist.github.com/jjelosua/53b416bd6655605846264eb9378e9c0e) to automatically launch a three-paned terminal window (one for the dailygraphics machine, one for the local webserver, and another for the separate graphics repo).
 
 You can save this locally, customize it to match your own configuration and add an alias for it to your `.bash_profile`.
 
@@ -238,24 +236,23 @@ Here are some examples:
 * Good: my-project-name<br>Bad: my project name
 * Good: my-wonderful-project<br>Bad: my wonderful project!
 
-**NPR users:** For added clarity, append the current date or known pubdate to your slug name, YYYYMMDD-style. For example: ```my-project-name-20150415```
+**NPR users:** For clarity and to help prevent overwriting existing projects, append the current date or known pubdate to your slug name, YYYYMMDD-style. For example: ```my-project-name-20150415```
 
 When you create a new project, dailygraphics will check against your local projects and the projects published to production to make sure that the ```$SLUG``` you've chosen does not already exist.
 
-Clone Old Graphic
+Clone An Old Graphic
 -----------------
-Sometimes we just want to reuse an old graphic but we want to profit from the dailygraphics rig to create the associated spreadsheet just like it would do with a new graphic from its template.
-
-We have created a Fabric task for this precise purpose it will search for a given slug in our graphics and graphics-archive repositories and clone it creating a new ready-to-work-on graphic.
+If you want to use an old graphic as a starting point for a new graphic -- with a new instance of the graphic's spreadsheet so you don't overwrite the old content -- use this command:
 
 ```
 fab clone_graphic:$OLD_SLUG,$NEW_SLUG
 ```
 
-It requires one parameter ```$OLD_SLUG```: the graphic slug we are trying to clone. The second parameter is optional, if given, it will be used to generate the new graphic slug, if it is not provided the new graphic slug will be derived from the ```$OLD_SLUG``` replacing the date at the end of the slug with the current date or appending the current date at the end, in case a date was not found at the end of ```$OLD_SLUG```
+It will search for a given slug in our graphics and graphics-archive repositories and clone it, creating a new ready-to-work-on graphic.
 
+The first (required) parameter -- ```$OLD_SLUG``` -- is the graphic slug you are trying to clone. The second parameter -- ```$NEW_SLUG``` -- is optional. If specified, it will be used to generate the new graphic slug. Otherwise, if no ```$NEW_SLUG``` is specified, the new graphic slug will be derived from the ```$OLD_SLUG```, replacing the date at the end of the slug with the current date (or, if ```$OLD_SLUG``` did not include a date, appending the current date at the end).
 
-Examples if today was ```20160705```:
+Examples (if today was ```20160705```):
 
 ```
 fab clone_graphic:my-project-name-20150415,my-new-project-20160706
@@ -280,8 +277,6 @@ fab clone_graphic:my-wrong-project-name-20150415
 Deploy To S3
 ------------
 
-When it's time to publish your graphic, it's better to deploy a specific graphic rather than the entire repo, to minimize the risk of publishing edits that aren't yet ready to go live.
-
 To deploy a specific graphic:
 
 ```
@@ -291,8 +286,7 @@ fab staging deploy:$SLUG
 fab production deploy:$SLUG
 ```
 
-You can deploy multiple graphics with a single command by passing the
-slugs as a comma-separated list (no spaces). To deploy multiple graphics at once:
+You can deploy multiple graphics with a single command by passing the slugs as a comma-separated list (no spaces). To deploy multiple graphics at once:
 
 ```
 fab staging deploy:$SLUG1,$SLUG2
@@ -301,6 +295,128 @@ fab staging deploy:$SLUG1,$SLUG2
 fab production deploy:$SLUG1,$SLUG2
 ```
 
+#### Deploy graphics that exist in an arbitrary location
+
+At NPR, we occasionally need to redeploy old graphics in our `graphics-archive` repo. The deployment command supports passing either a relative path to the graphic from dailygraphics or by passing an absolute path. This functionality can be used to render and deploy graphics that are outside the `GRAPHICS_PATH` location in `app_config.py` as long as the graphic has the templates and files required for graphics created by `dailygraphics`.
+
+```
+fab staging deploy:"path"
+```
+```
+fab production deploy:"path"
+```
+
+_Wrapping the path in quotes is needed if the path contains spaces._
+
+To deploy a specific archived graphic:
+
+```
+fab staging deploy:"../graphics-archive/2016/01/100-words-20160122"
+```
+```
+fab staging deploy:"/home/user/Projects/graphics-archive/2016/01/100-words-20160122"
+```
+
+Dependent fabric commands are also available, including `render` and `update_copy`. For example:
+
+```
+fab staging render:"../graphics-archive/2016/01/100-words-20160122"
+```
+```
+fab staging update_copy:"../graphics-archive/2016/01/100-words-20160122"
+```
+
+You can deploy multiple graphics with a single command by passing the slugs as a comma-separated list (no spaces). To deploy multiple graphics at once:
+
+```
+fab staging deploy:path1,path2
+```
+
+_Warning: There is no preview available for these changes and deployments. If you need to make a significant change or actively work on a graphic outside of the primary graphics folder, it may be better to clone the graphic and start fresh._
+
+Test Capabilities
+-----------------
+
+#### Installation
+
+At NPR, we recently had to update all of our past graphics to faciltate the site's switch to `https`. We have introduced test capabilities to trim down the review process for this project -- but this functionality can and probably should be a part of our regular deployment.
+
+Our basic test functionality uses [selenium for python](http://selenium-python.readthedocs.io/) and [chrome webdriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) to launch and validate the deployment url for a graphic or multiple graphics. The process makes a screenshot of the Chrome page and writes a log of the warnings, errors and ```console.log()``` statements that we may find.
+
+* Selenium is included in our `requirements.txt`.
+
+* To use [chrome webdriver](https://sites.google.com/a/chromium.org/chromedriver/downloads), download and unzip the corresponding version for your platform and put it somewhere on the `$PATH` so that selenium can find it. (You could include the path to the binary on the webdriver call but let's stick to only one approach.)
+
+As an alternative to `chrome-webdriver`, you can use [phantomjs](http://phantomjs.org/). However, we have found that the browser logging granularity is a bit worse. To install phantomjs:
+
+```
+$ brew install phantomjs
+```
+
+There are other drivers ([see here](http://selenium-python.readthedocs.io/installation.html#drivers)) that you could use, and it should be quite straightforward to modify the code to do that. Since this is not intended as a cross-browser test, sticking to one browser serves our needs.
+
+#### Test Deployment
+
+*Important:* _The testing functionality assumes that the graphic has already been deployed and its corresponding url is accessible._
+
+Once you have installed the needed binaries and libraries we are ready to start testing.
+
+The main entry point is a fabric task:
+
+```
+fab $ENV test:path
+```
+
+Where $ENV should be replaced by the desired environment `staging` or `production`
+
+You could do them on more than one graphic by separating paths with commas
+
+```
+fab $ENV test:path1,path2
+```
+
+If you need/want to run the test on more than a couple of graphics we have you covered, you can use the `bulk_test` fabric task
+
+```
+fab $ENV test.bulk_test:$CSVPATH
+```
+
+`$CSVPATH` is an absolute or relative path to the location of a csv file that will have either one path to a graphic per line or one url per line.
+
+If a path is given on each line the task will use the provided `$ENV` to calculate the deployed url and test it.
+
+If a url is given on each line you do not need to specify a `$ENV` since the url is already provided.
+
+As a result the test rig will create a screenshot and a logfile for each graphic inside `test` folder. If `bulk_test` is used it will create a subfolder with the timestamp and inside it it will create a logfile for all the process and a screenshot for each graphic.
+
+If there's an existing graphic report (screenshot + log) for a given graphic and environment and you run the test for that same configuration again the report will be overwritten, let's save some space right?
+
+#### Fine-Tuning Test Deployment
+
+All the fabric tasks mentioned above have some behavior that can be customized:
+
+* `use`: Which webdriver to use on the tests, defaults to `Chrome`
+* `screenshot`: Whether to make a screenshot or not of the tested page, defaults to `True`
+* `pymParent`: Whether we want to reinforce a communication protocol on Pym
+ to ensure that the page has loaded correctly, defaults to `False`
+
+Let's say we have installed phantomjs and want to test using that webdriver, we could run:
+
+```
+$ fab $ENV test:path,use='phantom'
+```
+
+Let's say we do not want a screenshot to be taken for one of our bulk tests:
+
+```
+$ fab $ENV test.bulk_test:$CSVPATH,screenshot=False
+```
+
+Let's say we are using the rendered index page for our graphic and want to enforce `Pym.js` communication prior to checking our page.
+
+```
+$ fab $ENV test:path,pymParent=True
+```
 
 Embedding
 ---------
@@ -391,6 +507,8 @@ Syncing these assets requires running a couple different commands at the right t
 * You can also take all remote versions (type "ra") or all local versions (type "la"). Type "c" to cancel if you aren't sure what to do.
 
 Unfortunately, there is no automatic way to know when a file has been intentionally deleted from the server or your local directory. When you want to simultaneously remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets.rm:"$SLUG/assets/file_name_here.jpg"```
+
+There's a `private` subfolder inside `assets`. Files inside that `private` folder will be synced to the Amazon S3 bucket configured in ```app_config.ASSETS_S3_BUCKET``` but will not be pushed to the final graphic location and thus will not be publicly accesible. You can use the `assets/private` folder to share assets with your team but not expose them publicly.
 
 Creating Locator Maps
 ---------------------
@@ -519,34 +637,6 @@ you're ready to export, run File >> Scripts >> ai2html. The resulting
 graphic will appear within the base template when you load your graphic!
 
 
-Working With Carebot
---------------------
-
-**This section is relevant to NPR users of the dailygraphics rig.**
-
-[Carebot](https://thecarebot.github.io) is a grant-funded project to measure and report more meaningful analytics around stories and story elements (like graphics). This branch of dailygraphics includes test code that the Carebot team has developed to measure 1) how long a dailygraphics embedded project is visible onscreen and 2) how far users have scrolled down the length of a story. Carebot is still a work in progress, and the code we've implemented so far is likely to change.
-
-We have created a `CAREBOT_ENABLED` configuration option on dailygraphics `app_config.py`. It allows you to switch `Carebot` on or off on your graphics. Since `carebot-tracker` is being served directly by NPR from a CDN you do not need to add any new javascript files to this repo.
-
-**`CAREBOT_ENABLED` is set to `True` by default on `app_config.py`, change it to `False` on your fork to disable `Carebot`.**
-
-If `CAREBOT_ENABLED` is set to `True`, new graphics created using the usual `fab add[type of graphic]:$slug` process will have the latest Carebot code. However, older graphics may need to be retrofitted as needed before being published.
-
-#### How To Add/Update Carebot Code In An Existing Graphic
-
-Copy the [pymChild analytics code](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/graphic/js/graphic.js#L17-L22) from the `onWindowLoaded` function of `dailygraphics/graphic_templates/graphic/js/graphic.js` to the same spot in the `js/graphic.js` file for your project.
-
-```
-pymChild.onMessage('on-screen', function(bucket) {
-    ANALYTICS.trackEvent('on-screen', bucket);
-});
-pymChild.onMessage('scroll-depth', function(data) {
-    ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
-});
-```
-
-These are the two custom messages that `carebot-tracker` will fire on the parent page. If `CAREBOT_ENABLED` is `False` this code on your graphic will not be executed.
-
 Adding a new graphic template
 -----------------------------
 
@@ -575,6 +665,34 @@ def add_scatterplot(slug):
 ```
 
 Finally, commit your new graphic template and your fabfile changes. Your new graphic template is now ready to use.
+
+Working With Carebot
+--------------------
+
+**This section is relevant to NPR users of the dailygraphics rig.**
+
+[Carebot](https://thecarebot.github.io) is a grant-funded project to measure and report more meaningful analytics around stories and story elements (like graphics). This branch of dailygraphics includes test code that the Carebot team has developed to measure 1) how long a dailygraphics embedded project is visible onscreen and 2) how far users have scrolled down the length of a story. Carebot is still a work in progress, and the code we've implemented so far is likely to change.
+
+We have created a `CAREBOT_ENABLED` configuration option on dailygraphics `app_config.py`. It allows you to switch `Carebot` on or off on your graphics. Since `carebot-tracker` is being served directly by NPR from a CDN you do not need to add any new javascript files to this repo.
+
+**`CAREBOT_ENABLED` is set to `True` by default on `app_config.py`, change it to `False` on your fork to disable `Carebot`.**
+
+If `CAREBOT_ENABLED` is set to `True`, new graphics created using the usual `fab add[type of graphic]:$slug` process will have the latest Carebot code. However, older graphics may need to be retrofitted as needed before being published.
+
+#### How To Add/Update Carebot Code In An Existing Graphic
+
+Copy the [pymChild analytics code](https://github.com/nprapps/dailygraphics/blob/master/graphic_templates/graphic/js/graphic.js#L17-L22) from the `onWindowLoaded` function of `dailygraphics/graphic_templates/graphic/js/graphic.js` to the same spot in the `js/graphic.js` file for your project.
+
+```
+pymChild.onMessage('on-screen', function(bucket) {
+    ANALYTICS.trackEvent('on-screen', bucket);
+});
+pymChild.onMessage('scroll-depth', function(data) {
+    ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
+});
+```
+
+These are the two custom messages that `carebot-tracker` will fire on the parent page. If `CAREBOT_ENABLED` is `False` this code on your graphic will not be executed.
 
 Keeping the graphics directory clean
 ------------------------------------

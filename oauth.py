@@ -63,11 +63,14 @@ def oauth_required(f):
     """
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        from flask import request
-
+        from flask import request, g
+        alt_path = getattr(g, 'alt_path', None)
         if request.path.startswith('/graphics/'):
             slug = request.path.split('/')[-2]
-            graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+            if alt_path:
+                graphic_path = alt_path
+            else:
+                graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
             try:
                 graphic_config = load_graphic_config(graphic_path)

@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-
+# _*_ coding:utf-8 _*_
 from mimetypes import guess_type
 import os
 import subprocess
 
-from flask import Blueprint, abort, make_response, render_template, render_template_string
+from flask import Blueprint, abort, make_response, render_template
 from jinja2 import Environment, FileSystemLoader
+from jinja2.exceptions import TemplateNotFound
 
 import app_config
 import copytext
@@ -20,14 +21,25 @@ def _graphics_detail(slug):
     """
     Renders a parent.html index with child.html embedded as iframe.
     """
-    from flask import request
+    from flask import request, g
 
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    alt_path = getattr(g, 'alt_path', None)
+    if alt_path:
+        graphic_path = alt_path
+    else:
+        graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
     # NOTE: Parent must load pym.js from same source as child to prevent version conflicts!
     context = make_context(asset_depth=2, root_path=graphic_path)
     context['slug'] = slug
     context['var_name'] = slug.replace('-', '_')
+
+    # Use local_pym for legacy graphics
+    local_pym = getattr(g, 'local_pym', None)
+    context['LOCAL_PYM'] = local_pym
+    # warning message
+    custom_location = getattr(g, 'custom_location', None)
+    context['CUSTOM_LOCATION'] = custom_location
 
     template = 'parent.html'
 
@@ -45,7 +57,12 @@ def _graphics_detail(slug):
     except IOError:
         pass
 
-    return make_response(render_template(template, **context))
+    try:
+        env = Environment(loader=FileSystemLoader(graphic_path))
+        template = env.get_template('parent.html')
+        return make_response(template.render(**context))
+    except TemplateNotFound:
+        return make_response(render_template(template, **context))
 
 @graphic.route('/<slug>/child.html')
 @oauth.oauth_required
@@ -53,7 +70,12 @@ def _graphics_child(slug):
     """
     Renders a child.html for embedding.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    from flask import g
+    alt_path = getattr(g, 'alt_path', None)
+    if alt_path:
+        graphic_path = alt_path
+    else:
+        graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     print graphic_path
 
     # Fallback for legacy projects w/o child templates
@@ -96,7 +118,12 @@ def _graphic_less(slug, filename):
     """
     Compiles LESS for a graphic.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    from flask import g
+    alt_path = getattr(g, 'alt_path', None)
+    if alt_path:
+        graphic_path = alt_path
+    else:
+        graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     less_path = '%s/css/%s.less' % (graphic_path, filename)
 
     if not os.path.exists(less_path):
@@ -109,7 +136,13 @@ def _graphic_less(slug, filename):
 # Serve arbitrary static files on-demand
 @graphic.route('/<slug>/<path:path>')
 def _static(slug, path):
-    real_path = '%s/%s/%s' % (app_config.GRAPHICS_PATH, slug, path)
+    from flask import g
+    alt_path = getattr(g, 'alt_path', None)
+    if alt_path:
+        graphic_path = alt_path
+    else:
+        graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    real_path = '%s/%s' % (graphic_path, path)
 
     try:
         with open(real_path) as f:
