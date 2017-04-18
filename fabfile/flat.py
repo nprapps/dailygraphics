@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# _*_ coding:utf-8 _*_
 import copy
 from cStringIO import StringIO
 from fnmatch import fnmatch
@@ -13,15 +13,6 @@ import app_config
 import utils
 
 GZIP_FILE_TYPES = ['.html', '.js', '.json', '.css', '.xml']
-
-
-class FakeTime:
-    def time(self):
-        return 1261130520.0
-
-# Hack to override gzip's time implementation
-# See: http://stackoverflow.com/questions/264224/setting-the-gzip-timestamp-from-python
-gzip.time = FakeTime()
 
 
 def deploy_file(src, dst, headers={}):
@@ -48,6 +39,11 @@ def deploy_file(src, dst, headers={}):
 
     if 'Content-Type' not in headers:
         file_headers['Content-Type'] = mimetypes.guess_type(src)[0]
+        if file_headers['Content-Type'] == 'text/html':
+            # Force character encoding header
+            file_headers['Content-Type'] = '; '.join([
+                file_headers['Content-Type'],
+                'charset=utf-8'])
 
     # Gzip file
     if os.path.splitext(src)[1].lower() in GZIP_FILE_TYPES:
@@ -57,7 +53,7 @@ def deploy_file(src, dst, headers={}):
             contents = f_in.read()
 
         output = StringIO()
-        f_out = gzip.GzipFile(filename=dst, mode='wb', fileobj=output)
+        f_out = gzip.GzipFile(filename=dst, mode='wb', fileobj=output, mtime=0)
         f_out.write(contents)
         f_out.close()
 
@@ -69,7 +65,9 @@ def deploy_file(src, dst, headers={}):
             print 'Skipping %s (has not changed)' % src
         else:
             print 'Uploading %s --> %s (gzipped)' % (src, dst)
-            k.set_contents_from_string(output.getvalue(), file_headers, policy=policy)
+            k.set_contents_from_string(output.getvalue(),
+                                       file_headers,
+                                       policy=policy)
     # Non-gzip file
     else:
         with open(src, 'rb') as f:
@@ -82,6 +80,7 @@ def deploy_file(src, dst, headers={}):
         else:
             print 'Uploading %s --> %s' % (src, dst)
             k.set_contents_from_filename(src, file_headers, policy=policy)
+
 
 def deploy_folder(src, dst, headers={}, ignore=[]):
     """
@@ -117,6 +116,7 @@ def deploy_folder(src, dst, headers={}, ignore=[]):
 
     for src, dst in to_deploy:
         deploy_file(src, dst, headers)
+
 
 def delete_folder(dst):
     """

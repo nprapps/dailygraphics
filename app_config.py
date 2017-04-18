@@ -97,6 +97,14 @@ GOOGLE_ANALYTICS = {
     'ACCOUNT_ID': ''
 }
 
+"""
+TESTS
+"""
+AUTOEXECUTE_TESTS = False
+TESTS_LOAD_WAIT_TIME = 2
+TEST_SCRIPTS_TIMEOUT = 5
+
+
 # These variables will be set at runtime. See configure_targets() below
 S3_BUCKET = None
 S3_BASE_URL = ''

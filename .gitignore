@@ -30,6 +30,9 @@ pip-log.txt
 .DS_store
 .gzip
 
+# Test Logs
+*.log
+
 node_modules
 www/*.html
 www/css/*.min.*.css
@@ -53,3 +56,6 @@ www/graphics/*/child.html
 dailygraphics.sublime-*
 graphic_templates/**/*.xlsx
 graphic_templates/_basec
+
+#Test
+test

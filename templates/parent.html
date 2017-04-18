@@ -220,10 +220,12 @@
 <!-- end textarea contents -->
 
     </div>
-
-
-
+{% if LOCAL_PYM %}
+    <script type="text/javascript" src="js/lib/pym.js"></script>
+{% else %}
     <script type="text/javascript" src="{{ PYM['pym_url'] }}"></script>
+{% endif %}
+
 {% if CAREBOT_ENABLED %}
     <script type="text/javascript" src="{{ CAREBOT_URL }}"></script>
 {% endif %}

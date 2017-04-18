@@ -18,16 +18,12 @@ import assets
 import flat
 import render
 import utils
+import test
 
 from render_utils import load_graphic_config
 
 SPREADSHEET_COPY_URL_TEMPLATE = 'https://www.googleapis.com/drive/v2/files/%s/copy'
 SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=1'
-
-"""
-Base configuration
-"""
-env.settings = None
 
 """
 Environments
@@ -100,7 +96,9 @@ def deploy_single(path):
     assets_max_age = getattr(graphic_config, 'ASSETS_MAX_AGE', None) or app_config.ASSETS_MAX_AGE
     update_copy(path)
     if use_assets:
-        assets.sync(path)
+        error = assets.sync(path)
+        if error:
+            return
 
     render.render(path)
     flat.deploy_folder(
@@ -122,7 +120,8 @@ def deploy_single(path):
             s3_assets,
             headers={
                 'Cache-Control': 'max-age=%i' % assets_max_age
-            }
+            },
+            ignore=['%s/private/*' % graphic_assets]
         )
 
     # Need to explicitly point to index.html for the AWS staging link
