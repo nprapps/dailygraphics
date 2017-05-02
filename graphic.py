@@ -76,7 +76,6 @@ def _graphics_child(slug):
         graphic_path = alt_path
     else:
         graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
-    print graphic_path
 
     # Fallback for legacy projects w/o child templates
     if not os.path.exists('%s/child_template.html' % graphic_path):
