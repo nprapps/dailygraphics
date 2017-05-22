@@ -20,6 +20,7 @@
 
     &.left { text-anchor: start; }
     &.right { text-anchor: end; }
+    &.center { text-anchor: middle; }
 
     &.out {
         font-size: 9px;
@@ -41,15 +42,13 @@
 
 @media screen and (min-width: 650px) {
     .key {
-        // justify-content: center;
+        justify-content: center;
         flex-wrap: nowrap;
         margin-bottom: 22px;
 
         .key-item {
             margin: 0 11px;
             width: auto;
-
-            &:first-child { margin-left: 0; }
         }
     }
 }

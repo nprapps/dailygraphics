@@ -1,3 +1,10 @@
+/* TODO
+- if 2 categories, display labels above each bar
+- if >2 categories, display centered legend
+*/
+
+
+
 // Global vars
 var pymChild = null;
 var isMobile = false;
@@ -71,8 +78,8 @@ var render = function(containerWidth) {
     }
 
     // Render the chart!
-    renderStackedBarChart({
-        container: '#stacked-bar-chart',
+    renderDivergingBarChart({
+        container: '#diverging-bar-chart',
         width: containerWidth,
         data: DATA
     });
@@ -84,9 +91,9 @@ var render = function(containerWidth) {
 }
 
 /*
- * Render a stacked bar chart.
+ * Render a diverging bar chart.
  */
-var renderStackedBarChart = function(config) {
+var renderDivergingBarChart = function(config) {
     /*
      * Setup
      */
@@ -94,7 +101,7 @@ var renderStackedBarChart = function(config) {
 
     var barHeight = 30;
     var barGap = 5;
-    var labelWidth = 85;
+    var labelWidth = 75;
     var labelMargin = 10;
     var valueGap = 6;
 
@@ -105,16 +112,8 @@ var renderStackedBarChart = function(config) {
         left: (labelWidth + labelMargin)
     };
 
-    var min = -83;
-    var max = 57;
-
     if (isMobile) {
-        labelWidth = 75;
-        margins['left'] = labelWidth + labelMargin;
-        margins['right'] = 23;
-        min = -82;
-        max = 36;
-        valueGap = 4;
+        margins['right'] = 24;
     }
 
     // Calculate actual chart dimensions
@@ -128,6 +127,18 @@ var renderStackedBarChart = function(config) {
     /*
      * Create D3 scale objects.
      */
+    var min = d3.min(config['data'], function(d) {
+        return d['offset'];
+    });
+
+    if (min > 0) {
+        min = 0;
+    }
+
+    var max = d3.max(config['data'], function(d) {
+        return d['values'][d['values'].length - 1]['x1'];
+    })
+
     var xScale = d3.scale.linear()
         .domain([min, max])
         .rangeRound([0, chartWidth]);
@@ -241,20 +252,37 @@ var renderStackedBarChart = function(config) {
                     return xScale(d['x1']);
                 }
             })
-            .attr('dx', function(d) {
+            .attr('dx', function(d, i) {
                 var textWidth = this.getComputedTextLength();
                 var barWidth = Math.abs(xScale(d['x1']) - xScale(d['x0']));
 
-                // if (textWidth + valueGap * 2 > barWidth) {
-                if ((textWidth + valueGap) > barWidth && d['val'] != 11) {
-                    // too small to fit in the bar -- set outside instead
-                    d3.select(this).classed('out', true);
+                if (textWidth > barWidth) {
+                    if (i == 0 || i == config['data'][0]['values'].length - 1) {
+                        // first or last item -- set outside the bar
+                        d3.select(this).classed('out', true);
+
+                        if (d['x0'] < 0) {
+                            return -valueGap;
+                        } else {
+                            return valueGap;
+                        }
+                    } else {
+                        // middle bar -- hide
+                        d3.select(this).classed('hidden', true);
+                        return 0;
+                    }
+                } else if (textWidth < barWidth && (textWidth + valueGap * 2) > barWidth) {
+                    // label baaaarely fits inside the bar. center it in the avail space
+                    d3.select(this).classed('center', true);
+
+                    var xShift = ((xScale(d['x1']) - xScale(d['x0'])) / 2);
 
                     if (d['x0'] < 0) {
-                        return -valueGap;
+                        return xShift;
                     } else {
-                        return valueGap;
+                        return -xShift;
                     }
+
                 } else {
                     if (d['x0'] < 0) {
                         return valueGap;
