@@ -1,10 +1,3 @@
-/* TODO
-- if 2 categories, display labels above each bar
-- if >2 categories, display centered legend
-*/
-
-
-
 // Global vars
 var pymChild = null;
 var isMobile = false;
@@ -105,12 +98,27 @@ var renderDivergingBarChart = function(config) {
     var labelMargin = 10;
     var valueGap = 6;
 
+    var showFullLegend = true;
+    var showBarLabels = false;
+    if (config['data'][0]['values'].length == 2) {
+        showFullLegend = false;
+        showBarLabels = true;
+    }
+    if (config['data'][0]['values'].length < 2) {
+        showFullLegend = false;
+        showBarLabels = false;
+    }
+
     var margins = {
         top: 0,
         right: 0,
         bottom: 0,
         left: (labelWidth + labelMargin)
     };
+
+    if (!showFullLegend && showBarLabels) {
+        margins['top'] = 30;
+    }
 
     if (isMobile) {
         margins['right'] = 24;
@@ -154,24 +162,26 @@ var renderDivergingBarChart = function(config) {
     /*
      * Render the legend.
      */
-    var legend = containerElement.append('ul')
-		.attr('class', 'key')
-		.selectAll('g')
-			.data(colorScale.domain())
-		.enter().append('li')
-			.attr('class', function(d, i) {
-				return 'key-item key-' + i + ' ' + classify(d);
-			});
+    if (showFullLegend) {
+        var legend = containerElement.append('ul')
+    		.attr('class', 'key')
+    		.selectAll('g')
+    			.data(colorScale.domain())
+    		.enter().append('li')
+    			.attr('class', function(d, i) {
+    				return 'key-item key-' + i + ' ' + classify(d);
+    			});
 
-    legend.append('b')
-        .style('background-color', function(d) {
-            return colorScale(d);
-        });
+        legend.append('b')
+            .style('background-color', function(d) {
+                return colorScale(d);
+            });
 
-    legend.append('label')
-        .text(function(d) {
-            return d;
-        });
+        legend.append('label')
+            .text(function(d) {
+                return d;
+            });
+    }
 
     /*
      * Create the root SVG element.
@@ -334,6 +344,33 @@ var renderDivergingBarChart = function(config) {
                 .text(function(d) {
                     return d[labelColumn];
                 });
+
+    // if there are only two categories, show labels above the bars instead
+    if (showBarLabels) {
+        var annotations = chartElement.append('g')
+            .attr('class', 'annotations')
+            .selectAll('text')
+            .data(colorScale.domain())
+            .enter().append('text')
+                .html(function(d) {
+                    return d;
+                })
+                .attr('class', function(d, i) {
+                    return 'label label-' + i + ' ' + classify(d);
+                })
+                .attr('x', xScale(0))
+                .attr('y', -15)
+                .attr('dx', function(d, i) {
+                    if (i == 0) {
+                        return -valueGap;
+                    } else {
+                        return valueGap;
+                    }
+                })
+                .attr('fill', function(d) {
+                    return colorScale(d);
+                });
+    }
 }
 
 /*
