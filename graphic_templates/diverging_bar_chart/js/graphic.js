@@ -1,3 +1,7 @@
+/* TODO
+- screengrab + add to readme
+*/
+
 // Global vars
 var pymChild = null;
 var isMobile = false;
@@ -315,6 +319,33 @@ var renderDivergingBarChart = function(config) {
             .attr('y2', chartHeight);
     }
 
+    // if there are only two categories, show labels above the bars instead
+    if (showBarLabels) {
+        var annotations = chartElement.append('g')
+            .attr('class', 'annotations')
+            .selectAll('text')
+            .data(colorScale.domain())
+            .enter().append('text')
+                .text(function(d) {
+                    return d;
+                })
+                .attr('class', function(d, i) {
+                    return 'dhdr dhdr-' + i;
+                })
+                .attr('x', xScale(0))
+                .attr('y', -15)
+                .attr('dx', function(d, i) {
+                    if (i == 0) {
+                        return -valueGap;
+                    } else {
+                        return valueGap;
+                    }
+                })
+                .attr('fill', function(d) {
+                    return colorScale(d);
+                });
+    }
+
     /*
      * Render bar labels.
      */
@@ -344,33 +375,6 @@ var renderDivergingBarChart = function(config) {
                 .text(function(d) {
                     return d[labelColumn];
                 });
-
-    // if there are only two categories, show labels above the bars instead
-    if (showBarLabels) {
-        var annotations = chartElement.append('g')
-            .attr('class', 'annotations')
-            .selectAll('text')
-            .data(colorScale.domain())
-            .enter().append('text')
-                .html(function(d) {
-                    return d;
-                })
-                .attr('class', function(d, i) {
-                    return 'label label-' + i + ' ' + classify(d);
-                })
-                .attr('x', xScale(0))
-                .attr('y', -15)
-                .attr('dx', function(d, i) {
-                    if (i == 0) {
-                        return -valueGap;
-                    } else {
-                        return valueGap;
-                    }
-                })
-                .attr('fill', function(d) {
-                    return colorScale(d);
-                });
-    }
 }
 
 /*
