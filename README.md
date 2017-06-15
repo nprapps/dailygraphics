@@ -17,7 +17,6 @@ dailygraphics
 * [Open Linked Google Spreadsheet](#open-linked-google-spreadsheet)
 * [Using Jinja Filter Functions](#using-jinja-filter-functions)
 * [Storing Media Assets](#storing-media-assets)
-* [Creating Locator Maps](#creating-locator-maps)
 * [Creating Animated Photos](#creating-animated-photos)
 * [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
 * [Adding A New Graphic Template](#adding-a-new-graphic-template)
@@ -223,7 +222,7 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Line chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/line-chart.png) | Line chart | ```fab add_line_chart:$SLUG``` |
 | ![Slopegraph](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/slopegraph.png) | Slopegraph | ```fab add_slopegraph:$SLUG``` |
 | ![Dot chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/dot-chart.png) | Dot chart | ```fab add_dot_chart:$SLUG``` |
-| ![Locator map](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/locator-map.png) | [Locator map](#creating-locator-maps) | ```fab add_map:$SLUG``` |
+| ![Locator map](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/locator-map.png) | Locator map ([documentation](graphic_templates/locator_map/README.md)) | ```fab add_map:$SLUG``` |
 | ![State grid map](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/state-grid-map.png) | State grid map | ```fab add_state_grid_map:$SLUG``` |
 | ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
 | ![Issue Matrix](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/issue-matrix.png) | A table comparing a list of candidates' positions on various issues | ```fab add_issue_matrix:$SLUG``` |
@@ -511,39 +510,6 @@ Unfortunately, there is no automatic way to know when a file has been intentiona
 
 There's a `private` subfolder inside `assets`. Files inside that `private` folder will be synced to the Amazon S3 bucket configured in ```app_config.ASSETS_S3_BUCKET``` but will not be pushed to the final graphic location and thus will not be publicly accesible. You can use the `assets/private` folder to share assets with your team but not expose them publicly.
 
-Creating Locator Maps
----------------------
-
-The new locator map template is designed to simplify creating basic locator maps with D3, TopoJSON and [Natural Earth](http://www.naturalearthdata.com) data. It will not create production-ready maps, but it will quickly generate a code-based starting point for a map project.
-
-To generate the necessary TopoJSON file, you will need to install the [mapturner](https://github.com/nprapps/mapturner) library. Mapturner also requires ogr2ogr/GDAL and topojson. **[See the mapturner docs](https://github.com/nprapps/mapturner)** for set-up information.
-
-_(Note: The code in our example is tailored for a map centered on Nepal. You'll want to edit the configuration, JavaScript and LESS accordingly.)_
-
-To get started, create a new graphic using that template:
-
-```
-fab add_map:$slug
-```
-
-Inside the project folder, edit the configuration file ```geodata.yaml``` to specify the particular layers and data columns you want. Options included:
-
-* ```bbox```: The bounding box for your map. To get coordinates (```x1 y1 x2 y2```, space-delimited) appropriate to your project, go to a site like [Bounding Box](http://boundingbox.klokantech.com), draw a box around the area you want (with a good amount of margin), and copy the coordinates of that box. (If you're using Bounding Box, choose the "CSV" coordinate output and replace the commas with spaces.)
-* Default layers: ```countries```, ```cities``` (for the primary/featured country), ```neighbors``` (for neighboring countries), ```lakes``` and ```rivers```. The default layers point to Natural Earth shapefiles. mapturner also supports geoJSON and CSVs with latitude and longitude columns.
-* For each shapefile layer, you can specify options to pass to the TopoJSON converter, including:
-  * ```id-property```: a column value you want to use as an identifier in the exported TopoJSON file
-  * ```properties```: columns you want TopoJSON to preserve in the exported file (by default, it strips out most non-geo data)
-  * ```where```: a query to pass in to filter the data returned (for example: ```where: adm0name != 'Nepal' AND scalerank <= 2```)
-
-([See the mapturner docs](https://github.com/nprapps/mapturner) for more details.)
-
-In your terminal, in the ```dailygraphics``` virtualenv, navigate to your project folder. Run mapturner to process your map's geodata:
-
-```
-mapturner geodata.yaml data/geodata.json
-```
-
-In your project ```js/graphic.js``` folder, change the ```PRIMARY_COUNTRY``` variable at the top from Nepal to the name of your featured country. You will also want to adjust the ```MAP_DEFAULT_SCALE``` and ```MAP_DEFAULT_HEIGHT``` variables so that your featured country fits onscreen.
 
 Creating Animated Photos
 ------------------------
