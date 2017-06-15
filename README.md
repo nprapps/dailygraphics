@@ -17,7 +17,6 @@ dailygraphics
 * [Open Linked Google Spreadsheet](#open-linked-google-spreadsheet)
 * [Using Jinja Filter Functions](#using-jinja-filter-functions)
 * [Storing Media Assets](#storing-media-assets)
-* [Creating An ai2html Graphic](#creating-an-ai2html-graphic)
 * [Adding A New Graphic Template](#adding-a-new-graphic-template)
 * [Working With Carebot](#working-with-carebot)
 * [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
@@ -226,6 +225,7 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Table](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/table.png) | Responsive HTML table | ```fab add_table:$SLUG``` |
 | ![Issue Matrix](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/issue-matrix.png) | A table comparing a list of candidates' positions on various issues | ```fab add_issue_matrix:$SLUG``` |
 | ![Animated photo](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/animated-photo.gif) | **Animated photo (GIF alternative)** [(documentation)](graphic_templates/animated_photo/README.md) | ```fab add_animated_photo:$SLUG``` |
+| ![ai2html](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/ai2html.png) | **ai2html graphic (Illustrator conversion)** [(documentation)](graphic_templates/ai2html_graphic/README.md) | ```fab add_ai2html_graphic:$SLUG``` |
 
 **Note**: `$SLUG` should be URL-safe, e.g., lowercase and with dashes instead of spaces and no special characters.
 
@@ -508,45 +508,6 @@ Syncing these assets requires running a couple different commands at the right t
 Unfortunately, there is no automatic way to know when a file has been intentionally deleted from the server or your local directory. When you want to simultaneously remove a file from the server and your local environment (i.e. it is not needed in the project any longer), run ```fab assets.rm:"$SLUG/assets/file_name_here.jpg"```
 
 There's a `private` subfolder inside `assets`. Files inside that `private` folder will be synced to the Amazon S3 bucket configured in ```app_config.ASSETS_S3_BUCKET``` but will not be pushed to the final graphic location and thus will not be publicly accesible. You can use the `assets/private` folder to share assets with your team but not expose them publicly.
-
-
-Creating An ai2html Graphic
----------------------------
-
-The ai2html template uses an open-source script called [ai2html](http://ai2html.org/) to convert Illustrator graphics to HTML and CSS and display them in our responsive dailygraphics template.
-
-To use this template, you'll need to install ai2html as an Illustrator
-script. Copy [the latest version of the script here](etc/ai2html.jsx)
-into the Illustrator folder where scripts are located.
-For example, on Mac OS X running Adobe Illustrator CC 2015, the path would be:
-`/Applications/Adobe Illustrator CC 2015/Presets.localized/en_US/Scripts/ai2html.jsx`
-
-**You only need to install the script once on your machine.** To check whether you
-have it installed, open Adobe Illustrator and look for the "ai2html"
-command in File >> Scripts.
-
-To create a new ai2html graphic, run:
-
-```
-fab add_ai2html_graphic:$slug
-```
-
-The basic project includes an Illustrator file in `assets`, which you'll
-use to create your graphic. The three artboards in the file are the
-three breakpoints for your graphic, allowing you to create custom
-versions for mobile, tablet and desktop-sized screens. (If you want to
-change the width of these artboards, you'll need to adjust the media
-queries in `css/graphic.less`.)
-
-You can only use fonts that are supported on our website, so make sure
-you are using the correct typeface and weight. [Here's a list of
-supported fonts](https://github.com/nprapps/dailygraphics/blob/ai2html/etc/ai2html.jsx#L593-L605).
-(For users outside of NPR, refer to the [ai2html docs](http://ai2html.org/#using-fonts-other-than-arial-and-georgia) to learn how to customize your fonts.)
-
-Create your graphic within Illustrator, referring to the [ai2html
-documentation](http://ai2html.org/#how-to-use-ai2html) for help. When
-you're ready to export, run File >> Scripts >> ai2html. The resulting
-graphic will appear within the base template when you load your graphic!
 
 
 Adding a new graphic template
