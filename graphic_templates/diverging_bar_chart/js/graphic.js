@@ -1,7 +1,3 @@
-/* TODO
-- screengrab + add to readme
-*/
-
 // Global vars
 var pymChild = null;
 var isMobile = false;
