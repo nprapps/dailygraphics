@@ -22,6 +22,7 @@
 * Force utf-8 character set on html deployment to S3 (#215)
 * Add testing capabilities
 * Add private assets functionality
+* New diverging bar chart template (#151)
 
 
 0.1.3
