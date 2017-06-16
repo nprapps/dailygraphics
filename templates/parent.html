@@ -24,6 +24,13 @@
             margin: 0 0 11px 0;
         }
 
+        p.homepage {
+            margin: -7px 0 11px 0;
+            font-size: 12px;
+            color: #666;
+        }
+        p.homepage em { color: #999; }
+
         a, a:link,
         a:visited {
             color: #4774CC;
@@ -182,17 +189,18 @@
             <div id='preview' data-pym-src="child.html">
             </div>
         </div>
-        <h2><span class="production">Production</span> universal autoinit embed code</h2>
+        <h2><span class="production">Production</span> embed code (for Seamus and NPR stations)</h2>
 {% if CUSTOM_LOCATION %}
         <h2><span class="production">This has been redeployed from a custom location. Check thoroughly before using in a new graphic.</span></h2>
 {% endif %}
+
+    <p class="homepage"><input id="homepage" type="checkbox"> This code will be embedded on the NPR homepage. <em>(Infrequent use case.)</em></p>
 
 <!-- textarea contents -->
     <textarea id="embed-code" readonly="readonly" rows="10" cols="80">
 <div data-pym-src="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</div><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
     </textarea>
 <!-- end textarea contents -->
-        <h2><span class="message">Check if asset is meant to run on homepage: <input id="homepage" type="checkbox"></h2>
 
     </div>
     <script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
