@@ -704,8 +704,12 @@ If you are working with multiple users who are creating/deleting graphics, you m
 git clean -dn
 ```
 
-This will list folders with no committed files. To permenantly delete those folders, run:
+This will list folders with no committed files. To permanently delete those folders, run:
 
 ```
 git clean -df
 ```
+
+**NOTE:** This will delete any files that have not been committed, so
+if you have any work in progress that you do not want deleted, you will
+need to commit those files before running `git clean -df`.
