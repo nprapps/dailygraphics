@@ -186,8 +186,7 @@
     <div class="content">
 
         <div id="preview-wrapper">
-            <div id='preview' data-pym-src="child.html">
-            </div>
+            <p id='preview' data-pym-src="child.html"></p>
         </div>
         <h2><span class="production">Production</span> embed code (for Seamus and NPR stations)</h2>
 {% if CUSTOM_LOCATION %}
@@ -198,7 +197,7 @@
 
 <!-- textarea contents -->
     <textarea id="embed-code" readonly="readonly" rows="10" cols="80">
-<div data-pym-src="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</div><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
+<p data-pym-src="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
     </textarea>
 <!-- end textarea contents -->
 
