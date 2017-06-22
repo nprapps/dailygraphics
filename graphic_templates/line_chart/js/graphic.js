@@ -255,6 +255,18 @@ var renderLineChart = function(config) {
         );
 
     /*
+     * Render 0 value line.
+     */
+    if (min < 0) {
+        chartElement.append('line')
+            .attr('class', 'zero-line')
+            .attr('x1', 0)
+            .attr('x2', chartWidth)
+            .attr('y1', yScale(0))
+            .attr('y2', yScale(0));
+    }
+
+    /*
      * Render lines to chart.
      */
     var line = d3.svg.line()
