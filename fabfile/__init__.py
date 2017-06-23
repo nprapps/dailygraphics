@@ -383,6 +383,13 @@ def add_block_histogram(slug):
     _add_graphic(slug, 'block_histogram')
 
 @task
+def add_diverging_bar_chart(slug):
+    """
+    Create a diverging bar chart.
+    """
+    _add_graphic(slug, 'diverging_bar_chart')
+
+@task
 def add_grouped_bar_chart(slug):
     """
     Create a grouped bar chart.

@@ -215,6 +215,7 @@ Build out your graphic in ```child_template.html```, and put your javascript in 
 | ![Bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/bar-chart.png) | Bar chart | ```fab add_bar_chart:$SLUG``` |
 | ![Grouped bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/grouped-bar-chart.png) | Grouped bar chart | ```fab add_grouped_bar_chart:$SLUG``` |
 | ![Stacked bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-bar-chart.png) | Stacked bar chart | ```fab add_stacked_bar_chart:$SLUG``` |
+| ![Diverging bar chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/diverging-bar-chart.png) | Diverging bar chart | ```fab add_diverging_bar_chart:$SLUG``` |
 | ![Column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/column-chart.png) | Column chart | ```fab add_column_chart:$SLUG``` |
 | ![Stacked column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-column-chart.png) | Stacked column chart | ```fab add_stacked_column_chart:$SLUG``` |
 | ![Stacked grouped column chart](https://raw.githubusercontent.com/nprapps/dailygraphics/master/graphic_templates/_thumbs/stacked-grouped-column-chart.png) | Stacked grouped column chart | ```fab add_stacked_grouped_column_chart:$SLUG``` |
@@ -703,8 +704,12 @@ If you are working with multiple users who are creating/deleting graphics, you m
 git clean -dn
 ```
 
-This will list folders with no committed files. To permenantly delete those folders, run:
+This will list folders with no committed files. To permanently delete those folders, run:
 
 ```
 git clean -df
 ```
+
+**NOTE:** This will delete any files that have not been committed, so
+if you have any work in progress that you do not want deleted, you will
+need to commit those files before running `git clean -df`.
