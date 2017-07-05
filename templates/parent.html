@@ -186,7 +186,7 @@
     <div class="content">
 
         <div id="preview-wrapper">
-            <p id='preview' data-pym-src="child.html"></p>
+            <p data-pym-loader data-child-src="child.html" id="preview">Loading...</p>
         </div>
         <h2><span class="production">Production</span> embed code (for Seamus and NPR stations)</h2>
 {% if CUSTOM_LOCATION %}
@@ -197,72 +197,42 @@
 
 <!-- textarea contents -->
     <textarea id="embed-code" readonly="readonly" rows="10" cols="80">
-<p data-pym-src="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
-    </textarea>
+<p data-pym-loader data-child-src="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html" id="responsive-embed-{{ slug }}">Loading...</p><script type="text/javascript" src="{{PYM['pym_loader_url']}}"></script></textarea>
 <!-- end textarea contents -->
 
     </div>
     <script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
     <script type="text/javascript">
+        var homePageEl = document.querySelector('#homepage');
         var resizeSidebarEl = document.querySelector('#resize-sidebar');
         var resizeMobileEl = document.querySelector('#resize-mobile');
         var resizeDesktopEl = document.querySelector('#resize-desktop');
         var resizeFluidEl = document.querySelector('#resize-fluid');
         var previewWrapperEl = document.querySelector('#preview-wrapper');
-        var homePageEl = document.querySelector('#homepage');
         resizeSidebarEl.addEventListener('click', function(e) {
             e.preventDefault();
-
             previewWrapperEl.style.width = '180px';
-            debugger;
-            if (window.pym.autoInitInstances.length) {
-                window.pym.autoInitInstances[0].sendWidth();
-            } else {
-                console.error('there are no pym autoinited instances')
-            }
-
+            window.dispatchEvent(new Event('resize'));
             window.location.hash = 'sidebar';
         });
-
         resizeMobileEl.addEventListener('click', function(e) {
             e.preventDefault();
-
             previewWrapperEl.style.width = '300px';
-            if (window.pym.autoInitInstances.length) {
-                window.pym.autoInitInstances[0].sendWidth();
-            } else {
-                console.error('there are no pym autoinited instances')
-            }
-
+            window.dispatchEvent(new Event('resize'));
             window.location.hash = 'mobile';
         });
-
         resizeDesktopEl.addEventListener('click', function(e) {
             e.preventDefault();
-
             previewWrapperEl.style.width = '730px';
-            if (window.pym.autoInitInstances.length) {
-                window.pym.autoInitInstances[0].sendWidth();
-            } else {
-                console.error('there are no pym autoinited instances')
-            }
-
+            window.dispatchEvent(new Event('resize'));
             window.location.hash = 'desktop';
         });
-
         resizeFluidEl.addEventListener('click', function(e) {
             e.preventDefault();
-
             previewWrapperEl.style.width = '100%';
-            if (window.pym.autoInitInstances.length) {
-                window.pym.autoInitInstances[0].sendWidth();
-            } else {
-                console.error('there are no pym autoinited instances')
-            }
-
+            window.dispatchEvent(new Event('resize'));
             window.location.hash = 'fluid';
         });
-
         homePageEl.addEventListener('change', function(e) {
             var textarea = document.getElementById('embed-code');
             var text = textarea.innerHTML
@@ -274,16 +244,6 @@
                 textarea.innerHTML = text;
             }
         });
-
-        if (window.location.hash == '#sidebar') {
-            previewWrapperEl.style.width = '180px';
-        } else if (window.location.hash == '#mobile') {
-            previewWrapperEl.style.width = '300px';
-        } else if (window.location.hash == '#desktop') {
-            previewWrapperEl.style.width = '730px';
-        } else if (window.location.hash == '#fluid') {
-            previewWrapperEl.style.width = '100%';
-        }
     </script>
 </body>
 </html>

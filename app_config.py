@@ -39,7 +39,7 @@ PYM
 
 PYM = {
     'pym_url': 'https://pym.nprapps.org/pym.v1.min.js',
-    'pym_loader_url': 'https://pym.nprapps.org/npr-pym-loader.v1.min.js',
+    'pym_loader_url': 'https://pym.nprapps.org/npr-pym-loader.v2.min.js',
 }
 
 """
