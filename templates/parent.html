@@ -244,6 +244,16 @@
                 textarea.innerHTML = text;
             }
         });
+
+        if (window.location.hash == '#sidebar') {
+            previewWrapperEl.style.width = '180px';
+        } else if (window.location.hash == '#mobile') {
+            previewWrapperEl.style.width = '300px';
+        } else if (window.location.hash == '#desktop') {
+            previewWrapperEl.style.width = '730px';
+        } else if (window.location.hash == '#fluid') {
+            previewWrapperEl.style.width = '100%';
+        }
     </script>
 </body>
 </html>
