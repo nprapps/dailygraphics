@@ -37,7 +37,11 @@ var render = function(containerWidth) {
         }
     }
 
-    d3.selectAll('.photo').html('');
+    // clear out previous canvid if it exists
+    var photoContainers = document.getElementById('graphic');
+    while (photoContainers.hasChildNodes()) {
+        photoContainers.removeChild(photoContainers.firstChild);
+    }
 
     var canvidControl = canvid({
         selector : '.photo',
