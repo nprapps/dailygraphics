@@ -3,6 +3,14 @@ var pymChild = null;
 var isMobile = false;
 var BREAKPOINTS = [ 375, 600, 1000 ];
 
+// Canvid params are defined in the spreadsheet
+var IMAGE_FOLDER = PARAMS['image_folder'];
+var IMAGE_WIDTH = +PARAMS['image_width'];
+var IMAGE_HEIGHT = +PARAMS['image_height'];
+var FRAMES = +PARAMS['frames'];
+var COLS = +PARAMS['cols'];
+var FRAMES_PER_SECOND = +PARAMS['frames_per_second'];
+
 /*
  * Initialize the graphic.
  */
@@ -28,16 +36,20 @@ var render = function(containerWidth) {
         containerWidth = DEFAULT_WIDTH;
     }
 
-    var sprite = 'img/filmstrip-' + BREAKPOINTS[BREAKPOINTS.length - 1] + '.jpg';
+    var sprite = IMAGE_FOLDER + '/filmstrip-' + BREAKPOINTS[BREAKPOINTS.length - 1] + '.jpg';
     for (var i = 0; i < BREAKPOINTS.length; i++) {
         if (i == 0 && containerWidth <= BREAKPOINTS[i]) {
-            sprite = 'img/filmstrip-' + BREAKPOINTS[i] + '.jpg';
+            sprite = IMAGE_FOLDER + '/filmstrip-' + BREAKPOINTS[i] + '.jpg';
         } else if (containerWidth > BREAKPOINTS[(i - 1)] && containerWidth <= BREAKPOINTS[i]) {
-            sprite = 'img/filmstrip-' + BREAKPOINTS[i] + '.jpg';
+            sprite = IMAGE_FOLDER + '/filmstrip-' + BREAKPOINTS[i] + '.jpg';
         }
     }
 
-    d3.selectAll('.photo').html('');
+    // clear out previous canvid if it exists
+    var photoContainers = document.getElementById('graphic');
+    while (photoContainers.hasChildNodes()) {
+        photoContainers.removeChild(photoContainers.firstChild);
+    }
 
     var canvidControl = canvid({
         selector : '.photo',
@@ -46,11 +58,11 @@ var render = function(containerWidth) {
             // cols = # of stills in a row in the filmstrip. in this case,
             //        same as frames.
             // fps = frames per second (animation speed). integers only
-            photo: { src: sprite, frames: 8, cols: 8, fps: 2 }
+            photo: { src: sprite, frames: FRAMES, cols: COLS, fps: FRAMES_PER_SECOND }
         },
         width: containerWidth,
             // multiply by height, width of original image
-            height: Math.floor(containerWidth * 1614/1500),
+            height: Math.floor(containerWidth * IMAGE_HEIGHT / IMAGE_WIDTH),
         loaded: function() {
             canvidControl.play('photo');
 
