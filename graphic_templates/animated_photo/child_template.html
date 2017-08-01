@@ -11,6 +11,9 @@
     </div>
     {% endif %}
 
+    <script type="text/javascript">
+        var PARAMS = {{ COPY.params.json() }};
+    </script>
 {% endblock content %}
 
 {% block js %}
