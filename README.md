@@ -149,7 +149,7 @@ Configuration
 
 The dailygraphics project configuration defaults are specific to NPR. If you want to use it in your newsroom you should fork this repository and update ``app_config.py`` with your own configuration.
 
-At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS``, ``STAGING_S3_BUCKETS`` and ``ASSETS_S3_BUCKET``. (``ASSETS_S3_BUCKET`` *must* be different from the other buckets.)
+At a minimum you will want to change ``REPOSITORY_URL``, ``DRIVE_ROOT_FOLDER``, ``PRODUCTION_S3_BUCKETS``, ``STAGING_S3_BUCKETS`` and ``ASSETS_S3_BUCKET``. (``ASSETS_S3_BUCKET`` *must* be different from the other buckets.)
 
 **Google OAuth**
 
@@ -164,7 +164,7 @@ Following the steps in [this blog post](http://blog.apps.npr.org/2015/03/02/app-
 
 You should only need to do this once.
 
-**NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson, David or Chris for more information.
+**NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact visuals for more information.
 
 
 Run The Project
