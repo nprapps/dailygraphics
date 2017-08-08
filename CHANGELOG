@@ -1,3 +1,10 @@
+0.1.6
+-----
+
+This version moves templates to a separate location from the duplicated spreadsheets.
+
+* Add optional drive root folder to store the COPY spreadsheets
+
 0.1.5
 -----
 

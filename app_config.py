@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# _*_ coding:utf-8 _*_
 """
 Project-wide application configuration.
 """
@@ -32,6 +32,10 @@ ARCHIVE_GRAPHICS_PATH = os.path.abspath('../graphics-archive')
 
 # Path to the graphic templates
 TEMPLATES_PATH = os.path.abspath('graphic_templates')
+
+# Add specific drive root folder where copy spreadsheet will be stored
+# Set to None to use the same folder as the original template
+DRIVE_ROOT_FOLDER = '0B2rSjDbnpA5XTThSNDZkWlJTX1E'
 
 """
 PYM

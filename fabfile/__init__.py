@@ -551,14 +551,20 @@ def copy_spreadsheet(slug):
         print 'Skipping spreadsheet creation. (COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.)' % slug
         return
 
+    metadata = {'title': '%s GRAPHIC COPY' % slug}
+    try:
+        if app_config.DRIVE_ROOT_FOLDER:
+            metadata['parents'] = [{
+                'id': app_config.DRIVE_ROOT_FOLDER}]
+    except AttributeError:
+        pass
+
     kwargs = {
         'credentials': get_credentials(),
         'url': SPREADSHEET_COPY_URL_TEMPLATE % graphic_config.COPY_GOOGLE_DOC_KEY,
         'method': 'POST',
         'headers': {'Content-Type': 'application/json'},
-        'body': json.dumps({
-            'title': '%s GRAPHIC COPY' % slug,
-        }),
+        'body': json.dumps(metadata),
     }
 
     resp = app_config.authomatic.access(**kwargs)
