@@ -4,7 +4,7 @@
 * Animated photo: Remove D3 dependency (#229)
 * Animated photo: Store params in the copy spreadsheet (#228)
 * Switch to new embed loader (#231)
-* Add today's date if not present or invalid on entered slug (#237)
+* Auto-generate dates for new graphics (#237)
 
 0.1.4
 -----

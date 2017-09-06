@@ -237,9 +237,9 @@ Here are some examples:
 * Good: my-project-name<br>Bad: my project name
 * Good: my-wonderful-project<br>Bad: my wonderful project!
 
-**NPR users:** For clarity and to help prevent overwriting existing projects, append the current date or known pubdate to your slug name, YYYYMMDD-style. For example: ```my-project-name-20150415```
+Dailygraphics by default will append the current date to your slug name, YYYMMDD-style -- for example: ```my-project-name-20170415```. This is for clarity and to help prevent ovewriting existing projects. You can also manually specify a date. If the date you specify is not a valid date, dailygraphics will use the current date instead.
 
-When you create a new project, dailygraphics will check against your local projects and the projects published to production to make sure that the ```$SLUG``` you've chosen does not already exist.
+When you create a new project, dailygraphics will check against your local projects and the projects published to production to make sure that the ```$SLUG``` (plus date) you've chosen does not already exist.
 
 Clone An Old Graphic
 -----------------
