@@ -180,6 +180,9 @@ def _add_graphic(slug, template):
     """
     Create a graphic with `slug` from `template`
     """
+    # Add today's date to end of slug if not present or invalid
+    slug = _add_date_slug(slug)
+
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
     if _check_slug(slug):
@@ -228,6 +231,29 @@ def _check_slug(slug):
         print 'Could not access S3 bucket, skipping Amazon S3 check'
 
     return False
+
+
+def _add_date_slug(old_slug):
+    """
+    Add today's date to slug if it does not have a date or it is not valid
+    """
+    slug = old_slug
+    today = datetime.today().strftime('%Y%m%d')
+    # create a new slug based on the old one
+    bits = old_slug.split('-')
+    # Test if we had a valid date
+    try:
+        datetime.strptime(bits[len(bits) - 1], '%Y%m%d')
+    except ValueError:
+        # Test if the date is not valid but numeric
+        try:
+            int(bits[len(bits) - 1])
+            bits = bits[:-1]
+        except ValueError:
+            pass
+        bits.extend([today])
+        slug = "-".join(bits)
+    return slug
 
 
 def _create_slug(old_slug):
