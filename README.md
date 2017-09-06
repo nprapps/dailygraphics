@@ -164,7 +164,7 @@ Following the steps in [this blog post](http://blog.apps.npr.org/2015/03/02/app-
 
 You should only need to do this once.
 
-**NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson, David or Chris for more information.
+**NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson or Juan for more information.
 
 
 Run The Project
