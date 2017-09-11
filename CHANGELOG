@@ -4,6 +4,7 @@
 * Animated photo: Remove D3 dependency (#229)
 * Animated photo: Store params in the copy spreadsheet (#228)
 * Switch to new embed loader (#231)
+* Auto-generate dates for new graphics (#237)
 
 0.1.4
 -----
