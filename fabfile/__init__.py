@@ -238,21 +238,18 @@ def _add_date_slug(old_slug):
     Add today's date to slug if it does not have a date or it is not valid
     """
     slug = old_slug
-    today = datetime.today().strftime('%Y%m%d')
+    today = datetime.today().strftime('%Y-%m-%d')
     # create a new slug based on the old one
     bits = old_slug.split('-')
     # Test if we had a valid date
     try:
-        datetime.strptime(bits[len(bits) - 1], '%Y%m%d')
+        slug_date = "-".join(bits[0:3])
+        datetime.strptime(slug_date, '%Y-%m-%d')
     except ValueError:
         # Test if the date is not valid but numeric
-        try:
-            int(bits[len(bits) - 1])
-            bits = bits[:-1]
-        except ValueError:
-            pass
-        bits.extend([today])
-        slug = "-".join(bits)
+        pre_slug = today.split('-') + bits
+        slug = "-".join(pre_slug)
+
     return slug
 
 
