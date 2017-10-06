@@ -83,6 +83,9 @@ var getAPMonth = function(dateObj) {
 /*
  * Wrap a block of SVG text to a given width
  * adapted from http://bl.ocks.org/mbostock/7555321
+ *
+ * Accepts: Selectors for text, numeric width value, numeric line height value
+ * Line height must be in the same units as the dy attribute.
  */
 var wrapText = function(texts, width, lineHeight) {
     texts.each(function() {
@@ -96,15 +99,22 @@ var wrapText = function(texts, width, lineHeight) {
         var x = text.attr('x');
         var y = text.attr('y');
 
-        var dx = text.attr('dx') ? parseFloat(text.attr('dx')) : 0;
-        var dy = text.attr('dy') ? parseFloat(text.attr('dy')) : 0;
+        // Get dx, dy attributes and check their units
+        // Default to 0 if attribute is undefined
+        // Default to px if units are not specified
+        var dxValueAndUnits = getAttrValueAndUnits(text.attr('dx'));
+        var dyValueAndUnits = getAttrValueAndUnits(text.attr('dy'));
+        var dx = dxValueAndUnits[0];
+        var dy = dyValueAndUnits[0];
+        var dxUnit = dxValueAndUnits[1];
+        var dyUnit = dyValueAndUnits[1];
 
         var tspan = text.text(null)
             .append('tspan')
             .attr('x', x)
             .attr('y', y)
-            .attr('dx', dx + 'px')
-            .attr('dy', dy + 'px');
+            .attr('dx', dx + dxUnit)
+            .attr('dy', dy + dyUnit);
 
         while (word = words.pop()) {
             line.push(word);
@@ -117,14 +127,39 @@ var wrapText = function(texts, width, lineHeight) {
 
                 lineNumber += 1;
 
+                var computedDy = ((lineNumber * lineHeight) + dy) + dyUnit;
+
                 tspan = text.append('tspan')
                     .attr('x', x)
                     .attr('y', y)
-                    .attr('dx', dx + 'px')
-                    .attr('dy', (lineNumber * lineHeight) + dy + 'px')
+                    .attr('dx', dx + dxUnit)
+                    .attr('dy', ((lineNumber * lineHeight) + dy) + dyUnit)
                     .attr('text-anchor', 'begin')
                     .text(word);
             }
+        }
+
+        function getAttrValueAndUnits(initValue) {
+            // Default to 0 if attribute is undefined
+            var attributeValue = 0;
+            // Default to px if unit is not specified
+            var attributeUnit = 'px';
+
+            if (initValue) {
+                var numericValue = +initValue;
+
+                // Check if the initial value includes a unit string
+                if (initValue != numericValue) {
+                    // If it has a unit, slice the string to store the unit
+                    // Accepted values: 'px', 'em'
+                    attributeUnit = initValue.slice(-2);
+                    attributeValue = +initValue.slice(0,-2);
+                } else {
+                    attributeValue = numericValue;
+                }
+            }
+
+            return [attributeValue, attributeUnit];
         }
     });
 }
