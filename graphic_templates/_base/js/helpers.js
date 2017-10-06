@@ -121,7 +121,7 @@ var wrapText = function(texts, width, lineHeight) {
                     .attr('x', x)
                     .attr('y', y)
                     .attr('dx', dx + 'px')
-                    .attr('dy', lineNumber * lineHeight)
+                    .attr('dy', (lineNumber * lineHeight) + dy + 'px')
                     .attr('text-anchor', 'begin')
                     .text(word);
             }
