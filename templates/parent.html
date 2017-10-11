@@ -44,9 +44,8 @@
         a.btn {
             font-size: 12px;
             line-height: 28px;
-            margin: 0;
-            float: left;
-            padding: 0 11px;
+            margin: 30px 0;
+            padding: 9px 11px;
             border-radius: 4px;
             background-color: #f7f7f7;
             font-weight: bold;
@@ -64,21 +63,20 @@
 
         /* Header */
         .parent-header {
+            display: flex;
+            flex-wrap: wrap;
             background-color: #ebebeb;
-            position: fixed;
-            top: 0px;
             width: 100%;
-            height: 40px;
-            padding: 10px 5px 0 5px;
+            padding: 5px;
             overflow: hidden;
         }
         .parent-header:after { clear: both; }
 
         .parent-header .segment {
-            float: left;
             padding-left: 5px;
             padding-right: 5px;
             white-space: nowrap;
+            margin: 4px 0;
         }
 
         .parent-header .right {
@@ -110,7 +108,7 @@
 
         /* Content */
         .content {
-            margin: 60px 10px 10px 10px;
+            margin: 20px 10px 10px 10px;
         }
 
         #preview-wrapper {
@@ -126,61 +124,93 @@
             display: block;
             margin-bottom: 5px;
         }
+
+        .segment-group{
+          margin: 7px 0;
+        }
+
+        .type-segment{
+          padding: 0px 5px;
+        }
+
+        .button-segment{
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          flex-grow: 2;
+        }
+
+        .resize-segment, .link-segment{
+          display: flex;
+          flex-wrap: wrap;
+          padding: 0px 7px;
+        }
+
     </style>
 </head>
 <body>
 
     <header class="parent-header">
-        <div class="segment">
-            <h1 class="{{ DEPLOYMENT_TARGET or 'localhost' }}">{{ DEPLOYMENT_TARGET or 'localhost' }}</h1>
+
+        <div class="type-segment segment-group">
+          <div class="segment">
+              <h1 class="{{ DEPLOYMENT_TARGET or 'localhost' }}">{{ DEPLOYMENT_TARGET or 'localhost' }}</h1>
+          </div>
         </div>
 
-        <div class="segment">
-            <a id="resize-sidebar" class="btn" href="#">Sidebar (180px)</a>
+        <div class="button-segment">
+
+          <div class="resize-segment segment-group">
+            <div class="segment">
+                <a id="resize-sidebar" class="btn" href="#">Sidebar (180px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-mobile" class="btn" href="#">Mobile (300px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-desktop" class="btn" href="#">Desktop (730px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-fluid" class="btn" href="#">Fluid (100%)</a>
+            </div>
+          </div>
+
+          <div class="link-segment segment-group">
+
+              {% if DEPLOYMENT_TARGET != "production" %}
+                  {% if DEPLOYMENT_TARGET != None %}
+                  <div class="segment">
+                      <a class="btn localhost" href="http://localhost:8000/graphics/{{ slug }}/">localhost &raquo;</a>
+                  </div>
+                  {% endif %}
+
+                  {% if DEPLOYMENT_TARGET != 'staging' %}
+                  <div class="segment">
+                      <a class="btn staging" href="https://s3.amazonaws.com/{{ STAGING_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/index.html" target="_blank">staging &raquo;</a>
+                  </div>
+                  {% endif %}
+
+                  {% if DEPLOYMENT_TARGET != 'production' %}
+                  <div class="segment">
+                      <a class="btn production" href="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
+                  </div>
+                  {% endif %}
+
+                  {% if COPY_GOOGLE_DOC_KEY %}
+                  {% if COPY_GOOGLE_DOC_KEY != 'None' %}
+                  <div class="segment">
+                      <a class="btn" href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">spreadsheet &raquo;</a>
+                  </div>
+                  {% endif %}
+                  {% endif %}
+              {% endif %}
+          </div>
+
         </div>
 
-        <div class="segment">
-            <a id="resize-mobile" class="btn" href="#">Mobile (300px)</a>
-        </div>
-
-        <div class="segment">
-            <a id="resize-desktop" class="btn" href="#">Desktop (730px)</a>
-        </div>
-
-        <div class="segment">
-            <a id="resize-fluid" class="btn" href="#">Fluid (100%)</a>
-        </div>
-
-        <div class="right">
-
-            {% if DEPLOYMENT_TARGET != "production" %}
-                {% if DEPLOYMENT_TARGET != None %}
-                <div class="segment">
-                    <a class="btn localhost" href="http://localhost:8000/graphics/{{ slug }}/">localhost &raquo;</a>
-                </div>
-                {% endif %}
-
-                {% if DEPLOYMENT_TARGET != 'staging' %}
-                <div class="segment">
-                    <a class="btn staging" href="https://s3.amazonaws.com/{{ STAGING_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/index.html" target="_blank">staging &raquo;</a>
-                </div>
-                {% endif %}
-
-                {% if DEPLOYMENT_TARGET != 'production' %}
-                <div class="segment">
-                    <a class="btn production" href="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
-                </div>
-                {% endif %}
-
-                {% if COPY_GOOGLE_DOC_KEY %}
-                {% if COPY_GOOGLE_DOC_KEY != 'None' %}
-                <div class="segment">
-                    <a class="btn" href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">spreadsheet &raquo;</a>
-                </div>
-                {% endif %}
-                {% endif %}
-            {% endif %}
-        </div>
     </header>
 
     <div class="content">
