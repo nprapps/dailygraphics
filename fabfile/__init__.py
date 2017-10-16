@@ -19,6 +19,7 @@ import flat
 import render
 import utils
 import test
+import copytext
 
 from render_utils import load_graphic_config
 
@@ -563,3 +564,69 @@ def copy_spreadsheet(slug):
 
     print 'Error creating spreadsheet (status code %s) with message %s' % (resp.status, resp.reason)
     return False
+
+@task
+def copyedit(*paths):
+    if paths[0] == '':
+        print 'You must specify at least one slug, like this: "deploy:slug" or "deploy:slug,slug"'
+        return
+
+    note = "These graphics accompany [AUTHOR]'s story, running [TIME], about [SUBJECT]. \n"
+    note += "Story URL (not yet published): http://seamus.npr.org/templates/story/story.php?storyId=[SEAMUS_ID]&live=1 \n"
+    note += "Expected run date: [TIME] \n"
+    note += "Primary graphics contacts: [GRAPHICS_CONTACT] \n"
+    note += "Primary editorial contact: [EDITORIAL_CONTACT] \n\n"
+
+    graphicCounter = 1
+
+    for path in paths:
+        note += "---- GRAPHIC %i ---- \n\n" % graphicCounter
+        note += copyedit_single(path)
+        graphicCounter += 1
+
+    #print note
+
+    write_to_clipboard(note)
+
+    #return note
+
+def write_to_clipboard(output):
+    process = subprocess.Popen(
+        'pbcopy', env={'LANG': 'en_US.UTF-8'}, stdin=subprocess.PIPE)
+    process.communicate(output.encode('utf-8'))
+
+
+def copyedit_single(path):
+    slug, abspath = utils.parse_path(path)
+    graphic_path = '%s/%s' % (abspath, slug)
+
+    note = ""
+
+    ## Get Spreadsheet Path
+    try:
+        graphic_config = load_graphic_config(graphic_path)
+    except IOError:
+        print '%s/graphic_config.py does not exist.' % slug
+        return
+
+    if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
+        print 'COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.' % slug
+        return
+
+    ## Generate Links From Slug
+    note += "Spreadsheet URL: https://docs.google.com/spreadsheets/d/%s/edit#gid=0 \n" % graphic_config.COPY_GOOGLE_DOC_KEY
+    note += "Production URL: https://apps.npr.org/dailygraphics/graphics/%s/ \n\n" % slug
+
+    ## Update Spreadsheet
+    copy_path = os.path.join(graphic_path, '%s.xlsx' % slug)
+    get_document(graphic_config.COPY_GOOGLE_DOC_KEY, copy_path)
+
+    ## Get Sheet Data
+    copy = copytext.Copy(filename=copy_path)
+    sheet = copy['labels']
+    for row in sheet:
+        note += '%s: %s \n' % (row[0],row[1])
+
+    note += "\n\n"
+
+    return note
