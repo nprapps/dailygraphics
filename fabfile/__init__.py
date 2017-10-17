@@ -9,9 +9,10 @@ from datetime import datetime
 
 from distutils.spawn import find_executable
 from fabric.api import local, require, task
-from fabric.state import env
+from fabric.state import env, output
 from oauth import get_document, get_credentials
 from time import sleep
+from jinja2 import Environment, FileSystemLoader
 
 import app_config
 import assets
@@ -567,40 +568,38 @@ def copy_spreadsheet(slug):
 
 @task
 def copyedit(*paths):
+    """
+    Generates a copyedit email for graphic(s) (fab copyedit:slug1,slug2 | pbcopy)
+    """
     if paths[0] == '':
-        print 'You must specify at least one slug, like this: "deploy:slug" or "deploy:slug,slug"'
+        print 'You must specify at least one slug, like this: "copyedit:slug" or "copyedit:slug,slug"'
         return
 
-    note = "These graphics accompany [AUTHOR]'s story, running [TIME], about [SUBJECT]. \n"
-    note += "Story URL (not yet published): http://seamus.npr.org/templates/story/story.php?storyId=[SEAMUS_ID]&live=1 \n"
-    note += "Expected run date: [TIME] \n"
-    note += "Primary graphics contacts: [GRAPHICS_CONTACT] \n"
-    note += "Primary editorial contact: [EDITORIAL_CONTACT] \n\n"
+    #Generate Intro Copyedit Text
+    env = Environment(loader=FileSystemLoader(['dailygraphics', 'templates']))
+    template = env.get_template('copyedit/intro.txt')
+    note = template.render()
 
     graphicCounter = 1
 
+    #Generates template for each graphic
     for path in paths:
-        note += "---- GRAPHIC %i ---- \n\n" % graphicCounter
-        note += copyedit_single(path)
+        note += copyedit_single(path, env, graphicCounter)
         graphicCounter += 1
 
-    #print note
+    #Gets rid of 'done' message at the end
+    output["status"] = False
 
-    write_to_clipboard(note)
+    print note
 
-    #return note
-
-def write_to_clipboard(output):
-    process = subprocess.Popen(
-        'pbcopy', env={'LANG': 'en_US.UTF-8'}, stdin=subprocess.PIPE)
-    process.communicate(output.encode('utf-8'))
-
-
-def copyedit_single(path):
+def copyedit_single(path, env, graphicNumber):
+    """
+    Generates the copyedit template for each graphic
+    """
     slug, abspath = utils.parse_path(path)
     graphic_path = '%s/%s' % (abspath, slug)
 
-    note = ""
+    template = env.get_template('copyedit/graphic.txt')
 
     ## Get Spreadsheet Path
     try:
@@ -614,8 +613,8 @@ def copyedit_single(path):
         return
 
     ## Generate Links From Slug
-    note += "Spreadsheet URL: https://docs.google.com/spreadsheets/d/%s/edit#gid=0 \n" % graphic_config.COPY_GOOGLE_DOC_KEY
-    note += "Production URL: https://apps.npr.org/dailygraphics/graphics/%s/ \n\n" % slug
+    spreadsheetID = graphic_config.COPY_GOOGLE_DOC_KEY
+    appID = slug
 
     ## Update Spreadsheet
     copy_path = os.path.join(graphic_path, '%s.xlsx' % slug)
@@ -624,9 +623,7 @@ def copyedit_single(path):
     ## Get Sheet Data
     copy = copytext.Copy(filename=copy_path)
     sheet = copy['labels']
-    for row in sheet:
-        note += '%s: %s \n' % (row[0],row[1])
 
-    note += "\n\n"
+    note = template.render(spreadsheetID = spreadsheetID, appID = appID, graphicNumber = graphicNumber, sheet = sheet)
 
     return note

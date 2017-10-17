@@ -1,0 +1,9 @@
+
+
+---- GRAPHIC {{graphicNumber}} ----
+
+Spreadsheet URL: https://docs.google.com/spreadsheets/d/{{spreadsheetID}}/edit#gid=0
+Production URL: https://apps.npr.org/dailygraphics/graphics/{{appID}}/
+{% for row in sheet %}
+{{row[0]}}: {{row[1]}}
+{% endfor %}
