@@ -1,7 +1,10 @@
 These graphics accompany [AUTHOR]'s story, running [TIME], about [SUBJECT].
+
 Story URL (not yet published): http://seamus.npr.org/templates/story/story.php?storyId=[SEAMUS_ID]&live=1
+
 Expected run date: [TIME]
-Primary graphics contacts: [GRAPHICS_CONTACT]
+
+Primary graphics contact: [GRAPHICS_CONTACT]
 Primary editorial contact: [EDITORIAL_CONTACT]
 
 {% for graphic in graphics %}{% include 'copyedit/graphic.txt' %}{% endfor %}
