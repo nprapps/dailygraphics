@@ -578,28 +578,20 @@ def copyedit(*paths):
     #Generate Intro Copyedit Text
     env = Environment(loader=FileSystemLoader(['dailygraphics', 'templates']))
     template = env.get_template('copyedit/intro.txt')
-    note = template.render()
-
-    graphicCounter = 1
-
-    #Generates template for each graphic
-    for path in paths:
-        note += copyedit_single(path, env, graphicCounter)
-        graphicCounter += 1
+    graphics = [copyedit_single(path, i) for i, path in enumerate(paths)]
+    note = template.render(graphics=graphics)
 
     #Gets rid of 'done' message at the end
     output["status"] = False
 
     print note
 
-def copyedit_single(path, env, graphicNumber):
+def copyedit_single(path, graphic_number):
     """
     Generates the copyedit template for each graphic
     """
     slug, abspath = utils.parse_path(path)
     graphic_path = '%s/%s' % (abspath, slug)
-
-    template = env.get_template('copyedit/graphic.txt')
 
     ## Get Spreadsheet Path
     try:
@@ -613,8 +605,8 @@ def copyedit_single(path, env, graphicNumber):
         return
 
     ## Generate Links From Slug
-    spreadsheetID = graphic_config.COPY_GOOGLE_DOC_KEY
-    appID = slug
+    spreadsheet_id = graphic_config.COPY_GOOGLE_DOC_KEY
+    app_id = slug
 
     ## Update Spreadsheet
     copy_path = os.path.join(graphic_path, '%s.xlsx' % slug)
@@ -624,6 +616,11 @@ def copyedit_single(path, env, graphicNumber):
     copy = copytext.Copy(filename=copy_path)
     sheet = copy['labels']
 
-    note = template.render(spreadsheetID = spreadsheetID, appID = appID, graphicNumber = graphicNumber, sheet = sheet)
+    note = {
+        "spreadsheet_id": spreadsheet_id,
+        "app_id": app_id,
+        "graphic_number": graphic_number + 1,
+        "sheet": sheet,
+    }
 
     return note
