@@ -290,6 +290,15 @@
             window.location.hash = 'desktop';
         });
 
+        resizeFullwidthEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            previewWrapperEl.style.width = '1010px';
+            window.dispatchEvent(new Event('resize'));
+
+            window.location.hash = 'desktop';
+        });
+
         resizeFluidEl.addEventListener('click', function(e) {
             e.preventDefault();
             previewWrapperEl.style.width = '100%';
