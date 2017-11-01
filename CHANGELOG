@@ -5,6 +5,7 @@
 * Animated photo: Store params in the copy spreadsheet (#228)
 * Switch to new embed loader (#231)
 * Auto-generate dates for new graphics (#237)
+* Make sure viewport test buttons are visible on mobile (#249)
 
 0.1.4
 -----
