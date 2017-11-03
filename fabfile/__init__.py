@@ -9,9 +9,10 @@ from datetime import datetime
 
 from distutils.spawn import find_executable
 from fabric.api import local, require, task
-from fabric.state import env
+from fabric.state import env, output
 from oauth import get_document, get_credentials
 from time import sleep
+from jinja2 import Environment, FileSystemLoader
 
 import app_config
 import assets
@@ -19,6 +20,7 @@ import flat
 import render
 import utils
 import test
+import copytext
 
 from render_utils import load_graphic_config
 
@@ -563,3 +565,62 @@ def copy_spreadsheet(slug):
 
     print 'Error creating spreadsheet (status code %s) with message %s' % (resp.status, resp.reason)
     return False
+
+@task
+def copyedit(*paths):
+    """
+    Generates a copyedit email for graphic(s) (fab copyedit:slug1,slug2 | pbcopy)
+    """
+    if paths[0] == '':
+        print 'You must specify at least one slug, like this: "copyedit:slug" or "copyedit:slug,slug"'
+        return
+
+    #Generate Intro Copyedit Text
+    env = Environment(loader=FileSystemLoader(['dailygraphics', 'templates']))
+    template = env.get_template('copyedit/intro.txt')
+    graphics = [copyedit_single(path, i) for i, path in enumerate(paths)]
+    note = template.render(graphics=graphics)
+
+    #Gets rid of 'done' message at the end
+    output["status"] = False
+
+    print note
+
+def copyedit_single(path, graphic_number):
+    """
+    Generates the copyedit template for each graphic
+    """
+    slug, abspath = utils.parse_path(path)
+    graphic_path = '%s/%s' % (abspath, slug)
+
+    ## Get Spreadsheet Path
+    try:
+        graphic_config = load_graphic_config(graphic_path)
+    except IOError:
+        print '%s/graphic_config.py does not exist.' % slug
+        return
+
+    if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
+        print 'COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.' % slug
+        return
+
+    ## Generate Links From Slug
+    spreadsheet_id = graphic_config.COPY_GOOGLE_DOC_KEY
+    app_id = slug
+
+    ## Update Spreadsheet
+    copy_path = os.path.join(graphic_path, '%s.xlsx' % slug)
+    get_document(graphic_config.COPY_GOOGLE_DOC_KEY, copy_path)
+
+    ## Get Sheet Data
+    copy = copytext.Copy(filename=copy_path)
+    sheet = copy['labels']
+
+    note = {
+        "spreadsheet_id": spreadsheet_id,
+        "app_id": app_id,
+        "graphic_number": graphic_number + 1,
+        "sheet": sheet,
+    }
+
+    return note
