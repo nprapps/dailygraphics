@@ -26,6 +26,11 @@ var onWindowLoaded = function() {
         data = JSON.parse(data);
         ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
     });
+
+    // check if this is on the homepage
+    if (getParameterByName('mode') == 'hp') {
+        d3.select('body').classed('hp', true);
+    }
 }
 
 /*
