@@ -575,10 +575,18 @@ def copyedit(*paths):
         print 'You must specify at least one slug, like this: "copyedit:slug" or "copyedit:slug,slug"'
         return
 
+    is_single_graphic = False
+    if len(paths) == 1:
+        is_single_graphic = True
+
     #Generate Intro Copyedit Text
     env = Environment(loader=FileSystemLoader(['dailygraphics', 'templates']))
-    template = env.get_template('copyedit/intro.txt')
+    if is_single_graphic:
+        template = env.get_template('copyedit/intro_single.txt')
+    else:
+        template = env.get_template('copyedit/intro_multiple.txt')
     graphics = [copyedit_single(path, i) for i, path in enumerate(paths)]
+
     note = template.render(graphics=graphics)
 
     #Gets rid of 'done' message at the end
