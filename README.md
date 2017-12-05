@@ -723,17 +723,23 @@ Generating Copyedit Notes
 The NPR Visuals team recently established a workflow for sending graphics to the NPR copyediting desk, in order to make sure that the information in each graphic is as accurate as possible. This process involves e-mailing a specific set of information to the copyedit desk (this is further expanded on in internal documentation). To help automate compiling and formatting this e-mail, run:
 
 ```
-fab copyedit:slug
+fab copyedit:$SLUG
 ```
 
-This will generate an e-mail template with information specific to the graphic that the slug refers to. Alternatively, you can run:
+This will generate an e-mail template with information specific to the graphic that the slug refers to. You can also generate a copyedit note that includes information for multiple graphics:
 
 ```
-fab copyedit:slug | pbcopy
+fab copyedit:$SLUG1,$SLUG2
+```
+
+Alternatively, you can run:
+
+```
+fab copyedit:$SLUG | pbcopy
 ```
 
 This will automatically copy the e-mail to your clipboard, which you can then paste into an e-mail service.
 
-#### Editing the copyedit e-mail templates
+#### Editing the Copyedit E-mail Templates
 
 The basic templates for these e-mails are generated from text files in `templates/copyedit/`. If you want to further modify these e-mail templates, you should just need to edit the files located there.
