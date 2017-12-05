@@ -23,6 +23,7 @@ dailygraphics
 * [Adding A New Graphic Template](#adding-a-new-graphic-template)
 * [Working With Carebot](#working-with-carebot)
 * [Keeping The Graphics Directory Clean](#keeping-the-graphics-directory-clean)
+* [Generating Copyedit Notes](#generating-copyedit-notes)
 
 What is this?
 -------------
@@ -713,3 +714,26 @@ git clean -df
 **NOTE:** This will delete any files that have not been committed, so
 if you have any work in progress that you do not want deleted, you will
 need to commit those files before running `git clean -df`.
+
+Generating Copyedit Notes
+--------------------
+
+**This section is relevant to NPR users of the dailygraphics rig.**
+
+The NPR Visuals team recently established a workflow for sending graphics to the NPR copyediting desk, in order to make sure that the information in each graphic is as accurate as possible. This process involves e-mailing a specific set of information to the copyedit desk (this is further expanded on in internal documentation). To help automate compiling and formatting this e-mail, run:
+
+```
+fab copyedit:slug
+```
+
+This will generate an e-mail template with information specific to the graphic that the slug refers to. Alternatively, you can run:
+
+```
+fab copyedit:slug | pbcopy
+```
+
+This will automatically copy the e-mail to your clipboard, which you can then paste into an e-mail service.
+
+#### Editing the copyedit e-mail templates
+
+The basic templates for these e-mails are generated from text files in `templates/copyedit/`. If you want to further modify these e-mail templates, you should just need to edit the files located there.
