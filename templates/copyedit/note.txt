@@ -1,5 +1,8 @@
+{% trans count=graphics|length %}
+This graphic accompanies [AUTHOR]'s story, running [TIME], about [SUBJECT].
+{% pluralize %}
 These graphics accompany [AUTHOR]'s story, running [TIME], about [SUBJECT].
-
+{% endtrans %}
 Story URL (not yet published): http://seamus.npr.org/templates/story/story.php?storyId=[SEAMUS_ID]&live=1
 
 Expected run date: [TIME]

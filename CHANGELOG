@@ -6,6 +6,7 @@
 * Switch to new embed loader (#231)
 * Auto-generate dates for new graphics (#237)
 * Make sure viewport test buttons are visible on mobile (#249)
+* Auto-generates copyedit note using fabric command (#236)
 
 0.1.4
 -----

@@ -576,19 +576,31 @@ def copyedit(*paths):
         return
 
     #Generate Intro Copyedit Text
-    env = Environment(loader=FileSystemLoader(['dailygraphics', 'templates']))
-    template = env.get_template('copyedit/intro.txt')
-    graphics = [copyedit_single(path, i) for i, path in enumerate(paths)]
+    env = Environment(
+        loader=FileSystemLoader(['dailygraphics', 'templates']),
+        extensions=['jinja2.ext.i18n']
+    )
+
+    #Enable translations. We're just using this for pluralization, not translating to different languages
+    env.install_null_translations()
+
+    template = env.get_template('copyedit/note.txt')
+
+    graphics = [get_graphic_template_variables(path, i)
+                for i, path in enumerate(paths)]
+
     note = template.render(graphics=graphics)
 
-    #Gets rid of 'done' message at the end
+    # Gets rid of 'done' message at the end.
+    # This suppresses output so only the graphic text
+    # we want can be piped to the clipboard.
     output["status"] = False
 
     print note
 
-def copyedit_single(path, graphic_number):
+def get_graphic_template_variables(path, graphic_number):
     """
-    Generates the copyedit template for each graphic
+    Generates the template variables for each graphic
     """
     slug, abspath = utils.parse_path(path)
     graphic_path = '%s/%s' % (abspath, slug)
