@@ -742,4 +742,4 @@ This will automatically copy the e-mail to your clipboard, which you can then pa
 
 #### Editing the Copyedit E-mail Templates
 
-The basic templates for these e-mails are generated from text files in `templates/copyedit/`. If you want to further modify these e-mail templates, you should just need to edit the files located there.
+The basic templates for these e-mails are generated from the Jinja templates in `templates/copyedit/`. If you want to further modify these e-mail templates, you should just need to edit the files located there.
