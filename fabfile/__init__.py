@@ -331,7 +331,7 @@ def clone_graphic(old_slug, slug=None):
         if success:
             download_copy(slug)
         else:
-            local('rm -r graphic_path')
+            local('rm -r %s' % (graphic_path))
             print 'Failed to copy spreadsheet! Try again!'
             return
     else:
