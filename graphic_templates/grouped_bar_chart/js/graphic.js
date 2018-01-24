@@ -138,7 +138,7 @@ var renderGroupedBarChart = function(config) {
                 return d;
             }
         }))
-        .range([COLORS['teal3'], COLORS['teal5']]);
+        .range([colors.ltgreen,colors.dkgreen]);
     /*
      * Render a color legend.
      */

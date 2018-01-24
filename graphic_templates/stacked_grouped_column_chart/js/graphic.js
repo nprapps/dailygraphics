@@ -149,7 +149,7 @@ var renderGroupedStackedColumnChart = function(config) {
                 return d;
             }
         }))
-        .range([ '#787878', COLORS['blue3'], '#ccc' ]);
+        .range([ colors.ltblue,colors.blue,colors.dkblue ]);
 
     /*
      * Render the legend.

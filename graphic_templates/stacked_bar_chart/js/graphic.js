@@ -140,7 +140,7 @@ var renderStackedBarChart = function(config) {
                 return d;
             }
         }))
-        .range([ COLORS['teal3'], COLORS['orange3'], COLORS['blue3'], '#ccc' ]);
+        .range([ colors.green,colors.orange,colors.blue,colors.yellow ]);
 
     /*
      * Render the legend.

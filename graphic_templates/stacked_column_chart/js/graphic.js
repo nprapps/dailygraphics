@@ -143,7 +143,7 @@ var renderStackedColumnChart = function(config) {
                 return d;
             }
         }))
-        .range([ COLORS['teal2'], COLORS['teal5'] ]);
+        .range([ colors.ltgreen, colors.dkgreen ]);
 
     /*
      * Render the legend.

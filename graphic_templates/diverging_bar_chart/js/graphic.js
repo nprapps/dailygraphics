@@ -157,7 +157,7 @@ var renderDivergingBarChart = function(config) {
                 return d;
             }
         }))
-        .range([ COLORS['teal3'], COLORS['teal5'], '#ccc', '#999' ]);
+        .range([ colors.orange,colors.tangerine,colors.dkblue,colors.ltblue ]);
 
     /*
      * Render the legend.

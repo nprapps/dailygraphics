@@ -98,7 +98,7 @@ var renderStateGridMap = function(config) {
 
         var colorScale = d3.scale.ordinal()
             .domain(categories)
-            .range([COLORS['teal6'], COLORS['teal5'], COLORS['teal4'], COLORS['teal3'], COLORS['teal2'], COLORS['teal1']]);
+            .range([colors.green,colors.orange,colors.blue,colors.yellow]);
     } else {
         // Define color scale
         var colorScale = d3.scale.ordinal()
