@@ -28,7 +28,10 @@ view the graphic checklist in our private team repo.
 
 * Is the headline human-friendly? (conversational, non-technical)
 * Is Every Word In The Headline Capitalized? (NPR headline style)
-* Are quotes in the headline singular and escaped? (&amp;lsquo;)
+* Are quotes in the headline singular?
+* Are there any widows in the headline (lone words on the last line)
+  when the graphic is resized? To avoid this, add a non-breaking space
+(`&nbsp;`) between the last two words of the headline.
 * Does the source line link back, if possible?
 * Does the credit line include everyone who worked on the graphic?
 * Do the footnotes explain all caveats a normal reader would need to know to understand the chart fully?
