@@ -130,9 +130,9 @@ def get_document(key, file_path, mimeType=None):
 
     if response.status != 200:
         if response.status == 404:
-            raise KeyError("Error! Your Google Doc does not exist or you do not have permission to access it.")
+            raise KeyError("Error! Your Google Doc %s does not exist or you do not have permission to access it." % key)
         else:
-            raise KeyError("Error! Google returned a %s error" % response.status)
+            raise KeyError("Error! Google returned a %s error for this Google Doc %s" % (response.status, key))
 
     with open(file_path, 'wb') as writefile:
         writefile.write(response.content)

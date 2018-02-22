@@ -94,6 +94,8 @@ def deploy_single(path):
     graphic_config = load_graphic_config(graphic_root)
 
     use_assets = getattr(graphic_config, 'USE_ASSETS', True)
+    # IMPORTANT: since we are patching in bulk we are not syncing assets
+    use_assets = False
     default_max_age = getattr(graphic_config, 'DEFAULT_MAX_AGE', None) or app_config.DEFAULT_MAX_AGE
     assets_max_age = getattr(graphic_config, 'ASSETS_MAX_AGE', None) or app_config.ASSETS_MAX_AGE
     update_copy(path)
