@@ -55,4 +55,5 @@ $(INPUT_DATA_DIR):
 	mkdir -p $(INPUT_DATA_DIR)
 
 clean:
+	rm -rf $(INPUT_DATA_DIR)
 	rm -rf $(OUTPUT_DATA_DIR)
