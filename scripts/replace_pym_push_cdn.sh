@@ -1,5 +1,2 @@
 #!/bin/bash
-cat $1 | while read line 
-do
-    gsed -E -i.bak "s/\s*\{\{\s*JS.push\('js\/lib\/pym.js'\)\s*\}\}\s*/<script type=\"text\/javascript\" src=\"https:\/\/pym.nprapps.org\/pym.v1.min.js\"><\/script>/g" "$line"
-done
+gsed -E -i.bak "s/\s*\{\{\s*JS.push\('js\/lib\/pym.js'\)\s*\}\}\s*/<script type=\"text\/javascript\" src=\"https:\/\/pym.nprapps.org\/pym.v1.min.js\"><\/script>/g" "$1"
