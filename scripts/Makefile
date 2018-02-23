@@ -1,6 +1,6 @@
 INPUT_DATA_DIR=scripts/data
 PATCHED_PYM_LOCATION=scripts/pym-patched/pym.js
-INPUT_GRAPHICS_FILE=test_pym-vuln-impacted-inventory.csv
+INPUT_GRAPHICS_FILE=pym_vuln_impacted_inventory.csv
 OUTPUT_DATA_DIR=scripts/logs
 
 
