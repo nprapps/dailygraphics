@@ -56,7 +56,7 @@ In terms of ordering of these tasks:
 * In order to run any of those tasks **first check that you already have the required input by reading the Makefile dependencies** and then run it like this from the dailygraphics root folder:
 
 
-### Notes
+### Notes
 
 * We have removed the assets synchronization from the deployment process since we want to do this in bulk and not be asked for sync confirmation (assets should not be impacted by pym.js vulnerability)
 * We have added a more verbose oauth process with google drive to be able to check what spreadsheet keys are causing problems.
