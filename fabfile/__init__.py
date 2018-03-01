@@ -484,6 +484,13 @@ def add_issue_matrix(slug):
     """
     _add_graphic(slug, 'issue_matrix')
 
+@task
+def add_link_sidebar(slug):
+    """
+    Create a sidebar of links.
+    """
+    _add_graphic(slug, 'link_sidebar')    
+
 def _check_credentials():
     """
     Check credentials and spawn server and browser if not

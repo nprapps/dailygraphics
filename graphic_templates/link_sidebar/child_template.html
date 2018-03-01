@@ -1,0 +1,49 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+
+    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
+    {% if COPY.labels.subhed %}<p>{{ render(COPY.labels.subhed)|smarty }}</p>{% endif %}
+
+    {% for group in COPY.links|groupby("group") %}
+        
+        {% if group.grouper %}
+            <h2>{{group.grouper}}</h2>
+        {% endif %}
+
+        {% for link in group.list %}
+            <h3 class="link">
+                <a href="{{link.link}}" target="_blank">
+                    {{link.link_text}}
+                </a>
+                {% if link.format %}
+                    <span class="small">({{link.format}})</span>
+                {% endif %}
+            </h3>
+            
+            {% if link.source %}
+                <p class="small">
+                    {{ link.source | smarty }}        
+                </p>
+            {% endif %}
+
+            {% if link.description %}
+                <p class="description">{{link.description}}</p>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    {% if COPY.labels.footnote %}
+    <div class="footnotes">
+        <h3>Notes</h3>
+        <p>{{ COPY.labels.footnote|smarty }}</p>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
+        {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
+    </div>
+
+
+{% endblock content %}
