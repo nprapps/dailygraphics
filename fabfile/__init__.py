@@ -251,6 +251,7 @@ def _add_date_slug(old_slug):
         try:
             int(bits[len(bits) - 1])
             bits = bits[:-1]
+            print 'Removed numeric end of the slug since not a valid date'
         except ValueError:
             pass
         bits.extend([today])
