@@ -251,6 +251,7 @@ def _add_date_slug(old_slug):
         try:
             int(bits[len(bits) - 1])
             bits = bits[:-1]
+            print 'Removed numeric end of the slug since not a valid date'
         except ValueError:
             pass
         bits.extend([today])
@@ -308,6 +309,9 @@ def clone_graphic(old_slug, slug=None):
     if slug == old_slug:
         print "%(slug)s already has today's date, please specify a new slug to clone into, i.e.: fab clone_graphic:%(slug)s,NEW_SLUG" % {'slug': old_slug}
         return
+
+    # Add today's date to end of slug if not present or invalid
+    slug = _add_date_slug(slug)
 
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     if _check_slug(slug):
