@@ -1,6 +1,7 @@
 0.1.5
 -----
 
+* Add date to slug of cloned graphic if missing or invalid (#239)
 * Animated photo: Remove D3 dependency (#229)
 * Animated photo: Store params in the copy spreadsheet (#228)
 * Switch to new embed loader (#231)
@@ -35,7 +36,6 @@
 * Add testing capabilities
 * Add private assets functionality
 * New diverging bar chart template (#151)
-
 
 0.1.3
 -----
