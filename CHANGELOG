@@ -10,6 +10,7 @@
 * Auto-generates copyedit note using fabric command (#236)
 * Upgrade cssmin version to solve installation issue (#259)
 * Solve issue with draft cloned graphic path (#260)
+* State grid map: Add optional U.S. territories (#264)
 
 0.1.4
 -----
@@ -26,7 +27,7 @@
 * Remove references to local copy of pym in a few graphics templates (#188)
 * Ensure support for https (#193)
 * Add AP-style full date formatter (#198)
-* Change flat to accomodate to new staging policy
+* Change flat to accommodate to new staging policy
 * Update awscli and Authomatic library requirements
 * Remove unused www deployment (#216)
 * Remove unused files for s3 deployment (#218)
