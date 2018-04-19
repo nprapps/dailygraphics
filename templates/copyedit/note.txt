@@ -3,7 +3,7 @@ This graphic accompanies __AUTHOR__'s story, running __TIME__, about __SUBJECT__
 {% pluralize %}
 These graphics accompany __AUTHOR__'s story, running __TIME__, about __SUBJECT__.
 {% endtrans %}
-Story URL (not yet published): http://seamus.npr.org/templates/story/story.php?storyId=__SEAMUS_ID__&live=1
+Story URL (not yet published): http://www.npr.org/templates/story/story.php?storyId=__SEAMUS_ID__&live=1
 
 Expected run date: __TIME__
 
