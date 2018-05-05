@@ -37,10 +37,10 @@ path.landmass { fill: #a8d5ef; }
 }
 
 .city-labels text {
+    .gotham();
     fill: #787878;
     font-size: 65%;
     text-anchor: start;
-    font-family: 'Gotham SSm', Helvetica, Arial,sans-serif;
     -webkit-font-smoothing: antialiased;
 
     &.admin-0-capital {
@@ -57,19 +57,19 @@ path.landmass { fill: #a8d5ef; }
 }
 
 .country-labels text {
+    .gotham();
     fill: #787878;
     font-size: 80%;
-    text-transform: uppercase;
+    font-weight: normal;
     letter-spacing: 7px;
     text-anchor: middle;
-    font-family: 'Gotham SSm', Helvetica, Arial,sans-serif;
-    font-weight: normal;
+    text-transform: uppercase;
     -webkit-font-smoothing: antialiased;
 
     &.primary {
         fill: #555;
-        font-weight: 700;
         font-size: 90%;
+        font-weight: 700;
     }
     &.bhutan { display: none; }
 }
