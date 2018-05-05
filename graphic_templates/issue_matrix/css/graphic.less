@@ -15,61 +15,50 @@ table {
     width: 100%;
     font-size: 12px;
     color: #666;
-    margin-bottom: 22px;
-}
-table th,
-table td {
-    padding: 10px;
-    text-align: left;
-}
-table th {
-    .knockout-header();
-    border-bottom: 2px solid #eee;
-    line-height: 1.2;
-    padding-top: 0;
-    vertical-align: bottom;
-}
-table td {
-    border-bottom: 1px solid #eee;
-    vertical-align: top;
-}
 
-table th.amt,
-table td.amt {
-    text-align: right;
-}
-
-table tr.shadedrow {
-    background-color: #f1f1f1;
-    color: #333;
-    font-weight: bold;
-}
-
-table td.issue {
-    span {
-        -webkit-font-smoothing: antialiased;
-        color: #999;
-
-        &.yes   {
-            color: @teal3;
-            font-weight: bold;
-        }
-        &.no    {
-            color: @orange3;
-            font-weight: bold;
-        }
+    tr.shadedrow {
+        background-color: #f1f1f1;
+        color: #333;
+        font-weight: bold;
     }
 
-    a span {
-        padding-bottom: 1px;
-        border-bottom: 1px solid #ddd;
-
-        &:hover { opacity: 0.7; }
+    th {
+        .knockout-header();
+        line-height: 1.2;
+        text-align: left;
+        vertical-align: bottom;
     }
 
-    sup {
-        line-height: 0;
-        color: #aaa;
+    td {
+        vertical-align: top;
+
+        &.issue {
+            span {
+                -webkit-font-smoothing: antialiased;
+                color: #999;
+
+                &.yes   {
+                    color: @teal3;
+                    font-weight: bold;
+                }
+                &.no    {
+                    color: @orange3;
+                    font-weight: bold;
+                }
+            }
+
+            a span {
+                padding-bottom: 1px;
+                border-bottom: 1px solid #ddd;
+
+                &:hover { opacity: 0.7; }
+            }
+
+            sup {
+                line-height: 0;
+                color: #aaa;
+            }
+        }
     }
 }
 
@@ -77,18 +66,32 @@ table td.issue {
  * larger-screen styles
  */
 @media @screen-medium-above {
-    &.name { white-space: nowrap; }
+    .name { white-space: nowrap; }
 }
 
 /*
  * larger-than-small-screen styles
  */
 @media @screen-mobile-above {
-    table th,
-    table td {
-        width: 14%;
+    table {
+        th, td {
+            padding: 10px;
+            width: 14%;
 
-        &.issue { text-align: center; }
+            // comment these two out if you want to highlight particular rows
+            &:first-child { padding-left: 0; }
+            &:last-child { padding-right: 0; }
+
+            &.amt { text-align: right; }
+            &.issue { text-align: center; }
+        }
+
+        th {
+            border-bottom: 2px solid #eee;
+            padding-top: 0;
+        }
+
+        td { border-bottom: 1px solid #eee; }
     }
 }
 
@@ -96,53 +99,51 @@ table td.issue {
  * small-screen styles
  */
 @media @screen-mobile {
-    table,
     tbody {
         display: block;
         width: 100%;
     }
-    thead { display: none; }
-    table tr,
-    table th,
-    table td,
-    table td.amt {
-        display: block;
-        padding: 0;
-        text-align: left;
-        white-space: normal;
-    }
-    table td,
-    table td.amt {
-        border: none;
-        margin-bottom: 6px;
-    }
-    table td:empty { display: none; }
 
-    table tr {
-        border-bottom: 1px solid #eee;
-        padding: 10px;
-    }
-    table tr:first-child { border-top: 1px solid #eee; }
+    table {
+        thead { display: none; }
 
-    table th[data-title]:before,
-    table td[data-title]:before {
-        content: attr(data-title) ":\00A0";
-        display: inline-block;
-        width: 50%;
-        min-width: 175px;
-        padding-right: 11px;
-        text-align: left;
-    }
+        tr, th, td {
+            display: block;
+            padding: 0;
+            white-space: normal;
+        }
 
-    table tr td:first-child {
-        .knockout-header();
-        color: #333;
-        font-size: 14px;
-        margin-bottom: 6px;
+        tr {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
 
-        &:before {
-            content: '';
-            display: none;
+            &:first-child { border-top: 1px solid #eee; }
+        }
+
+        td {
+            margin-bottom: 6px;
+
+            &:empty { display: none; }
+        }
+
+        tr td:first-child {
+            .knockout-header();
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 6px;
+
+            &:before {
+                content: '';
+                display: none;
+            }
+        }
+
+        th[data-title]:before,
+        td[data-title]:before {
+            content: attr(data-title) ":\00A0";
+            display: inline-block;
+            margin-right: 10px;
+            width: 70%;
         }
     }
 }

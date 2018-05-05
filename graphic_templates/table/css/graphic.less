@@ -18,23 +18,12 @@ table {
 
     th {
         .knockout-header();
-        border-bottom: 2px solid #eee;
         line-height: 1.2;
-        padding: 0 10px 10px 10px;
         text-align: left;
         vertical-align: bottom;
     }
 
-    td {
-        padding: 10px;
-        border-bottom: 1px solid #eee;
-        vertical-align: top;
-    }
-
-    th,
-    td {
-        &.amt { text-align: right; }
-    }
+    td { vertical-align: top; }
 }
 
 /*
@@ -84,6 +73,32 @@ table {
 }
 
 /*
+ * larger-than-small-screen styles
+ * ~ defining some desktop-only styles here to avoid
+ * ~ writing extra mobile styles to undo them.
+ */
+@media @screen-mobile-above {
+    table {
+        th, td {
+            padding: 10px;
+
+            // comment these two out if you want to highlight particular rows
+            &:first-child { padding-left: 0; }
+            &:last-child { padding-right: 0; }
+
+            &.amt { text-align: right; }
+        }
+
+        th {
+            border-bottom: 2px solid #eee;
+            padding-top: 0;
+        }
+
+        td { border-bottom: 1px solid #eee; }
+    }
+}
+
+/*
  * small-screen styles
  */
 @media @screen-mobile {
@@ -95,11 +110,7 @@ table {
     table {
         thead { display: none; }
 
-        tr,
-        th,
-        th.amt,
-        td,
-        td.amt {
+        tr, th, td {
             display: block;
             padding: 0;
             white-space: normal;
@@ -112,20 +123,10 @@ table {
             &:first-child { border-top: 1px solid #eee; }
         }
 
-        td,
-        td.amt {
-            border: none;
+        td {
             margin-bottom: 6px;
-            text-align: left;
 
             &:empty { display: none; }
-        }
-
-        th[data-title]:before,
-        td[data-title]:before {
-            content: attr(data-title) ":\00A0";
-            display: inline-block;
-            width: 70%;
         }
 
         tr td:first-child {
@@ -138,6 +139,14 @@ table {
                 content: '';
                 display: none;
             }
+        }
+
+        th[data-title]:before,
+        td[data-title]:before {
+            content: attr(data-title) ":\00A0";
+            display: inline-block;
+            margin-right: 10px;
+            width: 70%;
         }
     }
 }
