@@ -87,18 +87,24 @@ path.landmass { fill: #a8d5ef; }
     }
 }
 
-// responsive styles
-@media screen and (max-width: 500px) {
+/*
+ * small-screen styles
+ */
+@media @screen-mobile {
     svg { font-size: 12px; }
+
     .countries path { stroke-width: 2px; }
+
     .country-labels text {
         &.bangladesh,
         &.bhutan {
             display: none;
         }
     }
+
     .city-labels text { letter-spacing: .5px; }
-    .city-labels.shadow { display: none; }
+
+    .city-labels.shadow,
     .city-labels text,
     .cities path {
         &.scalerank-4,

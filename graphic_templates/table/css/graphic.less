@@ -1,6 +1,8 @@
 @import "base";
 
-// Base table styles
+/*
+ * Base table styles
+ */
 table {
     border-collapse: collapse;
     padding: 0;
@@ -42,7 +44,9 @@ table {
     }
 }
 
-// Tablesorter styles
+/*
+ * Tablesorter styles
+ */
 table {
     th {
         &.sort-header {
@@ -86,8 +90,10 @@ table {
     }
 }
 
-// Mobile styles
-@media screen and (max-width: 500px) {
+/*
+ * small-screen styles
+ */
+@media @screen-mobile {
     tbody {
         display: block;
         width: 100%;

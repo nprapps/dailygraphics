@@ -1,5 +1,11 @@
 @import "base";
 
+/*
+ * redefine mobile media queries
+ */
+@screen-mobile-above: ~"screen and (min-width: 551px)";
+@screen-mobile: ~"screen and (max-width: 550px)";
+
 /* table */
 table {
     border-collapse: collapse;
@@ -69,11 +75,11 @@ table td.issue {
     }
 }
 
-@media screen and (min-width: 651px) {
+@media @screen-medium-above {
     &.name { white-space: nowrap; }
 }
 
-@media screen and (min-width: 551px) {
+@media @screen-mobile-above {
     table th,
     table td {
         width: 14%;
@@ -82,8 +88,10 @@ table td.issue {
     }
 }
 
-/* responsive table */
-@media screen and (max-width: 550px) {
+/*
+ * small-screen styles
+ */
+@media @screen-mobile {
     table,
     tbody {
         display: block;
