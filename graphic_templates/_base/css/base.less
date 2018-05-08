@@ -94,12 +94,6 @@ body {
     color: #555;
 }
 
-// Homepage graphic styling
-body.hp {
-    padding-top: 0;
-    padding-bottom: 10px;
-}
-
 h1 {
     margin: 0 0 33px 0;
     font-size: 20px;
@@ -288,4 +282,15 @@ rect {
 
     &.in { fill: #fff; }
     &.out { fill: #999; }
+}
+
+/*
+ * HOMEPAGE
+ * styles for when a project is embedded on the homepage
+ * (if someone clicked the "This code will be embedded on the NPR homepage."
+ * checkbox when pulling the embed code.)
+ */
+body.hp {
+    padding-top: 0;
+    padding-bottom: 10px;
 }
