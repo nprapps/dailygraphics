@@ -300,10 +300,11 @@
             var textarea = document.getElementById('embed-code');
             var text = textarea.innerHTML
             if (this.checked) {
-                text = text.replace('child.html"', 'child.html" data-carebot-skip');
+                text = text.replace('child.html"', 'child.html?mode=hp" data-carebot-skip');
                 textarea.innerHTML = text;
             } else {
                 text = text.replace(' data-carebot-skip', '');
+                text = text.replace('?mode=hp', '');
                 textarea.innerHTML = text;
             }
         });
