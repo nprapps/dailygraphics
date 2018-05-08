@@ -10,6 +10,8 @@ var isMobile = false;
  */
 var onWindowLoaded = function() {
     if (Modernizr.svg) {
+        formatData();
+
         pymChild = new pym.Child({
             renderCallback: render
         });
@@ -30,6 +32,20 @@ var onWindowLoaded = function() {
         d3.select('body').classed('hp', true);
     }
 }
+
+/*
+ * Format graphic data.
+ */
+var formatData = function() {
+    if (LABELS["show_territories"].toLowerCase() === "false") {
+        var territories = ["Puerto Rico", "U.S. Virgin Islands", "Guam", "Northern Mariana Islands", "American Samoa"];
+        
+        DATA = DATA.filter(function(d) {
+            return territories.indexOf(d["state_name"]) == -1;
+        });
+    }
+}
+
 
 /*
  * Render the graphic(s). Called by pym with the container width.
