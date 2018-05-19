@@ -21,7 +21,7 @@ view the graphic checklist in our private team repo.
 * Is the data internally complete? (e.g., no missing years) If not, do we make it clear what data is missing?
   * For example, in a chart: dotted or missing lines and a corresponding footnote
   * In a table: “n/a” in the table cell, or an asterisk + footnote
-* Have we been careful to ensure we don't treat "0" and "null" interchangably?
+* Have we been careful to ensure we don't treat "0" and "null" interchangeably?
 * Does any bucketing of the data effectively represent the distribution? (quartiles, quintiles, equal-interval, jenks breaks, box plot, etc.)
 
 ## Text
