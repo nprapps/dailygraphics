@@ -1,19 +1,20 @@
 0.1.5
 -----
 
+* Switch to new embed loader (#231)
+* Upgrade cssmin version to solve installation issue (#259)
+* Auto-generate dates for new graphics (#237)
 * Add date to slug of cloned graphic if missing or invalid (#239)
+* Solve issue with draft cloned graphic path (#260)
 * Animated photo: Remove D3 dependency (#229)
 * Animated photo: Store params in the copy spreadsheet (#228)
-* Switch to new embed loader (#231)
-* Auto-generate dates for new graphics (#237)
-* Make sure viewport test buttons are visible on mobile (#249)
-* Auto-generates copyedit note using fabric command (#236)
-* Upgrade cssmin version to solve installation issue (#259)
-* Solve issue with draft cloned graphic path (#260)
+* Locator map: Add pixelOffset config option (#220)
 * State grid map: Add optional U.S. territories (#264)
 * State grid map: Adjust map SVG height when toggling territories on and off (#265)
+* Auto-generates copyedit note using fabric command (#236)
 * Copyedit email: Tweak to formatting (#257)
 * Add URL param to embed code, isHomepage boolean and css when homepage checkbox is clicked (#253)
+* Make sure viewport test buttons are visible on mobile (#249)
 
 0.1.4
 -----
