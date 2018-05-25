@@ -34,7 +34,7 @@ var onWindowLoaded = function() {
 var formatData = function() {
     if (LABELS["show_territories"].toLowerCase() === "false") {
         var territories = ["Puerto Rico", "U.S. Virgin Islands", "Guam", "Northern Mariana Islands", "American Samoa"];
-        
+
         DATA = DATA.filter(function(d) {
             return territories.indexOf(d["state_name"]) == -1;
         });

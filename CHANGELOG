@@ -11,6 +11,8 @@
 * Upgrade cssmin version to solve installation issue (#259)
 * Solve issue with draft cloned graphic path (#260)
 * State grid map: Add optional U.S. territories (#264)
+* Copyedit email: Tweak to formatting (#257)
+* Add URL param to embed code, isHomepage boolean and css when homepage checkbox is clicked (#253)
 
 0.1.4
 -----
