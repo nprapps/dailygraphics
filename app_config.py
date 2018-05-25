@@ -39,7 +39,7 @@ PYM
 
 PYM = {
     'pym_url': 'https://pym.nprapps.org/pym.v1.min.js',
-    'pym_loader_url': 'https://pym.nprapps.org/pym-loader.v1.min.js',
+    'pym_loader_url': 'https://pym.nprapps.org/npr-pym-loader.v2.min.js',
 }
 
 """
@@ -96,6 +96,14 @@ ANALYTICS
 GOOGLE_ANALYTICS = {
     'ACCOUNT_ID': 'UA-5828686-75'
 }
+
+"""
+TESTS
+"""
+AUTOEXECUTE_TESTS = False
+TESTS_LOAD_WAIT_TIME = 2
+TEST_SCRIPTS_TIMEOUT = 5
+
 
 # These variables will be set at runtime. See configure_targets() below
 S3_BUCKET = None

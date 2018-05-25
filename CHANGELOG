@@ -1,3 +1,20 @@
+0.1.5
+-----
+
+* Add date to slug of cloned graphic if missing or invalid (#239)
+* Animated photo: Remove D3 dependency (#229)
+* Animated photo: Store params in the copy spreadsheet (#228)
+* Switch to new embed loader (#231)
+* Auto-generate dates for new graphics (#237)
+* Make sure viewport test buttons are visible on mobile (#249)
+* Auto-generates copyedit note using fabric command (#236)
+* Upgrade cssmin version to solve installation issue (#259)
+* Solve issue with draft cloned graphic path (#260)
+* State grid map: Add optional U.S. territories (#264)
+* State grid map: Adjust map SVG height when toggling territories on and off (#265)
+* Copyedit email: Tweak to formatting (#257)
+* Add URL param to embed code, isHomepage boolean and css when homepage checkbox is clicked (#253)
+
 0.1.4
 -----
 
@@ -13,12 +30,16 @@
 * Remove references to local copy of pym in a few graphics templates (#188)
 * Ensure support for https (#193)
 * Add AP-style full date formatter (#198)
-* Change flat to accomodate to new staging policy
+* Change flat to accommodate to new staging policy
 * Update awscli and Authomatic library requirements
 * Remove unused www deployment (#216)
 * Remove unused files for s3 deployment (#218)
 * Allow render/deploy from an arbitrary folder
-
+* Remove empty env.settings (#221)
+* Force utf-8 character set on html deployment to S3 (#215)
+* Add testing capabilities
+* Add private assets functionality
+* New diverging bar chart template (#151)
 
 0.1.3
 -----

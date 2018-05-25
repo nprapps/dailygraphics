@@ -7,7 +7,7 @@ awscli==1.11.61
 bcdoc==0.12.0
 boto==2.25.0
 copytext==0.1.9
-cssmin==0.1.4
+cssmin==0.2.0
 docutils==0.11
 gunicorn==19.1.1
 nose==1.2.1
@@ -17,6 +17,8 @@ ply==3.4
 pycrypto==2.6
 requests==1.1.0
 rsa==3.1.2
+sauceclient==0.2.1
+selenium==3.3.1
 slimit==0.7.4
 ssh==1.7.14
 wsgiref==0.1.2

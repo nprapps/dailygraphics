@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# _*_ coding:utf-8 _*_
 import os
 
 from fabric.api import task
@@ -16,17 +16,17 @@ def render(path=''):
     """
     Render HTML templates and compile assets.
     """
-    archive = False
+    custom_location = False
     if path:
         slug, abspath = utils.parse_path(path)
         if abspath != app_config.GRAPHICS_PATH:
-            archive = True
-        _render_graphics(['%s/%s' % (abspath, slug)], archive)
+            custom_location = True
+        _render_graphics(['%s/%s' % (abspath, slug)], custom_location)
     else:
         _render_graphics(glob('%s/*' % app_config.GRAPHICS_PATH))
 
 
-def _render_graphics(paths, archive=False):
+def _render_graphics(paths, custom_location=False):
     """
     Render a set of graphics
     """
@@ -40,8 +40,13 @@ def _render_graphics(paths, archive=False):
         with app.app.test_request_context(path='graphics/%s/' % slug):
             g.compile_includes = True
             g.compiled_includes = {}
-            if archive:
+            if custom_location:
+                # warning message
+                g.custom_location = True
                 g.alt_path = path
+                # Test if there's a local pym copy
+                if os.path.exists('%s/js/lib/pym.js' % path):
+                    g.local_pym = True
             view = app.graphic.__dict__['_graphics_detail']
             content = view(slug).data
 
@@ -56,7 +61,7 @@ def _render_graphics(paths, archive=False):
                 slug)):
             g.compile_includes = True
             g.compiled_includes = {}
-            if archive:
+            if custom_location:
                 g.alt_path = path
             view = app.graphic.__dict__['_graphics_child']
             content = view(slug).data

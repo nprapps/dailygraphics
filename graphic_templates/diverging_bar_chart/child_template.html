@@ -5,8 +5,8 @@
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
 
-    <div id="graphic" class="graphic">
-        {% include 'ai2html-graphic.html' %}
+    <div id="diverging-bar-chart" class="graphic">
+        <img src="fallback.png" alt="[Chart]" class="fallback" />
     </div>
 
     {% if COPY.labels.footnote %}
@@ -21,9 +21,8 @@
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
     </div>
 
-{% endblock content %}
+    <script type="text/javascript">
+        var DATA = {{ COPY.data.json() }};
+    </script>
 
-{% block js %}
-    {{ JS.push('js/graphic.js') }}
-    {{ JS.render('js/graphic-footer.js') }}
-{% endblock js %}
+{% endblock content %}

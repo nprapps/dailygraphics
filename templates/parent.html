@@ -24,6 +24,13 @@
             margin: 0 0 11px 0;
         }
 
+        p.homepage {
+            margin: -7px 0 11px 0;
+            font-size: 12px;
+            color: #666;
+        }
+        p.homepage em { color: #999; }
+
         a, a:link,
         a:visited {
             color: #4774CC;
@@ -37,9 +44,8 @@
         a.btn {
             font-size: 12px;
             line-height: 28px;
-            margin: 0;
-            float: left;
-            padding: 0 11px;
+            margin: 30px 0;
+            padding: 9px 11px;
             border-radius: 4px;
             background-color: #f7f7f7;
             font-weight: bold;
@@ -57,21 +63,19 @@
 
         /* Header */
         .parent-header {
+            display: flex;
+            flex-wrap: wrap;
             background-color: #ebebeb;
-            position: fixed;
-            top: 0px;
             width: 100%;
-            height: 40px;
-            padding: 10px 5px 0 5px;
             overflow: hidden;
         }
         .parent-header:after { clear: both; }
 
         .parent-header .segment {
-            float: left;
             padding-left: 5px;
             padding-right: 5px;
             white-space: nowrap;
+            margin: 4px 0;
         }
 
         .parent-header .right {
@@ -103,7 +107,7 @@
 
         /* Content */
         .content {
-            margin: 60px 10px 10px 10px;
+            margin: 20px 10px 10px 10px;
         }
 
         #preview-wrapper {
@@ -117,176 +121,161 @@
 
         textarea {
             display: block;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
         }
+
+        .segment-group{
+          margin: 5px 0;
+        }
+
+        .type-segment{
+          padding: 0px 5px;
+        }
+
+        .button-segment{
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          flex-grow: 2;
+        }
+
+        .resize-segment, .link-segment{
+          display: flex;
+          flex-wrap: wrap;
+          padding: 0px 5px;
+        }
+
     </style>
 </head>
 <body>
 
     <header class="parent-header">
-        <div class="segment">
-            <h1 class="{{ DEPLOYMENT_TARGET or 'localhost' }}">{{ DEPLOYMENT_TARGET or 'localhost' }}</h1>
+
+        <div class="type-segment segment-group">
+          <div class="segment">
+              <h1 class="{{ DEPLOYMENT_TARGET or 'localhost' }}">{{ DEPLOYMENT_TARGET or 'localhost' }}</h1>
+          </div>
         </div>
 
-        <div class="segment">
-            <a id="resize-sidebar" class="btn" href="#">Sidebar (180px)</a>
+        <div class="button-segment">
+
+          <div class="resize-segment segment-group">
+            <div class="segment">
+                <a id="resize-sidebar" class="btn" href="#">Sidebar (180px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-mobile" class="btn" href="#">Mobile (300px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-desktop" class="btn" href="#">Desktop (730px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-fluid" class="btn" href="#">Fluid (100%)</a>
+            </div>
+          </div>
+
+          <div class="link-segment segment-group">
+
+              {% if DEPLOYMENT_TARGET != "production" %}
+                  {% if DEPLOYMENT_TARGET != None %}
+                  <div class="segment">
+                      <a class="btn localhost" href="http://localhost:8000/graphics/{{ slug }}/">localhost &raquo;</a>
+                  </div>
+                  {% endif %}
+
+                  {% if DEPLOYMENT_TARGET != 'staging' %}
+                  <div class="segment">
+                      <a class="btn staging" href="https://s3.amazonaws.com/{{ STAGING_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/index.html" target="_blank">staging &raquo;</a>
+                  </div>
+                  {% endif %}
+
+                  {% if DEPLOYMENT_TARGET != 'production' %}
+                  <div class="segment">
+                      <a class="btn production" href="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
+                  </div>
+                  {% endif %}
+
+                  {% if COPY_GOOGLE_DOC_KEY %}
+                  {% if COPY_GOOGLE_DOC_KEY != 'None' %}
+                  <div class="segment">
+                      <a class="btn" href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">spreadsheet &raquo;</a>
+                  </div>
+                  {% endif %}
+                  {% endif %}
+              {% endif %}
+          </div>
+
         </div>
 
-        <div class="segment">
-            <a id="resize-mobile" class="btn" href="#">Mobile (300px)</a>
-        </div>
-
-        <div class="segment">
-            <a id="resize-desktop" class="btn" href="#">Desktop (730px)</a>
-        </div>
-
-        <div class="segment">
-            <a id="resize-fluid" class="btn" href="#">Fluid (100%)</a>
-        </div>
-
-        <div class="right">
-
-            {% if DEPLOYMENT_TARGET != "production" %}
-                {% if DEPLOYMENT_TARGET != None %}
-                <div class="segment">
-                    <a class="btn localhost" href="http://localhost:8000/graphics/{{ slug }}/">localhost &raquo;</a>
-                </div>
-                {% endif %}
-
-                {% if DEPLOYMENT_TARGET != 'staging' %}
-                <div class="segment">
-                    <a class="btn staging" href="https://s3.amazonaws.com/{{ STAGING_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/index.html" target="_blank">staging &raquo;</a>
-                </div>
-                {% endif %}
-
-                {% if DEPLOYMENT_TARGET != 'production' %}
-                <div class="segment">
-                    <a class="btn production" href="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/" target="_blank">production &raquo;</a>
-                </div>
-                {% endif %}
-
-                {% if COPY_GOOGLE_DOC_KEY %}
-                {% if COPY_GOOGLE_DOC_KEY != 'None' %}
-                <div class="segment">
-                    <a class="btn" href="https://docs.google.com/spreadsheets/d/{{ COPY_GOOGLE_DOC_KEY }}/edit" target="_blank">spreadsheet &raquo;</a>
-                </div>
-                {% endif %}
-                {% endif %}
-            {% endif %}
-        </div>
     </header>
 
     <div class="content">
 
         <div id="preview-wrapper">
-            <div id='preview'>
-            </div>
+            <p data-pym-loader data-child-src="child.html" id="preview">Loading...</p>
         </div>
-
-        <h2><span class="production">Production</span> embed code (for Seamus)</h2>
-
-<!-- textarea contents -->
-    <textarea readonly="readonly" rows="10" cols="50">
-<div id="responsive-embed-{{ slug }}"></div>
-<script type=text/javascript>
-    (function(jQuery) {
-        if (typeof jQuery !== 'undefined' && typeof jQuery.getScript === 'function') {
-            // add randomness to id to support for multiple graphic instances in one story
-            var el = document.getElementById("responsive-embed-{{slug}}");
-            el.id = el.id + "-" + Math.random().toString(36).substr(2,5);
-            jQuery.getScript("{{ PYM['pym_url'] }}").done(function () {
-                jQuery(function () { // Wait for page load
-                    var pymParent = new pym.Parent(
-                        el.id,
-                        'https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html',
-                        {}
-                    );
-{% if CAREBOT_ENABLED %}
-                    jQuery.getScript("{{ CAREBOT_URL }}").done(function () {
-                        var tracker = new CarebotTracker.VisibilityTracker(el.id, function(result) {
-                            // Ignore Carebot events to empty embeds, keeps listening after unloading the page
-                            if (pymParent.el.getElementsByTagName('iframe').length !== 0) {
-                                pymParent.sendMessage('on-screen', result.bucket);
-                            }
-                        });
-                        // Check if there is already an scroll tracker somewhere on the page
-                        if (!document.querySelector("[data-carebot-scroll]")) {
-                            pymParent.el.setAttribute("data-carebot-scroll", "");
-                            var scrollTracker = new CarebotTracker.ScrollTracker('storytext', function(percent, seconds) {
-                                // Ignore Carebot events to empty embeds, keeps listening after unloading the page
-                                if (pymParent.el.getElementsByTagName('iframe').length !== 0) {
-                                    pymParent.sendMessage('scroll-depth', JSON.stringify({percent: percent,seconds: seconds}));
-                                }
-                            });
-                        }
-                    });
+        <h2><span class="production">Production</span> embed code (for Seamus and NPR stations)</h2>
+{% if CUSTOM_LOCATION %}
+        <h2><span class="production">This has been redeployed from a custom location. Check thoroughly before using in a new graphic.</span></h2>
 {% endif %}
-                });
-            });
-        } else {
-            console.error('could not load graphic: jQuery is not on the page.');
-        }
-    })(window.jQuery);
-</script>
-    </textarea>
-<!-- end textarea contents -->
 
-        <h2><span class="production">Production</span> autoinit embed code (<a href="http://blog.apps.npr.org/2014/12/19/pym-core-publisher.html">for member stations</a>)</h2>
+    <p class="homepage"><input id="homepage" type="checkbox"> This code will be embedded on the NPR homepage. <em>(Infrequent use case.)</em></p>
 
 <!-- textarea contents -->
-    <textarea readonly="readonly" rows="10" cols="50">
-<p data-pym-src="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
-    </textarea>
+    <textarea id="embed-code" readonly="readonly" rows="10" cols="80">
+<p data-pym-loader data-child-src="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html" id="responsive-embed-{{ slug }}">Loading...</p><script type="text/javascript" src="{{PYM['pym_loader_url']}}"></script></textarea>
 <!-- end textarea contents -->
 
     </div>
-
-    <script type="text/javascript" src="{{ PYM['pym_url'] }}"></script>
-{% if CAREBOT_ENABLED %}
-    <script type="text/javascript" src="{{ CAREBOT_URL }}"></script>
-{% endif %}
-
+    <script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
     <script type="text/javascript">
+        var homePageEl = document.querySelector('#homepage');
         var resizeSidebarEl = document.querySelector('#resize-sidebar');
         var resizeMobileEl = document.querySelector('#resize-mobile');
         var resizeDesktopEl = document.querySelector('#resize-desktop');
         var resizeFluidEl = document.querySelector('#resize-fluid');
         var previewWrapperEl = document.querySelector('#preview-wrapper');
-
         resizeSidebarEl.addEventListener('click', function(e) {
             e.preventDefault();
-
             previewWrapperEl.style.width = '180px';
-            pymParent.sendWidth();
-
+            window.dispatchEvent(new Event('resize'));
             window.location.hash = 'sidebar';
         });
-
         resizeMobileEl.addEventListener('click', function(e) {
             e.preventDefault();
-
             previewWrapperEl.style.width = '300px';
-            pymParent.sendWidth();
-
+            window.dispatchEvent(new Event('resize'));
             window.location.hash = 'mobile';
         });
-
         resizeDesktopEl.addEventListener('click', function(e) {
             e.preventDefault();
-
             previewWrapperEl.style.width = '730px';
-            pymParent.sendWidth();
-
+            window.dispatchEvent(new Event('resize'));
             window.location.hash = 'desktop';
         });
-
         resizeFluidEl.addEventListener('click', function(e) {
             e.preventDefault();
-
             previewWrapperEl.style.width = '100%';
-            pymParent.sendWidth();
-
+            window.dispatchEvent(new Event('resize'));
             window.location.hash = 'fluid';
+        });
+        homePageEl.addEventListener('change', function(e) {
+            var textarea = document.getElementById('embed-code');
+            var text = textarea.innerHTML
+            if (this.checked) {
+                text = text.replace('child.html"', 'child.html?mode=hp" data-carebot-skip');
+                textarea.innerHTML = text;
+            } else {
+                text = text.replace(' data-carebot-skip', '');
+                text = text.replace('?mode=hp', '');
+                textarea.innerHTML = text;
+            }
         });
 
         if (window.location.hash == '#sidebar') {
@@ -298,13 +287,6 @@
         } else if (window.location.hash == '#fluid') {
             previewWrapperEl.style.width = '100%';
         }
-
-        var pymParent = new pym.Parent('preview', 'child.html', {});
-{% if CAREBOT_ENABLED %}
-        var tracker = new CarebotTracker.VisibilityTracker('preview', function(result) {
-            pymParent.sendMessage('on-screen', result.bucket);
-        });
-{% endif %}
     </script>
 </body>
 </html>

@@ -11,11 +11,13 @@
     </div>
     {% endif %}
 
+    <script type="text/javascript">
+        var PARAMS = {{ COPY.params.json() }};
+    </script>
 {% endblock content %}
 
 {% block js %}
 
-    {{ JS.push('js/lib/d3.min.js') }}
     {{ JS.push('js/lib/canvid.js') }}
     {{ JS.push('js/graphic.js') }}
     {{ JS.render('js/graphic-footer.js') }}
