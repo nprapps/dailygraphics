@@ -105,7 +105,7 @@ Then set up the project like this:
 ```
 git clone https://github.com/nprapps/dailygraphics.git
 cd dailygraphics
-mkvirtualenv --no-site-packages dailygraphics
+mkvirtualenv dailygraphics
 pip install -r requirements.txt
 npm install
 ```
