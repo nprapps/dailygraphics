@@ -7,7 +7,8 @@ cssmin==0.2.0
 docutils==0.11
 gunicorn==19.1.1
 requests==2.18.4
-slimit==0.7.4
+slimit==0.8.1
+ply==3.4
 smartypants==1.8.6
 
 # Requirements for testing
