@@ -9,6 +9,7 @@
  * NOTE: This implementation must be consistent with the Python classify
  * function defined in base_filters.py.
  */
+
 var classify = function(str) {
     return str.toLowerCase()
         .replace(/\s+/g, '-')           // Replace spaces with -
@@ -161,4 +162,14 @@ if (!String.prototype.trim) {
     String.prototype.trim = function () {
         return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
     };
+}
+
+/*
+ * Check if this is on the homepage (if someone clicked the
+ * "This code will be embedded on the NPR homepage."
+ * checkbox when pulling the embed code.)
+ */
+if (getParameterByName('mode') == 'hp') {
+    document.body.classList.add('hp');
+    isHomepage = true;
 }

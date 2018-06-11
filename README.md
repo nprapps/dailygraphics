@@ -105,7 +105,7 @@ Then set up the project like this:
 ```
 git clone https://github.com/nprapps/dailygraphics.git
 cd dailygraphics
-mkvirtualenv --no-site-packages dailygraphics
+mkvirtualenv dailygraphics
 pip install -r requirements.txt
 npm install
 ```
@@ -544,7 +544,7 @@ In your terminal, in the ```dailygraphics``` virtualenv, navigate to your projec
 mapturner geodata.yaml data/geodata.json
 ```
 
-In your project ```js/graphic.js``` folder, change the ```PRIMARY_COUNTRY``` variable at the top from Nepal to the name of your featured country. You will also want to adjust the ```MAP_DEFAULT_SCALE``` and ```MAP_DEFAULT_HEIGHT``` variables so that your featured country fits onscreen.
+In your project's ```js/graphic.js```, change the ```primaryCountry``` variable in the `renderLocatorMap` config options from Nepal to the name of your featured country. To fine-tune the positioning of your map, adjust the `defaultScale` and aspect ratio variables, or specify an offset position in pixels by passing a `pixelOffset` config option as `[ X_OFFSET, Y_OFFSET]`.
 
 Creating Animated Photos
 ------------------------
