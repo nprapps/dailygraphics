@@ -59,10 +59,8 @@
     .answer {
         display: none;
         color: #787878;
-        margin-top: 4px;
-        margin: 0 0 5px 0;
-        border-left: 1px solid #eee;
-        border-bottom: 1px solid #eee;
+        margin-bottom: 10px;
+        margin-top: 7px;
         padding: 11px;
         .clearfix();
 
@@ -82,7 +80,33 @@
             }
         }
 
-        .answer { display: block; }
+        .answer { 
+            background-color: #fff1e0; 
+            padding: 13px;
+            display: flex;
+            align-items:flex-start;
+        }
+
+
+        img {
+            width: 300px;
+            height: 200px; 
+            margin: 0 10px 0 0;
+        }
+
+        figure {
+            margin: 5px 20px 0 10px; 
+        }
+
+        figcaption {
+            margin: 2px 0 0 0;
+            font-size: 11px;
+            line-height: 1.7;
+            color: #999;
+            font-style: italic;
+        }
+
+        .explanation { margin-top: 6px; }
 
         .correct strong b,
         .incorrect strong b {
@@ -108,6 +132,8 @@
             b { background-color: #777; }
         }
     }
+
+
 }
 
 #results {
@@ -141,4 +167,20 @@
         .q, .a { text-align: center; }
         .q { font-size: 13px; }
     }
+
+    #quiz .answered .answer {
+        display: block;
+
+        .explanation {
+            text-align: left;
+            margin-top: 5px;
+        }
+
+        figure { margin: 0 0 0 0; }
+        figcaption { text-align: right; }
+    }
+
+
+
+
 }

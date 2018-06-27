@@ -17,7 +17,17 @@
                     <li class="{{ row.status_1 }}">
                         <strong>{{ row.option_1 }}</strong>
                         {% if row.status_1 == 'correct' %}
-                        <p class="answer">{{ row.answer|smarty }}</p>
+                        <div class="answer">
+                        {% if row.answer_image_name != 'None' %}
+                        <figure>
+                        <img src="img/{{ row.answer_image_name }}" class="answer-image">
+                        <figcaption>{{ row.answer_image_credits }}</figcaption>
+                        </figure>
+                        {% endif %}
+                        <div class="explanation">
+                        {{ row.answer|smarty }}
+                        </div>
+                        </div>
                         {% endif %}
                     </li>
                     {% endif %}
@@ -25,7 +35,15 @@
                     <li class="{{ row.status_2 }}">
                         <strong>{{ row.option_2 }}</strong>
                         {% if row.status_2 == 'correct' %}
-                        <p class="answer">{{ row.answer|smarty }}</p>
+                        {% if row.answer_image_name != 'None' %}
+                        <figure>
+                        <img src="img/{{ row.answer_image_name }}" class="answer-image">
+                        <figcaption>{{ row.answer_image_credits }}</figcaption>
+                        </figure>
+                        {% endif %}
+                        <div class="explanation">
+                        {{ row.answer|smarty }}
+                        </div>
                         {% endif %}
                     </li>
                     {% endif %}
@@ -33,7 +51,17 @@
                     <li class="{{ row.status_3 }}">
                         <strong>{{ row.option_3 }}</strong>
                         {% if row.status_3 == 'correct' %}
-                        <p class="answer">{{ row.answer|smarty }}</p>
+                        <div class="answer">
+                        {% if row.answer_image_name != 'None' %}
+                        <figure>
+                        <img src="img/{{ row.answer_image_name }}" class="answer-image">
+                        <figcaption>{{ row.answer_image_credits }}</figcaption>
+                        </figure>
+                        {% endif %}
+                        <div class="explanation">
+                        {{ row.answer|smarty }}
+                        </div>
+                        </div>
                         {% endif %}
                     </li>
                     {% endif %}
@@ -41,7 +69,17 @@
                     <li class="{{ row.status_4 }}">
                         <strong>{{ row.option_4 }}</strong>
                         {% if row.status_4 == 'correct' %}
-                        <p class="answer">{{ row.answer|smarty }}</p>
+                        <div class="answer">
+                        {% if row.answer_image_name != 'None' %}
+                        <figure>
+                        <img src="img/{{ row.answer_image_name }}" class="answer-image">
+                        <figcaption>{{ row.answer_image_credits }}</figcaption>
+                        </figure>
+                        {% endif %}
+                        <div class="explanation">
+                        {{ row.answer|smarty }}
+                        </div>
+                        </div>
                         {% endif %}
                     </li>
                     {% endif %}
@@ -71,6 +109,9 @@
         var FINAL_LOW  = "{{ COPY.labels.final_low }}";
         var FINAL_MID  = "{{ COPY.labels.final_mid }}";
         var FINAL_HIGH = "{{ COPY.labels.final_high }}";
+        var FINAL_LOW_UPPER  = "{{ COPY.labels.final_low_upper }}";
+        var FINAL_MID_UPPER  = "{{ COPY.labels.final_mid_upper }}";
+        var FINAL_HIGH_UPPER = "{{ COPY.labels.final_high_upper }}";
     </script>
 {% endblock content %}
 

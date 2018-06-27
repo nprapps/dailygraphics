@@ -73,11 +73,11 @@ var onAnswerClicked = function() {
     if (numTaken == numQuestions) {
         resultsMsg = '<strong class="totals">You got ' + numCorrect + ' (of ' + numQuestions + ') right.</strong> ';
 
-        if (numCorrect <= 2) {
+        if (numCorrect <= FINAL_LOW_UPPER) {
             resultsMsg += '<em>' + FINAL_LOW + '</em>';
-        } else if (numCorrect <= 6) {
+        } else if (numCorrect <= FINAL_MID_UPPER) {
             resultsMsg += '<em>' + FINAL_MID + '</em>';
-        } else if (numCorrect > 6) {
+        } else if (numCorrect <= FINAL_HIGH_UPPER) {
             resultsMsg += '<em>' + FINAL_HIGH + '</em>';
         }
     // otherwise, show their status
