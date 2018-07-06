@@ -58,7 +58,7 @@ def app(port='8000'):
     """
     Serve app.py.
     """
-    local('gunicorn -b 0.0.0.0:%s --timeout 3600 --debug --reload app:wsgi_app' % port)
+    local('gunicorn -b 0.0.0.0:%s --timeout 3600 --reload app:wsgi_app' % port)
 
 """
 Deployment
