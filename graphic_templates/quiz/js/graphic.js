@@ -80,6 +80,9 @@ var onAnswerClicked = function() {
         } else if (numCorrect <= FINAL_HIGH_UPPER) {
             resultsMsg += '<em>' + FINAL_HIGH + '</em>';
         }
+
+        // Send user score to analytics 
+        ANALYTICS.trackEvent('quiz-finish', numCorrect ? numCorrect.toString() : '0');
     // otherwise, show their status
     } else {
         resultsMsg = 'You\'ve answered ' + numTaken + ' of ' + numQuestions + ' questions. Keep going!';

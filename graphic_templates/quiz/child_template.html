@@ -20,7 +20,7 @@
                         <div class="answer">
                         {% if row.answer_image_name != 'None' %}
                         <figure>
-                        <img src="img/{{ row.answer_image_name }}" class="answer-image">
+                        <img src="img/{{ row.answer_image_name }}" class="answer-image-{{ row.number }}">
                         <figcaption>{{ row.answer_image_credits }}</figcaption>
                         </figure>
                         {% endif %}
@@ -37,7 +37,7 @@
                         {% if row.status_2 == 'correct' %}
                         {% if row.answer_image_name != 'None' %}
                         <figure>
-                        <img src="img/{{ row.answer_image_name }}" class="answer-image">
+                        <img src="img/{{ row.answer_image_name }}" class="answer-image-{{ row.number }}">
                         <figcaption>{{ row.answer_image_credits }}</figcaption>
                         </figure>
                         {% endif %}
@@ -54,7 +54,7 @@
                         <div class="answer">
                         {% if row.answer_image_name != 'None' %}
                         <figure>
-                        <img src="img/{{ row.answer_image_name }}" class="answer-image">
+                        <img src="img/{{ row.answer_image_name }}" class="answer-image-{{ row.number }}">
                         <figcaption>{{ row.answer_image_credits }}</figcaption>
                         </figure>
                         {% endif %}
@@ -72,7 +72,7 @@
                         <div class="answer">
                         {% if row.answer_image_name != 'None' %}
                         <figure>
-                        <img src="img/{{ row.answer_image_name }}" class="answer-image">
+                        <img src="img/{{ row.answer_image_name }}" class="answer-image-{{ row.number }}">
                         <figcaption>{{ row.answer_image_credits }}</figcaption>
                         </figure>
                         {% endif %}
