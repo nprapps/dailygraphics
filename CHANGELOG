@@ -15,7 +15,7 @@
 * Copyedit email: Tweak to formatting (#257)
 * Add URL param to embed code, isHomepage boolean and css when homepage checkbox is clicked (#253)
 * Make sure viewport test buttons are visible on mobile (#249)
-* Bump LESS version to 3.0.4 (#270, #271)
+* Bump LESS version to 3.5.2 (#270, #271, #279)
 * Update Python libraries in requirements.txt (#272, #274)
 
 0.1.4
