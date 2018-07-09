@@ -1,6 +1,8 @@
 0.1.5
 -----
 
+This version includes updates to Python and NPM dependencies. Re-run `pip install -r requirements.txt` and `npm install`
+
 * Switch to new embed loader (#231)
 * Upgrade cssmin version to solve installation issue (#259)
 * Auto-generate dates for new graphics (#237)
@@ -15,7 +17,7 @@
 * Copyedit email: Tweak to formatting (#257)
 * Add URL param to embed code, isHomepage boolean and css when homepage checkbox is clicked (#253)
 * Make sure viewport test buttons are visible on mobile (#249)
-* Bump LESS version to 3.5.2 (#270, #271, #279)
+* Bump LESS version to 3.5.3 (#270, #271, #279, #284)
 * Update Python libraries in requirements.txt (#272, #274, #283)
 
 0.1.4
