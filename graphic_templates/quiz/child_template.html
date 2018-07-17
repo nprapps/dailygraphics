@@ -6,95 +6,22 @@
     {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
 
     <div id="quiz">
-        {% for row in COPY.quiz %}
         <div class="question">
             <div class="q">
-                <p>{{ row.question|smarty }}</p>
             </div>
             <div class="a">
                 <ul>
-                    {% if row.status_1 != 'None' %}
-                    <li class="{{ row.status_1 }}">
-                        <strong>{{ row.option_1 }}</strong>
-                        {% if row.status_1 == 'correct' %}
-                        <div class="answer">
-                        {% if row.answer_image_name != 'None' %}
-                        <figure>
-                        <img src="img/{{ row.answer_image_name }}" class="answer-image-{{ row.number }}">
-                        <figcaption>{{ row.answer_image_credits }}</figcaption>
-                        </figure>
-                        {% endif %}
-                        <div class="explanation">
-                        {{ row.answer|smarty }}
-                        </div>
-                        </div>
-                        {% endif %}
-                    </li>
-                    {% endif %}
-                    {% if row.status_2 != 'None' %}
-                    <li class="{{ row.status_2 }}">
-                        <strong>{{ row.option_2 }}</strong>
-                        {% if row.status_2 == 'correct' %}
-                        {% if row.answer_image_name != 'None' %}
-                        <figure>
-                        <img src="img/{{ row.answer_image_name }}" class="answer-image-{{ row.number }}">
-                        <figcaption>{{ row.answer_image_credits }}</figcaption>
-                        </figure>
-                        {% endif %}
-                        <div class="explanation">
-                        {{ row.answer|smarty }}
-                        </div>
-                        {% endif %}
-                    </li>
-                    {% endif %}
-                    {% if row.status_3 != 'None' %}
-                    <li class="{{ row.status_3 }}">
-                        <strong>{{ row.option_3 }}</strong>
-                        {% if row.status_3 == 'correct' %}
-                        <div class="answer">
-                        {% if row.answer_image_name != 'None' %}
-                        <figure>
-                        <img src="img/{{ row.answer_image_name }}" class="answer-image-{{ row.number }}">
-                        <figcaption>{{ row.answer_image_credits }}</figcaption>
-                        </figure>
-                        {% endif %}
-                        <div class="explanation">
-                        {{ row.answer|smarty }}
-                        </div>
-                        </div>
-                        {% endif %}
-                    </li>
-                    {% endif %}
-                    {% if row.status_4 != 'None' %}
-                    <li class="{{ row.status_4 }}">
-                        <strong>{{ row.option_4 }}</strong>
-                        {% if row.status_4 == 'correct' %}
-                        <div class="answer">
-                        {% if row.answer_image_name != 'None' %}
-                        <figure>
-                        <img src="img/{{ row.answer_image_name }}" class="answer-image-{{ row.number }}">
-                        <figcaption>{{ row.answer_image_credits }}</figcaption>
-                        </figure>
-                        {% endif %}
-                        <div class="explanation">
-                        {{ row.answer|smarty }}
-                        </div>
-                        </div>
-                        {% endif %}
-                    </li>
-                    {% endif %}
                 </ul>
             </div>
         </div>
-        {% endfor %}
 
         <p id="results"></p>
+        <div class="btn_div"><button class="btn next">Next</button></div>
     </div>
 
     {% if COPY.labels.footnote %}
     <div class="footnotes">
-        <h4>Notes</h4>
-        <p>{{ COPY.labels.footnote|smarty }}</p>
+        <p><strong>Notes:</strong> {{ COPY.labels.footnote|smarty }}</p>
     </div>
     {% endif %}
 
@@ -112,6 +39,7 @@
         var FINAL_LOW_UPPER  = "{{ COPY.labels.final_low_upper }}";
         var FINAL_MID_UPPER  = "{{ COPY.labels.final_mid_upper }}";
         var FINAL_HIGH_UPPER = "{{ COPY.labels.final_high_upper }}";
+        var QUIZ = {{ COPY.quiz.json() }};
     </script>
 {% endblock content %}
 
