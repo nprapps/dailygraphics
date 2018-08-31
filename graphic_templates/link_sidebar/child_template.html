@@ -20,6 +20,10 @@
                     <span class="small">({{link.format}})</span>
                 {% endif %}
             </h3>
+
+            {% if link.photo %}
+                <img class="document" src="{{link.photo}}">
+            {% endif %}
             
             {% if link.source %}
                 <p class="small">

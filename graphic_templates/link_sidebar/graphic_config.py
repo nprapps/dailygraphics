@@ -4,7 +4,7 @@ import base_filters
 
 COPY_GOOGLE_DOC_KEY = '1YTnLqcLIQctF4ZnOIhJWY2fEnN4llovLmk6fiNUY6vM'
 
-USE_ASSETS = False
+USE_ASSETS = True
 
 # Use these variables to override the default cache timeouts for this graphic
 # DEFAULT_MAX_AGE = 20
