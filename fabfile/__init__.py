@@ -494,6 +494,13 @@ def add_link_sidebar(slug):
     """
     _add_graphic(slug, 'link_sidebar')    
 
+@task
+def add_if_you_go_sidebar(slug):
+    """
+    Create a sidebar of event information.
+    """
+    _add_graphic(slug, 'iyg_sidebar')
+
 def _check_credentials():
     """
     Check credentials and spawn server and browser if not
