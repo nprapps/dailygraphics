@@ -1,0 +1,45 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+
+{% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
+{% if COPY.labels.subhed %}<p>{{ render(COPY.labels.subhed)|smarty }}</p>{% endif %}
+
+{% if COPY.labels.hdr_what %}
+        <h2>What:</h2>
+        {{ COPY.labels.hdr_what }}
+{% endif %}
+
+{% if COPY.labels.hdr_when %}
+        <h2>When:</h2>
+        {{ COPY.labels.hdr_when }}
+{% endif %}
+
+{% if COPY.labels.hdr_where %}
+        <h2>Where:</h2>
+        {{ COPY.labels.hdr_where }}
+{% endif %}
+
+{% if COPY.labels.hdr_how_much %}
+        <h2>How much:</h2>
+        {{ COPY.labels.hdr_how_much }}
+{% endif %}
+
+{% if COPY.labels.hdr_more_info %}
+        <h2>More info:</h2>
+        {{ COPY.labels.hdr_more_info }}
+{% endif %}
+
+{% if COPY.labels.footnote %}
+<div class="footnotes">
+    <h4>Notes</h4>
+    <p>{{ COPY.labels.footnote|smarty }}</p>
+</div>
+{% endif %}
+
+<div class="footer">
+    {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
+    {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
+</div>
+
+{% endblock content %}

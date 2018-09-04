@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>2018-09-04-template-iyg</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="shortcut icon" href="https://media.npr.org/favicon.ico" />
+    <style type="text/css">
+        /* Basic styles */
+        body {
+            font: 14px/1.4 Helvetica, Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 14px;
+            margin: 0 0 11px 0;
+        }
+
+        p.homepage {
+            margin: -7px 0 11px 0;
+            font-size: 12px;
+            color: #666;
+        }
+        p.homepage em { color: #999; }
+
+        a, a:link,
+        a:visited {
+            color: #4774CC;
+            text-decoration: none;
+        }
+        a:hover,
+        a:active {
+            color: #bccae5;
+        }
+
+        a.btn {
+            font-size: 12px;
+            line-height: 28px;
+            margin: 30px 0;
+            padding: 9px 11px;
+            border-radius: 4px;
+            background-color: #f7f7f7;
+            font-weight: bold;
+            -webkit-font-smoothing: antialiased;
+        }
+        a.btn:hover,
+        a.btn:active {
+            background-color: #fff;
+        }
+
+        .graphics-list li {
+            margin-top: 0;
+            margin-bottom: 6px;
+        }
+
+        /* Header */
+        .parent-header {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #ebebeb;
+            width: 100%;
+            overflow: hidden;
+        }
+        .parent-header:after { clear: both; }
+
+        .parent-header .segment {
+            padding-left: 5px;
+            padding-right: 5px;
+            white-space: nowrap;
+            margin: 4px 0;
+        }
+
+        .parent-header .right {
+            float: right;
+            margin-right: 15px;
+        }
+
+        .localhost,
+        a.localhost,
+        a.localhost:visited {
+            color: green;
+        }
+
+        .staging,
+        a.staging,
+        a.staging:visited {
+            color: orange;
+        }
+
+        .production,
+        a.production,
+        a.production:visited {
+            color: red;
+        }
+
+        .resize {
+            background-color: white;
+        }
+
+        /* Content */
+        .content {
+            margin: 20px 10px 10px 10px;
+        }
+
+        #preview-wrapper {
+            border: 2px dashed #ddd;
+            margin-bottom: 20px;
+        }
+
+        #preview {
+            width: 100%;
+        }
+
+        textarea {
+            display: block;
+            margin-bottom: 5px;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+
+        .segment-group{
+          margin: 5px 0;
+        }
+
+        .type-segment{
+          padding: 0px 5px;
+        }
+
+        .button-segment{
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          flex-grow: 2;
+        }
+
+        .resize-segment, .link-segment{
+          display: flex;
+          flex-wrap: wrap;
+          padding: 0px 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="parent-header">
+
+        <div class="type-segment segment-group">
+          <div class="segment">
+              <h1 class="localhost">localhost</h1>
+          </div>
+        </div>
+
+        <div class="button-segment">
+
+          <div class="resize-segment segment-group">
+            <div class="segment">
+                <a id="resize-sidebar" class="btn" href="#">Sidebar (180px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-mobile" class="btn" href="#">Mobile (331px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-desktop" class="btn" href="#">Desktop (663px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-full-width" class="btn" href="#">Full-Width (1010px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-fluid" class="btn" href="#">Fluid (100%)</a>
+            </div>
+          </div>
+
+          <div class="link-segment segment-group">
+
+              
+                  
+
+                  
+                  <div class="segment">
+                      <a class="btn staging" href="https://s3.amazonaws.com/stlpr-stg/dailygraphics/graphics/2018-09-04-template-iyg/index.html" target="_blank">staging &raquo;</a>
+                  </div>
+                  
+
+                  
+                  <div class="segment">
+                      <a class="btn production" href="https://apps.stlpublicradio.org/dailygraphics/graphics/2018-09-04-template-iyg/" target="_blank">production &raquo;</a>
+                  </div>
+                  
+
+                  
+                  
+                  <div class="segment">
+                      <a class="btn" href="https://docs.google.com/spreadsheets/d/1mFUbDPWqqw6V5De3wMX7z11LG1jttQSLs1RRxRP4OOU/edit" target="_blank">spreadsheet &raquo;</a>
+                  </div>
+                  
+                  
+              
+          </div>
+
+        </div>
+
+    </header>
+
+    <div class="content">
+
+        <div id="preview-wrapper">
+            <p data-pym-loader data-child-src="child.html" id="preview">Loading...</p>
+        </div>
+
+
+
+<h2>Main embed code (story-text width graphic)</h2>
+
+<!-- textarea contents -->
+<textarea readonly="readonly" rows="10" cols="50">
+<p data-pym-src="http://apps.stlpublicradio.org/dailygraphics/graphics/2018-09-04-template-iyg/child.html">Loading...</p><script src="https://pym.nprapps.org/npr-pym-loader.v2.min.js" type="text/javascript"></script>
+</textarea>
+<!-- end textarea contents -->
+
+<h2>Main embed code (right; change "wysiwyg-asset-image-wrapper right" to "wysiwyg-asset-image-wrapper left" to shift graphic to left)</h2>
+
+<!-- textarea contents -->
+<textarea readonly="readonly" rows="10" cols="50">
+<p class="wysiwyg-asset-image-wrapper right" data-pym-src="http://apps.stlpublicradio.org/dailygraphics/graphics/2018-09-04-template-iyg/child.html">Loading...</p><script src="https://pym.nprapps.org/npr-pym-loader.v2.min.js" type="text/javascript"></script>
+</textarea>
+<!-- end textarea contents -->
+
+<h2>Main embed code (offset-right; change "offset-right" to "offset-left" to shift graphic to left)</h2>
+
+<!-- textarea contents -->
+<textarea readonly="readonly" rows="10" cols="50">
+<p class="wysiwyg-asset-image-wrapper offset-right" data-pym-src="http://apps.stlpublicradio.org/dailygraphics/graphics/2018-09-04-template-iyg/child.html">Loading...</p><script src="https://pym.nprapps.org/npr-pym-loader.v2.min.js" type="text/javascript"></script>
+</textarea>
+<!-- end textarea contents -->
+
+<h2>Main embed code (full-width)</h2>
+
+<!-- textarea contents -->
+<textarea readonly="readonly" rows="10" cols="50">
+<p class="wysiwyg-asset-image-wrapper full-width" data-pym-src="http://apps.stlpublicradio.org/dailygraphics/graphics/2018-09-04-template-iyg/child.html">Loading...</p><script src="https://pym.nprapps.org/npr-pym-loader.v2.min.js" type="text/javascript"></script>
+</textarea>
+
+    </div>
+    <script src="https://pym.nprapps.org/npr-pym-loader.v2.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var homePageEl = document.querySelector('#homepage');
+        var resizeSidebarEl = document.querySelector('#resize-sidebar');
+        var resizeMobileEl = document.querySelector('#resize-mobile');
+        var resizeDesktopEl = document.querySelector('#resize-desktop');
+        var resizeFullwidthEl = document.querySelector('#resize-full-width');
+        var resizeFluidEl = document.querySelector('#resize-fluid');
+        var previewWrapperEl = document.querySelector('#preview-wrapper');
+        resizeSidebarEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            previewWrapperEl.style.width = '300px';
+            window.dispatchEvent(new Event('resize'));
+            window.location.hash = 'sidebar';
+        });
+        resizeMobileEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            previewWrapperEl.style.width = '331px';
+            window.dispatchEvent(new Event('resize'));
+            window.location.hash = 'mobile';
+        });
+        resizeDesktopEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            previewWrapperEl.style.width = '663px';
+            window.dispatchEvent(new Event('resize'));
+
+            window.location.hash = 'desktop';
+        });
+
+        resizeFullwidthEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            previewWrapperEl.style.width = '1010px';
+            window.dispatchEvent(new Event('resize'));
+
+            window.location.hash = 'desktop';
+        });
+
+        resizeFluidEl.addEventListener('click', function(e) {
+            e.preventDefault();
+            previewWrapperEl.style.width = '100%';
+            window.dispatchEvent(new Event('resize'));
+            window.location.hash = 'fluid';
+        });
+        homePageEl.addEventListener('change', function(e) {
+            var textarea = document.getElementById('embed-code');
+            var text = textarea.innerHTML
+            if (this.checked) {
+                text = text.replace('child.html"', 'child.html?mode=hp" data-carebot-skip');
+                textarea.innerHTML = text;
+            } else {
+                text = text.replace(' data-carebot-skip', '');
+                text = text.replace('?mode=hp', '');
+                textarea.innerHTML = text;
+            }
+        });
+
+        if (window.location.hash == '#sidebar') {
+            previewWrapperEl.style.width = '300px';
+        } else if (window.location.hash == '#mobile') {
+            previewWrapperEl.style.width = '331px';
+        } else if (window.location.hash == '#desktop') {
+            previewWrapperEl.style.width = '663px';
+        } else if (window.location.hash == '#full-width') {
+            previewWrapperEl.style.width = '1010px';
+        } else if (window.location.hash == '#fluid') {
+            previewWrapperEl.style.width = '100%';
+        }
+    </script>
+</body>
+</html>
