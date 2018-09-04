@@ -495,11 +495,11 @@ def add_link_sidebar(slug):
     _add_graphic(slug, 'link_sidebar')    
 
 @task
-def add_if_you_go_sidebar(slug):
+def add_event_sidebar(slug):
     """
     Create a sidebar of event information.
     """
-    _add_graphic(slug, 'iyg_sidebar')
+    _add_graphic(slug, 'event_sidebar')
 
 def _check_credentials():
     """
