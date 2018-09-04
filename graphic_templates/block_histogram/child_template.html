@@ -3,7 +3,7 @@
 {% block content %}
 
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
-    {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+    {% if COPY.labels.subhed %}<p>{{ render(COPY.labels.subhed)|smarty }}</p>{% endif %}
 
     <div id="block-histogram" class="graphic">
         <img src="fallback.png" alt="[Chart]" class="fallback" />
@@ -11,7 +11,7 @@
 
     {% if COPY.labels.footnote %}
     <div class="footnotes">
-        <h4>Notes</h4>
+        <h3>Notes</h3>
         <p>{{ COPY.labels.footnote|smarty }}</p>
     </div>
     {% endif %}

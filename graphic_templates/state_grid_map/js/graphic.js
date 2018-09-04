@@ -19,13 +19,6 @@ var onWindowLoaded = function() {
         pymChild = new pym.Child({});
     }
 
-    pymChild.onMessage('on-screen', function(bucket) {
-        ANALYTICS.trackEvent('on-screen', bucket);
-    });
-    pymChild.onMessage('scroll-depth', function(data) {
-        data = JSON.parse(data);
-        ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
-    });
 }
 
 /*
@@ -121,7 +114,7 @@ var renderStateGridMap = function(config) {
 
         var colorScale = d3.scale.ordinal()
             .domain(categories)
-            .range([COLORS['teal6'], COLORS['teal5'], COLORS['teal4'], COLORS['teal3'], COLORS['teal2'], COLORS['teal1']]);
+            .range([colors.green,colors.orange,colors.blue,colors.yellow]);
     } else {
         // Define color scale
         var colorScale = d3.scale.ordinal()

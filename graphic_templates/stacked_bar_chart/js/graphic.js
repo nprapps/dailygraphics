@@ -17,13 +17,6 @@ var onWindowLoaded = function() {
         pymChild = new pym.Child({});
     }
 
-    pymChild.onMessage('on-screen', function(bucket) {
-        ANALYTICS.trackEvent('on-screen', bucket);
-    });
-    pymChild.onMessage('scroll-depth', function(data) {
-        data = JSON.parse(data);
-        ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
-    });
 }
 
 /*
@@ -147,7 +140,7 @@ var renderStackedBarChart = function(config) {
                 return d;
             }
         }))
-        .range([ COLORS['teal3'], COLORS['orange3'], COLORS['blue3'], '#ccc' ]);
+        .range([ colors.green,colors.orange,colors.blue,colors.yellow ]);
 
     /*
      * Render the legend.

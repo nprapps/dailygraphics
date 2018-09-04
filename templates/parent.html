@@ -168,11 +168,15 @@
             </div>
 
             <div class="segment">
-                <a id="resize-mobile" class="btn" href="#">Mobile (300px)</a>
+                <a id="resize-mobile" class="btn" href="#">Mobile (331px)</a>
             </div>
 
             <div class="segment">
-                <a id="resize-desktop" class="btn" href="#">Desktop (730px)</a>
+                <a id="resize-desktop" class="btn" href="#">Desktop (663px)</a>
+            </div>
+
+            <div class="segment">
+                <a id="resize-full-width" class="btn" href="#">Full-Width (1010px)</a>
             </div>
 
             <div class="segment">
@@ -220,17 +224,41 @@
         <div id="preview-wrapper">
             <p data-pym-loader data-child-src="child.html" id="preview">Loading...</p>
         </div>
-        <h2><span class="production">Production</span> embed code (for Seamus and NPR stations)</h2>
+
 {% if CUSTOM_LOCATION %}
         <h2><span class="production">This has been redeployed from a custom location. Check thoroughly before using in a new graphic.</span></h2>
 {% endif %}
 
-    <p class="homepage"><input id="homepage" type="checkbox"> This code will be embedded on the NPR homepage. <em>(Infrequent use case.)</em></p>
+<h2>Main embed code (story-text width graphic)</h2>
 
 <!-- textarea contents -->
-    <textarea id="embed-code" readonly="readonly" rows="10" cols="80">
-<p data-pym-loader data-child-src="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html" id="responsive-embed-{{ slug }}">Loading...</p><script type="text/javascript" src="{{PYM['pym_loader_url']}}"></script></textarea>
+<textarea readonly="readonly" rows="10" cols="50">
+<p data-pym-src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
+</textarea>
 <!-- end textarea contents -->
+
+<h2>Main embed code (right; change "wysiwyg-asset-image-wrapper right" to "wysiwyg-asset-image-wrapper left" to shift graphic to left)</h2>
+
+<!-- textarea contents -->
+<textarea readonly="readonly" rows="10" cols="50">
+<p class="wysiwyg-asset-image-wrapper right" data-pym-src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
+</textarea>
+<!-- end textarea contents -->
+
+<h2>Main embed code (offset-right; change "offset-right" to "offset-left" to shift graphic to left)</h2>
+
+<!-- textarea contents -->
+<textarea readonly="readonly" rows="10" cols="50">
+<p class="wysiwyg-asset-image-wrapper offset-right" data-pym-src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
+</textarea>
+<!-- end textarea contents -->
+
+<h2>Main embed code (full-width)</h2>
+
+<!-- textarea contents -->
+<textarea readonly="readonly" rows="10" cols="50">
+<p class="wysiwyg-asset-image-wrapper full-width" data-pym-src="http://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Loading...</p><script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
+</textarea>
 
     </div>
     <script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>
@@ -239,26 +267,41 @@
         var resizeSidebarEl = document.querySelector('#resize-sidebar');
         var resizeMobileEl = document.querySelector('#resize-mobile');
         var resizeDesktopEl = document.querySelector('#resize-desktop');
+        var resizeFullwidthEl = document.querySelector('#resize-full-width');
         var resizeFluidEl = document.querySelector('#resize-fluid');
         var previewWrapperEl = document.querySelector('#preview-wrapper');
         resizeSidebarEl.addEventListener('click', function(e) {
             e.preventDefault();
-            previewWrapperEl.style.width = '180px';
+
+            previewWrapperEl.style.width = '300px';
             window.dispatchEvent(new Event('resize'));
             window.location.hash = 'sidebar';
         });
         resizeMobileEl.addEventListener('click', function(e) {
             e.preventDefault();
-            previewWrapperEl.style.width = '300px';
+
+            previewWrapperEl.style.width = '331px';
             window.dispatchEvent(new Event('resize'));
             window.location.hash = 'mobile';
         });
         resizeDesktopEl.addEventListener('click', function(e) {
             e.preventDefault();
-            previewWrapperEl.style.width = '730px';
+
+            previewWrapperEl.style.width = '663px';
             window.dispatchEvent(new Event('resize'));
+
             window.location.hash = 'desktop';
         });
+
+        resizeFullwidthEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            previewWrapperEl.style.width = '1010px';
+            window.dispatchEvent(new Event('resize'));
+
+            window.location.hash = 'desktop';
+        });
+
         resizeFluidEl.addEventListener('click', function(e) {
             e.preventDefault();
             previewWrapperEl.style.width = '100%';
@@ -279,11 +322,13 @@
         });
 
         if (window.location.hash == '#sidebar') {
-            previewWrapperEl.style.width = '180px';
-        } else if (window.location.hash == '#mobile') {
             previewWrapperEl.style.width = '300px';
+        } else if (window.location.hash == '#mobile') {
+            previewWrapperEl.style.width = '331px';
         } else if (window.location.hash == '#desktop') {
-            previewWrapperEl.style.width = '730px';
+            previewWrapperEl.style.width = '663px';
+        } else if (window.location.hash == '#full-width') {
+            previewWrapperEl.style.width = '1010px';
         } else if (window.location.hash == '#fluid') {
             previewWrapperEl.style.width = '100%';
         }

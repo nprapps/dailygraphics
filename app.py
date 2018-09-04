@@ -8,6 +8,7 @@ from werkzeug.debug import DebuggedApplication
 
 import app_config
 import copytext
+from render_utils import make_context, urlencode_filter, format_currency, format_thousands
 import graphic
 import graphic_templates
 import oauth
@@ -15,6 +16,10 @@ from render_utils import make_context
 
 app = Flask(app_config.PROJECT_SLUG)
 app.debug = app_config.DEBUG
+
+app.jinja_env.filters['urlencode'] = urlencode_filter
+app.jinja_env.filters['format_currency'] = format_currency
+app.jinja_env.filters['format_thousands'] = format_thousands
 
 @app.route('/')
 def _graphics_list():

@@ -17,13 +17,6 @@ var onWindowLoaded = function() {
         pymChild = new pym.Child({});
     }
 
-    pymChild.onMessage('on-screen', function(bucket) {
-        ANALYTICS.trackEvent('on-screen', bucket);
-    });
-    pymChild.onMessage('scroll-depth', function(data) {
-        data = JSON.parse(data);
-        ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
-    });
 }
 
 /*
@@ -160,7 +153,7 @@ var renderLineChart = function(config) {
 
     var colorScale = d3.scale.ordinal()
         .domain(_.pluck(config['data'], 'name'))
-        .range([COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3']]);
+        .range([colors.red,colors.blue,colors.yellow,colors.orange]);
 
     /*
      * Render the HTML legend.

@@ -103,7 +103,7 @@ brew install node
 Then set up the project like this:
 
 ```
-git clone https://github.com/nprapps/dailygraphics.git
+git clone https://github.com/stlpublicradio/dailygraphics.git
 cd dailygraphics
 mkvirtualenv dailygraphics
 pip install -r requirements.txt

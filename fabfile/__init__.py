@@ -240,22 +240,18 @@ def _add_date_slug(old_slug):
     Add today's date to slug if it does not have a date or it is not valid
     """
     slug = old_slug
-    today = datetime.today().strftime('%Y%m%d')
+    today = datetime.today().strftime('%Y-%m-%d')
     # create a new slug based on the old one
     bits = old_slug.split('-')
     # Test if we had a valid date
     try:
-        datetime.strptime(bits[len(bits) - 1], '%Y%m%d')
+        slug_date = "-".join(bits[0:3])
+        datetime.strptime(slug_date, '%Y-%m-%d')
     except ValueError:
         # Test if the date is not valid but numeric
-        try:
-            int(bits[len(bits) - 1])
-            bits = bits[:-1]
-            print 'Removed numeric end of the slug since not a valid date'
-        except ValueError:
-            pass
-        bits.extend([today])
-        slug = "-".join(bits)
+        pre_slug = today.split('-') + bits
+        slug = "-".join(pre_slug)
+
     return slug
 
 
@@ -469,6 +465,13 @@ def add_map(slug):
     Create a locator map.
     """
     _add_graphic(slug, 'locator_map')
+    
+@task
+def add_leaflet_map(slug):
+    """
+    Create a Leaflet map.
+    """
+    _add_graphic(slug, 'map')
 
 @task
 def add_table(slug):
@@ -483,6 +486,20 @@ def add_issue_matrix(slug):
     Create a table comparing positions on an issue.
     """
     _add_graphic(slug, 'issue_matrix')
+
+@task
+def add_link_sidebar(slug):
+    """
+    Create a sidebar of links.
+    """
+    _add_graphic(slug, 'link_sidebar')    
+
+@task
+def add_event_sidebar(slug):
+    """
+    Create a sidebar of event information.
+    """
+    _add_graphic(slug, 'event_sidebar')
 
 def _check_credentials():
     """

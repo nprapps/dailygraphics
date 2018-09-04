@@ -17,13 +17,6 @@ var onWindowLoaded = function() {
         pymChild = new pym.Child({});
     }
 
-    pymChild.onMessage('on-screen', function(bucket) {
-        ANALYTICS.trackEvent('on-screen', bucket);
-    });
-    pymChild.onMessage('scroll-depth', function(data) {
-        data = JSON.parse(data);
-        ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
-    });
 }
 
 /*
@@ -145,7 +138,7 @@ var renderGroupedBarChart = function(config) {
                 return d;
             }
         }))
-        .range([COLORS['teal3'], COLORS['teal5']]);
+        .range([colors.ltgreen,colors.dkgreen]);
     /*
      * Render a color legend.
      */

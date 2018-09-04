@@ -29,6 +29,7 @@ pip-log.txt
 
 .DS_store
 .gzip
+.vscode
 
 # Test Logs
 *.log

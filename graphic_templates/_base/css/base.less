@@ -1,72 +1,25 @@
-/*
- * Colors
- */
-@red1       : #6C2315;
-@red2       : #A23520;
-@red3       : #D8472B;
-@red4       : #E27560;
-@red5       : #ECA395;
-@red6       : #F5D1CA;
+// Colors
+// -------------------------
 
-@orange1    : #714616;
-@orange2    : #AA6A21;
-@orange3    : #E38D2C;
-@orange4    : #EAAA61;
-@orange5    : #F1C696;
-@orange6    : #F8E2CA;
+@brown		: #6b6256;
+@tan		: #a5a585;
+@ltgreen	: #70a99a;
+@green		: #449970;
+@dkgreen 	: #31716e;
+@ltblue 	: #55b7d9;
+@blue		: #358fb3;
+@dkblue		: #006c8e;
+@yellow		: #f1bb4f;
+@orange 	: #f6883e;
+@tangerine 	: #e8604d;
+@red		: #cc203b;
+@pink		: #c72068;
+@maroon 	: #8c1b52;
+@purple 	: #571751;
 
-@yellow1    : #77631B;
-@yellow2    : #B39429;
-@yellow3    : #EFC637;
-@yellow4    : #F3D469;
-@yellow5    : #F7E39B;
-@yellow6    : #FBF1CD;
+@import url(http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Titillium+Web:700,400,300);
 
-@teal1      : #0B403F;
-@teal2      : #11605E;
-@teal3      : #17807E;
-@teal4      : #51A09E;
-@teal5      : #8BC0BF;
-@teal6      : #C5DFDF;
-
-@blue1      : #28556F;
-@blue2      : #3D7FA6;
-@blue3      : #51AADE;
-@blue4      : #7DBFE6;
-@blue5      : #A8D5EF;
-@blue6      : #D3EAF7;
-
-/*
- * Fonts
- */
-.gotham() {
-    font-family: 'Gotham SSm',Helvetica,Arial,sans-serif;
-    font-weight: normal;
-    font-weight: 400;
-}
-
-// Normal Knockout
-.knockout() {
-    font-family: 'Knockout 31 4r','Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    font-weight: normal;
-}
-
-// Knockout, uppercased
-.knockout-upper() {
-    .knockout();
-    text-transform: uppercase;
-}
-
-// Knockout for headings
-.knockout-header() {
-    .knockout-upper();
-    letter-spacing: 0.05em;
-    -webkit-font-smoothing: antialiased;
-}
-
-.sans-serif() {
-    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-}
+/* base styles */
 
 /*
  * Mixins
@@ -89,41 +42,50 @@ html { -webkit-text-size-adjust: none; }
 
 body {
     margin: 0;
-    padding: 33px 0;
-    font: 14px/1.4 Helvetica, Arial, sans-serif;
+    padding: 0 0 15px 0;
+    font: 14px/1.4 'Titillium Web', Helvetica, sans-serif;
     color: #555;
 }
 
 h1 {
-    margin: 0 0 33px 0;
-    font-size: 20px;
-    color: #666;
-    font-family: 'Gotham SSm',Helvetica,Arial,sans-serif;
-    font-weight: normal;
-    line-height: 1.3;
-    font-weight: 400;
-    -webkit-font-smoothing: antialiased;
+	font-size: 20px;
+	color: #000;
+	font-weight: 700;
+	line-height: 1.3;
+	-webkit-font-smoothing: antialiased;
+}
+
+h2,h3,h4 {
+	font-weight: 700;
+	color: #777;
+	line-height: 1.6;
 }
 
 h2 {
-    font-weight: normal;
-    color: #777;
-    font-size: 12px;
-    margin: -22px 0 22px 0;
-    line-height: 1.6;
+	font-size: 16px;
 }
 
 h3 {
+	font-size: 14px;
+}
+
+h4 { font-size: 12px;
+}
+
+h5 {
     margin: 0 0 15px 0;
-    font-family: 'Knockout 31 4r';
     font-weight: normal;
     text-transform: uppercase;
     padding-top: 0;
     line-height: 1.2;
     letter-spacing: 0.05em;
-    -webkit-font-smoothing: antialiased;
     font-size: 12px;
     color: #333;
+}
+
+h1,h2,h3,h4,h5 {
+    margin: 20px 0 0 0;
+    -webkit-font-smoothing: antialiased;
 }
 
 .nowrap {
@@ -251,7 +213,7 @@ rect {
     shape-rendering: crispEdges;
 }
 
-.bars rect { fill: @teal3; }
+.bars rect { fill: @ltgreen; }
 
 .labels {
     position: absolute;
@@ -277,20 +239,26 @@ rect {
 }
 
 .value text {
-    font-size: 10px;
+    font-size: 12px;
     -webkit-font-smoothing: antialiased;
 
     &.in { fill: #fff; }
     &.out { fill: #999; }
 }
 
-/*
- * HOMEPAGE
- * styles for when a project is embedded on the homepage
- * (if someone clicked the "This code will be embedded on the NPR homepage."
- * checkbox when pulling the embed code.)
- */
-body.hp {
-    padding-top: 0;
-    padding-bottom: 10px;
-}
+/* Size "Full" divs in Core Publisher correctly — add div.full inside body tags */
+		@media screen and (max-width: 641px) {
+			div.full {
+				margin-right: 8.75%;
+			}
+		}
+		@media screen and (min-width: 642px) and (max-width: 1009px) {
+			div.full {
+				margin-right: 8.3%;
+			}
+		}
+		@media screen and (min-width: 1011px) and (max-width: 1025px) {
+			div.full {
+				margin-right: 8.3%;
+			}
+		}

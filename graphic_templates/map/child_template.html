@@ -1,0 +1,35 @@
+{% extends 'base_template.html' %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+{% endblock extra_css %}
+
+{% block content %}
+{% if COPY.labels.headline %}<h1>{{ COPY.labels.headline }}</h1>{% endif %}
+{% if COPY.labels.subhed %}<p>{{ COPY.labels.subhed }}</p>{% endif %}
+
+<div id="graphic">
+	<div id="map"></div>
+</div>
+
+{% if COPY.labels.footnote %}
+<div class="footnotes">
+	<h3>Notes</h3>
+	<p>{{ COPY.labels.footnote }}</p>
+</div>
+{% endif %}
+
+<div class="footer">
+	{% if COPY.labels.source %}<p>Source: {{ COPY.labels.source }}</p>{% endif %}
+	{% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit }}</p>{% endif %}
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script src="js/lib/jquery.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+{% endblock extra_js %}

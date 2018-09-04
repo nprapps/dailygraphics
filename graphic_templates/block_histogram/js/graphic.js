@@ -1,6 +1,6 @@
 // Global config
 var COLOR_BINS = [ -4, -2, 0, 2, 4, 6, 8, 10 ];
-var COLOR_RANGE = [ '#e68c31', '#eba934', '#efc637', '#c6b550', '#99a363', '#6a9171', '#17807e' ];
+var COLOR_RANGE = ['#cc203b', '#e8604d', '#f6883e', '#f1bb4f', '#449970', '#70a99a', '#31716e'];
 
 // Global vars
 var pymChild = null;
@@ -21,13 +21,6 @@ var onWindowLoaded = function() {
         pymChild = new pym.Child({});
     }
 
-    pymChild.onMessage('on-screen', function(bucket) {
-        ANALYTICS.trackEvent('on-screen', bucket);
-    });
-    pymChild.onMessage('scroll-depth', function(data) {
-        data = JSON.parse(data);
-        ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
-    });
 }
 
 /*
