@@ -31,6 +31,8 @@ def _graphics_list():
         name = graphic.split('%s/' % app_config.GRAPHICS_PATH)[1].split('/child.html')[0]
         context['graphics'].append(name)
 
+    context['graphics'].sort();
+
     context['graphics_count'] = len(context['graphics'])
 
     templates = glob('%s/*' % app_config.TEMPLATES_PATH)
@@ -42,6 +44,8 @@ def _graphics_list():
             continue
 
         context['templates'].append(name)
+
+    context['templates'].sort()
 
     context['templates_count'] = len(context['templates'])
 
