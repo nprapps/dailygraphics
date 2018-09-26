@@ -1,0 +1,44 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+<div class="layout {{ COPY.labels.image_layout }} {{ COPY.labels.page_layout }}">
+
+    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
+    {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+
+    <div id="graphic" class="graphic">
+        {% for comparison in COPY.data %}
+        <div class="comparison {{ comparison.id|classify }} comparison-{{ loop.index0 }}" data-comparison="{{ comparison.id|classify }}">
+            <div class="image-toggle">
+                <a class="toggle-1 toggle-btn active" href="#">
+                    <span class="btn-hed">{{ comparison.label_hed1 }}</span>
+                    {% if comparison.label_dek1 %}<span class="btn-dek">{{ comparison.label_dek1 }}</span>{% endif %}
+                </a>
+                <a class="toggle-2 toggle-btn" href="#">
+                    <span class="btn-hed">{{ comparison.label_hed2 }}</span>
+                    {% if comparison.label_dek2 %}<span class="btn-dek">{{ comparison.label_dek2 }}</span>{% endif %}
+                </a>
+            </div>
+            <div class="img-wrapper">
+                <img class="flip-image image-1" src="assets/{{ comparison.image1 }}" />
+                <img class="flip-image image-2" src="assets/{{ comparison.image2 }}" />
+                {% if comparison.title %}<h4>{{ comparison.title }}</h4>{% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if COPY.labels.footnote %}
+    <div class="footnotes">
+        <h4>Notes</h4>
+        <p>{{ COPY.labels.footnote|smarty }}</p>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
+        {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
+    </div>
+
+</div>
+{% endblock content %}
