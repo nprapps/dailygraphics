@@ -8,6 +8,7 @@ This version includes updates to Python and NPM dependencies. Re-run `pip instal
 * Auto-generate dates for new graphics (#237)
 * Add date to slug of cloned graphic if missing or invalid (#239)
 * Solve issue with draft cloned graphic path (#260)
+* New template: Before-and-After toggle (#238)
 * Animated photo: Remove D3 dependency (#229)
 * Animated photo: Store params in the copy spreadsheet (#228)
 * Locator map: Add pixelOffset config option (#220)

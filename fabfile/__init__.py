@@ -387,6 +387,13 @@ def add_bar_chart(slug):
     _add_graphic(slug, 'bar_chart')
 
 @task
+def add_before_after(slug):
+    """
+    Create a before/after image toggle.
+    """
+    _add_graphic(slug, 'before_after')
+
+@task
 def add_column_chart(slug):
     """
     Create a column chart.
