@@ -20,6 +20,7 @@ This version includes updates to Python and NPM dependencies. Re-run `pip instal
 * Bump LESS version to 3.5.3 (#270, #271, #279, #284)
 * Update Python libraries in requirements.txt (#272, #274, #283)
 * Make sure list of graphics is sorted by alpha (#291)
+* Expose direct link to child page to allow for fallback links in story text if the embed doesn't load.
 
 0.1.4
 -----
