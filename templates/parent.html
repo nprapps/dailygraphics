@@ -148,6 +148,30 @@
           padding: 0px 5px;
         }
 
+        .direct-link {
+            margin-top: 22px;
+            max-width: 500px;
+        }
+        .direct-link input {
+            box-sizing: border-box;
+            max-width: 500px;
+            padding: 5px;
+            width: 100%;
+        }
+        .direct-link p {
+            font-size: 12px;
+            color: #666;
+        }
+        .direct-link blockquote {
+            background-color: #f1f1f1;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 10px;
+            width: 100%;
+        }
+        .direct-link blockquote p {
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -231,6 +255,16 @@
     <textarea id="embed-code" readonly="readonly" rows="10" cols="80">
 <p data-pym-loader data-child-src="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html" id="responsive-embed-{{ slug }}">Loading...</p><script type="text/javascript" src="{{PYM['pym_loader_url']}}"></script></textarea>
 <!-- end textarea contents -->
+
+        <div class="direct-link">
+            <h2><strong>Direct link</strong> (for users who can't see the embed &mdash; iOS app, stations, API)</h2>
+            <input value="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html" />
+
+            <p>Underneath the graphic embed, in the text of the story, add a prompt with a direct link to the graphic (without this preview frame, embed code, etc.). You can copy/paste the text below directly into Seamus (new editor) and the formatting should be preserved.</p>
+            <blockquote>
+                <p><em><strong><a href="https://{{ PRODUCTION_S3_BUCKET['bucket_name'] }}/{{ PROJECT_SLUG }}/graphics/{{ slug }}/child.html">Don't see the graphic above? Click here.</a></strong></em></p>
+            </blockquote>
+        </div>
 
     </div>
     <script src="{{PYM['pym_loader_url']}}" type="text/javascript"></script>

@@ -478,6 +478,13 @@ def add_table(slug):
     _add_graphic(slug, 'table')
 
 @task
+def add_quiz(slug):
+    """
+    Create a quiz.
+    """
+    _add_graphic(slug, 'quiz')
+
+@task
 def add_issue_matrix(slug):
     """
     Create a table comparing positions on an issue.
