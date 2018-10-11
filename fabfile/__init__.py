@@ -373,6 +373,13 @@ def add_animated_photo(slug):
     _add_graphic(slug, 'animated_photo')
 
 @task
+def add_soundscape(slug):
+    """
+    Create a new 'tap/hover for sound' photo.
+    """
+    _add_graphic(slug, 'soundscape')
+
+@task
 def add_archive_graphic(slug):
     """
     Create a shell to archive an old project.

@@ -1,0 +1,48 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+
+    <div id="graphic" class="graphic">
+        <div class="item-wrapper align-{{ COPY.labels.photo_align }} item-{{ COPY.labels.photo_orientation }} {% if COPY.labels.quote %}has-quote{% endif %}">
+            <div id="graphic-image" class="img-wrapper">
+                <div class="overlay">
+                    <span class="instructions"></span>
+                    <i class="icon icon-headphones"></i>
+                </div>
+                <img src="{{ COPY.labels.photo }}">
+                <audio id="audio" src="{{ COPY.labels.mp3 }}" loop></audio>
+            </div>
+            {% if COPY.labels.quote or COPY.labels.photo_caption %}
+            <div class="quote-wrapper">
+                {% if COPY.labels.quote %}
+                <p class="quote-text">{{ COPY.labels.quote|smarty }}</p>
+                <p class="quote-header">
+                    <span class="quote-name">{{ COPY.labels.quote_name }}</span>{% if COPY.labels.quote_identifier %}<span class="quote-identifier">, {{ COPY.labels.quote_identifier }}</span>{% endif %}
+                </p>
+                {% endif %}
+                {% if COPY.labels.photo_caption or COPY.labels.photo_credit %}
+                <div class="photo-info">
+                    {% if COPY.labels.photo_caption %}<p class="caption">{{ COPY.labels.photo_caption }}</p>{% endif %}
+                    {% if COPY.labels.photo_credit %}<p class="credit">{{ COPY.labels.photo_credit }}</p>{% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if COPY.labels.quote|string == '' and COPY.labels.photo_caption %}
+    <div class="caption">
+        <p>{{ COPY.labels.caption|smarty }} </p>
+        <p class="credit">{{ COPY.labels.credit|smarty }}</p>
+    </div>
+    {% endif %}
+
+{% endblock content %}
+
+{% block js %}
+    {{ JS.push('js/lib/modernizr.svg.min.js') }}
+    {{ JS.push('js/base.js') }}
+    {{ JS.push('js/graphic.js') }}
+    {{ JS.render('js/graphic-footer.js') }}
+{% endblock js %}

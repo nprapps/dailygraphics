@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2016 by original authors @ fontello.com</metadata>
+<defs>
+<font id="sound-hovercraft" horiz-adv-x="1000" >
+<font-face font-family="sound-hovercraft" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="headphones" unicode="&#xe800;" d="M929 356q0-93-34-176l-11-27-103-18q-13-47-51-77t-87-29v-18q0-8-5-13t-13-5h-36q-8 0-13 5t-5 13v321q0 8 5 13t13 5h36q8 0 13-5t5-13v-18q39 0 72-20t52-53l38 7q16 53 16 108 0 82-49 155t-132 117-176 43-176-43-132-117-49-155q0-55 16-108l38-7q19 34 52 53t73 20v18q0 8 5 13t13 5h35q8 0 13-5t5-13v-321q0-8-5-13t-13-5h-35q-8 0-13 5t-5 13v18q-49 0-88 29t-50 77l-103 18-11 27q-34 83-34 176 0 84 37 162t100 135 149 92 178 34 179-34 148-92 100-135 38-162z" horiz-adv-x="928.6" />
+</font>
+</defs>
+</svg>
