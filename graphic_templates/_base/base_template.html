@@ -14,7 +14,6 @@
     <base target="_blank">
 
     {% block fonts %}
-
     <!-- Fonts -->
     <script src="https://apps.npr.org/dailygraphics/graphics/fonts/js/lib/webfont.js"></script>
     <script>
@@ -32,7 +31,6 @@
         timeout: 10000
     });
     </script>
-
     {% endblock %}
 
     <!-- Configuration -->
@@ -41,15 +39,20 @@
         GOOGLE_ANALYTICS_PROJECT_SLUG = '{{ slug }}';
     </script>
 
+    {% block css %}
     <!-- CSS + LESS -->
     {{ CSS.push('css/graphic.less') }}
     {{ CSS.render('css/graphic-header.css') }}
+    {% endblock %}
+
 </head>
 <body>
+    {% block js_head %}
     <!-- Analytics -->
     {{ JS.push('js/helpers.js') }}
     {{ JS.push('js/analytics.js') }}
     {{ JS.render('js/graphic-header.js') }}
+    {% endblock %}
 
     {% block content %}
 
@@ -59,12 +62,12 @@
 
     <script type="text/javascript" src="{{ PYM['pym_url'] }}"></script>
     {% block js %}
-        {{ JS.push('js/lib/underscore.js') }}
-        {{ JS.push('js/lib/d3.min.js') }}
-        {{ JS.push('js/lib/modernizr.svg.min.js') }}
-        {{ JS.push('js/base.js') }}
-        {{ JS.push('js/graphic.js') }}
-        {{ JS.render('js/graphic-footer.js') }}
+    {{ JS.push('js/lib/underscore.js') }}
+    {{ JS.push('js/lib/d3.min.js') }}
+    {{ JS.push('js/lib/modernizr.svg.min.js') }}
+    {{ JS.push('js/base.js') }}
+    {{ JS.push('js/graphic.js') }}
+    {{ JS.render('js/graphic-footer.js') }}
     {% endblock js %}
 </body>
 </html>
