@@ -9,8 +9,8 @@
                     <span class="instructions"></span>
                     <i class="icon icon-headphones"></i>
                 </div>
-                <img src="{{ COPY.labels.photo }}">
-                <audio id="audio" src="{{ COPY.labels.mp3 }}" loop></audio>
+                <img src="{{ COPY.labels.photo }}" alt="Photo" />
+                <audio id="audio" src="{{ COPY.labels.mp3 }}" {% if COPY.labels.loop_audio|upper == 'TRUE' %}loop{% endif %}></audio>
             </div>
             {% if COPY.labels.quote or COPY.labels.photo_caption %}
             <div class="quote-wrapper">
