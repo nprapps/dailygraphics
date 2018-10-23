@@ -226,7 +226,7 @@ var renderBarChart = function(config) {
                     'width': labelWidth + 'px',
                     'height': barHeight + 'px',
                     'left': '0px',
-                    'top': (i * (barHeight + barGap)) + 'px;'
+                    'top': (i * (barHeight + barGap)) + 'px'
                 });
             })
             .attr('class', function(d) {
@@ -264,10 +264,10 @@ var renderBarChart = function(config) {
                     var outsideOffset = -(valueGap + textWidth);
 
                     if (xStart + outsideOffset < 0) {
-                        d3.select(this).classed('in', true)
+                        d3.select(this).classed('in', true);
                         return valueGap;
                     } else {
-                        d3.select(this).classed('out', true)
+                        d3.select(this).classed('out', true);
                         return outsideOffset;
                     }
                 // Positive case
@@ -281,7 +281,7 @@ var renderBarChart = function(config) {
                     }
                 }
             })
-            .attr('dy', (barHeight / 2) + 3)
+            .attr('dy', (barHeight / 2) + 3);
 }
 
 /*

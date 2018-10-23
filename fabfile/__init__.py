@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# _*_ coding:utf-8 _*_
 import boto
 import json
 import os
@@ -9,25 +9,23 @@ from datetime import datetime
 
 from distutils.spawn import find_executable
 from fabric.api import local, require, task
-from fabric.state import env
+from fabric.state import env, output
 from oauth import get_document, get_credentials
 from time import sleep
+from jinja2 import Environment, FileSystemLoader
 
 import app_config
 import assets
 import flat
 import render
 import utils
+import test
+import copytext
 
 from render_utils import load_graphic_config
 
 SPREADSHEET_COPY_URL_TEMPLATE = 'https://www.googleapis.com/drive/v2/files/%s/copy'
 SPREADSHEET_VIEW_TEMPLATE = 'https://docs.google.com/spreadsheet/ccc?key=%s#gid=1'
-
-"""
-Base configuration
-"""
-env.settings = None
 
 """
 Environments
@@ -60,7 +58,7 @@ def app(port='8000'):
     """
     Serve app.py.
     """
-    local('gunicorn -b 0.0.0.0:%s --timeout 3600 --debug --reload app:wsgi_app' % port)
+    local('gunicorn -b 0.0.0.0:%s --timeout 3600 --reload app:wsgi_app' % port)
 
 """
 Deployment
@@ -70,24 +68,24 @@ has two primary functions: Pushing flat files to S3 and deploying
 code to a remote server if required.
 """
 @task
-def deploy(*slugs):
+def deploy(*paths):
     """
     Deploy the latest app(s) to S3 and, if configured, to our servers.
     """
-    if slugs[0] == '':
+    if paths[0] == '':
         print 'You must specify at least one slug, like this: "deploy:slug" or "deploy:slug,slug"'
         return
 
-    for slug in slugs:
-        deploy_single(slug)
+    for path in paths:
+        deploy_single(path)
 
-def deploy_single(slug):
+def deploy_single(path):
     """
     Deploy a single project to S3 and, if configured, to our servers.
     """
     require('settings', provided_by=[production, staging])
-
-    graphic_root = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    slug, abspath = utils.parse_path(path)
+    graphic_root = '%s/%s' % (abspath, slug)
     s3_root = '%s/graphics/%s' % (app_config.PROJECT_SLUG, slug)
     graphic_assets = '%s/assets' % graphic_root
     s3_assets = '%s/assets' % s3_root
@@ -98,30 +96,24 @@ def deploy_single(slug):
     use_assets = getattr(graphic_config, 'USE_ASSETS', True)
     default_max_age = getattr(graphic_config, 'DEFAULT_MAX_AGE', None) or app_config.DEFAULT_MAX_AGE
     assets_max_age = getattr(graphic_config, 'ASSETS_MAX_AGE', None) or app_config.ASSETS_MAX_AGE
-
-    update_copy(slug)
-
+    update_copy(path)
     if use_assets:
-        assets.sync(slug)
+        error = assets.sync(path)
+        if error:
+            return
 
-    render.render(slug)
-
+    render.render(path)
     flat.deploy_folder(
         graphic_root,
         s3_root,
         headers={
             'Cache-Control': 'max-age=%i' % default_max_age
         },
-        ignore=['%s/*' % graphic_assets, '%s/*' % graphic_node_modules]
-    )
-
-    # Deploy parent assets
-    flat.deploy_folder(
-        'www',
-        app_config.PROJECT_SLUG,
-        headers={
-            'Cache-Control': 'max-age=%i' % default_max_age
-        }
+        ignore=['%s/*' % graphic_assets, '%s/*' % graphic_node_modules,
+                # Ignore files unused on static S3 server
+                '*.xls', '*.xlsx', '*.pyc', '*.py', '*.less', '*.bak',
+                '%s/base_template.html' % graphic_root,
+                '%s/child_template.html' % graphic_root]
     )
 
     if use_assets:
@@ -130,17 +122,24 @@ def deploy_single(slug):
             s3_assets,
             headers={
                 'Cache-Control': 'max-age=%i' % assets_max_age
-            }
+            },
+            ignore=['%s/private/*' % graphic_assets]
         )
 
-    print ''
-    print '%s URL: %s/graphics/%s/' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug)
+    # Need to explicitly point to index.html for the AWS staging link
+    file_suffix = ''
+    if env.settings == 'staging':
+        file_suffix = 'index.html'
 
-def download_copy(slug):
+    print ''
+    print '%s URL: %s/graphics/%s/%s' % (env.settings.capitalize(), app_config.S3_BASE_URL, slug, file_suffix)
+
+def download_copy(path):
     """
     Downloads a Google Doc as an .xlsx file.
     """
-    graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
+    slug, abspath = utils.parse_path(path)
+    graphic_path = '%s/%s' % (abspath, slug)
 
     try:
         graphic_config = load_graphic_config(graphic_path)
@@ -156,12 +155,12 @@ def download_copy(slug):
     get_document(graphic_config.COPY_GOOGLE_DOC_KEY, copy_path)
 
 @task
-def update_copy(slug=None):
+def update_copy(path=None):
     """
     Fetches the latest Google Doc and updates local JSON.
     """
-    if slug:
-        download_copy(slug)
+    if path:
+        download_copy(path)
         return
 
     slugs = os.listdir(app_config.GRAPHICS_PATH)
@@ -183,6 +182,9 @@ def _add_graphic(slug, template):
     """
     Create a graphic with `slug` from `template`
     """
+    # Add today's date to end of slug if not present or invalid
+    slug = _add_date_slug(slug)
+
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
 
     if _check_slug(slug):
@@ -233,6 +235,30 @@ def _check_slug(slug):
     return False
 
 
+def _add_date_slug(old_slug):
+    """
+    Add today's date to slug if it does not have a date or it is not valid
+    """
+    slug = old_slug
+    today = datetime.today().strftime('%Y%m%d')
+    # create a new slug based on the old one
+    bits = old_slug.split('-')
+    # Test if we had a valid date
+    try:
+        datetime.strptime(bits[len(bits) - 1], '%Y%m%d')
+    except ValueError:
+        # Test if the date is not valid but numeric
+        try:
+            int(bits[len(bits) - 1])
+            bits = bits[:-1]
+            print 'Removed numeric end of the slug since not a valid date'
+        except ValueError:
+            pass
+        bits.extend([today])
+        slug = "-".join(bits)
+    return slug
+
+
 def _create_slug(old_slug):
     """
     create a new slug based on an older one
@@ -255,7 +281,7 @@ def _search_graphic_slug(slug):
     searches a given slug in graphics and graphics-archive repos
     """
     IGNORE_LIST = ['js', 'css', 'assets', 'lib', '.git']
-    # Limit the search to grahics and graphics-archive repos
+    # Limit the search to graphics and graphics-archive repos
     # searching graphics first
     search_scope = [app_config.GRAPHICS_PATH, app_config.ARCHIVE_GRAPHICS_PATH]
 
@@ -284,6 +310,9 @@ def clone_graphic(old_slug, slug=None):
         print "%(slug)s already has today's date, please specify a new slug to clone into, i.e.: fab clone_graphic:%(slug)s,NEW_SLUG" % {'slug': old_slug}
         return
 
+    # Add today's date to end of slug if not present or invalid
+    slug = _add_date_slug(slug)
+
     graphic_path = '%s/%s' % (app_config.GRAPHICS_PATH, slug)
     if _check_slug(slug):
         return
@@ -306,7 +335,7 @@ def clone_graphic(old_slug, slug=None):
         if success:
             download_copy(slug)
         else:
-            local('rm -r graphic_path')
+            local('rm -r %s' % (graphic_path))
             print 'Failed to copy spreadsheet! Try again!'
             return
     else:
@@ -386,6 +415,13 @@ def add_block_histogram(slug):
     _add_graphic(slug, 'block_histogram')
 
 @task
+def add_diverging_bar_chart(slug):
+    """
+    Create a diverging bar chart.
+    """
+    _add_graphic(slug, 'diverging_bar_chart')
+
+@task
 def add_grouped_bar_chart(slug):
     """
     Create a grouped bar chart.
@@ -440,6 +476,13 @@ def add_table(slug):
     Create a data table.
     """
     _add_graphic(slug, 'table')
+
+@task
+def add_quiz(slug):
+    """
+    Create a quiz.
+    """
+    _add_graphic(slug, 'quiz')
 
 @task
 def add_issue_matrix(slug):
@@ -533,3 +576,74 @@ def copy_spreadsheet(slug):
 
     print 'Error creating spreadsheet (status code %s) with message %s' % (resp.status, resp.reason)
     return False
+
+@task
+def copyedit(*paths):
+    """
+    Generates a copyedit email for graphic(s) (fab copyedit:slug1,slug2 | pbcopy)
+    """
+    if paths[0] == '':
+        print 'You must specify at least one slug, like this: "copyedit:slug" or "copyedit:slug,slug"'
+        return
+
+    #Generate Intro Copyedit Text
+    env = Environment(
+        loader=FileSystemLoader(['dailygraphics', 'templates']),
+        extensions=['jinja2.ext.i18n']
+    )
+
+    #Enable translations. We're just using this for pluralization, not translating to different languages
+    env.install_null_translations()
+
+    template = env.get_template('copyedit/note.txt')
+
+    graphics = [get_graphic_template_variables(path, i)
+                for i, path in enumerate(paths)]
+
+    note = template.render(graphics=graphics)
+
+    # Gets rid of 'done' message at the end.
+    # This suppresses output so only the graphic text
+    # we want can be piped to the clipboard.
+    output["status"] = False
+
+    print note
+
+def get_graphic_template_variables(path, graphic_number):
+    """
+    Generates the template variables for each graphic
+    """
+    slug, abspath = utils.parse_path(path)
+    graphic_path = '%s/%s' % (abspath, slug)
+
+    ## Get Spreadsheet Path
+    try:
+        graphic_config = load_graphic_config(graphic_path)
+    except IOError:
+        print '%s/graphic_config.py does not exist.' % slug
+        return
+
+    if not hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') or not graphic_config.COPY_GOOGLE_DOC_KEY:
+        print 'COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.' % slug
+        return
+
+    ## Generate Links From Slug
+    spreadsheet_id = graphic_config.COPY_GOOGLE_DOC_KEY
+    app_id = slug
+
+    ## Update Spreadsheet
+    copy_path = os.path.join(graphic_path, '%s.xlsx' % slug)
+    get_document(graphic_config.COPY_GOOGLE_DOC_KEY, copy_path)
+
+    ## Get Sheet Data
+    copy = copytext.Copy(filename=copy_path)
+    sheet = copy['labels']
+
+    note = {
+        "spreadsheet_id": spreadsheet_id,
+        "app_id": app_id,
+        "graphic_number": graphic_number + 1,
+        "sheet": sheet,
+    }
+
+    return note

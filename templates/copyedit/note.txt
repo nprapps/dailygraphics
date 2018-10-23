@@ -1,0 +1,13 @@
+{% trans count=graphics|length %}
+This graphic accompanies __AUTHOR__'s story, running __TIME__, about __SUBJECT__.
+{% pluralize %}
+These graphics accompany __AUTHOR__'s story, running __TIME__, about __SUBJECT__.
+{% endtrans %}
+Story URL (not yet published): http://www.npr.org/templates/story/story.php?storyId=__SEAMUS_ID__&live=1
+
+Expected run date: __TIME__
+
+Primary graphics contact: __GRAPHICS_CONTACT__
+Primary editorial contact: __EDITORIAL_CONTACT__
+
+{% for graphic in graphics %}{% include 'copyedit/graphic.txt' %}{% endfor %}

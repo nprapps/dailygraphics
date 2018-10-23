@@ -1,5 +1,11 @@
 # Daily Graphics Checklist
 
+This is a checklist to help make sure you're covering all the bases when
+making graphics.
+
+For NPR users looking for specifics on the publishing process at NPR,
+view the graphic checklist in our private team repo.
+
 ## Initial Concept
 
 * Is the data organized by the component most important to the narrative?
@@ -15,16 +21,19 @@
 * Is the data internally complete? (e.g., no missing years) If not, do we make it clear what data is missing?
   * For example, in a chart: dotted or missing lines and a corresponding footnote
   * In a table: “n/a” in the table cell, or an asterisk + footnote
-* Have we been careful to ensure we don't treat "0" and "null" interchangably?
+* Have we been careful to ensure we don't treat "0" and "null" interchangeably?
 * Does any bucketing of the data effectively represent the distribution? (quartiles, quintiles, equal-interval, jenks breaks, box plot, etc.)
 
 ## Text
 
 * Is the headline human-friendly? (conversational, non-technical)
 * Is Every Word In The Headline Capitalized? (NPR headline style)
-* Are quotes in the headline singular and escaped? (&amp;lsquo;)
-* Does the Source line link back, if possible?
-* Does the Credit line include everyone who worked on the graphic?
+* Are quotes in the headline singular?
+* Are there any widows in the headline (lone words on the last line)
+  when the graphic is resized? To avoid this, add a non-breaking space
+(`&nbsp;`) between the last two words of the headline.
+* Does the source line link back, if possible?
+* Does the credit line include everyone who worked on the graphic?
 * Do the footnotes explain all caveats a normal reader would need to know to understand the chart fully?
 
 ## Technical / Code
@@ -33,7 +42,6 @@
 * Are we only including data we’re actually displaying (to keep page weight down)?
 * Have you created a static fallback image for your final graphic? (fallback.png)
   * If there have been late edits to your graphic, have you updated the fallback image?
-* Are all links out target="_blank" so they don't open inside the iframe.
 
 ## Charts
 
@@ -51,11 +59,3 @@
 * Is there a useful secondary sort order?
 * Have any repetitive unit labels been moved to the header? (%, $)
 * Are all numeric values within a column rounded to the same number of decimal places?
-
-## Process / Project Management
-
-* Has the graphic been edited by Alyson?
-* Has the graphic gone through line edit and copy edit?
-  * Line edit: Review/edit by a digital editor
-  * Copy edit: Final edit by the copy desk. Most daily graphics are copy edited at the same time as their stories. But more complex graphics should go to copyedit before that, to give editors more time to review.
-* Have you added the graphic to the Graphics Archive page in Confluence?

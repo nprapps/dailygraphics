@@ -1,12 +1,52 @@
+0.1.5
+-----
+
+This version includes updates to Python and NPM dependencies. Re-run `pip install -r requirements.txt` and `npm install`
+
+* Switch to new embed loader (#231)
+* Upgrade cssmin version to solve installation issue (#259)
+* Auto-generate dates for new graphics (#237)
+* Add date to slug of cloned graphic if missing or invalid (#239)
+* Solve issue with draft cloned graphic path (#260)
+* Animated photo: Remove D3 dependency (#229)
+* Animated photo: Store params in the copy spreadsheet (#228)
+* Locator map: Add pixelOffset config option (#220)
+* State grid map: Add optional U.S. territories (#264)
+* State grid map: Adjust map SVG height when toggling territories on and off (#265)
+* Auto-generates copyedit note using fabric command (#236)
+* Copyedit email: Tweak to formatting (#257)
+* Add URL param to embed code, isHomepage boolean and css when homepage checkbox is clicked (#253)
+* Make sure viewport test buttons are visible on mobile (#249)
+* Bump LESS version to 3.5.3 (#270, #271, #279, #284)
+* Update Python libraries in requirements.txt (#272, #274, #283)
+* Make sure list of graphics is sorted by alpha (#291)
+* Expose direct link to child page to allow for fallback links in story text if the embed doesn't load.
+
 0.1.4
 -----
 
+* Change http and // references to https. (#205)
+* Block histogram: Assign block colors via JS rather than CSS (#175)
+* State grid map: Fix sizing in IE11 (#170)
+* State grid map: Add sequential legend option (#191)
 * State grid map: Define data column as a variable (#176)
 * Animated photo: Check for credit OR caption when displaying caption area (#174)
 * Standardize use of _.contains to filter data columns in stacked bar/column chart templates (#183)
 * Add AP-style month formatter (#190)
 * Line chart template: Update filter for null values (#189)
 * Remove references to local copy of pym in a few graphics templates (#188)
+* Ensure support for https (#193)
+* Add AP-style full date formatter (#198)
+* Change flat to accommodate to new staging policy
+* Update awscli and Authomatic library requirements
+* Remove unused www deployment (#216)
+* Remove unused files for s3 deployment (#218)
+* Allow render/deploy from an arbitrary folder
+* Remove empty env.settings (#221)
+* Force utf-8 character set on html deployment to S3 (#215)
+* Add testing capabilities
+* Add private assets functionality
+* New diverging bar chart template (#151)
 
 0.1.3
 -----

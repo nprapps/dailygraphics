@@ -1,30 +1,19 @@
-Authomatic==0.0.13
-Fabric==1.4.3
+Authomatic==0.1.0.post1
+Fabric==1.14.0
 Flask==0.9
-Jinja2==2.7.3
-Werkzeug==0.8.3
-awscli==1.2.10
-bcdoc==0.12.0
-boto==2.25.0
-botocore==0.31.0
-colorama==0.2.5
+boto==2.48.0
 copytext==0.1.9
-cssmin==0.1.4
+cssmin==0.2.0
 docutils==0.11
-gunicorn==19.1.1
-jmespath==0.2.1
-nose==1.2.1
-odict==1.5.1
-openpyxl==2.0.3
+gunicorn==19.8.1
+requests==2.18.4
+slimit==0.8.1
 ply==3.4
-pyasn1==0.1.7
-pycrypto==2.6
-python-dateutil==2.2
-requests==1.1.0
-rsa==3.1.2
-six==1.5.2
-slimit==0.7.4
-ssh==1.7.14
-wsgiref==0.1.2
-xlrd==0.9.0
 smartypants==1.8.6
+
+# Requirements for testing
+# Since this Python package is only used for development,
+# not as a dependency, don't worry about splitting these out
+# into a separate `requirements-dev.txt` file
+nose==1.2.1
+selenium==3.3.3

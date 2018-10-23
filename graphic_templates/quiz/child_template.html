@@ -1,0 +1,82 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+
+    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
+    {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+
+    <div id="quiz">
+        {% for row in COPY.quiz %}
+        <div class="question">
+            <div class="q">
+                <p>{{ row.question|smarty }}</p>
+            </div>
+            <div class="a">
+                <ul>
+                    {% if row.status_1 != 'None' %}
+                    <li class="{{ row.status_1 }}">
+                        <strong>{{ row.option_1 }}</strong>
+                        {% if row.status_1 == 'correct' %}
+                        <p class="answer">{{ row.answer|smarty }}</p>
+                        {% endif %}
+                    </li>
+                    {% endif %}
+                    {% if row.status_2 != 'None' %}
+                    <li class="{{ row.status_2 }}">
+                        <strong>{{ row.option_2 }}</strong>
+                        {% if row.status_2 == 'correct' %}
+                        <p class="answer">{{ row.answer|smarty }}</p>
+                        {% endif %}
+                    </li>
+                    {% endif %}
+                    {% if row.status_3 != 'None' %}
+                    <li class="{{ row.status_3 }}">
+                        <strong>{{ row.option_3 }}</strong>
+                        {% if row.status_3 == 'correct' %}
+                        <p class="answer">{{ row.answer|smarty }}</p>
+                        {% endif %}
+                    </li>
+                    {% endif %}
+                    {% if row.status_4 != 'None' %}
+                    <li class="{{ row.status_4 }}">
+                        <strong>{{ row.option_4 }}</strong>
+                        {% if row.status_4 == 'correct' %}
+                        <p class="answer">{{ row.answer|smarty }}</p>
+                        {% endif %}
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+
+        <p id="results"></p>
+    </div>
+
+    {% if COPY.labels.footnote %}
+    <div class="footnotes">
+        <h4>Notes</h4>
+        <p>{{ COPY.labels.footnote|smarty }}</p>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
+        {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
+    </div>
+
+    <script type="text/javascript">
+        var LBL_RIGHT  = "{{ COPY.labels.lbl_right }}";
+        var LBL_WRONG  = "{{ COPY.labels.lbl_wrong }}";
+        var FINAL_LOW  = "{{ COPY.labels.final_low }}";
+        var FINAL_MID  = "{{ COPY.labels.final_mid }}";
+        var FINAL_HIGH = "{{ COPY.labels.final_high }}";
+    </script>
+{% endblock content %}
+
+{% block js %}
+    {{ JS.push('js/lib/jquery.js') }}
+    {{ JS.push('js/lib/underscore.js') }}
+    {{ JS.push('js/graphic.js') }}
+    {{ JS.render('js/graphic-footer.js') }}
+{% endblock js %}

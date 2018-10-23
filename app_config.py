@@ -38,8 +38,8 @@ PYM
 """
 
 PYM = {
-    'pym_url': '//pym.nprapps.org/pym.v1.min.js',
-    'pym_loader_url': '//pym.nprapps.org/pym-loader.v1.min.js',
+    'pym_url': 'https://pym.nprapps.org/pym.v1.min.js',
+    'pym_loader_url': 'https://pym.nprapps.org/npr-pym-loader.v2.min.js',
 }
 
 """
@@ -47,7 +47,7 @@ CAREBOT
 """
 
 CAREBOT_ENABLED = True
-CAREBOT_URL = '//carebot.nprapps.org/carebot-tracker.v0.min.js'
+CAREBOT_URL = 'https://carebot.nprapps.org/carebot-tracker.v0.min.js'
 
 """
 OAUTH
@@ -97,6 +97,14 @@ GOOGLE_ANALYTICS = {
     'ACCOUNT_ID': 'UA-5828686-75'
 }
 
+"""
+TESTS
+"""
+AUTOEXECUTE_TESTS = False
+TESTS_LOAD_WAIT_TIME = 2
+TEST_SCRIPTS_TIMEOUT = 5
+
+
 # These variables will be set at runtime. See configure_targets() below
 S3_BUCKET = None
 S3_BASE_URL = ''
@@ -116,17 +124,17 @@ def configure_targets(deployment_target):
 
     if deployment_target == 'production':
         S3_BUCKET = PRODUCTION_S3_BUCKET
-        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
+        S3_BASE_URL = 'https://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
         S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
         DEBUG = False
     elif deployment_target == 'staging':
         S3_BUCKET = STAGING_S3_BUCKET
-        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
+        S3_BASE_URL = 'https://s3.amazonaws.com/%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
         S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
         DEBUG = True
     else:
         S3_BUCKET = None
-        S3_BASE_URL = 'http://127.0.0.1:8000'
+        S3_BASE_URL = '//127.0.0.1:8000'
         S3_DEPLOY_URL = None
         DEBUG = True
 
