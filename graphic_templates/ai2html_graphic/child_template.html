@@ -2,28 +2,30 @@
 
 {% block content %}
 
-    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
-    {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+	<header id="meta">
+		{% if COPY.labels.headline %}<h1 class="hed">{{ COPY.labels.headline|smarty }}</h1>{% endif %}
+		{% if COPY.labels.subhed %}<h2 class="dek">{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+	</header>
 
-    <div id="graphic" class="graphic">
-        {% include 'ai2html-graphic.html' %}
-    </div>
+	<figure id="ai2html-graphic" class="graphic" role="img" aria-describedby="meta">
+		{% include 'ai2html-graphic.html' %}
+	</figure>
 
-    {% if COPY.labels.footnote %}
-    <div class="footnotes">
+	{% if COPY.labels.footnote %}
+	<div class="footnotes">
         <h4>Notes</h4>
         <p>{{ COPY.labels.footnote|smarty }}</p>
     </div>
-    {% endif %}
+	{% endif %}
 
-    <div class="footer">
+	<footer class="footer" role="contentinfo">
         {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
-    </div>
+    </footer>
 
 {% endblock content %}
 
 {% block js %}
-    {{ JS.push('js/graphic.js') }}
-    {{ JS.render('js/graphic-footer.js') }}
+	{{ JS.push('js/graphic.js') }}
+	{{ JS.render('js/graphic-footer.js') }}
 {% endblock js %}

@@ -2,27 +2,28 @@
 
 {% block content %}
 
-    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
-    {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+   <header id="meta">
+    {% if COPY.labels.headline %}<h1 class="hed">{{ COPY.labels.headline|smarty }}</h1>{% endif %}
+    {% if COPY.labels.subhed %}<h2 class="dek">{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+  </header>
 
-    <div id="bar-chart" class="graphic">
-        <img src="fallback.png" alt="[Chart]" class="fallback" />
-    </div>
+  <figure id="bar-chart" class="graphic"><img src="fallback.png" alt="[Chart]" class="fallback" /></figure>
 
-    {% if COPY.labels.footnote %}
-    <div class="footnotes">
-        <h4>Notes</h4>
-        <p>{{ COPY.labels.footnote|smarty }}</p>
-    </div>
-    {% endif %}
+	{% if COPY.labels.footnote %}
+	  <div class="footnotes">
+	  	<h4>Notes</h4>
+	    <p>{{ COPY.labels.footnote }}</p>
+	  </div>
+	{% endif %}
 
-    <div class="footer">
-        {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
+	<footer class="footer" role="contentinfo">
+	    {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
-    </div>
+	</footer>
 
-    <script type="text/javascript">
-        var DATA = {{ COPY.data.json() }};
-    </script>
+  <script type="text/javascript">
+    var DATA = {{ COPY.data.json() }};
+    var ariaData = {{ COPY.labels.json() }};
+  </script>
 
 {% endblock content %}
