@@ -173,12 +173,19 @@ if (!String.prototype.trim) {
     };
 }
 
+
 /*
- * Check if this is on the homepage (if someone clicked the
- * "This code will be embedded on the NPR homepage."
- * checkbox when pulling the embed code.)
+ * Check for special URL parameters
  */
-if (getParameterByName('mode') == 'hp') {
-    document.body.classList.add('hp');
-    isHomepage = true;
+switch (getParameterByName('mode')) {
+    // Homepage (if someone clicked the "This code will be embedded
+    // on the NPR homepage." checkbox when pulling the embed code.)
+    case 'hp':
+        document.body.classList.add('hp');
+        isHomepage = true;
+        break;
+    // Direct links to the child page (iOS app workaround link)
+    case 'childlink':
+        document.body.classList.add('childlink');
+        break;
 }

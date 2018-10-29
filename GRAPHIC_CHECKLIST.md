@@ -24,6 +24,8 @@ view the graphic checklist in our private team repo.
 * Have we been careful to ensure we don't treat "0" and "null" interchangeably?
 * Does any bucketing of the data effectively represent the distribution? (quartiles, quintiles, equal-interval, jenks breaks, box plot, etc.)
 
+See also: [The Quartz Guide to Bad Data](https://github.com/Quartz/bad-data-guide) (by team alum Chris Groskopf)
+
 ## Text
 
 * Is the headline human-friendly? (conversational, non-technical)
