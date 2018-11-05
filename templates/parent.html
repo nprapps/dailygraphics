@@ -237,9 +237,9 @@
 
     <div class="content">
         <div id="preview-wrapper">
-            <p data-pym-loader data-child-src="child.html" id="preview">Loading...</p>
-            <script src="{{ PYM['pym_loader_url'] }}" type="text/javascript"></script>
+            <p id="preview">Loading...</p>
         </div>
+
         <h2><span class="production">Production</span> embed code (for Seamus and NPR stations)</h2>
 
 {% if CUSTOM_LOCATION %}
@@ -265,6 +265,10 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="{{ PYM['pym_url'] }}"></script>
+    {% if CAREBOT_ENABLED %}
+    <script type="text/javascript" src="{{ CAREBOT_URL }}"></script>
+    {% endif %}
     <script type="text/javascript">
         var homePageEl = document.querySelector('#homepage');
         var resizeMobileEl = document.querySelector('#resize-mobile');
@@ -277,6 +281,9 @@
             previewWrapperEl.style.width = '300px';
             window.location.hash = 'mobile';
             window.dispatchEvent(new Event('resize'));
+
+            pymParent.sendWidth();
+            pymParent.sendMessage('liveblog');
         });
 
         resizeLiveblogEl.addEventListener('click', function(e) {
@@ -284,6 +291,9 @@
             previewWrapperEl.style.width = '400px';
             window.location.hash = 'liveblog';
             window.dispatchEvent(new Event('resize'));
+
+            pymParent.sendWidth();
+            pymParent.sendMessage('liveblog', true);
         });
 
         resizeDesktopEl.addEventListener('click', function(e) {
@@ -291,12 +301,18 @@
             previewWrapperEl.style.width = '730px';
             window.location.hash = 'desktop';
             window.dispatchEvent(new Event('resize'));
+
+            pymParent.sendWidth();
+            pymParent.sendMessage('liveblog');
         });
         resizeFluidEl.addEventListener('click', function(e) {
             e.preventDefault();
             previewWrapperEl.style.width = '100%';
             window.location.hash = 'fluid';
             window.dispatchEvent(new Event('resize'));
+
+            pymParent.sendWidth();
+            pymParent.sendMessage('liveblog');
         });
         homePageEl.addEventListener('change', function(e) {
             var textarea = document.getElementById('embed-code');
@@ -319,6 +335,20 @@
             previewWrapperEl.style.width = '730px';
         } else if (window.location.hash == '#fluid') {
             previewWrapperEl.style.width = '100%';
+        }
+
+        var pymParent = new pym.Parent('preview', 'child.html', {});
+
+        {% if CAREBOT_ENABLED %}
+        var tracker = new CarebotTracker.VisibilityTracker('preview', function(result) {
+            pymParent.sendMessage('on-screen', result.bucket);
+        });
+        {% endif %}
+
+        if (window.location.hash == '#liveblog') {
+            window.setTimeout(function() {
+                pymParent.sendMessage('liveblog', true);
+            }, 1000);
         }
     </script>
 </body>
