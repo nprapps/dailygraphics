@@ -30,25 +30,6 @@ var geoData = null;
  * Initialize the graphic.
  */
 var onWindowLoaded = function() {
-    if (Modernizr.svg) {
-        loadJSON()
-    } else {
-        pymChild = new pym.Child({});
-
-        pymChild.onMessage('on-screen', function(bucket) {
-            ANALYTICS.trackEvent('on-screen', bucket);
-        });
-        pymChild.onMessage('scroll-depth', function(data) {
-            data = JSON.parse(data);
-        ANALYTICS.trackEvent('scroll-depth', data.percent, data.seconds);
-        });
-    }
-}
-
-/*
- * Load graphic data from a CSV.
- */
-var loadJSON = function() {
     d3.json(GEO_DATA_URL, function(error, data) {
         geoData = data;
 
