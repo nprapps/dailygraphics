@@ -27,19 +27,20 @@ var onWindowLoaded = function() {
  */
 var formatData = function() {
     DATA.forEach(function(d) {
-        d['key'] = d['Group'];
-        d['values'] = [];
+        d.key = d.Group;
+        d.values = [];
 
-        _.each(d, function(v, k) {
-            if (_.contains(skipLabels, k)) {
+        Object.keys(d).forEach(function(k) {
+            var v = d[k];
+            if (skipLabels.indexOf(k) > -1) {
                 return;
             }
 
-            d['values'].push({ 'label': k, 'amt': +v });
+            d.values.push({ 'label': k, 'amt': +v });
             delete d[k];
         });
 
-        delete d['Group'];
+        delete d.Group;
     });
 }
 
@@ -80,8 +81,8 @@ var renderGroupedBarChart = function(config) {
     var labelColumn = 'label';
     var valueColumn = 'amt';
 
-    var numGroups = config['data'].length;
-    var numGroupBars = config['data'][0]['values'].length;
+    var numGroups = config.data.length;
+    var numGroupBars = config.data[0].values.length;
 
     var barHeight = 25;
     var barGapInner = 2;
@@ -102,18 +103,18 @@ var renderGroupedBarChart = function(config) {
     var roundTicksFactor = 5;
 
     // Calculate actual chart dimensions
-    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartWidth = config.width - margins.left - margins.right;
     var chartHeight = (((((barHeight + barGapInner) * numGroupBars) - barGapInner) + barGap) * numGroups) - barGap + barGapInner;
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config['container']);
+    var containerElement = d3.select(config.container);
     containerElement.html('');
 
     /*
      * Create D3 scale objects.
      */
-    var min = d3.min(config['data'], function(d) {
-        return d3.min(d['values'], function(v) {
+    var min = d3.min(config.data, function(d) {
+        return d3.min(d.values, function(v) {
             return Math.floor(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
         });
     });
@@ -122,8 +123,8 @@ var renderGroupedBarChart = function(config) {
         min = 0;
     }
 
-    var max = d3.max(config['data'], function(d) {
-        return d3.max(d['values'], function(v) {
+    var max = d3.max(config.data, function(d) {
+        return d3.max(d.values, function(v) {
             return Math.ceil(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
         });
     });
@@ -136,19 +137,19 @@ var renderGroupedBarChart = function(config) {
         .range([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
-        .domain(d3.keys(config['data'][0]['values']).filter(function(d) {
-            if (!_.contains(skipLabels, d)) {
+        .domain(d3.keys(config.data[0].values).filter(function(d) {
+            if (skipLabels.indexOf(d) == -1) {
                 return d;
             }
         }))
-        .range([COLORS['teal3'], COLORS['teal5']]);
+        .range([COLORS.teal3, COLORS.teal5]);
     /*
      * Render a color legend.
      */
     var legend = containerElement.append('ul')
         .attr('class', 'key')
         .selectAll('g')
-            .data(config['data'][0]['values'])
+            .data(config.data[0].values)
         .enter().append('li')
             .attr('class', function(d, i) {
                 return 'key-item key-' + i + ' ' + classify(d[labelColumn]);
@@ -171,10 +172,10 @@ var renderGroupedBarChart = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
-        .attr('width', chartWidth + margins['left'] + margins['right'])
-        .attr('height', chartHeight + margins['top'] + margins['bottom'])
+        .attr('width', chartWidth + margins.left + margins.right)
+        .attr('height', chartHeight + margins.top + margins.bottom)
         .append('g')
-        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
     /*
      * Create D3 axes.
@@ -214,7 +215,7 @@ var renderGroupedBarChart = function(config) {
      * Render bars to chart.
      */
     var barGroups = chartElement.selectAll('.bars')
-        .data(config['data'])
+        .data(config.data)
         .enter()
         .append('g')
             .attr('class', 'g bars')
@@ -228,7 +229,7 @@ var renderGroupedBarChart = function(config) {
 
     barGroups.selectAll('rect')
         .data(function(d) {
-            return d['values'];
+            return d.values;
         })
         .enter()
         .append('rect')
@@ -276,11 +277,11 @@ var renderGroupedBarChart = function(config) {
         .attr('class', 'labels')
         .attr('style', formatStyle({
             'width': labelWidth + 'px',
-            'top': margins['top'] + 'px',
+            'top': margins.top + 'px',
             'left': '0'
         }))
         .selectAll('li')
-        .data(config['data'])
+        .data(config.data)
         .enter()
         .append('li')
             .attr('style', function(d,i) {
@@ -298,11 +299,11 @@ var renderGroupedBarChart = function(config) {
                 });
             })
             .attr('class', function(d,i) {
-                return classify(d['key']);
+                return classify(d.key);
             })
             .append('span')
                 .text(function(d) {
-                    return d['key']
+                    return d.key
                 });
 
     /*
@@ -312,7 +313,7 @@ var renderGroupedBarChart = function(config) {
         .attr('class', 'value')
         .selectAll('text')
         .data(function(d) {
-            return d['values'];
+            return d.values;
         })
         .enter()
         .append('text')
