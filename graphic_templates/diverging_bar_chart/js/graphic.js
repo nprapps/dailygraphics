@@ -27,9 +27,9 @@ var onWindowLoaded = function() {
  */
 var formatData = function() {
     DATA.forEach(function(d) {
-        d['values'] = [];
-        d['offset'] = +d['offset'];
-        var x0 = d['offset'];
+        d.values = [];
+        d.offset = Number(d.offset);
+        var x0 = d.offset;
 
         for (var key in d) {
             if (_.contains(skipLabels, key)) {
@@ -40,7 +40,7 @@ var formatData = function() {
 
             var x1 = x0 + d[key];
 
-            d['values'].push({
+            d.values.push({
                 'name': key,
                 'x0': x0,
                 'x1': x1,
@@ -96,11 +96,11 @@ var renderDivergingBarChart = function(config) {
 
     var showFullLegend = true;
     var showBarLabels = false;
-    if (config['data'][0]['values'].length == 2) {
+    if (config.data[0].values.length == 2) {
         showFullLegend = false;
         showBarLabels = true;
     }
-    if (config['data'][0]['values'].length < 2) {
+    if (config.data[0].values.length < 2) {
         showFullLegend = false;
         showBarLabels = false;
     }
@@ -113,34 +113,34 @@ var renderDivergingBarChart = function(config) {
     };
 
     if (!showFullLegend && showBarLabels) {
-        margins['top'] = 30;
+        margins.top = 30;
     }
 
     if (isMobile) {
-        margins['right'] = 24;
+        margins.right = 24;
     }
 
     // Calculate actual chart dimensions
-    var chartWidth = config['width'] - margins['left'] - margins['right'];
-    var chartHeight = ((barHeight + barGap) * config['data'].length) - barGap;
+    var chartWidth = config.width - margins.left - margins.right;
+    var chartHeight = ((barHeight + barGap) * config.data.length) - barGap;
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config['container']);
+    var containerElement = d3.select(config.container);
     containerElement.html('');
 
     /*
      * Create D3 scale objects.
      */
-    var min = d3.min(config['data'], function(d) {
-        return d['offset'];
+    var min = d3.min(config.data, function(d) {
+        return d.offset;
     });
 
     if (min > 0) {
         min = 0;
     }
 
-    var max = d3.max(config['data'], function(d) {
-        return d['values'][d['values'].length - 1]['x1'];
+    var max = d3.max(config.data, function(d) {
+        return d.values[d.values.length - 1].x1;
     })
 
     var xScale = d3.scale.linear()
@@ -148,12 +148,12 @@ var renderDivergingBarChart = function(config) {
         .rangeRound([0, chartWidth]);
 
     var colorScale = d3.scale.ordinal()
-        .domain(d3.keys(config['data'][0]).filter(function(d) {
+        .domain(d3.keys(config.data[0]).filter(function(d) {
             if (!_.contains(skipLabels, d)) {
                 return d;
             }
         }))
-        .range([ COLORS['teal3'], COLORS['teal5'], '#ccc', '#999' ]);
+        .range([ COLORS.teal3, COLORS.teal5, '#ccc', '#999' ]);
 
     /*
      * Render the legend.
@@ -186,16 +186,16 @@ var renderDivergingBarChart = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
-        .attr('width', chartWidth + margins['left'] + margins['right'])
-        .attr('height', chartHeight + margins['top'] + margins['bottom'])
+        .attr('width', chartWidth + margins.left + margins.right)
+        .attr('height', chartHeight + margins.top + margins.bottom)
         .append('g')
-        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
     /*
      * Render bars to chart.
      */
      var group = chartElement.selectAll('.group')
-         .data(config['data'])
+         .data(config.data)
          .enter().append('g')
              .attr('class', function(d) {
                  return 'group ' + classify(d[labelColumn]);
@@ -206,25 +206,25 @@ var renderDivergingBarChart = function(config) {
 
      group.selectAll('rect')
          .data(function(d) {
-             return d['values'];
+             return d.values;
          })
          .enter().append('rect')
              .attr('x', function(d) {
-                 if (d['x0'] < d['x1']) {
-                     return xScale(d['x0']);
+                 if (d.x0 < d.x1) {
+                     return xScale(d.x0);
                  }
 
-                 return xScale(d['x1']);
+                 return xScale(d.x1);
              })
              .attr('width', function(d) {
-                 return Math.abs(xScale(d['x1']) - xScale(d['x0']));
+                 return Math.abs(xScale(d.x1) - xScale(d.x0));
              })
              .attr('height', barHeight)
              .style('fill', function(d) {
-                 return colorScale(d['name']);
+                 return colorScale(d.name);
              })
              .attr('class', function(d) {
-                 return classify(d['name']);
+                 return classify(d.name);
              });
 
      /*
@@ -234,17 +234,17 @@ var renderDivergingBarChart = function(config) {
         .attr('class', 'value')
         .selectAll('text')
         .data(function(d) {
-            return d['values'];
+            return d.values;
         })
         .enter().append('text')
             .text(function(d) {
-                if (d['val'] != 0) {
-                    return d['val'] + '%';
+                if (d.val != 0) {
+                    return d.val + '%';
                 }
             })
             .attr('class', function(d) {
-                var c = classify(d['name']);
-                if (d['x0'] < 0) {
+                var c = classify(d.name);
+                if (d.x0 < 0) {
                     c += ' left';
                 } else {
                     c += ' right';
@@ -252,22 +252,22 @@ var renderDivergingBarChart = function(config) {
                 return c;
             })
             .attr('x', function(d) {
-                if (d['x0'] < 0) {
-                    return xScale(d['x0']);
+                if (d.x0 < 0) {
+                    return xScale(d.x0);
                 } else {
-                    return xScale(d['x1']);
+                    return xScale(d.x1);
                 }
             })
             .attr('dx', function(d, i) {
                 var textWidth = this.getComputedTextLength();
-                var barWidth = Math.abs(xScale(d['x1']) - xScale(d['x0']));
+                var barWidth = Math.abs(xScale(d.x1) - xScale(d.x0));
 
                 if (textWidth > barWidth) {
-                    if (i == 0 || i == config['data'][0]['values'].length - 1) {
+                    if (i == 0 || i == config.data[0].values.length - 1) {
                         // first or last item -- set outside the bar
                         d3.select(this).classed('out', true);
 
-                        if (d['x0'] < 0) {
+                        if (d.x0 < 0) {
                             return -valueGap;
                         } else {
                             return valueGap;
@@ -281,16 +281,16 @@ var renderDivergingBarChart = function(config) {
                     // label baaaarely fits inside the bar. center it in the avail space
                     d3.select(this).classed('center', true);
 
-                    var xShift = ((xScale(d['x1']) - xScale(d['x0'])) / 2);
+                    var xShift = ((xScale(d.x1) - xScale(d.x0)) / 2);
 
-                    if (d['x0'] < 0) {
+                    if (d.x0 < 0) {
                         return xShift;
                     } else {
                         return -xShift;
                     }
 
                 } else {
-                    if (d['x0'] < 0) {
+                    if (d.x0 < 0) {
                         return valueGap;
                     } else {
                         return -valueGap;
@@ -345,11 +345,11 @@ var renderDivergingBarChart = function(config) {
         .attr('class', 'labels')
         .attr('style', formatStyle({
             'width': labelWidth + 'px',
-            'top': margins['top'] + 'px',
+            'top': margins.top + 'px',
             'left': '0'
         }))
         .selectAll('li')
-        .data(config['data'])
+        .data(config.data)
         .enter()
         .append('li')
             .attr('style', function(d, i) {
