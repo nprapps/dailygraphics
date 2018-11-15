@@ -26,7 +26,7 @@ var onWindowLoaded = function() {
  */
 var formatData = function() {
     DATA.forEach(function(d) {
-        d['amt'] = +d['amt'];
+        d.amt = Number(d.amt);
     });
 }
 
