@@ -38,7 +38,7 @@ var formatData = function() {
     }
 
     // put states in bins
-    _.each(DATA, function(d) {
+    DATA.forEach(function(d) {
         if (d['amt'] != null) {
             var amt = +d['amt'];
             var state = d['usps'];
@@ -108,9 +108,7 @@ var renderBlockHistogram = function(config) {
     var ticksY = 4;
 
     // Determine largest bin
-    var largestBin = _.max(binnedData, function(bin) {
-        return bin.length;
-    }).length;
+    var largestBin = Math.max.apply(null, binnedData.map(function(b) { return b.length }));
 
     // Calculate actual chart dimensions
     var chartWidth = config['width'] - margins['left'] - margins['right'];
@@ -250,7 +248,8 @@ var renderBlockHistogram = function(config) {
         .data(function(d, i) {
             // add the bin index to each row of data so we can assign the right color
             var formattedData = [];
-            _.each(d, function(v,k) {
+            Object.keys(d).forEach(function(k) {
+                var v = d[k];
                 formattedData.push({ 'key': k, 'value': v, 'parentIndex': i });
             })
             return formattedData;
