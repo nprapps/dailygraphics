@@ -30,8 +30,8 @@ var onWindowLoaded = function() {
  */
 var formatData = function() {
     DATA.forEach(function(d) {
-        d['start'] = +d['start'];
-        d['end'] = +d['end'];
+        d.start = Number(d.start);
+        d.end = Number(d.end);
     });
 }
 
@@ -80,8 +80,8 @@ var renderSlopegraph = function(config) {
     var startColumn = 'start';
     var endColumn = 'end';
 
-    var startLabel = config['labels']['start_label'];
-    var endLabel = config['labels']['end_label'];
+    var startLabel = config.labels.start_label;
+    var endLabel = config.labels.end_label;
 
     var aspectWidth = 5;
     var aspectHeight = 3;
@@ -103,21 +103,21 @@ var renderSlopegraph = function(config) {
     if (isSidebar) {
         aspectWidth = 2;
         aspectHeight = 3;
-        margins['left'] = 30;
-        margins['right'] = 105;
+        margins.left = 30;
+        margins.right = 105;
         labelGap = 32;
     } else if (isMobile) {
         aspectWidth = 2.5
         aspectHeight = 3;
-        margins['right'] = 145;
+        margins.right = 145;
     }
 
     // Calculate actual chart dimensions
-    var chartWidth = config['width'] - margins['left'] - margins['right'];
-    var chartHeight = Math.ceil((config['width'] * aspectHeight) / aspectWidth) - margins['top'] - margins['bottom'];
+    var chartWidth = config.width - margins.left - margins.right;
+    var chartHeight = Math.ceil((config.width * aspectHeight) / aspectWidth) - margins.top - margins.bottom;
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config['container']);
+    var containerElement = d3.select(config.container);
     containerElement.html('');
 
     /*
@@ -127,12 +127,12 @@ var renderSlopegraph = function(config) {
         .domain([startLabel, endLabel])
         .range([0, chartWidth])
 
-    var min = d3.min(config['data'], function(d) {
+    var min = d3.min(config.data, function(d) {
         var rowMin = d3.min([d[startColumn], d[endColumn]]);
         return Math.floor(rowMin / roundTicksFactor) * roundTicksFactor;
     });
 
-    var max = d3.max(config['data'], function(d) {
+    var max = d3.max(config.data, function(d) {
         var rowMax = d3.max([d[startColumn], d[endColumn]]);
         return Math.ceil(rowMax / roundTicksFactor) * roundTicksFactor;
     });
@@ -142,8 +142,8 @@ var renderSlopegraph = function(config) {
         .range([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
-        .domain(_.pluck(config['data'], labelColumn))
-        .range([ COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3'] ]);
+        .domain(config.data.map(function(d) { return d[labelColumn] }))
+        .range([ COLORS.red3, COLORS.yellow3, COLORS.blue3, COLORS.orange3, COLORS.teal3 ]);
 
     /*
      * Create D3 axes.
@@ -171,10 +171,10 @@ var renderSlopegraph = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
-        .attr('width', chartWidth + margins['left'] + margins['right'])
-        .attr('height', chartHeight + margins['top'] + margins['bottom'])
+        .attr('width', chartWidth + margins.left + margins.right)
+        .attr('height', chartHeight + margins.top + margins.bottom)
         .append('g')
-        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
     /*
      * Render axes to chart.
@@ -194,7 +194,7 @@ var renderSlopegraph = function(config) {
     chartElement.append('g')
         .attr('class', 'lines')
         .selectAll('line')
-        .data(config['data'])
+        .data(config.data)
         .enter()
         .append('line')
             .attr('class', function(d, i) {
@@ -225,7 +225,7 @@ var renderSlopegraph = function(config) {
     chartElement.append('g')
         .attr('class', 'dots start')
         .selectAll('circle')
-        .data(config['data'])
+        .data(config.data)
         .enter()
         .append('circle')
             .attr('cx', xScale(startLabel))
@@ -243,7 +243,7 @@ var renderSlopegraph = function(config) {
     chartElement.append('g')
         .attr('class', 'dots end')
         .selectAll('circle')
-        .data(config['data'])
+        .data(config.data)
         .enter()
         .append('circle')
             .attr('cx', xScale(endLabel))
@@ -264,7 +264,7 @@ var renderSlopegraph = function(config) {
     chartElement.append('g')
         .attr('class', 'value start')
         .selectAll('text')
-        .data(config['data'])
+        .data(config.data)
         .enter()
         .append('text')
             .attr('x', xScale(startLabel))
@@ -288,7 +288,7 @@ var renderSlopegraph = function(config) {
     chartElement.append('g')
         .attr('class', 'value end')
         .selectAll('text')
-        .data(config['data'])
+        .data(config.data)
         .enter()
         .append('text')
             .attr('x', xScale(endLabel))
@@ -315,7 +315,7 @@ var renderSlopegraph = function(config) {
     chartElement.append('g')
         .attr('class', 'label')
         .selectAll('text')
-        .data(config['data'])
+        .data(config.data)
         .enter()
         .append('text')
             .attr('x', xScale(endLabel))
@@ -335,7 +335,7 @@ var renderSlopegraph = function(config) {
             .text(function(d) {
                 return d[labelColumn];
             })
-            .call(wrapText, (margins['right'] - labelGap), 16);
+            .call(wrapText, (margins.right - labelGap), 16);
 }
 
 /*
