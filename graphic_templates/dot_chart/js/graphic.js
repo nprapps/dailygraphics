@@ -11,7 +11,7 @@ var onWindowLoaded = function() {
     pymChild = new pym.Child({
         renderCallback: render
     });
-
+    
     pymChild.onMessage('on-screen', function(bucket) {
         ANALYTICS.trackEvent('on-screen', bucket);
     });
@@ -26,9 +26,9 @@ var onWindowLoaded = function() {
  */
 var formatData = function() {
     DATA.forEach(function(d) {
-        d.amt = +d.amt;
-        d.min = +d.min;
-        d.max = +d.max;
+        d['amt'] = +d['amt'];
+        d['min'] = +d['min'];
+        d['max'] = +d['max'];
     });
 }
 
@@ -90,15 +90,15 @@ var renderDotChart = function(config) {
 
     if (isMobile) {
         ticksX = 6;
-        margins.right = 30;
+        margins['right'] = 30;
     }
 
     // Calculate actual chart dimensions
-    var chartWidth = config.width - margins.left - margins.right;
-    var chartHeight = ((barHeight + barGap) * config.data.length);
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = ((barHeight + barGap) * config['data'].length);
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     /*
@@ -108,16 +108,16 @@ var renderDotChart = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
-        .attr('width', chartWidth + margins.left + margins.right)
-        .attr('height', chartHeight + margins.top + margins.bottom)
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
         .append('g')
-        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     /*
      * Create D3 scale objects.
      */
     var min = 0;
-    var max = d3.max(config.data, function(d) {
+    var max = d3.max(config['data'], function(d) {
         return Math.ceil(d[maxColumn] / roundTicksFactor) * roundTicksFactor;
     });
 
@@ -165,7 +165,7 @@ var renderDotChart = function(config) {
     chartElement.append('g')
         .attr('class', 'bars')
         .selectAll('line')
-        .data(config.data)
+        .data(config['data'])
         .enter()
         .append('line')
             .attr('x1', function(d, i) {
@@ -187,7 +187,7 @@ var renderDotChart = function(config) {
     chartElement.append('g')
         .attr('class', 'dots')
         .selectAll('circle')
-        .data(config.data)
+        .data(config['data'])
         .enter().append('circle')
             .attr('cx', function(d, i) {
                 return xScale(d[valueColumn]);
@@ -205,11 +205,11 @@ var renderDotChart = function(config) {
         .attr('class', 'labels')
         .attr('style', formatStyle({
             'width': labelWidth + 'px',
-            'top': margins.top + 'px',
+            'top': margins['top'] + 'px',
             'left': '0'
         }))
         .selectAll('li')
-        .data(config.data)
+        .data(config['data'])
         .enter()
         .append('li')
             .attr('style', function(d, i) {
@@ -235,7 +235,7 @@ var renderDotChart = function(config) {
         chartElement.append('g')
             .attr('class', cls)
             .selectAll('text')
-            .data(config.data)
+            .data(config['data'])
             .enter().append('text')
                 .attr('x', function(d, i) {
                     return xScale(d[maxColumn]) + 6;

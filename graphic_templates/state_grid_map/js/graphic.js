@@ -14,7 +14,7 @@ var onWindowLoaded = function() {
     pymChild = new pym.Child({
         renderCallback: render
     });
-
+    
     pymChild.onMessage('on-screen', function(bucket) {
         ANALYTICS.trackEvent('on-screen', bucket);
     });
@@ -52,7 +52,7 @@ var render = function(containerWidth) {
         isMobile = false;
     }
 
-    if (LABELS.is_numeric && LABELS.is_numeric.toLowerCase() == 'true') {
+    if (LABELS['is_numeric'] && LABELS['is_numeric'].toLowerCase() == 'true') {
         var isNumeric = true;
     } else {
         var isNumeric = false;
@@ -81,7 +81,7 @@ var renderStateGridMap = function(config) {
     var valueColumn = 'category';
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     // Copy map template
@@ -91,15 +91,15 @@ var renderStateGridMap = function(config) {
     // Extract categories from data
     var categories = [];
 
-    if (LABELS.legend_labels && LABELS.legend_labels !== '') {
+    if (LABELS['legend_labels'] && LABELS['legend_labels'] !== '') {
         // If custom legend labels are specified
-        var legendLabels = LABELS.legend_labels.split(',');
-        _.each(legendLabels, function(label) {
+        var legendLabels = LABELS['legend_labels'].split(',');
+        legendLabels.forEach(function(label) {
             categories.push(label.trim());
         });
     } else {
         // Default: Return sorted array of categories
-         _.each(config.data, function(state) {
+         config['data'].forEach(function(state) {
             if (state[valueColumn] != null) {
                 categories.push(state[valueColumn]);
             }
@@ -112,20 +112,20 @@ var renderStateGridMap = function(config) {
     var legendWrapper = containerElement.select('.key-wrap');
     var legendElement = containerElement.select('.key');
 
-    if (config.isNumeric) {
+    if (config['isNumeric']) {
         legendWrapper.classed('numeric-scale', true);
 
         var colorScale = d3.scale.ordinal()
             .domain(categories)
-            .range([COLORS.teal6, COLORS.teal5, COLORS.teal4, COLORS.teal3, COLORS.teal2, COLORS.teal1]);
+            .range([COLORS['teal6'], COLORS['teal5'], COLORS['teal4'], COLORS['teal3'], COLORS['teal2'], COLORS['teal1']]);
     } else {
         // Define color scale
         var colorScale = d3.scale.ordinal()
             .domain(categories)
-            .range([COLORS.red3, COLORS.yellow3, COLORS.blue3, COLORS.orange3, COLORS.teal3]);
+            .range([COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3']]);
     }
 
-    _.each(colorScale.domain(), function(key, i) {
+    colorScale.domain().forEach(function(key, i) {
         var keyItem = legendElement.append('li')
             .classed('key-item', true)
 
@@ -136,11 +136,11 @@ var renderStateGridMap = function(config) {
             .text(key);
 
         // Add the optional upper bound label on numeric scale
-        if (config.isNumeric && i == categories.length - 1) {
-            if (LABELS.max_label && LABELS.max_label !== '') {
+        if (config['isNumeric'] && i == categories.length - 1) {
+            if (LABELS['max_label'] && LABELS['max_label'] !== '') {
                 keyItem.append('label')
                     .attr('class', 'end-label')
-                    .text(LABELS.max_label);
+                    .text(LABELS['max_label']);
             }
         }
     });
@@ -149,17 +149,17 @@ var renderStateGridMap = function(config) {
     var chartElement = containerElement.select('svg');
 
     // resize map (needs to be explicitly set for IE11)
-    chartElement.attr('width', config.width)
+    chartElement.attr('width', config['width'])
         .attr('height', function() {
             var s = d3.select(this);
             var viewBox = s.attr('viewBox').split(' ');
-            return Math.floor(config.width * parseInt(viewBox[3]) / parseInt(viewBox[2]));
+            return Math.floor(config['width'] * parseInt(viewBox[3]) / parseInt(viewBox[2]));
         });
 
     // Set state colors
-    _.each(config.data, function(state) {
+    config['data'].forEach(function(state) {
         if (state[valueColumn] !== null) {
-            var stateClass = 'state-' + classify(state.state_name);
+            var stateClass = 'state-' + classify(state['state_name']);
             var categoryClass = 'category-' + classify(state[valueColumn]);
 
             chartElement.select('.' + stateClass)
@@ -171,34 +171,34 @@ var renderStateGridMap = function(config) {
     // Draw state labels
     chartElement.append('g')
         .selectAll('text')
-            .data(config.data)
+            .data(config['data'])
         .enter().append('text')
             .attr('text-anchor', 'middle')
             .text(function(d) {
-                var state = _.findWhere(STATES, { 'name': d.state_name });
+                var state = STATES.filter(function(v) { return v['name'] == d['state_name'] }).pop();
 
-                return isMobile ? state.usps : state.ap;
+                return isMobile ? state['usps'] : state['ap'];
             })
             .attr('class', function(d) {
                 return d[valueColumn] !== null ? 'category-' + classify(d[valueColumn]) + ' label label-active' : 'label';
             })
             .attr('x', function(d) {
-                var className = '.state-' + classify(d.state_name);
+                var className = '.state-' + classify(d['state_name']);
                 var tileBox = chartElement.select(className)[0][0].getBBox();
 
-                return tileBox.x + tileBox.width * 0.52;
+                return tileBox['x'] + tileBox['width'] * 0.52;
             })
             .attr('y', function(d) {
-                var className = '.state-' + classify(d.state_name);
+                var className = '.state-' + classify(d['state_name']);
                 var tileBox = chartElement.select(className)[0][0].getBBox();
                 var textBox = d3.select(this)[0][0].getBBox();
-                var textOffset = textBox.height / 2;
+                var textOffset = textBox['height'] / 2;
 
                 if (isMobile) {
                     textOffset -= 1;
                 }
 
-                return (tileBox.y + tileBox.height * 0.5) + textOffset;
+                return (tileBox['y'] + tileBox['height'] * 0.5) + textOffset;
             });
 }
 

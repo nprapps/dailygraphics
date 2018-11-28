@@ -29,10 +29,10 @@ var formatData = function() {
     DATA.forEach(function(d) {
         var x0 = 0;
 
-        d.values = [];
+        d['values'] = [];
 
         for (var key in d) {
-            if (_.contains(skipLabels, key)) {
+            if (skipLabels.indexOf(key) >= -1) {
                 continue;
             }
 
@@ -40,7 +40,7 @@ var formatData = function() {
 
             var x1 = x0 + d[key];
 
-            d.values.push({
+            d['values'].push({
                 'name': key,
                 'x0': x0,
                 'x1': x1,
@@ -109,28 +109,28 @@ var renderStackedBarChart = function(config) {
     }
 
     // Calculate actual chart dimensions
-    var chartWidth = config.width - margins.left - margins.right;
-    var chartHeight = ((barHeight + barGap) * config.data.length);
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = ((barHeight + barGap) * config['data'].length);
 
     // Clear existing graphic (for redraw)
-    var containerElement = d3.select(config.container);
+    var containerElement = d3.select(config['container']);
     containerElement.html('');
 
     /*
      * Create D3 scale objects.
      */
-    var min = d3.min(config.data, function(d) {
-        var lastValue = d.values[d.values.length - 1];
-        return Math.floor(lastValue.x1 / roundTicksFactor) * roundTicksFactor;
+    var min = d3.min(config['data'], function(d) {
+        var lastValue = d['values'][d['values'].length - 1];
+        return Math.floor(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
      });
 
     if (min > 0) {
         min = 0;
     }
 
-    var max = d3.max(config.data, function(d) {
-        var lastValue = d.values[d.values.length - 1];
-        return Math.ceil(lastValue.x1 / roundTicksFactor) * roundTicksFactor;
+    var max = d3.max(config['data'], function(d) {
+        var lastValue = d['values'][d['values'].length - 1];
+        return Math.ceil(lastValue['x1'] / roundTicksFactor) * roundTicksFactor;
     });
 
     var xScale = d3.scale.linear()
@@ -138,12 +138,10 @@ var renderStackedBarChart = function(config) {
         .rangeRound([0, chartWidth]);
 
     var colorScale = d3.scale.ordinal()
-        .domain(d3.keys(config.data[0]).filter(function(d) {
-            if (!_.contains(skipLabels, d)) {
-                return d;
-            }
+        .domain(d3.keys(config['data'][0]).filter(function(d) {
+            return skipLabels.indexOf(d) == -1;
         }))
-        .range([ COLORS.teal3, COLORS.orange3, COLORS.blue3, '#ccc' ]);
+        .range([ COLORS['teal3'], COLORS['orange3'], COLORS['blue3'], '#ccc' ]);
 
     /*
      * Render the legend.
@@ -174,10 +172,10 @@ var renderStackedBarChart = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
-        .attr('width', chartWidth + margins.left + margins.right)
-        .attr('height', chartHeight + margins.top + margins.bottom)
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
         .append('g')
-        .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     /*
      * Create D3 axes.
@@ -217,7 +215,7 @@ var renderStackedBarChart = function(config) {
      * Render bars to chart.
      */
      var group = chartElement.selectAll('.group')
-         .data(config.data)
+         .data(config['data'])
          .enter().append('g')
              .attr('class', function(d) {
                  return 'group ' + classify(d[labelColumn]);
@@ -228,25 +226,25 @@ var renderStackedBarChart = function(config) {
 
      group.selectAll('rect')
          .data(function(d) {
-             return d.values;
+             return d['values'];
          })
          .enter().append('rect')
              .attr('x', function(d) {
-                 if (d.x0 < d.x1) {
-                     return xScale(d.x0);
+                 if (d['x0'] < d['x1']) {
+                     return xScale(d['x0']);
                  }
 
-                 return xScale(d.x1);
+                 return xScale(d['x1']);
              })
              .attr('width', function(d) {
-                 return Math.abs(xScale(d.x1) - xScale(d.x0));
+                 return Math.abs(xScale(d['x1']) - xScale(d['x0']));
              })
              .attr('height', barHeight)
              .style('fill', function(d) {
-                 return colorScale(d.name);
+                 return colorScale(d['name']);
              })
              .attr('class', function(d) {
-                 return classify(d.name);
+                 return classify(d['name']);
              });
 
      /*
@@ -256,30 +254,30 @@ var renderStackedBarChart = function(config) {
         .attr('class', 'value')
         .selectAll('text')
         .data(function(d) {
-            return d.values;
+            return d['values'];
         })
         .enter().append('text')
             .text(function(d) {
-                if (d.val != 0) {
-                    return d.val + '%';
+                if (d['val'] != 0) {
+                    return d['val'] + '%';
                 }
             })
             .attr('class', function(d) {
-                return classify(d.name);
+                return classify(d['name']);
             })
             .attr('x', function(d) {
- 				return xScale(d.x1);
+ 				return xScale(d['x1']);
             })
             .attr('dx', function(d) {
                 var textWidth = this.getComputedTextLength();
-                var barWidth = Math.abs(xScale(d.x1) - xScale(d.x0));
+                var barWidth = Math.abs(xScale(d['x1']) - xScale(d['x0']));
 
                 // Hide labels that don't fit
                 if (textWidth + valueGap * 2 > barWidth) {
                     d3.select(this).classed('hidden', true)
                 }
 
-                if (d.x1 < 0) {
+                if (d['x1'] < 0) {
                     return valueGap;
                 }
 
@@ -306,11 +304,11 @@ var renderStackedBarChart = function(config) {
         .attr('class', 'labels')
         .attr('style', formatStyle({
             'width': labelWidth + 'px',
-            'top': margins.top + 'px',
+            'top': margins['top'] + 'px',
             'left': '0'
         }))
         .selectAll('li')
-        .data(config.data)
+        .data(config['data'])
         .enter()
         .append('li')
             .attr('style', function(d, i) {

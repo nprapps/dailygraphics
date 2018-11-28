@@ -5,7 +5,11 @@
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
 
-    <div id="graphic" class="graphic">
+    <div id="graphic" class="graphic" role="img"
+    {% if COPY.labels.screenreader %}
+    aria-label="{{ COPY.labels.screenreader|forceescape }}"
+    {% endif %}
+    >
         {% include 'ai2html-graphic.html' %}
     </div>
 
