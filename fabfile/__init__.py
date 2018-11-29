@@ -113,7 +113,8 @@ def deploy_single(path):
                 # Ignore files unused on static S3 server
                 '*.xls', '*.xlsx', '*.pyc', '*.py', '*.less', '*.bak',
                 '%s/base_template.html' % graphic_root,
-                '%s/child_template.html' % graphic_root]
+                '%s/child_template.html' % graphic_root,
+                '%s/README.md' % graphic_root]
     )
 
     if use_assets:
