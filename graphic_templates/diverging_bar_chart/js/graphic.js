@@ -189,10 +189,14 @@ var renderDivergingBarChart = function(config) {
     var chartWrapper = containerElement.append('div')
         .attr('class', 'graphic-wrapper');
 
-    var chartElement = chartWrapper.append('svg')
+    var svg = chartWrapper.append('svg')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
-        .append('g')
+
+  svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+  svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+   var chartElement = svg.append('g')
         .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     /*
@@ -201,6 +205,7 @@ var renderDivergingBarChart = function(config) {
      var group = chartElement.selectAll('.group')
          .data(config['data'])
          .enter().append('g')
+    				.attr('role', 'list')
              .attr('class', function(d) {
                  return 'group ' + classify(d[labelColumn]);
              })
@@ -213,6 +218,7 @@ var renderDivergingBarChart = function(config) {
              return d['values'];
          })
          .enter().append('rect')
+    				.attr('role', 'listitems')
              .attr('x', function(d) {
                  if (d['x0'] < d['x1']) {
                      return xScale(d['x0']);
@@ -236,11 +242,13 @@ var renderDivergingBarChart = function(config) {
       */
      group.append('g')
         .attr('class', 'value')
+    		.attr('role', 'list')
         .selectAll('text')
         .data(function(d) {
             return d['values'];
         })
         .enter().append('text')
+    			.attr('role', 'listitems')
             .text(function(d) {
                 if (d['val'] != 0) {
                     return d['val'] + '%';

@@ -73,11 +73,17 @@ var renderGraphic = function(config) {
     containerElement.html('');
 
     // Create container
-    var chartElement = containerElement.append('svg')
+    var svg = containerElement.append('svg')
+	  		.attr('role', 'img')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
-        .append('g')
-        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+
+	  svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+	  svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+	  var chartElement = svg
+	    .append('g')
+	    .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
     // Draw here!
 }

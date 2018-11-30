@@ -174,20 +174,31 @@ var renderSlopegraph = function(config) {
     var chartWrapper = containerElement.append('div')
         .attr('class', 'graphic-wrapper');
 
-    var chartElement = chartWrapper.append('svg')
+    var svg = chartWrapper.append('svg')
+		  	.attr('role', 'img')
+		  	.attr('aria-labelledby', 'svg-title svg-desc')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
-        .append('g')
-        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+
+
+  svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+  svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+
+  var chartElement = svg
+    .append('g')
+    .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
     /*
      * Render axes to chart.
      */
      chartElement.append('g')
+    			.attr('role', 'presentation')
          .attr('class', 'x axis')
          .call(xAxisTop);
 
     chartElement.append('g')
+    		.attr('role', 'presentation')
         .attr('class', 'x axis')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxis);
