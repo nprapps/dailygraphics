@@ -41,7 +41,10 @@
     .dhdr-1 { text-anchor: start; }
 }
 
-@media screen and (min-width: 650px) {
+/*
+ * larger-screen styles
+ */
+@media @screen-medium-above {
     .key {
         justify-content: center;
         flex-wrap: nowrap;
@@ -53,6 +56,10 @@
         }
     }
 }
-@media screen and (max-width: 500px) {
+
+/*
+ * small-screen styles
+ */
+@media @screen-mobile {
     .value text { font-size: 9px; }
 }

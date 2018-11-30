@@ -12,14 +12,16 @@
     fill: #999;
 }
 
-@media screen and (max-width: 500px) {
-    .value text {
-        font-size: 10px;
-    }
+/*
+ * larger-than-mobile-screen styles
+ */
+@media @screen-mobile-above {
+    .key { display: none; }
 }
 
-@media screen and (min-width: 500px) {
-    .key {
-        display: none;
-    }
+/*
+ * small-screen styles
+ */
+@media @screen-mobile {
+    .value text { font-size: 10px; }
 }

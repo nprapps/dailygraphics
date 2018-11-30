@@ -8,21 +8,25 @@
     &.hidden { display: none; }
 }
 
-.x.axis.category {
-    text {
-        font-weight: bold;
-        fill: #454545;
-        text-anchor: middle;
+.x.axis {
+    &.category {
+        text {
+            font-weight: bold;
+            fill: #454545;
+            text-anchor: middle;
+        }
+    }
+
+    &.bars {
+        line, path {
+            display: none;
+        }
     }
 }
 
-.x.axis.bars {
-    path, line {
-        display: none;
-    }
-}
-
-// mobile styles
-@media screen and (max-width: 500px){
+/*
+ * small-screen styles
+ */
+@media @screen-mobile {
     .bar text { font-size: 10px; }
 }
