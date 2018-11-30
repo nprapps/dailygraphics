@@ -163,9 +163,11 @@ var renderGroupedStackedColumnChart = function(config) {
      */
     var legend = containerElement.append('ul')
 		.attr('class', 'key')
+		.attr('role', 'list')
 		.selectAll('g')
 			.data(colorScale.domain())
 		.enter().append('li')
+			.attr('role', 'listitem')
 			.attr('class', function(d, i) {
 				return 'key-item key-' + i + ' ' + classify(d);
 			});
@@ -186,10 +188,18 @@ var renderGroupedStackedColumnChart = function(config) {
     var chartWrapper = containerElement.append('div')
         .attr('class', 'graphic-wrapper');
 
-    var chartElement = chartWrapper.append('svg')
+    var svg = chartWrapper.append('svg')
+		  	.attr('role', 'img')
+		  	.attr('aria-labelledby', 'svg-title svg-desc')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
         .append('g')
+            .attr('transform', makeTranslate(margins['left'], margins['top']));
+
+	  svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+	  svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+    var chartElement = svg.append('g')
             .attr('transform', makeTranslate(margins['left'], margins['top']));
 
     /*
@@ -215,16 +225,19 @@ var renderGroupedStackedColumnChart = function(config) {
      */
     chartElement.append('g')
          .attr('class', 'x axis category')
+    	 		.attr('role', 'presentation')
          .attr('transform', makeTranslate(0, chartHeight))
          .call(xAxis);
 
     chartElement.selectAll('.x.axis.category .tick line').remove();
     chartElement.selectAll('.x.axis.category text')
+    	 	.attr('role', 'presentation')
         .attr('y', 35)
         .attr('dy', 0)
         .call(wrapText, xScale.rangeBand(), 13);
 
     chartElement.append('g')
+    	 	.attr('role', 'presentation')
         .attr('class', 'y axis')
         .call(yAxis);
 
@@ -237,6 +250,7 @@ var renderGroupedStackedColumnChart = function(config) {
 
     chartElement.append('g')
         .attr('class', 'y grid')
+    	 	.attr('role', 'presentation')
         .call(yAxisGrid()
             .tickSize(-chartWidth, 0)
             .tickFormat('')
@@ -247,6 +261,7 @@ var renderGroupedStackedColumnChart = function(config) {
      */
     xScale.domain().forEach(function(c, k) {
         var categoryElement = chartElement.append('g')
+    	 			.attr('role', 'presentation')
             .attr('class', classify(c));
 
         var columns = categoryElement.selectAll('.columns')
@@ -268,6 +283,7 @@ var renderGroupedStackedColumnChart = function(config) {
             });
         columns.append('g')
             .attr('class', 'x axis bars')
+    	 			.attr('role', 'presentation')
             .attr('transform', makeTranslate(0, chartHeight))
             .call(xAxisBars);
 
@@ -283,6 +299,7 @@ var renderGroupedStackedColumnChart = function(config) {
                 return d['values'];
             })
             .enter().append('rect')
+    						.attr('role', 'presentation')
                 .attr('y', function(d) {
                     if (d['y1'] < d['y0']) {
                         return yScale(d['y0']);
@@ -312,6 +329,7 @@ var renderGroupedStackedColumnChart = function(config) {
                 .text(function(d) {
                     return d['val'];
                 })
+    						.attr('role', 'listitem')
                 .attr('class', function(d) {
                     return classify(d['name']);
                 })

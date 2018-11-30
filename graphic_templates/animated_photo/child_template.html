@@ -2,13 +2,13 @@
 
 {% block content %}
 
-    <div id="graphic" class="photo"></div>
+    <figure id="graphic" class="photo" role="img" aria-describedby="caption"></figure>
 
     {% if COPY.labels.caption or COPY.labels.credit %}
-    <div class="caption">
+    <footer class="caption" id="caption" role="contentinfo">
         {% if COPY.labels.caption %}<p>{{ render(COPY.labels.caption)|smarty }}</p>{% endif %}
         {% if COPY.labels.credit %}<p class="credit">{{ COPY.labels.credit|smarty }}</p>{% endif %}
-    </div>
+    </footer>
     {% endif %}
 
     <script type="text/javascript">

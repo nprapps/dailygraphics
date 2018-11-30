@@ -2,26 +2,27 @@
 
 {% block content %}
 
-    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
+    <header id="meta">{% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+  	</header>
 
-    <div class="graphic">
-        <table id="state-table">
+    <figure class="graphic">
+        <table id="state-table" role="table" aria-label="{{COPY.labels.headline}}" aria-describedby="meta">
             <thead>
                 <tr>
-                    <th>
+                    <th aria-role="columnheader">
                         <div class="sorter"><div class="icon"></div></div>
                         <div class="header">{{ COPY.labels.hdr_state }}</div>
                     </th>
-                    <th>
+                    <th aria-role="columnheader">
                         <div class="sorter"><div class="icon"></div></div>
                         <div class="header">{{ COPY.labels.hdr_usps }}</div>
                     </th>
-                    <th>
+                    <th aria-role="columnheader">
                         <div class="sorter"><div class="icon"></div></div>
                         <div class="header">{{ COPY.labels.hdr_ap }}</div>
                     </th>
-                    <th class="amt">
+                    <th class="amt" aria-role="columnheader">
                         <div class="sorter"><div class="icon"></div></div>
                         <div class="header">{{ COPY.labels.hdr_value }}</div>
                     </th>
@@ -29,16 +30,16 @@
             </thead>
 
             {% for row in COPY.data %}
-            <tr class="state-{{ row.usps|classify }}">
-                <td data-title="{{ COPY.labels.hdr_state }}">{{ row.name }}</td>
-                <td data-title="{{ COPY.labels.hdr_usps }}">{{ row.usps }}</td>
-                <td data-title="{{ COPY.labels.hdr_ap }}">{{ row.usps|ap_state }}</td>
-                <td data-title="{{ COPY.labels.hdr_value }}" class="amt">{{ row.value|comma }}</td>
+            <tr class="state-{{ row.usps|classify }}" aria-role="row">
+                <td aria-role="cell" data-title="{{ COPY.labels.hdr_state }}">{{ row.name }}</td>
+                <td aria-role="cell" data-title="{{ COPY.labels.hdr_usps }}">{{ row.usps }}</td>
+                <td aria-role="cell" data-title="{{ COPY.labels.hdr_ap }}">{{ row.usps|ap_state }}</td>
+                <td aria-role="cell" data-title="{{ COPY.labels.hdr_value }}" class="amt">{{ row.value|comma }}</td>
             </tr>
             {% endfor %}
 
         </table>
-    </div>
+    </figure>
 
     {% if COPY.labels.footnote %}
     <div class="footnotes">
@@ -47,10 +48,10 @@
     </div>
     {% endif %}
 
-    <div class="footer">
+    <footer class="footer" role="contentinfo">
         {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
-    </div>
+    </footer>
 
 {% endblock content %}
 

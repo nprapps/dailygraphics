@@ -190,11 +190,19 @@ var renderLineChart = function(config) {
     var chartWrapper = containerElement.append('div')
         .attr('class', 'graphic-wrapper');
 
-    var chartElement = chartWrapper.append('svg')
+    var svg = chartWrapper.append('svg')
+		  	.attr('role', 'img')
+		  	.attr('aria-labelledby', 'svg-title svg-desc')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
-        .append('g')
-        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+
+  svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+  svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+
+  var chartElement = svg
+    .append('g')
+    .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
     /*
      * Create D3 axes.
@@ -221,10 +229,12 @@ var renderLineChart = function(config) {
      */
     chartElement.append('g')
         .attr('class', 'x axis')
+    		.attr('role', 'presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxis);
 
     chartElement.append('g')
+    		.attr('role', 'presentation')
         .attr('class', 'y axis')
         .call(yAxis);
 
@@ -241,6 +251,7 @@ var renderLineChart = function(config) {
 
     chartElement.append('g')
         .attr('class', 'x grid')
+    		.attr('role', 'presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxisGrid()
             .tickSize(-chartHeight, 0, 0)
@@ -249,6 +260,7 @@ var renderLineChart = function(config) {
 
     chartElement.append('g')
         .attr('class', 'y grid')
+    		.attr('role', 'presentation')
         .call(yAxisGrid()
             .tickSize(-chartWidth, 0, 0)
             .tickFormat('')
@@ -260,6 +272,7 @@ var renderLineChart = function(config) {
     if (min < 0) {
         chartElement.append('line')
             .attr('class', 'zero-line')
+    				.attr('role', 'presentation')
             .attr('x1', 0)
             .attr('x2', chartWidth)
             .attr('y1', yScale(0))
@@ -296,10 +309,12 @@ var renderLineChart = function(config) {
 
     chartElement.append('g')
         .attr('class', 'value')
+    		.attr('role', 'list')
         .selectAll('text')
         .data(config['data'])
         .enter().append('text')
-            .attr('x', function(d, i) {
+    				.attr('role', 'listitem')
+            .attr('x', function(d) {
                 var last = d['values'][d['values'].length - 1];
 
                 return xScale(last[dateColumn]) + 5;

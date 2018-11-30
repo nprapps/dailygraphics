@@ -151,10 +151,17 @@ var renderLocatorMap = function(config) {
     chartWrapper = containerElement.append('div')
         .attr('class', 'graphic-wrapper');
 
-    chartElement = chartWrapper.append('svg')
+    var svg = chartWrapper.append('svg')
+		  	.attr('role', 'application')
+		  	.attr('aria-labelledby', 'svg-title svg-desc')
         .attr('width', mapWidth)
-        .attr('height', mapHeight)
-        .append('g')
+        .attr('height', mapHeight);
+
+
+  svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+  svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+  chartElement = svg.append('g')
 
     /*
      * Create SVG filters.

@@ -1,13 +1,14 @@
 {% extends 'base_template.html' %}
 
 {% block content %}
+		<header id="meta">
+	    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
+	    {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+  	</header>
 
-    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
-    {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
-
-    <div id="column-chart" class="graphic">
+    <figure id="column-chart" class="graphic" role="img" aria-describedby="meta">
         <img src="fallback.png" alt="[Chart]" class="fallback" />
-    </div>
+    </figure>
 
     {% if COPY.labels.footnote %}
     <div class="footnotes">
@@ -16,13 +17,14 @@
     </div>
     {% endif %}
 
-    <div class="footer">
+    <footer class="footer" role="contentinfo">
         {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
-    </div>
+    </footer>
 
     <script type="text/javascript">
         var DATA = {{ COPY.data.json() }};
+    		var ariaData = {{ COPY.labels.json() }};
     </script>
 
 {% endblock content %}

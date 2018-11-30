@@ -2,8 +2,9 @@
 
 {% block content %}
 
-    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
+    <header id="meta">{% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+  	</header>
 
     <div id="quiz">
         {% for row in COPY.quiz %}
@@ -60,10 +61,10 @@
     </div>
     {% endif %}
 
-    <div class="footer">
+    <footer class="footer" role="contentinfo">
         {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
-    </div>
+    </footer>
 
     <script type="text/javascript">
         var LBL_RIGHT  = "{{ COPY.labels.lbl_right }}";

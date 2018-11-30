@@ -157,9 +157,11 @@ var renderStackedColumnChart = function(config) {
      */
     var legend = containerElement.append('ul')
 		.attr('class', 'key')
+		.attr('role', 'list')
 		.selectAll('g')
 			.data(colorScale.domain())
 		.enter().append('li')
+			.attr('role', 'listitem')
 			.attr('class', function(d, i) {
 				return 'key-item key-' + i + ' ' + classify(d);
 			});
@@ -180,10 +182,16 @@ var renderStackedColumnChart = function(config) {
     var chartWrapper = containerElement.append('div')
         .attr('class', 'graphic-wrapper');
 
-    var chartElement = chartWrapper.append('svg')
+    var svg = chartWrapper.append('svg')
+		  	.attr('role', 'img')
+		  	.attr('aria-labelledby', 'svg-title svg-desc')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
-        .append('g')
+
+	  svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+	  svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+    var chartElement = svg.append('g')
             .attr('transform', makeTranslate(margins['left'], margins['top']));
 
     /*
@@ -209,11 +217,13 @@ var renderStackedColumnChart = function(config) {
      */
     chartElement.append('g')
         .attr('class', 'x axis')
+        .attr('role','presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxis);
 
     chartElement.append('g')
         .attr('class', 'y axis')
+        .attr('role','presentation')
         .call(yAxis);
 
     /*
@@ -225,6 +235,7 @@ var renderStackedColumnChart = function(config) {
 
     chartElement.append('g')
         .attr('class', 'y grid')
+        .attr('role','presentation')
         .call(yAxisGrid()
             .tickSize(-chartWidth, 0)
             .tickFormat('')
@@ -234,18 +245,29 @@ var renderStackedColumnChart = function(config) {
      * Render bars to chart.
      */
     var bars = chartElement.selectAll('.bars')
+  			.attr('aria-label', 'stacked bar graph')
         .data(config['data'])
         .enter().append('g')
             .attr('class', 'bar')
+	        .attr('data-id', function(d) {
+	        	return d[labelColumn];
+	        })
             .attr('transform', function(d) {
                 return makeTranslate(xScale(d[labelColumn]), 0);
             });
 
-    bars.selectAll('rect')
+    var barG = bars.selectAll('g')
         .data(function(d) {
-            return d['values'];
+            return d.values;
         })
-        .enter().append('rect')
+        .enter().append('g');
+
+    barG.append('title')
+    .text(function(d) {
+    	return d3.select(this.parentNode.parentNode).attr("data-id") + ' - ' + d.name + ' (' + d.val + ')';
+    })
+
+    barG.append('rect')
             .attr('y', function(d) {
                 if (d['y1'] < d['y0']) {
                     return yScale(d['y0']);
@@ -270,6 +292,7 @@ var renderStackedColumnChart = function(config) {
     if (min < 0) {
         chartElement.append('line')
             .attr('class', 'zero-line')
+        		.attr('role', 'presentation')
             .attr('x1', 0)
             .attr('x2', chartWidth)
             .attr('y1', yScale(0))
@@ -281,7 +304,7 @@ var renderStackedColumnChart = function(config) {
      */
     bars.selectAll('text')
         .data(function(d) {
-            return d['values'];
+            return d.values;
         })
         .enter().append('text')
             .text(function(d) {

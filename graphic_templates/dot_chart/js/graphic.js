@@ -111,10 +111,16 @@ var renderDotChart = function(config) {
     var chartWrapper = containerElement.append('div')
         .attr('class', 'graphic-wrapper');
 
-    var chartElement = chartWrapper.append('svg')
+    var svg = chartWrapper.append('svg')
+		  	.attr('role', 'img')
+		  	.attr('aria-labelledby', 'svg-title svg-desc')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
-        .append('g')
+
+		svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+		svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+    var chartElement = svg.append('g')
         .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     /*
@@ -145,6 +151,7 @@ var renderDotChart = function(config) {
      */
     chartElement.append('g')
         .attr('class', 'x axis')
+	    	.attr('role', 'presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxis);
 
@@ -157,6 +164,7 @@ var renderDotChart = function(config) {
 
     chartElement.append('g')
         .attr('class', 'x grid')
+	    	.attr('role', 'presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxisGrid()
             .tickSize(-chartHeight, 0, 0)
@@ -188,18 +196,26 @@ var renderDotChart = function(config) {
     /*
      * Render dots to chart.
      */
-    chartElement.append('g')
+    var dots = chartElement.append('g')
         .attr('class', 'dots')
-        .selectAll('circle')
+    		.attr('role', 'presentation')
+        .selectAll('g.circles')
         .data(config['data'])
-        .enter().append('circle')
-            .attr('cx', function(d, i) {
-                return xScale(d[valueColumn]);
-            })
-            .attr('cy', function(d, i) {
-                return i * (barHeight + barGap) + (barHeight / 2);
-            })
-            .attr('r', dotRadius)
+        .enter().append('g')
+        	.attr('class', 'circles');
+
+    dots.append('title').text(function(d) {
+    	return d[labelColumn] + ' (' + d[valueColumn] + ')';
+    })
+
+    dots.append('circle')
+      .attr('cx', function(d, i) {
+          return xScale(d[valueColumn]);
+      })
+      .attr('cy', function(d, i) {
+          return i * (barHeight + barGap) + (barHeight / 2);
+      })
+      .attr('r', dotRadius);
 
     /*
      * Render bar labels.
@@ -207,6 +223,7 @@ var renderDotChart = function(config) {
     containerElement
         .append('ul')
         .attr('class', 'labels')
+    		.attr('role', 'list')
         .attr('style', formatStyle({
             'width': labelWidth + 'px',
             'top': margins['top'] + 'px',
@@ -216,6 +233,7 @@ var renderDotChart = function(config) {
         .data(config['data'])
         .enter()
         .append('li')
+    		.attr('role', 'listitems')
             .attr('style', function(d, i) {
                 return formatStyle({
                     'width': labelWidth + 'px',
@@ -236,20 +254,26 @@ var renderDotChart = function(config) {
      * Render bar values.
      */
     _.each(['shadow', 'value'], function(cls) {
-        chartElement.append('g')
+        var shadowG = chartElement.append('g')
             .attr('class', cls)
             .selectAll('text')
             .data(config['data'])
-            .enter().append('text')
-                .attr('x', function(d, i) {
-                    return xScale(d[maxColumn]) + 6;
-                })
-                .attr('y', function(d,i) {
-                    return i * (barHeight + barGap) + (barHeight / 2) + 3;
-                })
-                .text(function(d) {
-                    return d[valueColumn].toFixed(1) + '%';
-                });
+            .enter().append('g');
+
+            shadowG.append('title').text(function(d) {
+		        	return d[labelColumn] + ' (' + d[valueColumn] + ')';
+		        });
+		        shadowG.append('text')
+    					.attr('role', 'listitems')
+              .attr('x', function(d) {
+                  return xScale(d[maxColumn]) + 6;
+              })
+              .attr('y', function(d, i) {
+                  return i * (barHeight + barGap) + (barHeight / 2) + 3;
+              })
+              .text(function(d) {
+                  return d[valueColumn].toFixed(1) + '%';
+              });
     });
 }
 

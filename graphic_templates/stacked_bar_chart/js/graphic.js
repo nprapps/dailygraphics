@@ -154,9 +154,11 @@ var renderStackedBarChart = function(config) {
      */
     var legend = containerElement.append('ul')
 		.attr('class', 'key')
+		.attr('role', 'list')
 		.selectAll('g')
 			.data(colorScale.domain())
 		.enter().append('li')
+			.attr('role', 'listitem')
 			.attr('class', function(d, i) {
 				return 'key-item key-' + i + ' ' + classify(d);
 			});
@@ -177,10 +179,17 @@ var renderStackedBarChart = function(config) {
     var chartWrapper = containerElement.append('div')
         .attr('class', 'graphic-wrapper');
 
-    var chartElement = chartWrapper.append('svg')
+    var svg = chartWrapper.append('svg')
+		  	.attr('role', 'img')
+		  	.attr('aria-labelledby', 'svg-title svg-desc')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
-        .append('g')
+
+
+		svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+		svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+    var chartElement = svg.append('g')
         .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     /*
@@ -199,6 +208,7 @@ var renderStackedBarChart = function(config) {
      */
     chartElement.append('g')
         .attr('class', 'x axis')
+	    	.attr('role', 'presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxis);
 
@@ -211,6 +221,7 @@ var renderStackedBarChart = function(config) {
 
     chartElement.append('g')
         .attr('class', 'x grid')
+	    	.attr('role', 'presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxisGrid()
             .tickSize(-chartHeight, 0, 0)

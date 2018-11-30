@@ -131,12 +131,13 @@ var renderStateGridMap = function(config) {
 
     _.each(colorScale.domain(), function(key, i) {
         var keyItem = legendElement.append('li')
+        		.attr('role', 'list')
             .classed('key-item', true)
 
         keyItem.append('b')
             .style('background', colorScale(key));
 
-        keyItem.append('label')
+        keyItem.append('label').attr('role', 'listitem')
             .text(key);
 
         // Add the optional upper bound label on numeric scale
