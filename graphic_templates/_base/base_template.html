@@ -4,6 +4,7 @@
 <head>
     <title>Graphic : NPR</title>
 
+		<meta name="title" content="{{ COPY.labels.headline }}">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
@@ -47,24 +48,28 @@
 </head>
 <body>
     <!-- Analytics -->
-    {{ JS.push('js/helpers.js') }}
-    {{ JS.push('js/analytics.js') }}
-    {{ JS.render('js/graphic-header.js') }}
+    <header>
+	    {{ JS.push('js/helpers.js') }}
+	    {{ JS.push('js/analytics.js') }}
+	    {{ JS.render('js/graphic-header.js') }}
+  	</header>
+		<section>
+	    {% block content %}
 
-    {% block content %}
+	        The child template content goes here!
 
-        The child template content goes here!
-
-    {% endblock content %}
-
-    <script type="text/javascript" src="{{ PYM['pym_url'] }}"></script>
-    {% block js %}
-        {{ JS.push('js/lib/underscore.js') }}
-        {{ JS.push('js/lib/d3.min.js') }}
-        {{ JS.push('js/lib/modernizr.svg.min.js') }}
-        {{ JS.push('js/base.js') }}
-        {{ JS.push('js/graphic.js') }}
-        {{ JS.render('js/graphic-footer.js') }}
-    {% endblock js %}
+	    {% endblock content %}
+   	</section>
+		<footer>
+	    <script type="text/javascript" src="{{ PYM['pym_url'] }}"></script>
+	    {% block js %}
+	        {{ JS.push('js/lib/underscore.js') }}
+	        {{ JS.push('js/lib/d3.min.js') }}
+	        {{ JS.push('js/lib/modernizr.svg.min.js') }}
+	        {{ JS.push('js/base.js') }}
+	        {{ JS.push('js/graphic.js') }}
+	        {{ JS.render('js/graphic-footer.js') }}
+	    {% endblock js %}
+	   </footer>
 </body>
 </html>

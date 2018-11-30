@@ -1,21 +1,22 @@
 {% extends 'base_template.html' %}
 
 {% block content %}
+		<header id="meta">
+	    <h1>Headline</h1>
+	    <h2>Subhed</h2>
+  	</header>
 
-    <h1>Headline</h1>
-    <h2>Subhed</h2>
-
-    <div id="graphic"><img src="fallback.png" alt="[Chart]" class="fallback" /></div>
+    <figure id="graphic" role="img" aria-describedby="meta"><img src="fallback.png" alt="[Chart]" class="fallback" /></figure>
 
     <!-- <div class="footnotes">
         <h4>Notes</h4>
         <p>Footnote</p>
     </div> -->
 
-    <div class="footer">
+    <footer class="footer" role="contentinfo">
         <p>Source: TK TK TK</p>
         <p>Credit: TK TK TK</p>
-    </div>
+    </footer>
 
 {% endblock content %}
 

@@ -130,10 +130,18 @@ var renderBlockHistogram = function(config) {
     var chartWrapper = containerElement.append('div')
         .attr('class', 'graphic-wrapper');
 
-    var chartElement = chartWrapper.append('svg')
+    var svg = chartWrapper.append('svg')
+		  	.attr('role', 'img')
+		  	.attr('aria-labelledby', 'svg-title svg-desc')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
-        .append('g')
+
+
+  svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+  svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+   var chartElement = svg
+   			.append('g')
         .attr('transform', makeTranslate(margins['left'], margins['top']));
 
     /*
@@ -172,6 +180,7 @@ var renderBlockHistogram = function(config) {
      */
     chartElement.append('g')
         .attr('class', 'x axis')
+    		.attr('role', 'presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxis);
 
@@ -183,6 +192,7 @@ var renderBlockHistogram = function(config) {
     };
 
     chartElement.append('g')
+    		.attr('role', 'presentation')
         .attr('class', 'y grid')
         .call(yAxisGrid()
             .tickSize(-chartWidth, 0)
@@ -204,6 +214,7 @@ var renderBlockHistogram = function(config) {
         })
 
     var lastTick = chartElement.select('.x.axis')
+    		.attr('role', 'presentation')
         .append('g')
         .attr('class', 'tick')
         .attr('transform', function() {
@@ -240,17 +251,22 @@ var renderBlockHistogram = function(config) {
     /*
      * Render bins to chart.
      */
+
     var bins = chartElement.selectAll('.bin')
         .data(config['data'])
         .enter().append('g')
-            .attr('class', function(d,i) {
+        		.attr('role', 'list')
+            .attr('class', function(d, i) {
                 return 'bin bin-' + i;
+            })
+            .attr('data-id', function(d,i) {
+            	return COLOR_BINS[i];
             })
             .attr('transform', function(d, i) {
                 return makeTranslate(xScale(COLOR_BINS[i]), 0);
             });
 
-    bins.selectAll('rect')
+    var rects = bins.selectAll('g')
         .data(function(d, i) {
             // add the bin index to each row of data so we can assign the right color
             var formattedData = [];
@@ -259,7 +275,14 @@ var renderBlockHistogram = function(config) {
             })
             return formattedData;
         })
-        .enter().append('rect')
+        .enter().append('g');
+
+        rects.append('title').text(function(d) {
+		    	return d.value + ' (' + d3.select(this.parentNode.parentNode).attr('data-id') + ')';
+		    });
+
+        rects.append('rect')
+    			.attr('role', 'presentation')
             .attr('width', xScale.rangeBand())
             .attr('x', 0)
             .attr('y', function(d,i) {
@@ -284,6 +307,7 @@ var renderBlockHistogram = function(config) {
                 return d3.entries(d);
             })
         .enter().append('text')
+    			.attr('role','presentation')
             .attr('x', (xScale.rangeBand() / 2))
             .attr('y', function(d,i) {
                 return chartHeight - ((blockHeight + blockGap) * (i + 1));
@@ -305,6 +329,7 @@ var renderBlockHistogram = function(config) {
         .attr('dx', -15)
         .attr('text-anchor', 'end')
         .attr('y', -10)
+    		.attr('role','presentation')
         .html(LABELS['annotation_left']);
 
     annotations.append('text')
@@ -316,6 +341,7 @@ var renderBlockHistogram = function(config) {
         .html(LABELS['annotation_right']);
 
     annotations.append('line')
+    		.attr('role','presentation')
         .attr('class', 'axis-0')
         .attr('x1', xScale(0) - ((xScale.rangeBand() * .1) / 2))
         .attr('y1', -margins['top'])

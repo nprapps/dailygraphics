@@ -79,7 +79,7 @@ var renderBarChart = function(config) {
 
     var margins = {
         top: 0,
-        right: 15,
+        right: 35,
         bottom: 20,
         left: (labelWidth + labelMargin)
     };
@@ -111,7 +111,7 @@ var renderBarChart = function(config) {
   svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
 
    var chartElement = svg.append('g')
-        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+        .attr('transform', makeTranslate(margins['left'], margins['top']));
 
     /*
      * Create D3 scale objects.
@@ -148,6 +148,7 @@ var renderBarChart = function(config) {
      */
     chartElement.append('g')
         .attr('class', 'x axis')
+    		.attr('role', 'presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxis);
 
@@ -160,7 +161,7 @@ var renderBarChart = function(config) {
 
     chartElement.append('g')
         .attr('class', 'x grid')
-    	.attr('role','presentation')
+    	.attr('role', 'presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxisGrid()
             .tickSize(-chartHeight, 0, 0)
@@ -168,31 +169,39 @@ var renderBarChart = function(config) {
         );
 
     /*
-     * Render bars to chart.
-     */
-    chartElement.append('g')
-        .attr('class', 'bars')
-        .selectAll('rect')
-        .data(config['data'])
-        .enter()
-        .append('rect')
-            .attr('x', function(d) {
-                if (d[valueColumn] >= 0) {
-                    return xScale(0);
-                }
+  * Render bars to chart.
+  */
+  var dataGroup = chartElement.append('g')
+  	.attr('aria-label','bar graph')
+    .attr('class', 'data');
 
-                return xScale(d[valueColumn]);
-            })
-            .attr('width', function(d) {
-                return Math.abs(xScale(0) - xScale(d[valueColumn]));
-            })
-            .attr('y', function(d, i) {
-                return i * (barHeight + barGap);
-            })
-            .attr('height', barHeight)
-            .attr('class', function(d, i) {
-                return 'bar-' + i + ' ' + classify(d[labelColumn]);
-            });
+  var rects = dataGroup.selectAll('g.rects')
+    .data(config.data)
+    .enter()
+    .append('g').attr('class', 'rects');
+
+    rects
+    .append('title').text(function(d) {
+    	return d[labelColumn];
+    })
+
+    rects
+    .append('rect')
+    	.attr('role', 'presentation')
+      .attr('x', function(d) {
+        if (d[valueColumn] >= 0) { return xScale(0); }
+        return xScale(d[valueColumn]);
+      })
+      .attr('width', function(d) {
+        return Math.abs(xScale(0) - xScale(d[valueColumn]));
+      })
+      .attr('y', function(d, i) {
+        return i * (barHeight + barGap);
+      })
+      .attr('height', barHeight)
+      .attr('class', function(d, i) {
+        return 'bars bar-' + i + ' ' + classify(d[labelColumn]);
+    	});
 
     /*
      * Render 0-line.
@@ -220,6 +229,7 @@ var renderBarChart = function(config) {
         .data(config['data'])
         .enter()
         .append('li')
+				.attr('role', 'listitem')
             .attr('style', function(d, i) {
                 return formatStyle({
                     'width': labelWidth + 'px',
@@ -239,12 +249,22 @@ var renderBarChart = function(config) {
     /*
      * Render bar values.
      */
-    chartElement.append('g')
-        .attr('class', 'value')
-        .selectAll('text')
-        .data(config['data'])
-        .enter()
+    var textLabels = dataGroup.append('g')
+    .attr('class', 'value')
+    .selectAll('g.textg')
+    .data(config.data)
+    .enter()
+    .append('g')
+    .attr('class','textg');
+
+   textLabels.append('title')
+    .text(function(d) {
+    	return d[valueColumn];
+    })
+
+    textLabels
         .append('text')
+    		.attr('role','listitem')
             .text(function(d) {
                 return d[valueColumn].toFixed(0) + '%';
             })

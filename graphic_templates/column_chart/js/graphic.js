@@ -99,11 +99,18 @@ var renderColumnChart = function(config) {
     var chartWrapper = containerElement.append('div')
         .attr('class', 'graphic-wrapper');
 
-    var chartElement = chartWrapper.append('svg')
+    var svg = chartWrapper.append('svg')
+	  		.attr('role', 'img')
+	  		.attr('aria-labelledby', 'svg-title svg-desc')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
-        .append('g')
-        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+
+	  svg.append('title').attr('id', 'svg-title').text(ariaData.headline);
+	  svg.append('desc').attr('id', 'svg-desc').text(ariaData.subhed);
+
+	  var chartElement = svg
+	    .append('g')
+       	.attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
 
     /*
      * Create D3 scale objects.
@@ -153,6 +160,7 @@ var renderColumnChart = function(config) {
      */
     chartElement.append('g')
         .attr('class', 'x axis')
+    		.attr('role', 'presentation')
         .attr('transform', makeTranslate(0, chartHeight))
         .call(xAxis);
 
@@ -169,6 +177,7 @@ var renderColumnChart = function(config) {
 
     chartElement.append('g')
         .attr('class', 'y grid')
+    		.attr('role', 'presentation')
         .call(yAxisGrid()
             .tickSize(-chartWidth, 0)
             .tickFormat('')
@@ -177,33 +186,42 @@ var renderColumnChart = function(config) {
     /*
      * Render bars to chart.
      */
-    chartElement.append('g')
+
+    var dataEls = chartElement.append('g')
         .attr('class', 'bars')
-        .selectAll('rect')
-        .data(config['data'])
-        .enter()
-        .append('rect')
-            .attr('x', function(d) {
-                return xScale(d[labelColumn]);
-            })
-            .attr('y', function(d) {
-                if (d[valueColumn] < 0) {
-                    return yScale(0);
-                }
+        .selectAll('g')
+          .data(config['data'])
+        .enter().append('g')
+    			.attr('role', 'list');
 
-                return yScale(d[valueColumn]);
-            })
-            .attr('width', xScale.rangeBand())
-            .attr('height', function(d) {
-                if (d[valueColumn] < 0) {
-                    return yScale(d[valueColumn]) - yScale(0);
-                }
+    dataEls.append('title')
+    		.text(function(d) {
+    			return parseInt(d[labelColumn]) + ' (' + d[valueColumn]  + ')';
+    		})
 
-                return yScale(0) - yScale(d[valueColumn]);
-            })
-            .attr('class', function(d) {
-                return 'bar bar-' + d[labelColumn];
-            });
+    dataEls.append('rect')
+			.attr('role','listitems')
+        .attr('x', function(d) {
+            return xScale(d[labelColumn]);
+        })
+        .attr('y', function(d) {
+            if (d[valueColumn] < 0) {
+                return yScale(0);
+            }
+
+            return yScale(d[valueColumn]);
+        })
+        .attr('width', xScale.rangeBand())
+        .attr('height', function(d) {
+            if (d[valueColumn] < 0) {
+                return yScale(d[valueColumn]) - yScale(0);
+            }
+
+            return yScale(0) - yScale(d[valueColumn]);
+        })
+        .attr('class', function(d) {
+            return 'bar bar-' + d[labelColumn];
+        });
 
     /*
      * Render 0 value line.
@@ -211,6 +229,7 @@ var renderColumnChart = function(config) {
     if (min < 0) {
         chartElement.append('line')
             .attr('class', 'zero-line')
+    				.attr('role','presentation')
             .attr('x1', 0)
             .attr('x2', chartWidth)
             .attr('y1', yScale(0))
@@ -222,10 +241,12 @@ var renderColumnChart = function(config) {
      */
     chartElement.append('g')
         .attr('class', 'value')
+    		.attr('role', 'list')
         .selectAll('text')
         .data(config['data'])
         .enter()
         .append('text')
+    			.attr('role', 'listitems')
             .text(function(d) {
                 return d[valueColumn].toFixed(0);
             })
