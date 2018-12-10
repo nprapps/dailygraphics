@@ -1,16 +1,9 @@
-0.1.6
------
-
-This version moves templates to a separate location from the duplicated spreadsheets.
-
-* Add optional drive root folder to store the COPY spreadsheets
-
 0.1.5
 -----
 
 This version includes updates to Python and NPM dependencies. Re-run `pip install -r requirements.txt` and `npm install`
 
-Also new in this version: Users can specify a destination folder for generated Google Spreadsheets. After updating, you will need to update  `DRIVE_SPREADSHEETS_FOLDER` in `app_config.py` to either specify a folder or set it to `None`. (#301)
+This version moves templates to a separate location from the duplicated spreadsheets. After updating, you will need to update  `DRIVE_SPREADSHEETS_FOLDER` in `app_config.py` to either specify a folder or set it to `None`. (#301)
 
 * Switch to new embed loader (#231)
 * Upgrade cssmin version to solve installation issue (#259)
@@ -30,6 +23,8 @@ Also new in this version: Users can specify a destination folder for generated G
 * Update Python libraries in requirements.txt (#272, #274, #283)
 * Make sure list of graphics is sorted by alpha (#291)
 * Expose direct link to child page to allow for fallback links in story text if the embed doesn't load.
+* Add optional drive root folder to store the COPY spreadsheets (#301)
+* Accessibility: Added an optional `screenreader` field to describe graphic contents (#299)
 
 0.1.4
 -----
