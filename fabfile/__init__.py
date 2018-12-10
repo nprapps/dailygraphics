@@ -113,7 +113,8 @@ def deploy_single(path):
                 # Ignore files unused on static S3 server
                 '*.xls', '*.xlsx', '*.pyc', '*.py', '*.less', '*.bak',
                 '%s/base_template.html' % graphic_root,
-                '%s/child_template.html' % graphic_root]
+                '%s/child_template.html' % graphic_root,
+                '%s/README.md' % graphic_root]
     )
 
     if use_assets:
@@ -203,7 +204,7 @@ def _add_graphic(slug, template):
         if success:
             download_copy(slug)
         else:
-            local('rm -r graphic_path')
+            local('rm -r %s' % graphic_path)
             print 'Failed to copy spreadsheet! Try again!'
             return
     else:
@@ -551,14 +552,20 @@ def copy_spreadsheet(slug):
         print 'Skipping spreadsheet creation. (COPY_GOOGLE_DOC_KEY is not defined in %s/graphic_config.py.)' % slug
         return
 
+    metadata = {'title': '%s GRAPHIC COPY' % slug}
+    try:
+        if app_config.DRIVE_SPREADSHEETS_FOLDER:
+            metadata['parents'] = [{
+                'id': app_config.DRIVE_SPREADSHEETS_FOLDER}]
+    except AttributeError:
+        pass
+
     kwargs = {
         'credentials': get_credentials(),
         'url': SPREADSHEET_COPY_URL_TEMPLATE % graphic_config.COPY_GOOGLE_DOC_KEY,
         'method': 'POST',
         'headers': {'Content-Type': 'application/json'},
-        'body': json.dumps({
-            'title': '%s GRAPHIC COPY' % slug,
-        }),
+        'body': json.dumps(metadata),
     }
 
     resp = app_config.authomatic.access(**kwargs)
@@ -572,9 +579,10 @@ def copy_spreadsheet(slug):
 
         return True
     else:
-        utils.replace_in_file(config_path, graphic_config.COPY_GOOGLE_DOC_KEY, '')
-
+        utils.replace_in_file('%s/graphic_config.py' % config_path, graphic_config.COPY_GOOGLE_DOC_KEY, '')
     print 'Error creating spreadsheet (status code %s) with message %s' % (resp.status, resp.reason)
+    if resp.status == 404:
+        print 'Please make sure you modify the DRIVE_SPREADSHEETS_FOLDER in app_config.py. Check the configuration section on the README.'
     return False
 
 @task
