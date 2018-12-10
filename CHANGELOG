@@ -10,6 +10,8 @@ This version moves templates to a separate location from the duplicated spreadsh
 
 This version includes updates to Python and NPM dependencies. Re-run `pip install -r requirements.txt` and `npm install`
 
+Also new in this version: Users can specify a destination folder for generated Google Spreadsheets. After updating, you will need to update  `DRIVE_SPREADSHEETS_FOLDER` in `app_config.py` to either specify a folder or set it to `None`. (#301)
+
 * Switch to new embed loader (#231)
 * Upgrade cssmin version to solve installation issue (#259)
 * Auto-generate dates for new graphics (#237)
