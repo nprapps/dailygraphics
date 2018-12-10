@@ -6,15 +6,11 @@ var isMobile = false;
  * Initialize the graphic.
  */
 var onWindowLoaded = function() {
-    if (Modernizr.svg) {
-        formatData();
+    formatData();
 
-        pymChild = new pym.Child({
-            renderCallback: render
-        });
-    } else {
-        pymChild = new pym.Child({});
-    }
+    pymChild = new pym.Child({
+        renderCallback: render
+    });
 
     pymChild.onMessage('on-screen', function(bucket) {
         ANALYTICS.trackEvent('on-screen', bucket);
@@ -30,7 +26,7 @@ var onWindowLoaded = function() {
  */
 var formatData = function() {
     DATA.forEach(function(d) {
-        d['amt'] = +d['amt'];
+        d.amt = Number(d.amt);
     });
 }
 

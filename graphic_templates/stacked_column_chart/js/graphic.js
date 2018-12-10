@@ -7,15 +7,11 @@ var skipLabels = [ 'label', 'values', 'total' ];
  * Initialize the graphic.
  */
 var onWindowLoaded = function() {
-    if (Modernizr.svg) {
-        formatData();
+    formatData();
 
-        pymChild = new pym.Child({
-            renderCallback: render
-        });
-    } else {
-        pymChild = new pym.Child({});
-    }
+    pymChild = new pym.Child({
+        renderCallback: render
+    });
 
     pymChild.onMessage('on-screen', function(bucket) {
         ANALYTICS.trackEvent('on-screen', bucket);
@@ -37,7 +33,7 @@ var formatData = function() {
         d['total'] = 0;
 
         for (var key in d) {
-            if (_.contains(skipLabels, key)) {
+            if (skipLabels.indexOf(key) > -1) {
                 continue;
             }
 
@@ -125,7 +121,7 @@ var renderStackedColumnChart = function(config) {
      * Create D3 scale objects.
      */
     var xScale = d3.scale.ordinal()
-        .domain(_.pluck(config['data'], labelColumn))
+        .domain(config['data'].map(function(d) { return d[labelColumn] }))
         .rangeRoundBands([0, chartWidth], .1)
 
     var min = d3.min(config['data'], function(d) {

@@ -10,15 +10,11 @@ var isSidebar = false;
  * Initialize graphic
  */
 var onWindowLoaded = function() {
-    if (Modernizr.svg) {
-        formatData();
+    formatData();
 
-        pymChild = new pym.Child({
-            renderCallback: render
-        });
-    } else {
-        pymChild = new pym.Child({});
-    }
+    pymChild = new pym.Child({
+        renderCallback: render
+    });
 
     pymChild.onMessage('on-screen', function(bucket) {
         ANALYTICS.trackEvent('on-screen', bucket);
@@ -146,7 +142,7 @@ var renderSlopegraph = function(config) {
         .range([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
-        .domain(_.pluck(config['data'], labelColumn))
+        .domain(config.data.map(function(d) { return d[labelColumn] }))
         .range([ COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3'] ]);
 
     /*
