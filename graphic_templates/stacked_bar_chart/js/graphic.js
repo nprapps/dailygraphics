@@ -32,7 +32,7 @@ var formatData = function() {
         d['values'] = [];
 
         for (var key in d) {
-            if (skipLabels.indexOf(key) >= -1) {
+            if (skipLabels.indexOf(key) > -1) {
                 continue;
             }
 
