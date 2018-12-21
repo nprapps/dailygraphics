@@ -711,6 +711,15 @@ This will list folders with no committed files. To permanently delete those fold
 git clean -df
 ```
 
+If these commands do not show/remove anything, try:
+
+```
+git clean -dxn
+git clean -dxf
+```
+
+(The [`-x` flag](https://git-scm.com/docs/git-clean) asks Git to look at ignored files a different way.)
+
 **NOTE:** This will delete any files that have not been committed, so
 if you have any work in progress that you do not want deleted, you will
 need to commit those files before running `git clean -df`.
