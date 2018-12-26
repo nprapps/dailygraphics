@@ -101,7 +101,22 @@ def _graphics_child(slug):
         if hasattr(graphic_config, 'COPY_GOOGLE_DOC_KEY') and graphic_config.COPY_GOOGLE_DOC_KEY:
             copy_path = '%s/%s.xlsx' % (graphic_path, slug)
 
-            context['COPY'] = copytext.Copy(filename=copy_path)
+            # Trim strings to avoid whitespace issues
+            copy = copytext.Copy(filename=copy_path)
+            for sheet in copy._copy:
+                worksheet = copy[sheet]
+                for row in worksheet:
+                    stripped = []
+                    for item in row._row:
+                        print item
+                        if isinstance(item, str) or isinstance(item, unicode):
+                            stripped.append(item.strip())
+                        else:
+                            stripped.append(item)
+                    print stripped
+                    row._row = stripped
+
+            context['COPY'] = copy
     except IOError:
         pass
 
