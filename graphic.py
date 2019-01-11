@@ -113,7 +113,6 @@ def _graphics_child(slug):
                             stripped.append(item.strip())
                         else:
                             stripped.append(item)
-                    print stripped
                     row._row = stripped
 
             context['COPY'] = copy
