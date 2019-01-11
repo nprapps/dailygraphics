@@ -108,7 +108,6 @@ def _graphics_child(slug):
                 for row in worksheet:
                     stripped = []
                     for item in row._row:
-                        print item
                         if isinstance(item, str) or isinstance(item, unicode):
                             stripped.append(item.strip())
                         else:
