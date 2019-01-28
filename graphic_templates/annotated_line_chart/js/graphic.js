@@ -36,16 +36,14 @@ var formatData = function() {
         d[key] = Number(d[key]);
 
         // Annotations
-        var hasAnnotation = d["annotate"] != null && d["annotate"].length > 0;
+        var hasAnnotation = !!d["annotate"];
         if (hasAnnotation) {
 
-          var hasCustomLabel = d["annotate"] != "True";
-          var hasCustomXOffset = d["x_offset"] != null && d["x_offset"].length > 0;
-          var hasCustomYOffset = d["y_offset"] != null && d["y_offset"].length > 0;
-
+          var hasCustomLabel = d["annotate"].toLowerCase() != "true";
           var label = hasCustomLabel ? d["annotate"] : null;
-          var xOffset = hasCustomXOffset ? 0 : Number(d["x_offset"]); 
-          var yOffset = hasCustomYOffset ? 0 : Number(d["y_offset"]);
+          
+          var xOffset = Number(d["x_offset"]) || 0; 
+          var yOffset = Number(d["y_offset"]) || 0;
 
           annotations.push({
             date: d["date"],
