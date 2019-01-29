@@ -97,7 +97,7 @@ var render = function(containerWidth) {
 
   // Render the chart!
   renderLineChart({
-    container: "#line-chart",
+    container: "#annotated-line-chart",
     width: containerWidth,
     data: dataSeries,
     annotations: annotations
