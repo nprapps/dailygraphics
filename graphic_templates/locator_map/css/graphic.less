@@ -37,10 +37,10 @@ path.landmass { fill: #a8d5ef; }
 }
 
 .city-labels text {
+    .gotham();
     fill: #787878;
     font-size: 65%;
     text-anchor: start;
-    font-family: 'Gotham SSm', Helvetica, Arial,sans-serif;
     -webkit-font-smoothing: antialiased;
 
     &.admin-0-capital {
@@ -57,19 +57,19 @@ path.landmass { fill: #a8d5ef; }
 }
 
 .country-labels text {
+    .gotham();
     fill: #787878;
     font-size: 80%;
-    text-transform: uppercase;
+    font-weight: normal;
     letter-spacing: 7px;
     text-anchor: middle;
-    font-family: 'Gotham SSm', Helvetica, Arial,sans-serif;
-    font-weight: normal;
+    text-transform: uppercase;
     -webkit-font-smoothing: antialiased;
 
     &.primary {
         fill: #555;
-        font-weight: 700;
         font-size: 90%;
+        font-weight: 700;
     }
     &.bhutan { display: none; }
 }
@@ -87,18 +87,24 @@ path.landmass { fill: #a8d5ef; }
     }
 }
 
-// responsive styles
-@media screen and (max-width: 500px) {
+/*
+ * small-screen styles
+ */
+@media @screen-mobile {
     svg { font-size: 12px; }
+
     .countries path { stroke-width: 2px; }
+
     .country-labels text {
         &.bangladesh,
         &.bhutan {
             display: none;
         }
     }
+
     .city-labels text { letter-spacing: .5px; }
-    .city-labels.shadow { display: none; }
+
+    .city-labels.shadow,
     .city-labels text,
     .cities path {
         &.scalerank-4,

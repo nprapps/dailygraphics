@@ -150,7 +150,7 @@ Configuration
 
 The dailygraphics project configuration defaults are specific to NPR. If you want to use it in your newsroom you should fork this repository and update ``app_config.py`` with your own configuration.
 
-At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS``, ``STAGING_S3_BUCKETS`` and ``ASSETS_S3_BUCKET``. (``ASSETS_S3_BUCKET`` *must* be different from the other buckets.)
+At a minimum you will want to change ``REPOSITORY_URL``, ``PRODUCTION_S3_BUCKETS``, ``STAGING_S3_BUCKETS`` and ``ASSETS_S3_BUCKET``. (``ASSETS_S3_BUCKET`` *must* be different from the other buckets.). ``DRIVE_SPREADSHEETS_FOLDER`` Should also be changed to a folder ID where you have write permissions or set it to `None` to use your root folder.
 
 **Google OAuth**
 
@@ -165,7 +165,7 @@ Following the steps in [this blog post](http://blog.apps.npr.org/2015/03/02/app-
 
 You should only need to do this once.
 
-**NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact Alyson or Juan for more information.
+**NPR users:** The environment variables you need have already been generated, so you can skip the first step. Contact visuals for more information.
 
 
 Run The Project
@@ -712,6 +712,15 @@ This will list folders with no committed files. To permanently delete those fold
 ```
 git clean -df
 ```
+
+If these commands do not show/remove anything, try:
+
+```
+git clean -dxn
+git clean -dxf
+```
+
+(The [`-x` flag](https://git-scm.com/docs/git-clean) asks Git to look at ignored files a different way.)
 
 **NOTE:** This will delete any files that have not been committed, so
 if you have any work in progress that you do not want deleted, you will

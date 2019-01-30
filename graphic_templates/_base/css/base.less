@@ -1,4 +1,11 @@
 /*
+ * Media queries
+ */
+@screen-medium-above: ~"screen and (min-width: 651px)";
+@screen-mobile-above: ~"screen and (min-width: 501px)";
+@screen-mobile: ~"screen and (max-width: 500px)";
+
+/*
  * Colors
  */
 @red1       : #6C2315;
@@ -82,6 +89,18 @@
     }
 }
 
+// NPR multimedia-template
+.mmedia-constrained() {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 650px;
+}
+
+.mmedia-constrained-centered() {
+    .mmedia-constrained();
+    text-align: center;
+}
+
 /*
  * Base styles
  */
@@ -114,21 +133,15 @@ h2 {
 }
 
 h3 {
-    margin: 0 0 15px 0;
-    font-family: 'Knockout 31 4r';
-    font-weight: normal;
-    text-transform: uppercase;
-    padding-top: 0;
-    line-height: 1.2;
-    letter-spacing: 0.05em;
-    -webkit-font-smoothing: antialiased;
-    font-size: 12px;
+    .knockout-header();
     color: #333;
+    font-size: 12px;
+    line-height: 1.2;
+    margin: 0 0 15px 0;
+    padding-top: 0;
 }
 
-.nowrap {
-    white-space: nowrap;
-}
+.nowrap { white-space: nowrap; }
 
 .footnotes {
     margin-bottom: 20px;
@@ -167,9 +180,9 @@ a:hover, a:active { color: #bccae5; }
 }
 
 .graphic {
-    position: relative;
-    margin-bottom: 11px;
     .clearfix();
+    margin-bottom: 22px;
+    position: relative;
 
     img {
         max-width: 100%;
@@ -293,4 +306,22 @@ rect {
 body.hp {
     padding-top: 0;
     padding-bottom: 10px;
+}
+
+/*
+ * CHILDLINK
+ * Direct links to the child page (iOS app workaround link)
+ */
+body.childlink {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+}
+
+/*
+ * Accessibility styles
+ */
+
+img:not([alt]) {
+    outline: 3px solid red;
 }
