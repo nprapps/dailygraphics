@@ -29,8 +29,8 @@
 
   // Default sort method if no better sort method is found
   var caseInsensitiveSort = function(a, b) {
-    a = a.toLowerCase();
-    b = b.toLowerCase();
+    a = a.trim().toLowerCase();
+    b = b.trim().toLowerCase();
 
     if (a === b) return 0;
     if (a < b) return 1;
@@ -81,7 +81,15 @@
 
       if (el.rows && el.rows.length > 0) {
         if (el.tHead && el.tHead.rows.length > 0) {
-          firstRow = el.tHead.rows[el.tHead.rows.length - 1];
+          for (i = 0; i < el.tHead.rows.length; i++) {
+            if (el.tHead.rows[i].getAttribute('data-sort-method') === 'thead') {
+              firstRow = el.tHead.rows[i];
+              break;
+            }
+          }
+          if (!firstRow) {
+            firstRow = el.tHead.rows[el.tHead.rows.length - 1];
+          }
           that.thead = true;
         } else {
           firstRow = el.rows[0];
@@ -92,8 +100,7 @@
 
       var onClick = function() {
         if (that.current && that.current !== this) {
-          that.current.classList.remove('sort-up');
-          that.current.classList.remove('sort-down');
+          that.current.removeAttribute('aria-sort');
         }
 
         that.current = this;
@@ -103,12 +110,12 @@
       // Assume first row is the header and attach a click handler to each.
       for (i = 0; i < firstRow.cells.length; i++) {
         cell = firstRow.cells[i];
-        if (!cell.classList.contains('no-sort')) {
-          cell.classList.add('sort-header');
+        cell.setAttribute('role','columnheader');
+        if (cell.getAttribute('data-sort-method') !== 'none') {
           cell.tabindex = 0;
           cell.addEventListener('click', onClick, false);
 
-          if (cell.classList.contains('sort-default')) {
+          if (cell.getAttribute('data-sort-default') !== null) {
             defaultSort = cell;
           }
         }
@@ -127,25 +134,22 @@
           item = '',
           items = [],
           i = that.thead ? 0 : 1,
-          sortDir,
-          sortMethod = header.getAttribute('data-sort-method');
+          sortMethod = header.getAttribute('data-sort-method'),
+          sortOrder = header.getAttribute('aria-sort');
 
       that.table.dispatchEvent(createEvent('beforeSort'));
 
-      // If updating an existing sort `sortDir` should remain unchanged.
-      if (update) {
-        sortDir = header.classList.contains('sort-up') ? 'sort-up' : 'sort-down';
-      } else {
-        if (header.classList.contains('sort-up')) {
-          sortDir = 'sort-down';
-        } else if (header.classList.contains('sort-down')) {
-          sortDir = 'sort-up';
+      // If updating an existing sort, direction should remain unchanged.
+      if (!update) {
+        if (sortOrder === 'ascending') {
+          sortOrder = 'descending';
+        } else if (sortOrder === 'descending') {
+          sortOrder = 'ascending';
         } else {
-          sortDir = that.options.descending ? 'sort-up' : 'sort-down';
+          sortOrder = that.options.descending ? 'descending' : 'ascending';
         }
 
-        header.classList.remove(sortDir === 'sort-down' ? 'sort-up' : 'sort-down');
-        header.classList.add(sortDir);
+        header.setAttribute('aria-sort', sortOrder);
       }
 
       if (that.table.rows.length < 2) return;
@@ -181,16 +185,19 @@
       }
 
       that.col = column;
-      var newRows = [],
-          noSorts = {},
-          j,
-          totalRows = 0,
-          noSortsSoFar = 0;
 
       for (i = 0; i < that.table.tBodies.length; i++) {
+        var newRows = [],
+            noSorts = {},
+            j,
+            totalRows = 0,
+            noSortsSoFar = 0;
+
+        if (that.table.tBodies[i].rows.length < 2) continue;
+
         for (j = 0; j < that.table.tBodies[i].rows.length; j++) {
           item = that.table.tBodies[i].rows[j];
-          if (item.classList.contains('no-sort')) {
+          if (item.getAttribute('data-sort-method') === 'none') {
             // keep no-sorts in separate list to be able to insert
             // them back at their original position later
             noSorts[totalRows] = item;
@@ -204,30 +211,29 @@
           }
           totalRows++;
         }
-      }
-
-      // Before we append should we reverse the new array or not?
-      // If we reverse, the sort needs to be `anti-stable` so that
-      // the double negatives cancel out
-      if (sortDir === 'sort-down') {
-        newRows.sort(stabilize(sortFunction, true));
-        newRows.reverse();
-      } else {
-        newRows.sort(stabilize(sortFunction, false));
-      }
-
-      // append rows that already exist rather than creating new ones
-      for (i = 0; i < totalRows; i++) {
-        if (noSorts[i]) {
-          // We have a no-sort row for this position, insert it here.
-          item = noSorts[i];
-          noSortsSoFar++;
+        // Before we append should we reverse the new array or not?
+        // If we reverse, the sort needs to be `anti-stable` so that
+        // the double negatives cancel out
+        if (sortOrder === 'descending') {
+          newRows.sort(stabilize(sortFunction, true));
         } else {
-          item = newRows[i - noSortsSoFar].tr;
+          newRows.sort(stabilize(sortFunction, false));
+          newRows.reverse();
         }
 
-        // appendChild(x) moves x if already present somewhere else in the DOM
-        that.table.tBodies[0].appendChild(item);
+        // append rows that already exist rather than creating new ones
+        for (j = 0; j < totalRows; j++) {
+          if (noSorts[j]) {
+            // We have a no-sort row for this position, insert it here.
+            item = noSorts[j];
+            noSortsSoFar++;
+          } else {
+            item = newRows[j - noSortsSoFar].tr;
+          }
+
+          // appendChild(x) moves x if already present somewhere else in the DOM
+          that.table.tBodies[i].appendChild(item);
+        }
       }
 
       that.table.dispatchEvent(createEvent('afterSort'));
