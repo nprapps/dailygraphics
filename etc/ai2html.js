@@ -142,154 +142,15 @@ var defaultSettings = {
     {"aifont":"Georgia","family":"georgia,'times new roman',times,serif","weight":"","style":""},
     {"aifont":"Georgia-Bold","family":"georgia,'times new roman',times,serif","weight":"bold","style":""},
     {"aifont":"Georgia-Italic","family":"georgia,'times new roman',times,serif","weight":"","style":"italic"},
-    {"aifont":"Georgia-BoldItalic","family":"georgia,'times new roman',times,serif","weight":"bold","style":"italic"}
+    {"aifont":"Georgia-BoldItalic","family":"georgia,'times new roman',times,serif","weight":"bold","style":"italic"},
+    // NPR-specific
+    {"aifont":"Gotham-Book","family":"'Gotham SSm',Helvetica,Arial,sans-serif","weight":"","style":""},
+    {"aifont":"Gotham-BookItalic","family":"'Gotham SSm',Helvetica,Arial,sans-serif","weight":"","style":"italic"},
+    {"aifont":"Gotham-Bold","family":"'Gotham SSm',Helvetica,Arial,sans-serif","weight":"bold","style":""},
+    {"aifont":"Gotham-BoldItalic","family":"'Gotham SSm',Helvetica,Arial,sans-serif","weight":"bold","style":"italic"},
+    {"aifont":"Knockout-31JuniorMiddlewt","family":"'Knockout 31 4r',Helvetica,Arial,sans-serif","weight":"","style":""}
   ]
 };
-
-// These settings override the default settings in NYT mode
-var nytOverrideSettings = {
-  "html_output_path": "../src/",
-  "image_output_path": "../public/_assets/",
-  "config_file_path": "../config.yml",
-  "use_lazy_loader": true,
-  "include_resizer_css_js": true,
-  "include_resizer_script": true,
-  "credit": "By The New York Times",
-  "page_template": "vi-article-embed",
-  "publish_system": "scoop",
-
-  // NYT-specific settings (not present in default settings)
-  "environment": "production",
-  "show_in_compatible_apps": true,
-  "display_for_promotion_only": false,
-  "constrain_width_to_text_column": false,
-  "compatibility": "inline",
-  "interactive_size": "medium",
-  "scoop_publish_fields": true,
-  "scoop_asset_id": "",
-  "scoop_username": "",
-  "scoop_slug": "",
-  "scoop_external_edit_key": "",
-
-  "settings_block": [
-    "settings_version",
-    "image_format",
-    "write_image_files",
-    "responsiveness",
-    "max_width",
-    "output",
-    "png_number_of_colors",
-    "jpg_quality",
-    "use_lazy_loader",
-    "show_completion_dialog_box",
-    "last_updated_text",
-    "headline",
-    "leadin",
-    "summary",
-    "notes",
-    "sources",
-    "credit",
-    "show_in_compatible_apps",
-    "display_for_promotion_only",
-    "constrain_width_to_text_column",
-    "interactive_size",
-    "scoop_asset_id",
-    "scoop_username",
-    "scoop_slug",
-    "scoop_external_edit_key"
-  ],
-
-  "config_file": [
-    "last_updated_text",
-    "headline",
-    "leadin",
-    "summary",
-    "notes",
-    "sources",
-    "credit",
-    "page_template",
-    "publish_system",
-    "environment",
-    "show_in_compatible_apps",
-    "display_for_promotion_only",
-    "constrain_width_to_text_column",
-    "compatibility",
-    "interactive_size",
-    "scoop_publish_fields",
-    "scoop_asset_id",
-    "scoop_username",
-    "scoop_slug",
-    "scoop_external_edit_key"
-  ],
-
-  "fonts": [
-    {"aifont":"NYTFranklin-Light","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"300","style":""},
-    {"aifont":"NYTFranklin-Medium","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"500","style":""},
-    {"aifont":"NYTFranklin-SemiBold","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"600","style":""},
-    {"aifont":"NYTFranklin-Semibold","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"600","style":""},
-    {"aifont":"NYTFranklinSemiBold-Regular","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"600","style":""},
-    {"aifont":"NYTFranklin-SemiboldItalic","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"600","style":"italic"},
-    {"aifont":"NYTFranklin-Bold","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"700","style":""},
-    {"aifont":"NYTFranklin-LightItalic","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"300","style":"italic"},
-    {"aifont":"NYTFranklin-MediumItalic","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"500","style":"italic"},
-    {"aifont":"NYTFranklin-BoldItalic","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"700","style":"italic"},
-    {"aifont":"NYTFranklin-ExtraBold","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"800","style":""},
-    {"aifont":"NYTFranklin-ExtraBoldItalic","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"800","style":"italic"},
-    {"aifont":"NYTFranklin-Headline","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"bold","style":""},
-    {"aifont":"NYTFranklin-HeadlineItalic","family":"nyt-franklin,arial,helvetica,sans-serif","weight":"bold","style":"italic"},
-    {"aifont":"NYTCheltenham-ExtraLight","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"200","style":""},
-    {"aifont":"NYTCheltenhamExtLt-Regular","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"200","style":""},
-    {"aifont":"NYTCheltenham-Light","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"300","style":""},
-    {"aifont":"NYTCheltenhamLt-Regular","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"300","style":""},
-    {"aifont":"NYTCheltenham-LightSC","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"300","style":""},
-    {"aifont":"NYTCheltenham-Book","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"400","style":""},
-    {"aifont":"NYTCheltenhamBook-Regular","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"400","style":""},
-    {"aifont":"NYTCheltenham-Wide","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"","style":""},
-    {"aifont":"NYTCheltenhamMedium-Regular","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"500","style":""},
-    {"aifont":"NYTCheltenham-Medium","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"500","style":""},
-    {"aifont":"NYTCheltenham-Bold","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"700","style":""},
-    {"aifont":"NYTCheltenham-BoldCond","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"bold","style":""},
-    {"aifont":"NYTCheltenhamCond-BoldXC","family":"nyt-cheltenham-extra-cn-bd,georgia,'times new roman',times,serif","weight":"bold","style":""},
-    {"aifont":"NYTCheltenham-BoldExtraCond","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"bold","style":""},
-    {"aifont":"NYTCheltenham-ExtraBold","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"bold","style":""},
-    {"aifont":"NYTCheltenham-ExtraLightIt","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"","style":"italic"},
-    {"aifont":"NYTCheltenham-ExtraLightItal","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"","style":"italic"},
-    {"aifont":"NYTCheltenham-LightItalic","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"","style":"italic"},
-    {"aifont":"NYTCheltenham-BookItalic","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"","style":"italic"},
-    {"aifont":"NYTCheltenham-WideItalic","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"","style":"italic"},
-    {"aifont":"NYTCheltenham-MediumItalic","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"","style":"italic"},
-    {"aifont":"NYTCheltenham-BoldItalic","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"700","style":"italic"},
-    {"aifont":"NYTCheltenham-ExtraBoldItal","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"bold","style":"italic"},
-    {"aifont":"NYTCheltenham-ExtraBoldItalic","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"bold","style":"italic"},
-    {"aifont":"NYTCheltenhamSH-Regular","family":"nyt-cheltenham-sh,nyt-cheltenham,georgia,'times new roman',times,serif","weight":"400","style":""},
-    {"aifont":"NYTCheltenhamSH-Italic","family":"nyt-cheltenham-sh,nyt-cheltenham,georgia,'times new roman',times,serif","weight":"400","style":"italic"},
-    {"aifont":"NYTCheltenhamSH-Bold","family":"nyt-cheltenham-sh,nyt-cheltenham,georgia,'times new roman',times,serif","weight":"700","style":""},
-    {"aifont":"NYTCheltenhamSH-BoldItalic","family":"nyt-cheltenham-sh,nyt-cheltenham,georgia,'times new roman',times,serif","weight":"700","style":"italic"},
-    {"aifont":"NYTCheltenhamWide-Regular","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"500","style":""},
-    {"aifont":"NYTCheltenhamWide-Italic","family":"nyt-cheltenham,georgia,'times new roman',times,serif","weight":"500","style":"italic"},
-    {"aifont":"NYTKarnakText-Regular","family":"nyt-karnak-display-130124,georgia,'times new roman',times,serif","weight":"400","style":""},
-    {"aifont":"NYTKarnakDisplay-Regular","family":"nyt-karnak-display-130124,georgia,'times new roman',times,serif","weight":"400","style":""},
-    {"aifont":"NYTStymieLight-Regular","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"300","style":""},
-    {"aifont":"NYTStymieMedium-Regular","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"500","style":""},
-    {"aifont":"StymieNYT-Light","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"300","style":""},
-    {"aifont":"StymieNYT-LightPhoenetic","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"300","style":""},
-    {"aifont":"StymieNYT-Lightitalic","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"300","style":"italic"},
-    {"aifont":"StymieNYT-Medium","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"500","style":""},
-    {"aifont":"StymieNYT-MediumItalic","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"500","style":"italic"},
-    {"aifont":"StymieNYT-Bold","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"700","style":""},
-    {"aifont":"StymieNYT-BoldItalic","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"700","style":"italic"},
-    {"aifont":"StymieNYT-ExtraBold","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"700","style":""},
-    {"aifont":"StymieNYT-ExtraBoldText","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"700","style":""},
-    {"aifont":"StymieNYT-ExtraBoldTextItal","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"700","style":"italic"},
-    {"aifont":"StymieNYTBlack-Regular","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"700","style":""},
-    {"aifont":"StymieBT-ExtraBold","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"700","style":""},
-    {"aifont":"Stymie-Thin","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"300","style":""},
-    {"aifont":"Stymie-UltraLight","family":"nyt-stymie,arial,helvetica,sans-serif","weight":"300","style":""},
-    {"aifont":"NYTMagSans-Regular","family":"'nyt-mag-sans',arial,helvetica,sans-serif","weight":"500","style":""},
-    {"aifont":"NYTMagSans-Bold","family":"'nyt-mag-sans',arial,helvetica,sans-serif","weight":"700","style":""}
-  ]
-};
-
 
 // ================================================
 // Constant data
@@ -1299,11 +1160,6 @@ function initSpecialTextBlocks() {
 function initDocumentSettings(textBlockSettings) {
   var settings = extend({}, defaultSettings); // copy default settings
 
-  // Apply NYT settings if applicable
-  if (detectTimesFonts()) {
-    importNewYorkTimesSettings(settings);
-  }
-
   // merge external settings into @settings
   extendSettings(settings, readExternalSettings());
 
@@ -1317,48 +1173,6 @@ function initDocumentSettings(textBlockSettings) {
     }
   }
   return settings;
-}
-
-function importNewYorkTimesSettings(settings) {
-  var configFilePath = docPath + '../config.yml'
-
-  // Check that we are in an NYT Preview project
-  // If not, give NYT users the option of continuing with non-NYT settings
-  if (!fileExists(configFilePath)) {
-    if (!confirm("You seem to be running ai2html outside of NYT Preview.\nContinue in non-Preview mode?", true)) {
-      error("Make sure your Illustrator file is inside the \u201Cai\u201D folder of a Preview project.");
-    }
-    return;
-  }
-
-  // TODO: consider applying in non-Preview mode
-  extendSettings(settings, nytOverrideSettings);
-
-  scriptEnvironment = 'nyt-preview';
-  var yamlConfig = readYamlConfigFile(configFilePath) || {};
-  settings.project_type = yamlConfig.project_type == 'ai2html' ? 'ai2html' : '';
-  if (!folderExists(docPath + '../public/') ||
-      (settings.project_type != 'ai2html' && !folderExists(docPath + '../src/'))) {
-    error("Your Preview project may be missing a \u201Cpublic\u201D or a \u201Csrc\u201D folder.");
-  }
-
-  if (yamlConfig.scoop_slug) {
-    settings.scoop_slug_from_config_yml = yamlConfig.scoop_slug;
-  }
-
-  // Read .git/config file to get preview slug
-  var gitConfig = readGitConfigFile(docPath + "../.git/config") || {};
-  if (gitConfig.url) {
-    settings.preview_slug = gitConfig.url.replace( /^[^:]+:/ , "" ).replace( /\.git$/ , "");
-  }
-
-  settings.image_source_path = "_assets/";
-  if (settings.project_type == "ai2html") {
-    settings.html_output_path = "/../public/";
-    settings.image_output_path = "_assets/";
-    settings.create_config_file = true;
-    settings.create_promo_image = true;
-  }
 }
 
 function extendSettings(settings, moreSettings) {
