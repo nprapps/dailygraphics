@@ -606,10 +606,10 @@ Creating An ai2html Graphic
 The ai2html template uses an open-source script called [ai2html](http://ai2html.org/) to convert Illustrator graphics to HTML and CSS and display them in our responsive dailygraphics template.
 
 To use this template, you'll need to install ai2html as an Illustrator
-script. Copy [the latest version of the script here](etc/ai2html.jsx)
+script. Copy [the latest version of the script here](etc/ai2html.js)
 into the Illustrator folder where scripts are located.
 For example, on Mac OS X running Adobe Illustrator CC 2015, the path would be:
-`/Applications/Adobe Illustrator CC 2015/Presets.localized/en_US/Scripts/ai2html.jsx`
+`/Applications/Adobe Illustrator CC 2015/Presets.localized/en_US/Scripts/ai2html.js`
 
 **You only need to install the script once on your machine.** To check whether you
 have it installed, open Adobe Illustrator and look for the "ai2html"
@@ -630,7 +630,7 @@ queries in `css/graphic.less`.)
 
 You can only use fonts that are supported on our website, so make sure
 you are using the correct typeface and weight. [Here's a list of
-supported fonts](https://github.com/nprapps/dailygraphics/blob/ai2html/etc/ai2html.jsx#L593-L605).
+supported fonts](https://github.com/nprapps/dailygraphics/blob/master/etc/ai2html.js#L138-L151).
 (For users outside of NPR, refer to the [ai2html docs](http://ai2html.org/#using-fonts-other-than-arial-and-georgia) to learn how to customize your fonts.)
 
 Create your graphic within Illustrator, referring to the [ai2html
