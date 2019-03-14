@@ -1,3 +1,11 @@
+0.1.6
+-----
+
+* Update version of ai2html. Users will need to reinstall the ai2html.js script (copy from `/etc` to your Illustrator scripts directory). (#230, #311)
+* Disable gzip compression at deploy, in favor of compression set at the CDN level (#293, #310)
+* Table template: Update tablesort version (#223, #309)
+* Automatically strip whitespace from COPY sheet inputs (#303)
+
 0.1.5
 -----
 
@@ -25,7 +33,6 @@ This version moves templates to a separate location from the duplicated spreadsh
 * Expose direct link to child page to allow for fallback links in story text if the embed doesn't load.
 * Add optional drive root folder to store the COPY spreadsheets (#301)
 * Accessibility: Added an optional `screenreader` field to describe graphic contents (#299)
-* Automatically strip whitespace from COPY sheet inputs (#303)
 
 0.1.4
 -----
