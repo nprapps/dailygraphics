@@ -4,6 +4,7 @@ var isMobile = false;
 
 var $quiz = null;
 var $results = null;
+var $next = null;
 
 var numQuestions = 0;
 var numTaken = 0;
@@ -18,9 +19,11 @@ var onWindowLoaded = function() {
     // set vars
     $quiz = $('#quiz');
     $results = $('#results');
-    numQuestions = $quiz.find('div.question').length;
+    $next = $('.btn');
+    numQuestions = QUIZ.length;
 
-    $quiz.find('li strong').on('click', onAnswerClicked);
+    // To collapse quiz for a question-by-question setup, set param of collapseQuiz to true. Else, false. 
+    collapseQuiz(true);
 
     // pym!
     pymChild = new pym.Child({ });
@@ -37,8 +40,65 @@ var onWindowLoaded = function() {
 /*
  * Quiz
  */
+var collapseQuiz = function(bool) {
+    if (bool) {
+        nextQuestion(0);
+        $quiz.find('li strong').on('click', onAnswerClicked);
+        $next.on('click', function() {
+            $next.css("background-color", "#eee");
+            $next.css("color", "#ababab");
+            nextQuestion(numTaken);
+            $quiz.find('li strong').on('click', onAnswerClicked);
+        })
+    } else {
+        alert("If you're not collapsing quiz, remember to replace contents of child_template.html with child_template_alternate.html -- and then get rid of me!");
+        $('.btn_div').html("");
+        $quiz.find('li strong').on('click', onAnswerClicked);
+    }
+}
+
+var nextQuestion = function(i) {
+    $('.question').removeClass('answered');
+    var question = QUIZ[i],
+        answers = "",
+        numQApairs = (Object.keys(question).length - 5) / 2; //num that is possible, could be less
+
+    for (i = 1; i < numQApairs + 1; i++) { 
+        if (question['option_' + i.toString()] != 'None') {
+
+            answers += "<li class=" + question['status_' + i.toString()] + ">\
+                                <strong>" + question['option_' + i.toString()] + "</strong>";
+
+            if (question['status_' + i.toString()] == 'correct') {
+                answers += "<div class='answer'>";
+
+                if (question['answer_image_name'] != 'None') {
+
+                    answers += "<figure><img src='img/" + question['answer_image_name'] + "' class='answer-image-" + question['number'] + "'>\
+                                <figcaption>" + question['answer_image_credits'] + "</figcaption></figure>";
+
+                }
+
+                answers += "<div class='explanation'>" + question['answer'] + "</div></div>";
+            }
+            answers += "</li>";
+        }
+    }    
+
+    $('.q').html("<p>"+ question['question'] + "</p>");
+    $('#quiz ul').html("");
+    $('#quiz ul').html(answers);
+
+    // update the iframe height
+    if (pymChild) {
+        pymChild.sendHeight();
+    }
+}
+
 var onAnswerClicked = function() {
-    console.log($(this));
+    $next.css("background-color", "#7598c9");
+    $next.css("color", "#fff");
+
     var $thisAnswer = $(this);
     var $thisQuestion = $thisAnswer.parents('.question');
     var $allAnswers = $thisQuestion.find('strong');
@@ -71,15 +131,21 @@ var onAnswerClicked = function() {
 
     // if all questions have been answered, show a rewarding message
     if (numTaken == numQuestions) {
+
+        $('.btn_div').html("");
+
         resultsMsg = '<strong class="totals">You got ' + numCorrect + ' (of ' + numQuestions + ') right.</strong> ';
 
-        if (numCorrect <= 2) {
+        if (numCorrect <= FINAL_LOW_UPPER) {
             resultsMsg += '<em>' + FINAL_LOW + '</em>';
-        } else if (numCorrect <= 6) {
+        } else if (numCorrect <= FINAL_MID_UPPER) {
             resultsMsg += '<em>' + FINAL_MID + '</em>';
-        } else if (numCorrect > 6) {
+        } else if (numCorrect <= FINAL_HIGH_UPPER) {
             resultsMsg += '<em>' + FINAL_HIGH + '</em>';
         }
+
+        // Send user score to analytics 
+        ANALYTICS.trackEvent('quiz-finish', numCorrect ? numCorrect.toString() : '0');
     // otherwise, show their status
     } else {
         resultsMsg = 'You\'ve answered ' + numTaken + ' of ' + numQuestions + ' questions. Keep going!';
