@@ -1,7 +1,6 @@
 0.1.6
 -----
 
-* Update version of ai2html. Users will need to reinstall the ai2html.js script (copy from `/etc` to your Illustrator scripts directory). (#230, #311)
 * Disable gzip compression at deploy, in favor of compression set at the CDN level (#293, #310)
 * Table template: Update tablesort version (#223, #309)
 * Automatically strip whitespace from COPY sheet inputs (#303)
