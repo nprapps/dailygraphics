@@ -174,6 +174,7 @@ def update_copy(path=None):
 
         print slug
         download_copy(slug)
+        del sys.modules['graphic_config']
 
 
 """
