@@ -1,6 +1,8 @@
 dailygraphics
 =============
 
+**NOTE: This project relies on an old version of Python and is no longer under active development. Its successor is [dailygraphics-next](https://github.com/nprapps/dailygraphics-next).**
+
 * [What Is This?](#what-is-this)
 * [Assumptions](#assumptions)
 * [What's In Here?](#whats-in-here)
@@ -102,6 +104,8 @@ brew install node
 
 Then set up the project like this:
 
+** OLD INSTRUCTIONS **
+
 ```
 git clone https://github.com/nprapps/dailygraphics.git
 cd dailygraphics
@@ -109,6 +113,30 @@ mkvirtualenv dailygraphics
 pip install -r requirements.txt
 npm install
 ```
+
+** NEW INSTRUCTIONS **
+
+Since this project is based on Python 2.7, you will have to jump through some hoops to get it working on modern machines. Our current workflow (for Mac):
+
+[Set up your development environment](https://blog.apps.npr.org/2013/06/06/how-to-setup-a-developers-environment.html) following the steps in our blog post, including [Anaconda](https://docs.anaconda.com/) for managing Python virtual environments.
+
+Then run the following commands in your terminal:
+
+```
+git clone https://github.com/nprapps/dailygraphics.git
+cd dailygraphics
+conda create --name dailygraphics python=2.7.18
+pip install -r requirements.txt
+npm install
+```
+
+To activate the environment in later uses, run these commands in terminal:
+
+```
+cd dailygraphics
+conda activate dailygraphics
+```
+
 
 You'll now need to create a folder to hold the graphics created and deployed by this rig. This is configured in `app_config.GRAPHICS_PATH` and defaults to `../graphics`.
 

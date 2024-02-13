@@ -17,3 +17,7 @@ smartypants==1.8.6
 # into a separate `requirements-dev.txt` file
 nose==1.2.1
 selenium==3.3.3
+
+# added for later support
+cryptography==3.3.2
+werkzeug==0.16.0
