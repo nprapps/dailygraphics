@@ -374,6 +374,13 @@ def add_animated_photo(slug):
     _add_graphic(slug, 'animated_photo')
 
 @task
+def add_annotated_line_chart(slug):
+    """
+    Create an annotated line chart.
+    """
+    _add_graphic(slug, 'annotated_line_chart')
+
+@task
 def add_archive_graphic(slug):
     """
     Create a shell to archive an old project.
