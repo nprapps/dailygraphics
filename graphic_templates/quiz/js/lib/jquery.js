@@ -4657,7 +4657,6 @@ jQuery.event = {
 				// Triggered event must either 1) have no namespace, or
 				// 2) have namespace(s) a subset or equal to those in the bound event (both can have no namespace).
 				if ( !event.namespace_re || event.namespace_re.test( handleObj.namespace ) ) {
-
 					event.handleObj = handleObj;
 					event.data = handleObj.data;
 
